@@ -1,0 +1,18 @@
+/ {
+
+	aliases {
+		wifi-reset = &green_led;
+	};
+};
+
+&ethernet{
+	status = "okay";
+
+};
+
+&mac{
+	status = "okay";
+};
+&mdio{
+	status = "okay";
+};

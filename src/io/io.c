@@ -15,13 +15,17 @@
 #include <zephyr/input/input.h>
 #include "../zbus_topics.h"
 #include "../settings_topics.h"
+#include <global_var.h>
 
 
 LOG_MODULE_REGISTER(io);
 
-/* Стек для нового потока */
+/* Stack tor new thread */
 #define IO_TASK_STACK_SIZE 1024
 #define IO_TASK_PRIORITY   2
+
+K_THREAD_STACK_DEFINE(io_task_stack, IO_TASK_STACK_SIZE);
+static struct k_thread io_task_thread_data;
 
 #define RELAY1_NODE DT_ALIAS(relay1)
 #define RELAY2_NODE DT_ALIAS(relay2)
@@ -31,10 +35,12 @@ LOG_MODULE_REGISTER(io);
 static void input_cb(struct input_event *evt, void *user_data);
 INPUT_CALLBACK_DEFINE(NULL, input_cb, NULL);
 
-K_THREAD_STACK_DEFINE(io_task_stack, IO_TASK_STACK_SIZE);
-static struct k_thread io_task_thread_data;
+
 
 relays_def_state relays_default_state;
+
+
+
 
 static const struct device *gpio_inputs_dev = DEVICE_DT_GET(DT_NODELABEL(gpio_inputs));
 
@@ -57,32 +63,21 @@ static const uint16_t input_codes[] = {
 static void input_cb(struct input_event *evt, void *user_data)
 {
     if (evt->type == INPUT_EV_KEY) {
-        io_event_data_t io_event_data;
-        io_event_data.event_direction = FROM_INTERFACE;
-        io_event_data.bool_data = evt->value;
+        io_event_data_t io_event_data = {
+            .event_direction = FROM_INTERFACE,
+            .bool_data = evt->value,
+        };
 
         switch (evt->code) {
-            case INPUT_KEY_1:
-                printk("Input AC1: %s\n", evt->value ? "pressed" : "released");
-                io_event_data.io_event = INPUT_1_STATUS;
-                break;
-            case INPUT_KEY_2:
-                printk("Input AC2: %s\n", evt->value ? "pressed" : "released");
-                io_event_data.io_event = INPUT_2_STATUS;
-                break;
-            case INPUT_KEY_3:
-                printk("Input AC3: %s\n", evt->value ? "pressed" : "released");
-                io_event_data.io_event = INPUT_3_STATUS;
-                break;
-            default:
-                return;
+            case INPUT_KEY_1: io_event_data.io_event = INPUT_1_STATUS; break;
+            case INPUT_KEY_2: io_event_data.io_event = INPUT_2_STATUS; break;
+            case INPUT_KEY_3: io_event_data.io_event = INPUT_3_STATUS; break;
+            default: return;
         }
 
         int ret = zbus_chan_pub(&io_events, &io_event_data, K_NO_WAIT);
         if (ret != 0) {
             LOG_ERR("Failed to publish zbus event: %d", ret);
-        } else {
-            LOG_INF("Published io_event: %d, bool: %d", io_event_data.io_event, io_event_data.bool_data);
         }
     }
 }
@@ -105,24 +100,15 @@ void force_get_inputs_state(void)
 
 static void write_relays(bool state, enum io_events event) {
     switch (event) {
-        case OUTPUT_1_CONTROL:
-            gpio_pin_set_dt(&relay1, state);
-            break;
-        case OUTPUT_2_CONTROL:
-            gpio_pin_set_dt(&relay2, state);
-            break;
-        case OUTPUT_3_CONTROL:
-            gpio_pin_set_dt(&relay3, state);
-            break;
-        case OUTPUT_4_CONTROL:
-            gpio_pin_set_dt(&relay4, state);
-            break;
+        case OUTPUT_1_CONTROL: gpio_pin_set_dt(&relay1, state); break;
+        case OUTPUT_2_CONTROL: gpio_pin_set_dt(&relay2, state); break;
+        case OUTPUT_3_CONTROL: gpio_pin_set_dt(&relay3, state); break;
+        case OUTPUT_4_CONTROL: gpio_pin_set_dt(&relay4, state); break;
         default:
             LOG_ERR("Unknown event: %d", event);
-            break;
+            return;
     }
 }
-
 
 
 void io_outputs_task(void *a, void *b, void *c) {
@@ -133,34 +119,22 @@ void io_outputs_task(void *a, void *b, void *c) {
 
     LOG_INF("Start io outputs task");
 
-
     // Check if inputs ready
     if (!device_is_ready(relay1.port) || !device_is_ready(relay2.port) || !device_is_ready(relay3.port) || !device_is_ready(relay4.port)) {
-        /* Порт не готов – нечего делать */
+        /* Not ready exit */
         LOG_ERR("GPIO outputs device is not ready");
         return;
     }
-
-    uint8_t applied_state = 0x00; /* force first apply */
-    write_relays_once(applied_state);
 
     const struct zbus_channel *chan;
     io_event_data_t evt;
 
     while (1) {
-        if (zbus_sub_wait(&io_sub, &chan, K_FOREVER) == 0) {
-            if (chan == &io_events) {
-                int ret = zbus_chan_read(chan, &evt, K_FOREVER);
-                if (ret != 0) {
-                    LOG_ERR("zbus_chan_read failed: %d", ret);
-                    continue;
-                }
-
-                LOG_INF("io event handled: evt.io_event = %d, evt.bool_data = %d, evt.event_direction = %d",
-                        evt.io_event, evt.bool_data, evt.event_direction);
-                if (evt.event_direction == TO_INTERFACE) {
-                    write_relays(evt.bool_data, evt.io_event);
-                }
+        if (zbus_sub_wait_msg(&io_sub, &chan, &evt, K_FOREVER) == 0) {
+            LOG_INF("io event handled: evt.io_event = %d, evt.bool_data = %d, evt.event_direction = %d",
+                    evt.io_event, evt.bool_data, evt.event_direction);
+            if (evt.event_direction == TO_INTERFACE) {
+                write_relays(evt.bool_data, evt.io_event);
             }
         }
     }

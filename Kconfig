@@ -1,0 +1,36 @@
+# menu "REST API options"
+#
+# config REST_CORS_ENABLE
+#     bool "Enable CORS for REST endpoints"
+#     default n
+#     help
+#       If enabled, the HTTP server will include CORS headers and handle
+#       preflight OPTIONS requests.
+#
+# config REST_CORS_ORIGIN
+#     string "Access-Control-Allow-Origin value"
+#     depends on REST_CORS_ENABLE
+#     default "*"
+#     help
+#       Value for the Access-Control-Allow-Origin header. Use "*" to allow all,
+#       or set to a specific origin like "http://mydevice.local".
+#
+# config REST_CORS_ALLOW_HEADERS
+#     string "Access-Control-Allow-Headers value"
+#     depends on REST_CORS_ENABLE
+#     default "Content-Type"
+#     help
+#       Comma-separated list of allowed headers in CORS requests.
+#
+# config REST_CORS_ALLOW_METHODS
+#     string "Access-Control-Allow-Methods value"
+#     depends on REST_CORS_ENABLE
+#     default "GET, POST, OPTIONS"
+#     help
+#       Comma-separated list of allowed HTTP methods.
+#
+# endmenu
+
+source "/Volumes/LocalData/Programming/Zephyr/latest/modules/lib/matter/config/zephyr/Kconfig"
+
+source "Kconfig.zephyr"

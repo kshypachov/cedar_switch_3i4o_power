@@ -43,6 +43,6 @@ static struct http_resource_detail_dynamic reboot_resource_detail = {
 
 /* === Register path for HTTP service only === */
 HTTP_RESOURCE_DEFINE(api_system_reboot,
-                     http_api_service,
+                     http_service,
                      "/api/system/reboot",
                      &reboot_resource_detail);

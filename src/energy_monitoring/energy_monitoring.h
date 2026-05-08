@@ -1,0 +1,10 @@
+//
+// Created by Kirill Shypachov on 26.10.2025.
+//
+
+#ifndef CEDAR_SWITCH_3IN3OUT_POWER_ENERGY_MONITORING_H
+#define CEDAR_SWITCH_3IN3OUT_POWER_ENERGY_MONITORING_H
+
+void energy_monitoring_init(void);
+
+#endif //CEDAR_SWITCH_3IN3OUT_POWER_ENERGY_MONITORING_H

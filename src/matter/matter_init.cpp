@@ -6,6 +6,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/kernel.h>
 #include <zephyr/net/net_event.h>
+#include "matter_event_loop.h"
 
 #include <app/server/Server.h>
 #include <platform/CHIPDeviceLayer.h>
@@ -29,6 +30,10 @@ LOG_MODULE_REGISTER(matter);
 
 static struct k_work matter_start_work;
 static atomic_t matter_start_work_submitted;
+
+K_THREAD_STACK_DEFINE(matter_boot_thread_stack, 8192);
+static struct k_thread matter_boot_thread_data;
+#define MATTER_BOOT_THREAD_PRIORITY   14
 
 using namespace chip;
 using namespace chip::DeviceLayer;
@@ -72,7 +77,7 @@ static void log_matter_onboarding_codes()
     LOG_INF("Matter manual pairing code: %s", manualCodeBuffer);
 }
 
-void matter_init()
+static void matter_init()
 {
     CHIP_ERROR err;
 
@@ -133,7 +138,7 @@ void matter_init()
 
 }
 
-void matter_start()
+static void matter_start()
 {
     CHIP_ERROR err;
 
@@ -151,43 +156,56 @@ void matter_start()
     started = true;
     LOG_INF("Matter event loop started");
 
-    err = chip::Server::GetInstance().GetCommissioningWindowManager().OpenBasicCommissioningWindow();
-    if (err != CHIP_NO_ERROR) {
-        LOG_ERR("OpenBasicCommissioningWindow failed: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
-    }
-
-    chip::CommissioningWindowManager & cwm = chip::Server::GetInstance().GetCommissioningWindowManager();
-
-    if (cwm.IsCommissioningWindowOpen()) {
-        LOG_INF("Commissioning window is open");
-        log_matter_onboarding_codes();
-    } else {
-        LOG_INF("Commissioning window is closed");
-    }
+    // err = chip::Server::GetInstance().GetCommissioningWindowManager().OpenBasicCommissioningWindow();
+    // if (err != CHIP_NO_ERROR) {
+    //     LOG_ERR("OpenBasicCommissioningWindow failed: %" CHIP_ERROR_FORMAT, err.Format());
+    //     return;
+    // }
+    //
+    // chip::CommissioningWindowManager & cwm = chip::Server::GetInstance().GetCommissioningWindowManager();
+    //
+    // if (cwm.IsCommissioningWindowOpen()) {
+    //     LOG_INF("Commissioning window is open");
+    //     log_matter_onboarding_codes();
+    // } else {
+    //     LOG_INF("Commissioning window is closed");
+    // }
 }
 
-static void matter_start_work_handler(struct k_work *work) {
-    ARG_UNUSED(work);
+static void matter_start_work_handler(void * p1, void * p2, void * p3) {
+    ARG_UNUSED(p1);
+    ARG_UNUSED(p2);
+    ARG_UNUSED(p3);
+
     matter_init();
     matter_start();
+    start_io_to_matter_stream();
+
+    k_thread_abort(k_current_get());
 }
 
-void init_ip_v6_address(struct net_mgmt_event_callback *cb,
-                     uint64_t mgmt_event,
-                     struct net_if *iface)
+void start_matter()
 {
-    LOG_INF("Default interface: %p", iface);
+    LOG_INF("Net callback IPv6 got, start matter after 5 sec");
+
+    k_msleep(5000);
 
     if (!atomic_cas(&matter_start_work_submitted, 0, 1)) {
         LOG_INF("Matter start work already submitted");
         return;
     }
 
-    k_work_init(&matter_start_work, matter_start_work_handler);
-    int ret = k_work_submit(&matter_start_work);
-    if (ret < 0) {
-        atomic_clear(&matter_start_work_submitted);
-        LOG_ERR("Failed to submit Matter start work: %d", ret);
-    }
+    // Start Matter boot task
+
+    k_tid_t tid = k_thread_create(
+        &matter_boot_thread_data,
+        matter_boot_thread_stack,
+        K_THREAD_STACK_SIZEOF(matter_boot_thread_stack),
+        matter_start_work_handler,
+        NULL, NULL, NULL,
+        MATTER_BOOT_THREAD_PRIORITY,
+        0, K_NO_WAIT);
+
+    k_thread_name_set(tid, "matter_boot_thread");
+
 }

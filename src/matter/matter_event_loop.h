@@ -2,7 +2,6 @@
 // Created by Kirill Shypachov on 18.04.2026.
 //
 
-#ifndef CEDAR_SWITCH_3IN4OUT_POWER_MATTER_EVENT_LOOP_H
-#define CEDAR_SWITCH_3IN4OUT_POWER_MATTER_EVENT_LOOP_H
+#pragma once
 
-#endif //CEDAR_SWITCH_3IN4OUT_POWER_MATTER_EVENT_LOOP_H
+void start_io_to_matter_stream(void);

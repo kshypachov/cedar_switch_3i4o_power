@@ -1,0 +1,10 @@
+//
+// Created by Kirill Shypachov on 14.09.2025.
+//
+
+#ifndef CEDAR_SWITCH_3IN3OUT_POWER_LITTLEFS_MOUNT_H
+#define CEDAR_SWITCH_3IN3OUT_POWER_LITTLEFS_MOUNT_H
+
+int fs_service_init(void);
+
+#endif //CEDAR_SWITCH_3IN3OUT_POWER_LITTLEFS_MOUNT_H

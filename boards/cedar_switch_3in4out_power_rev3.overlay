@@ -1,21 +1,8 @@
-/ {
-	chosen {
-		//zephyr,flash = &flash_ext;
-		//zephyr,code-partition = &slot0_partition;
-		zephyr,flash = &flash0;
-		//zephyr,flash = &flash_ext;
-		zephyr,code-partition = &slot2_partition;
-		//zephyr,shell-uart = &cdc_acm_uart0;
-		//zephyr,console = &cdc_acm_uart0;
-	};
-};
-
 &clk_msis {
 	status = "disabled";
 	msi-range = <4>;
 	msi-pll-mode;
 };
-
 
 &pll1 {
 	div-m = <5>;
@@ -36,15 +23,3 @@
 	div-q = <10>;
 	div-r = <2>;
 };
-//
-//&octospi1 {
-//	clocks = <&rcc STM32_CLOCK(AHB2_2, 4)>,
-//			 <&rcc STM32_SRC_PLL1_Q OCTOSPI_SEL(2)>,
-//			 <&rcc STM32_CLOCK(AHB2, 21)>;
-//};
-//
-//&octospi2 {
-//	clocks = <&rcc STM32_CLOCK(AHB2_2, 4)>,
-//			 <&rcc STM32_SRC_PLL1_Q OCTOSPI_SEL(2)>,
-//			 <&rcc STM32_CLOCK(AHB2, 21)>;
-//};

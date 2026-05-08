@@ -14,7 +14,7 @@
 #include "../../settings_topics.h"
 #include "../authentication.h"
 
-LOG_MODULE_REGISTER(REST_API_default_relay_state);
+LOG_MODULE_REGISTER(REST_API_default_relay_state, LOG_LEVEL_DBG);
 
 
 static void app_settings_def_relay_state_update(relays_def_state state) {
@@ -23,6 +23,8 @@ static void app_settings_def_relay_state_update(relays_def_state state) {
     settings_save_one(def_relays1_state_settings_topik, &state.relay1, sizeof(state.relay1));
     settings_save_one(def_relays2_state_settings_topik, &state.relay2, sizeof(state.relay2));
     settings_save_one(def_relays3_state_settings_topik, &state.relay3, sizeof(state.relay3));
+    settings_save_one(def_relays4_state_settings_topik, &state.relay4, sizeof(state.relay4));
+
 }
 
 /* Дескрипторы полей для json_obj_parse:
@@ -33,6 +35,7 @@ static const struct json_obj_descr relays_def_state_descr[] = {
     JSON_OBJ_DESCR_PRIM_NAMED(relays_def_state, "relay1", relay1, JSON_TOK_TRUE),
     JSON_OBJ_DESCR_PRIM_NAMED(relays_def_state, "relay2", relay2, JSON_TOK_TRUE),
     JSON_OBJ_DESCR_PRIM_NAMED(relays_def_state, "relay3", relay3, JSON_TOK_TRUE),
+    JSON_OBJ_DESCR_PRIM_NAMED(relays_def_state, "relay4", relay4, JSON_TOK_TRUE),
 };
 
 static int settings_def_relay_state_handler(struct http_client_ctx *client,
@@ -60,17 +63,20 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
                 settings_load_one(def_relays1_state_settings_topik, &relays_def.relay1, sizeof(relays_def.relay1));
                 settings_load_one(def_relays2_state_settings_topik, &relays_def.relay2, sizeof(relays_def.relay2));
                 settings_load_one(def_relays3_state_settings_topik, &relays_def.relay3, sizeof(relays_def.relay3));
+                settings_load_one(def_relays4_state_settings_topik, &relays_def.relay4, sizeof(relays_def.relay4));
 
                 /* Формируем JSON строку */
                 snprintk(resp_buf, sizeof(resp_buf),
                                  "{\"enabled\": %s, "
                                  "\"relay1\": %s, "
                                  "\"relay2\": %s, "
-                                 "\"relay3\": %s}",
+                                 "\"relay3\": %s, "
+                                 "\"relay4\": %s}",
                                  relays_def.enabled ? "true" : "false",
                                  relays_def.relay1 ? "true" : "false",
                                  relays_def.relay2 ? "true" : "false",
-                                 relays_def.relay3 ? "true" : "false");
+                                 relays_def.relay3 ? "true" : "false",
+                                 relays_def.relay4 ? "true" : "false");
             }
         }else if (client->method == HTTP_POST) {
             if (status == HTTP_SERVER_DATA_ABORTED) {
@@ -87,7 +93,7 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
             cursor += request_ctx->data_len;
 
             if (status == HTTP_SERVER_DATA_FINAL) {
-                http_settings_status_set_updated();
+                //http_settings_status_set_updated();
                 relays_def_state tmp = {0};
                 const int expected = BIT_MASK(ARRAY_SIZE(relays_def_state_descr));
                 int ret = json_obj_parse(post_request_buff, cursor, relays_def_state_descr, ARRAY_SIZE(relays_def_state_descr), &tmp);
@@ -112,11 +118,13 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
                                  "{\"enabled\": %s, "
                                  "\"relay1\": %s, "
                                  "\"relay2\": %s, "
-                                 "\"relay3\": %s}",
+                                 "\"relay3\": %s, "
+                                 "\"relay4\": %s}",
                                  tmp.enabled ? "true" : "false",
                                  tmp.relay1 ? "true" : "false",
                                  tmp.relay2 ? "true" : "false",
-                                 tmp.relay3 ? "true" : "false");
+                                 tmp.relay3 ? "true" : "false",
+                                 tmp.relay4 ? "true" : "false");
 
                 if (n < 0 || n >= (int)sizeof(resp_buf)) {
                     response_ctx->status = HTTP_500_INTERNAL_SERVER_ERROR;
@@ -163,6 +171,6 @@ static struct http_resource_detail_dynamic settings_def_relay_state = {
 
 /* === Register path for HTTP service only === */
 HTTP_RESOURCE_DEFINE(api_def_relay_state,
-                     http_api_service,
+                     http_service,
                      "/api/relays/safe_state",
                      &settings_def_relay_state);

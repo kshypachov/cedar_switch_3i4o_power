@@ -1,3 +1,1 @@
-//
-// Created by Kirill Shypachov on 06.05.2026.
-//
+/* Implementation moved to matter_control.cpp (requires C++ Matter SDK) */

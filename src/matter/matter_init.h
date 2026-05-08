@@ -13,9 +13,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    void matter_init();
-    void matter_start();
-    void init_ip_v6_address(struct net_mgmt_event_callback *cb, uint64_t mgmt_event, struct net_if *iface);
+    //void matter_init();
+    //void matter_start();
+    void start_matter();
 #ifdef __cplusplus
 }
 #endif

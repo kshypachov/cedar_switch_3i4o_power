@@ -16,6 +16,12 @@
 #include <zephyr/net/net_mgmt.h>
 #include <zephyr/net/dhcpv4.h>
 #include <zephyr/net/ethernet_mgmt.h>
+#include <zephyr/kernel.h>
+#include <zephyr/settings/settings.h>
+#include <zephyr/sys/printk.h>
+
+#include "zephyr/net/net_config.h"
+#include "../matter/matter_init.h"
 
 LOG_MODULE_REGISTER(net_init, LOG_LEVEL_INF);
 
@@ -23,6 +29,9 @@ LOG_MODULE_REGISTER(net_init, LOG_LEVEL_INF);
 #define EEPROM_I2C_ADDR      0x50
 #define EEPROM_MAC_OFFSET    0xFA
 #define MAC_ADDR_LEN         6
+
+static struct net_mgmt_event_callback cb;
+static struct net_mgmt_event_callback cb6;
 
 static bool mac_is_all_value(const uint8_t *mac, uint8_t value)
 {
@@ -111,10 +120,50 @@ int ethernet_interfaces_init(void)
         return ret;
     }
 
+    LOG_INF("Network interface up with MAC %02x:%02x:%02x:%02x:%02x:%02x",
+           mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+
+    net_mgmt_init_event_callback(&cb6, start_matter, NET_EVENT_IPV6_ADDR_ADD);
+    net_mgmt_add_event_callback(&cb6);
+
     net_if_up(iface); /* DHCP starts automatically if CONFIG_NET_DHCPV4=y */
     (void)net_dhcpv4_start(iface); /* Explicit DHCP start */
-    LOG_INF("Network interface up with MAC %02x:%02x:%02x:%02x:%02x:%02x",
-            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
     return 0;
+}
+
+
+static int warmup_settings_cb(const char *key,
+
+                  size_t len,
+                  settings_read_cb read_cb,
+                  void *cb_arg,
+                  void *param)
+
+{
+
+    ARG_UNUSED(param);
+    /*
+     * Важно: чтобы реально прогреть backend/cache, лучше прочитать value.
+     * Если читать не нужно, можно использовать маленький буфер и дочитывать
+     * кусками.
+     */
+    uint8_t buf[64];
+    size_t off = 0;
+    while (off < len) {
+        size_t chunk = MIN(sizeof(buf), len - off);
+        ssize_t rc = read_cb(cb_arg, buf, chunk);
+        if (rc < 0) {
+            printk("settings warmup: failed to read %s: %d\n",
+                   key, (int)rc);
+            return 0; /* продолжаем обход */
+        }
+        if (rc == 0) {
+            break;
+        }
+        off += rc;
+    }
+    printk("settings warmup: key=%s len=%u\n", key, (unsigned int)len);
+    return 0; /* продолжать обход */
 }

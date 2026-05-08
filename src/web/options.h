@@ -1,0 +1,10 @@
+//
+// Created by Kirill Shypachov on 25.10.2025.
+//
+
+#ifndef CEDAR_SWITCH_3IN3OUT_POWER_OPTIONS_H
+#define CEDAR_SWITCH_3IN3OUT_POWER_OPTIONS_H
+
+
+
+#endif //CEDAR_SWITCH_3IN3OUT_POWER_OPTIONS_H

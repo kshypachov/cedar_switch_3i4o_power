@@ -12,9 +12,14 @@
 #include "../http_common.h"
 #include "../../settings_topics.h"
 #include "../../zbus_topics.h"
+#include <global_var.h>
 
-LOG_MODULE_REGISTER(REST_API_relays_state);
+#include "config/device-config.h"
 
+
+LOG_MODULE_REGISTER(REST_API_relays_state, LOG_LEVEL_DBG);
+
+/* Local struct used only for JSON parsing of the relay state endpoint */
 typedef struct {
     bool relay1;
     bool relay2;
@@ -22,22 +27,28 @@ typedef struct {
     bool relay4;
 } relays_state_t;
 
+static void relays_state_update(relays_state_t state) {
 
-void relays_state_update(relays_state_t state) {
+    io_event_data_t event;
+    bool prev_state[] = {state.relay1, state.relay2, state.relay3, state.relay4};
 
-    outputs_msg_t relays_state = {0};
-    zbus_chan_read(&outputs_zbus_topik, &relays_state, K_NO_WAIT);
-    relays_state.seq++;
-    relays_state.state = state.relay1 << 0 | state.relay2 << 1 | state.relay3 << 2 | state.relay4 << 3;
-    zbus_chan_pub(&outputs_zbus_topik, &relays_state, K_NO_WAIT);
+    event.event_direction = TO_INTERFACE;
 
-}
+    for (size_t i = OUTPUT_1_CONTROL; i <= OUTPUT_4_CONTROL; i++)
+    {
+        event.io_event = i;
+        event.bool_data = prev_state[i - OUTPUT_1_CONTROL];
+        zbus_chan_pub(&io_events, &event, K_NO_WAIT);
+    }
 
-int relays_state_get(void) {
+    event.event_direction = FROM_INTERFACE;
 
-    outputs_msg_t relays_state = {0};
-    zbus_chan_read(&outputs_zbus_topik, &relays_state, K_NO_WAIT);
-    return relays_state.state;
+    for (size_t i = OUTPUT_1_CONTROL; i <= OUTPUT_4_CONTROL; i++)
+    {
+        event.io_event = i;
+        event.bool_data = prev_state[i - OUTPUT_1_CONTROL];
+        zbus_chan_pub(&io_events, &event, K_NO_WAIT);
+    }
 }
 
 static const struct json_obj_descr relays_state_descr[] = {
@@ -58,23 +69,27 @@ static int relays_state_handler(struct http_client_ctx *client,
     static char resp_buf[256] = "\0";
     static char post_request_buff [256] = "\0";
     static size_t cursor;
-    uint8_t relays_state = 0;
 
 
     if (client->method == HTTP_GET) {
-
+// State read from globar var
         LOG_INF("GET /api/relays/state");
-        relays_state = relays_state_get();
-        /* Формируем JSON строку */
+        bool r[4] = {false, false, false, false};
+        for (size_t i = 0; i < accessories_count; i++) {
+            uint8_t ep = accessories_list[i].endpoint;
+            if (ep >= 1 && ep <= 4) {
+                r[ep - 1] = accessories_list[i].state;
+            }
+        }
         int n = snprintk(resp_buf, sizeof(resp_buf),
                          "{\"relay1\": %s, "
                          "\"relay2\": %s, "
                          "\"relay3\": %s, "
                          "\"relay4\": %s }",
-                         (relays_state & 1) ? "true" : "false" ,
-                         (relays_state & 2) ? "true" : "false" ,
-                         (relays_state & 4) ? "true" : "false" ,
-                         (relays_state & 8) ? "true" : "false" );
+                         r[0] ? "true" : "false",
+                         r[1] ? "true" : "false",
+                         r[2] ? "true" : "false",
+                         r[3] ? "true" : "false");
 
         if (n < 0 || n >= (int)sizeof(resp_buf)) {
             response_ctx->status = HTTP_500_INTERNAL_SERVER_ERROR;
@@ -85,6 +100,7 @@ static int relays_state_handler(struct http_client_ctx *client,
 
             return 0;
         }
+        LOG_DBG("GET /api/relays/state: %s", resp_buf);
         response_ctx->status = HTTP_200_OK;
         response_ctx->body = (uint8_t *) resp_buf;
         response_ctx->body_len = strlen(resp_buf);
@@ -96,11 +112,13 @@ static int relays_state_handler(struct http_client_ctx *client,
         LOG_INF("POST /api/relays/state");
 
         if (status == HTTP_SERVER_DATA_ABORTED) {
+            LOG_WRN("POST /api/relays/state aborted");
             cursor = 0;
             return 0;
         }
 
         if (request_ctx->data_len + cursor > sizeof(post_request_buff)) {
+            LOG_WRN("POST /api/relays/state: buffer overflow");
             cursor = 0;
             return -ENOMEM;
         }
@@ -109,6 +127,8 @@ static int relays_state_handler(struct http_client_ctx *client,
         cursor += request_ctx->data_len;
 
         if (status == HTTP_SERVER_DATA_FINAL) {
+
+            LOG_DBG("POST /api/relays/state: %s", post_request_buff);
 
             relays_state_t tmp = {0};
             const int expected = BIT_MASK(ARRAY_SIZE(relays_state_descr));
@@ -172,7 +192,7 @@ return 0;
 }
 
 
-static struct http_resource_detail_dynamic relays_state = {
+static struct http_resource_detail_dynamic relays_state_api = {
     .common = {
         .type = HTTP_RESOURCE_TYPE_DYNAMIC,
         .bitmask_of_supported_http_methods = BIT(HTTP_GET) | BIT(HTTP_POST) | BIT(HTTP_OPTIONS),
@@ -182,8 +202,8 @@ static struct http_resource_detail_dynamic relays_state = {
     .user_data = NULL,
 };
 
-/* === Register path for HTTP service only === */
+
 HTTP_RESOURCE_DEFINE(api_relays_state,
-                     http_api_service,
+                     http_service,
                      "/api/relays/state",
-                     &relays_state);
+                     &relays_state_api);

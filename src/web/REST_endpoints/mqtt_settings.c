@@ -114,7 +114,7 @@ static int settings_mqtt_handler(struct http_client_ctx *client,
 
         if (status == HTTP_SERVER_DATA_FINAL) {
 
-            http_settings_status_set_updated();
+            //http_settings_status_set_updated();
             mqtt_settings_t tmp = {0};
             const int expected = BIT_MASK(ARRAY_SIZE(mqtt_settings_descr));
             int ret = json_obj_parse(post_request_buff, cursor, mqtt_settings_descr, ARRAY_SIZE(mqtt_settings_descr), &tmp);
@@ -163,10 +163,8 @@ static int settings_mqtt_handler(struct http_client_ctx *client,
             response_ctx->final_chunk = true;
 
             return 0;
-
         }
             return 0;
-
     }else {
         return -1;
     }
@@ -187,6 +185,6 @@ static struct http_resource_detail_dynamic settings_mqtt = {
 
 /* === Register path for HTTP service only === */
 HTTP_RESOURCE_DEFINE(api_mqtt_settings,
-                     http_api_service,
+                     http_service,
                      "/api/mqtt/settings",
                      &settings_mqtt);
