@@ -1,0 +1,30 @@
+&clk_msis {
+	status = "disabled";
+	msi-range = <4>;
+	msi-pll-mode;
+};
+
+&clk_lse {
+	clock-frequency = <32768>;
+	status = "disabled";
+};
+
+&pll1 {
+	div-m = <5>;
+	mul-n = <64>;
+	div-q = <2>;
+	div-r = <2>;
+	div-p = <2>;
+	clocks = <&clk_hse>;
+	status = "okay";
+};
+
+&pll2 {
+	status = "okay";
+	clocks = <&clk_hse>;
+	div-m = <5>;
+	mul-n = <96>;
+	div-p = <2>;
+	div-q = <10>;
+	div-r = <2>;
+};

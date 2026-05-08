@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.intellij.dts.settings.DtsSettings">
+    <option name="zephyrBoard" value="$PROJECT_DIR$/boards/arm/cedar_switch_3in4out_power_rev3" />
+    <option name="zephyrCMakeSync" value="false" />
+    <option name="zephyrRoot" value="$PROJECT_DIR$/../../Zephyr/latest/zephyr" />
+  </component>
+</project>

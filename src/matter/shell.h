@@ -1,0 +1,8 @@
+//
+// Created by Kirill Shypachov on 19.04.2026.
+//
+
+#ifndef CEDAR_SWITCH_3IN4OUT_POWER_SHELL_H
+#define CEDAR_SWITCH_3IN4OUT_POWER_SHELL_H
+
+#endif //CEDAR_SWITCH_3IN4OUT_POWER_SHELL_H

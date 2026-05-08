@@ -1,0 +1,31 @@
+//
+// Created by Kirill Shypachov on 05.04.2026.
+//
+
+#ifndef CEDAR_SWITCH_3IN3OUT_POWER_EVENTS_H
+#define CEDAR_SWITCH_3IN3OUT_POWER_EVENTS_H
+
+enum event_direction {
+    FROM_INTERFACE,
+    TO_INTERFACE,
+};
+
+enum io_events {
+    INPUT_1_STATUS,
+    INPUT_2_STATUS,
+    INPUT_3_STATUS,
+
+    OUTPUT_1_STATUS,
+    OUTPUT_2_STATUS,
+    OUTPUT_3_STATUS,
+    OUTPUT_4_STATUS,
+
+    OUTPUT_1_CONTROL,
+    OUTPUT_2_CONTROL,
+    OUTPUT_3_CONTROL,
+    OUTPUT_4_CONTROL,
+
+    UNCNOWN_IO_EVENT = 255,
+};
+
+#endif //CEDAR_SWITCH_3IN3OUT_POWER_EVENTS_H
