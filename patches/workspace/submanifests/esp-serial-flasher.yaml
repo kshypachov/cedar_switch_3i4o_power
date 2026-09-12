@@ -1,0 +1,16 @@
+# ESP32 ROM serial bootloader flashing library, used by the Cedar switch
+# application to update the ESP32-C6 coprocessor over USART3.
+#
+# Pinned to the v2.0.0 tag (commit ca7edfce). v2.0.0 is the first release
+# carrying a first-class Zephyr port: zephyr/module.yml, port/zephyr_port.c
+# and the "espressif,esp-loader" devicetree binding.
+#
+# See cedar_switch_3in4out_power/docs/device-development/development-plan.md,
+# section 8, for how it is integrated and who owns the UART.
+
+manifest:
+  projects:
+    - name: esp-serial-flasher
+      url: https://github.com/espressif/esp-serial-flasher
+      revision: ca7edfcef903a4075332f0ad6c8fbda1e2cb9a9d
+      path: modules/lib/esp-serial-flasher

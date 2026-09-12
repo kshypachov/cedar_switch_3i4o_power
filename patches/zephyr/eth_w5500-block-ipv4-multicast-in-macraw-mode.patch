@@ -1,0 +1,69 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=9A=D0=B8=D1=80=D0=B8=D0=BB=D0=BE=20=D0=A8=D0=B8=D0=BF=D0=B0=D1=87=D0=BE=D0=B2?= <kshypachov@gmail.com>
+Date: Fri, 12 Sep 2026 00:00:00 +0300
+Subject: [PATCH] drivers: ethernet: w5500: block IPv4 multicast in MACRAW mode
+
+The W5500 RX thread is created with K_PRIO_COOP(2) and, inside its
+`while (int_pin)` loop, performs synchronous polled SPI without ever
+yielding. Any sustained frame rate on the segment therefore starves the
+rest of the system rather than merely loading it.
+
+This was reached on real hardware: an unrelated 239.255.x.x stream on the
+LAN delivered roughly 271 frames/s to the driver, and logging and the
+shell stopped responding for as long as it ran. The frames were discarded
+by the IP stack — none of them were for this device — so the entire cost
+was paid before anything could decide they were uninteresting.
+
+Socket 0 mode already sets MACRAW plus the MAC filter. Setting MMB
+(Sn_MR bit 5) in addition makes the chip drop IPv4 multicast before it
+reaches the host, which removes the load at its source.
+
+MIP6B (bit 4) is deliberately left clear. Both bits were characterised on
+this hardware: MMB drops only IPv4 multicast, MIP6B drops only IPv6
+multicast. Blocking IPv6 multicast breaks Neighbor Discovery and SLAAC,
+and Matter runs on IPv6 multicast, so it cannot be used on this product.
+
+The starvation itself is upstream issue #115626, where the consensus is
+that these threads should not be cooperative. This patch only removes the
+traffic that triggered it here; it is not a fix for that issue.
+
+Signed-off-by: Кирило Шипачов <kshypachov@gmail.com>
+---
+diff --git a/drivers/ethernet/eth_w5500.c b/drivers/ethernet/eth_w5500.c
+index a7c588bbeb6..3f16a9b0a23 100644
+--- a/drivers/ethernet/eth_w5500.c
++++ b/drivers/ethernet/eth_w5500.c
+@@ -419,8 +419,15 @@ static void w5500_iface_init(struct net_if *iface)
+ 	const struct device *dev = net_if_get_device(iface);
+ 	struct w5500_runtime *ctx = dev->data;
+ 
+-	/* configure Socket 0 with MACRAW mode and MAC filtering enabled */
+-	uint8_t mode = S0_MR_MACRAW | BIT(W5500_S0_MR_MF);
++	/*
++	 * Socket 0 in MACRAW with MAC filtering. MMB additionally drops IPv4
++	 * multicast in hardware: an unrelated 239.255.x stream on the segment
++	 * was delivering ~271 frames/s to this driver, and since the RX thread
++	 * is cooperative it never yielded, starving logging, the shell and the
++	 * rest of the system. IPv6 multicast is left enabled (MIP6B, bit 4,
++	 * stays clear) because Matter depends on it.
++	 */
++	uint8_t mode = S0_MR_MACRAW | BIT(W5500_S0_MR_MF) | BIT(W5500_S0_MR_MMB);
+ 
+ 	w5500_spi_write(dev, W5500_S0_MR, &mode, 1);
+ 
+diff --git a/drivers/ethernet/eth_w5500_priv.h b/drivers/ethernet/eth_w5500_priv.h
+index d1070e62d49..a86cd6a5bfe 100644
+--- a/drivers/ethernet/eth_w5500_priv.h
++++ b/drivers/ethernet/eth_w5500_priv.h
+@@ -68,6 +68,8 @@
+ #define W5500_S0_IMR		(W5500_S0_REGS + W5500_Sn_IMR)
+ 
+ #define W5500_S0_MR_MF		7 /* MAC Filter for W5500 */
++#define W5500_S0_MR_MMB		5 /* IPv4 multicast blocking in MACRAW mode */
++#define W5500_S0_MR_MIP6B	4 /* IPv6 packet blocking in MACRAW mode */
+ #define W5500_Sn_REGS_LEN	0x0040
+ #define W5500_SIMR		0x0018 /* Socket Interrupt Mask Register */
+ #define IR_S0			0x01
+-- 
+2.51.0
+

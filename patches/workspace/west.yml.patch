@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=9A=D0=B8=D1=80=D0=B8=D0=BB=D0=BE=20=D0=A8=D0=B8=D0=BF=D0=B0=D1=87=D0=BE=D0=B2?= <kshypachov@gmail.com>
+Date: Fri, 12 Sep 2026 00:00:00 +0300
+Subject: [PATCH] manifest: add the Matter SDK and the three Cedar repositories
+
+The workspace is a plain Zephyr checkout whose own west.yml is the manifest,
+so the projects this product needs have to be added to it. Four entries:
+connectedhomeip at v1.6.0.0, the board definition, the application and the
+bootloader.
+
+This is not upstreamable. It is recorded only so the edit can be restored
+after the manifest repository is reset or re-cloned; see patches/README.md.
+
+Signed-off-by: Кирило Шипачов <kshypachov@gmail.com>
+---
+diff --git a/west.yml b/west.yml
+index a5dece1843e..aed9eb2811b 100644
+--- a/west.yml
++++ b/west.yml
+@@ -23,6 +23,10 @@ manifest:
+       url-base: https://github.com/zephyrproject-rtos
+     - name: babblesim
+       url-base: https://github.com/BabbleSim
++    - name: matter
++      url-base: https://github.com/project-chip
++    - name: cedar_board
++      url-base: https://github.com/kshypachov
+ 
+   group-filter: [-babblesim, -optional, -testing]
+ 
+@@ -416,6 +420,26 @@ manifest:
+     - name: zephyr-xenlib
+       revision: 7f0884563f865a2a223f26dd0d847fb0faad397d
+       path: modules/lib/zephyr-xenlib
++    - name: connectedhomeip
++      remote: matter
++      revision: v1.6.0.0
++      path: modules/lib/matter
++      clone-depth: 1
++    - name: cedar_board_zephyr
++      remote: cedar_board
++      revision: main
++      path: zephyr/boards/arm/cedar_switch_3in4out_power_rev3
++      clone-depth: 1
++    - name: cedar_switch_3i4o_power
++      remote: cedar_board
++      revision: main
++      path: cedar_switch_3in4out_power
++      clone-depth: 1
++    - name: cedar_switch_3i4o_power_bootloader
++      remote: cedar_board
++      revision: main
++      path: cedar_switch_3i4o_power_bootloader
++      clone-depth: 1
+   # zephyr-keep-sorted-stop
+ 
+   self:
+-- 
+2.51.0
+

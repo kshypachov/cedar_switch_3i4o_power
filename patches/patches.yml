@@ -1,0 +1,34 @@
+# Patches this application carries against repositories it does not own.
+#
+# Format and tooling: `west patch`, schema at
+# zephyr/scripts/schemas/patch-schema.yml. The command has to be told where the
+# definitions live, because -sm resolves a directory and not a west project
+# name — this application carries no zephyr/module.yml of its own, so its west
+# name "cedar_switch_3i4o_power" is rejected and the workspace-relative
+# directory is used instead:
+#
+#   west patch -sm cedar_switch_3in4out_power -b patches -l patches/patches.yml list
+#   west patch -sm cedar_switch_3in4out_power -b patches -l patches/patches.yml -dm zephyr apply
+#
+# Do NOT run `west patch clean` in this workspace. Its default clean-command is
+# `git clean -d -f -x`, and the zephyr checkout here is shared with several
+# other projects whose work is untracked — including the submanifest this
+# product needs. See README.md.
+
+patches:
+  - path: zephyr/eth_w5500-block-ipv4-multicast-in-macraw-mode.patch
+    sha256sum: 131ac3912ebf86b50e490630851866f4b3a93bba9c67d1f872884c3d885e56cb
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-12
+    upstreamable: true
+    issue: https://github.com/zephyrproject-rtos/zephyr/issues/115626
+    merge-status: false
+    comments: >-
+      Sets MMB (Sn_MR bit 5) so the W5500 drops IPv4 multicast in hardware.
+      Removes the traffic that starved the cooperative RX thread on this
+      product; it is not a fix for the thread priority itself. MIP6B is
+      deliberately left clear because Matter needs IPv6 multicast. Both bits
+      were characterised on the board, not taken from the datasheet. Upstream
+      request drafted in docs/upstream/w5500-multicast-filtering-request.md.
