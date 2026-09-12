@@ -1,0 +1,44 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig JOB_MANAGER
+	bool "Job manager for long-running web API operations"
+	help
+	  Identity, lifecycle and idempotency for operations that cannot finish
+	  inside an HTTP handler: network apply, Wi-Fi scan, firmware upload and
+	  install, Matter commissioning window, password change. Fixed pools, no
+	  dynamic allocation. See include/job_manager/job_manager.h.
+
+if JOB_MANAGER
+
+config JOB_MANAGER_MAX_JOBS
+	int "Full job records"
+	default 16
+	range 4 64
+	help
+	  Records holding a complete job, including phase and progress. Active
+	  jobs are never evicted from this pool; when it is full of terminal
+	  jobs the oldest is retired into the compact tier, and when it is full
+	  of active jobs job_create() reports exhaustion so the caller can
+	  answer 429 instead of losing work.
+
+config JOB_MANAGER_DEDUPE_SLOTS
+	int "Compact retention records"
+	default 256
+	range 16 1024
+	help
+	  Much smaller records that outlive full ones, keeping a job's id, its
+	  idempotency key and its outcome available after the full record is
+	  evicted. This is what stops a late retry from executing an action a
+	  second time. Sized generously because each entry is cheap.
+
+config JOB_MANAGER_RETENTION_SECONDS
+	int "How long a compact record answers a retry, in seconds"
+	default 900
+	range 60 7200
+	help
+	  The API contract requires at least 15 minutes (900 s). Retention is
+	  measured on the monotonic clock, so it is unaffected by wall-clock
+	  changes and does not survive a reboot — which is correct, since job
+	  ids are only unique within a boot.
+
+endif # JOB_MANAGER

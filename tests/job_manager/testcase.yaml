@@ -1,0 +1,13 @@
+tests:
+  cedar.job_manager:
+    # Pure logic, no hardware: the sim tier from section 12 of the development
+    # plan. Zephyr's POSIX architecture does not build on macOS, so this runs
+    # in the Linux container - see tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - job_manager
+      - sim
