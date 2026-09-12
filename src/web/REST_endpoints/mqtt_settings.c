@@ -5,32 +5,128 @@
 #include <zephyr/kernel.h>
 #include <zephyr/net/http/service.h>
 #include <zephyr/net/http/server.h>
-#include <zephyr/settings/settings.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/data/json.h>
 #include <string.h>
 #include <zephyr/logging/log.h>
 #include "../http_common.h"
 #include "../../settings_topics.h"
+#include <settings_registry/settings_registry.h>
 
 LOG_MODULE_REGISTER(REST_API_mqtt_settings);
 
-static void app_settings_mqtt_update(mqtt_settings_t const mqtt) {
-    settings_save_one(mqtt_enabled_settings, &mqtt.enabled, sizeof(mqtt.enabled));
-    settings_save_one(mqtt_host_settings, mqtt.host, sizeof(mqtt.host));
-    settings_save_one(mqtt_port_settings, &mqtt.port, sizeof(mqtt.port));
-    settings_save_one(mqtt_user_settings, mqtt.user, sizeof(mqtt.user));
-    settings_save_one(mqtt_pass_settings, mqtt.pass, sizeof(mqtt.pass));
+/*
+ * MQTT connection settings, persisted through settings-registry under
+ * "reg/mqtt/". Keys that were written by earlier firmware as raw Zephyr
+ * settings ("/settings/mqtt/...") are not migrated: nothing on the device
+ * reads MQTT settings at runtime (the loader in ha_mqtt.c is commented out),
+ * so an existing board shows defaults until the settings are posted again.
+ * "secure" was declared but never stored, so it has no key.
+ */
+#define MQTT_KEY_ENABLED "mqtt/enabled"
+#define MQTT_KEY_HOST    "mqtt/host"
+#define MQTT_KEY_PORT    "mqtt/port"
+#define MQTT_KEY_USER    "mqtt/user"
+#define MQTT_KEY_PASS    "mqtt/pass"
+
+static bool mqtt_enabled_storage;
+static uint32_t mqtt_port_storage;
+static char mqtt_host_storage[sizeof(((mqtt_settings_t *)0)->host)];
+static char mqtt_user_storage[sizeof(((mqtt_settings_t *)0)->user)];
+static char mqtt_pass_storage[sizeof(((mqtt_settings_t *)0)->pass)];
+
+SETTING_REGISTRY_DEFINE(mqtt_enabled_setting, .key = MQTT_KEY_ENABLED,
+                        .type = SETTING_TYPE_BOOL, .storage = SETTING_STORAGE_OWNED,
+                        .persistence = SETTING_PERSISTENT, .mirror = SETTING_MIRROR_RAM,
+                        .ram_storage = &mqtt_enabled_storage);
+SETTING_REGISTRY_DEFINE(mqtt_host_setting, .key = MQTT_KEY_HOST,
+                        .type = SETTING_TYPE_STRING, .storage = SETTING_STORAGE_OWNED,
+                        .persistence = SETTING_PERSISTENT, .mirror = SETTING_MIRROR_RAM,
+                        .max_len = sizeof(mqtt_host_storage), .default_value = "",
+                        .ram_storage = mqtt_host_storage);
+/* The JSON field is uint16_t: reject what would silently wrap. */
+SETTING_REGISTRY_DEFINE(mqtt_port_setting, .key = MQTT_KEY_PORT,
+                        .type = SETTING_TYPE_U32, .storage = SETTING_STORAGE_OWNED,
+                        .persistence = SETTING_PERSISTENT, .mirror = SETTING_MIRROR_RAM,
+                        .ram_storage = &mqtt_port_storage,
+                        .validate = setting_validate_range_u32,
+                        .validate_ctx = &(struct setting_range_u32){ .min = 0, .max = UINT16_MAX });
+SETTING_REGISTRY_DEFINE(mqtt_user_setting, .key = MQTT_KEY_USER,
+                        .type = SETTING_TYPE_STRING, .storage = SETTING_STORAGE_OWNED,
+                        .persistence = SETTING_PERSISTENT, .mirror = SETTING_MIRROR_RAM,
+                        .max_len = sizeof(mqtt_user_storage), .default_value = "",
+                        .ram_storage = mqtt_user_storage);
+SETTING_REGISTRY_DEFINE(mqtt_pass_setting, .key = MQTT_KEY_PASS,
+                        .type = SETTING_TYPE_STRING, .storage = SETTING_STORAGE_OWNED,
+                        .persistence = SETTING_PERSISTENT, .mirror = SETTING_MIRROR_RAM,
+                        .max_len = sizeof(mqtt_pass_storage), .default_value = "",
+                        .ram_storage = mqtt_pass_storage);
+
+static int mqtt_set_string(const char *key, const char *value)
+{
+    struct setting_value v = {
+        .type = SETTING_TYPE_STRING,
+        .buf = { .data = (uint8_t *)value, .len = strlen(value) },
+    };
+
+    return setting_set(key, &v);
 }
 
-/* Load all fields (defaults to zeroed if not present) */
+static void mqtt_get_string(const char *key, char *buf, size_t size)
+{
+    struct setting_value v = {
+        .type = SETTING_TYPE_STRING,
+        .buf = { .data = (uint8_t *)buf, .len = size },
+    };
+
+    if (setting_get(key, &v) != 0) {
+        buf[0] = '\0';
+        return;
+    }
+    buf[MIN(v.buf.len, size - 1)] = '\0';
+}
+
+/* Returns 0, or the first registry error; later keys are still attempted. */
+static int app_settings_mqtt_update(mqtt_settings_t const *mqtt) {
+    int first_err = 0;
+    int rc;
+
+    rc = setting_set(MQTT_KEY_ENABLED, &(struct setting_value){
+        .type = SETTING_TYPE_BOOL, .b = mqtt->enabled });
+    first_err = first_err ? first_err : rc;
+    rc = mqtt_set_string(MQTT_KEY_HOST, mqtt->host);
+    first_err = first_err ? first_err : rc;
+    rc = setting_set(MQTT_KEY_PORT, &(struct setting_value){
+        .type = SETTING_TYPE_U32, .u32 = mqtt->port });
+    first_err = first_err ? first_err : rc;
+    rc = mqtt_set_string(MQTT_KEY_USER, mqtt->user);
+    first_err = first_err ? first_err : rc;
+    rc = mqtt_set_string(MQTT_KEY_PASS, mqtt->pass);
+    first_err = first_err ? first_err : rc;
+
+    if (first_err != 0) {
+        LOG_ERR("failed to store MQTT settings: %d", first_err);
+    }
+    return first_err;
+}
+
+/* Load all fields; a key that cannot be read keeps its zero value */
 static void app_settings_mqtt_load(mqtt_settings_t *mqtt) {
+    struct setting_value v;
+
     memset(mqtt, 0, sizeof(*mqtt));
-    settings_load_one(mqtt_enabled_settings, &mqtt->enabled, sizeof(mqtt->enabled));
-    settings_load_one(mqtt_host_settings,   mqtt->host, sizeof(mqtt->host));
-    settings_load_one(mqtt_port_settings,   &mqtt->port, sizeof(mqtt->port));
-    settings_load_one(mqtt_user_settings,   mqtt->user, sizeof(mqtt->user));
-    settings_load_one(mqtt_pass_settings,   mqtt->pass, sizeof(mqtt->pass));
+
+    v.type = SETTING_TYPE_BOOL;
+    if (setting_get(MQTT_KEY_ENABLED, &v) == 0) {
+        mqtt->enabled = v.b;
+    }
+    v.type = SETTING_TYPE_U32;
+    if (setting_get(MQTT_KEY_PORT, &v) == 0) {
+        mqtt->port = (uint16_t)v.u32;
+    }
+    mqtt_get_string(MQTT_KEY_HOST, mqtt->host, sizeof(mqtt->host));
+    mqtt_get_string(MQTT_KEY_USER, mqtt->user, sizeof(mqtt->user));
+    mqtt_get_string(MQTT_KEY_PASS, mqtt->pass, sizeof(mqtt->pass));
 }
 
 static const struct json_obj_descr mqtt_settings_descr[] = {
@@ -58,13 +154,6 @@ static int settings_mqtt_handler(struct http_client_ctx *client,
         if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 
             app_settings_mqtt_load(&mqtt_sett);
-
-            settings_load_one(mqtt_enabled_settings, &mqtt_sett.enabled, sizeof(mqtt_sett.enabled));
-            settings_load_one(mqtt_host_settings, mqtt_sett.host, sizeof(mqtt_sett.host));
-            settings_load_one(mqtt_port_settings, &mqtt_sett.port, sizeof(mqtt_sett.port));
-            settings_load_one(mqtt_user_settings, mqtt_sett.user, sizeof(mqtt_sett.user));
-            settings_load_one(mqtt_pass_settings, mqtt_sett.pass, sizeof(mqtt_sett.pass));
-
 
             /* Формируем JSON строку */
             int n = snprintk(resp_buf, sizeof(resp_buf),
@@ -132,7 +221,15 @@ static int settings_mqtt_handler(struct http_client_ctx *client,
                 return 0;
             }
             /* Применяем новое состояние */
-            app_settings_mqtt_update(tmp);
+            if (app_settings_mqtt_update(&tmp) != 0) {
+                response_ctx->status = HTTP_500_INTERNAL_SERVER_ERROR;
+                static const char err_json[] = "{\"error\":\"storage\"}";
+                response_ctx->body = (uint8_t *)err_json;
+                response_ctx->body_len = sizeof(err_json) - 1;
+                response_ctx->final_chunk = true;
+
+                return 0;
+            }
 
             /* Возвращаем обновлённое состояние (или 204 No Content — на ваш вкус) */
             int n = snprintk(resp_buf, sizeof(resp_buf),

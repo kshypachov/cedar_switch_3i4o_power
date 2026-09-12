@@ -4,7 +4,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/net/http/service.h>
 #include <zephyr/net/http/server.h>
-#include <zephyr/settings/settings.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/data/json.h>
 #include <string.h>

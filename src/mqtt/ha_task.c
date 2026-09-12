@@ -8,7 +8,6 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/net/socket.h>
 #include <zephyr/net/socket_service.h>
-#include <zephyr/settings/settings.h>
 #include <zephyr/net/sntp.h>
 #include <zephyr/kernel.h>
 #include <zephyr/zbus/zbus.h>

@@ -10,7 +10,6 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/sys/__assert.h>
-#include <zephyr/settings/settings.h>
 #include <string.h>
 #include "../zbus_topics.h"
 #include "../settings_topics.h"

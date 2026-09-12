@@ -17,7 +17,6 @@
 #include <zephyr/net/dhcpv4.h>
 #include <zephyr/net/ethernet_mgmt.h>
 #include <zephyr/kernel.h>
-#include <zephyr/settings/settings.h>
 #include <zephyr/sys/printk.h>
 
 #include "zephyr/net/net_config.h"
@@ -137,39 +136,4 @@ int ethernet_interfaces_init(void)
     (void)net_dhcpv4_start(iface); /* Explicit DHCP start */
 
     return 0;
-}
-
-
-static int warmup_settings_cb(const char *key,
-
-                  size_t len,
-                  settings_read_cb read_cb,
-                  void *cb_arg,
-                  void *param)
-
-{
-
-    ARG_UNUSED(param);
-    /*
-     * Важно: чтобы реально прогреть backend/cache, лучше прочитать value.
-     * Если читать не нужно, можно использовать маленький буфер и дочитывать
-     * кусками.
-     */
-    uint8_t buf[64];
-    size_t off = 0;
-    while (off < len) {
-        size_t chunk = MIN(sizeof(buf), len - off);
-        ssize_t rc = read_cb(cb_arg, buf, chunk);
-        if (rc < 0) {
-            printk("settings warmup: failed to read %s: %d\n",
-                   key, (int)rc);
-            return 0; /* продолжаем обход */
-        }
-        if (rc == 0) {
-            break;
-        }
-        off += rc;
-    }
-    printk("settings warmup: key=%s len=%u\n", key, (unsigned int)len);
-    return 0; /* продолжать обход */
 }
