@@ -44,13 +44,19 @@ jobs:
     name: contract checks and mock suite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           # 3.12 is the floor tests/ci/Dockerfile settles on, for the same reason.
           python-version: '3.12'
           cache: pip
+          # The pip cache is keyed on a hash of a dependency file, and setup-python
+          # fails outright when it finds none — it looks for requirements.txt or
+          # pyproject.toml, and this repository has neither. The package lists
+          # live in this workflow, so this workflow is the honest key: editing a
+          # list invalidates the cache, and nothing else does.
+          cache-dependency-path: .github/workflows/checks.yml
 
       - name: Install the two dependencies
         # Both are already toolchain dependencies — jsonschema is in
@@ -72,7 +78,7 @@ jobs:
       ZEPHYR_TOOLCHAIN_VARIANT: host
     steps:
       - name: Check out the application inside a west workspace
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # The repository is the application, and twister expects it beside
           # ZEPHYR_BASE, so the checkout goes one level down.
@@ -85,10 +91,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends device-tree-compiler gperf ninja-build
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
+          # Same key as the contract job; the checkout sits one level down here.
+          cache-dependency-path: ws/cedar_switch_3in4out_power/.github/workflows/checks.yml
 
       - name: Install twister's Python dependencies
         # The same list as tests/ci/Dockerfile, so a failure here and a failure
@@ -155,8 +163,11 @@ jobs:
 
       - name: Keep the twister report when something failed
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
+          # A failure before twister runs leaves no report, and a warning that
+          # there is nothing to upload only buries the step that actually failed.
+          if-no-files-found: ignore
           name: twister-out
           path: |
             ws/twister-out/twister.log
