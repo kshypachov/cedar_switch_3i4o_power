@@ -1,0 +1,75 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig NETWORK_MANAGER
+	bool "Transactional network configuration"
+	select DEVICE_CONFIG_STORE
+	select JOB_MANAGER
+	select API_VALIDATION
+	help
+	  The transaction that changes this device's network without being able
+	  to lose it: validate, journal, apply, confirm — with a deadline that
+	  rolls the change back when nobody can confirm it, because the only way
+	  to manage this device is over the network it just changed. No threads
+	  and no I/O of its own; interfaces are reached through an injected
+	  adapter. See include/network_manager/network_manager.h.
+
+if NETWORK_MANAGER
+
+config NETWORK_MANAGER_CANDIDATE_TTL_SECONDS
+	int "How long a staged candidate survives without being applied"
+	default 300
+	range 30 3600
+	help
+	  The API contract specifies 300 seconds. A candidate holds the one
+	  transaction slot, so leaving one behind would block the next change;
+	  it also holds a Wi-Fi password in RAM, which is a second reason not to
+	  keep it indefinitely.
+
+config NETWORK_MANAGER_CONFIRM_TIMEOUT_SECONDS
+	int "Default seconds a client has to confirm an applied change"
+	default 120
+	range 30 900
+	help
+	  Used when a request does not name its own timeout. The contract's
+	  starting value is 120 seconds, chosen to cover a browser that has to
+	  find the device at a new address and, if the address changed, log in
+	  again.
+
+config NETWORK_MANAGER_CONFIRM_TIMEOUT_MIN_SECONDS
+	int "Smallest confirmation timeout a request may ask for"
+	default 30
+	range 10 300
+	help
+	  Below this a client that merely has to reconnect would run out of time
+	  through no fault of the configuration, and the device would roll back
+	  a change that was working.
+
+config NETWORK_MANAGER_CONFIRM_TIMEOUT_MAX_SECONDS
+	int "Largest confirmation timeout a request may ask for"
+	default 900
+	range 60 3600
+	help
+	  Above this an unreachable device stays unreachable for longer than
+	  anyone will wait before power-cycling it, which defeats the point of
+	  the deadline.
+
+config NETWORK_MANAGER_SCAN_MAX_RESULTS
+	int "Access points kept from one scan"
+	default 64
+	range 8 128
+	help
+	  The contract caps a scan response at 64 records and requires
+	  `truncated=true` when more were seen. Each record is small, but the
+	  array is statically allocated, so this is real RAM.
+
+config NETWORK_MANAGER_LOG_LEVEL
+	int "Log level"
+	default 3
+	range 0 4
+	help
+	  Standard Zephyr levels: 0 none, 1 error, 2 warning, 3 info, 4 debug.
+	  Transitions are logged at info because "this device rolled back your
+	  network change" is the first thing anyone reading a boot log needs to
+	  see. Nothing here ever logs a password or an SSID.
+
+endif # NETWORK_MANAGER

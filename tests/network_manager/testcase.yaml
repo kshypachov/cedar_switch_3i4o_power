@@ -1,0 +1,16 @@
+tests:
+  cedar.network_manager:
+    # Pure logic over injected interfaces and an injected clock: the sim tier
+    # from section 12 of the development plan. A cable that is out, a password
+    # that does not work and a client that never confirms are produced here on
+    # demand; the hardware tier covers the real W5500 and C6. Zephyr's POSIX
+    # architecture does not build on macOS, so this runs in the Linux
+    # container - see tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - network_manager
+      - sim
