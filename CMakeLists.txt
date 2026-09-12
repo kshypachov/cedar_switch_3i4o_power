@@ -15,11 +15,39 @@ cmake_minimum_required(VERSION 3.20.0)
 # 2. Добавляем флаги компиляции для твоего приложения (как в твоем примере для ESP)
 #add_compile_definitions(CHIP_CONFIG_SKIP_APP_SPECIFIC_GENERATED_HEADER_INCLUDES=1)
 
+# Matter (connectedhomeip) берём из west-воркспейса: <workspace>/modules/lib/matter.
+# Корень воркспейса вычисляется из ZEPHYR_BASE (<workspace>/zephyr), без жёстких путей.
+# Переопределить можно через -DCHIP_ROOT=<path> или переменную окружения CHIP_ROOT.
+# Должно выполняться до find_package(Zephyr), иначе chip-module не подхватится.
+if(NOT DEFINED CHIP_ROOT)
+    if(DEFINED ENV{CHIP_ROOT})
+        set(CHIP_ROOT $ENV{CHIP_ROOT})
+    elseif(DEFINED ENV{ZEPHYR_BASE})
+        get_filename_component(WEST_TOPDIR $ENV{ZEPHYR_BASE} DIRECTORY)
+        set(CHIP_ROOT ${WEST_TOPDIR}/modules/lib/matter)
+    else()
+        message(FATAL_ERROR "Не задан ни CHIP_ROOT, ни ZEPHYR_BASE. Собирайте через `west build`.")
+    endif()
+endif()
+get_filename_component(CHIP_ROOT "${CHIP_ROOT}" ABSOLUTE)
+if(NOT EXISTS ${CHIP_ROOT}/config/zephyr/chip-module/zephyr/module.yml)
+    message(FATAL_ERROR "Matter не найден в CHIP_ROOT=${CHIP_ROOT}. Выполните `west update`.")
+endif()
+
+list(APPEND ZEPHYR_EXTRA_MODULES ${CHIP_ROOT}/config/zephyr/chip-module)
+
+# Модули приложения внутри репозитория (modules/<name>, у каждого zephyr/module.yml).
+# Zephyr сам находит только модули из west-манифеста, поэтому регистрируем явно.
+# Должно выполняться до find_package(Zephyr).
 list(APPEND ZEPHYR_EXTRA_MODULES
-        /Volumes/LocalData/Programming/Zephyr/latest/modules/lib/matter/config/zephyr/chip-module
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/settings-registry # Generic per-key settings store over Zephyr Settings (CONFIG_SETTINGS_REGISTRY)
 )
 
-set(CHIP_ROOT /Volumes/LocalData/Programming/Zephyr/latest/modules/lib/matter)
+# CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
+# а новый Zephyr генерирует его как generated/zephyr/autoconf.h. Отдаём этот каталог
+# только GN-сборке CHIP (MATTER_CFLAGS наследуется chip-module через add_subdirectory),
+# чтобы не включать глобальный CONFIG_LEGACY_GENERATED_INCLUDE_PATH.
+list(APPEND MATTER_CFLAGS "-isystem${CMAKE_BINARY_DIR}/zephyr/include/generated/zephyr")
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(cedar_switch_3in4out_power)
@@ -46,6 +74,10 @@ zephyr_include_directories(
 #        src/matter
 #        src/app-firmware-updater/*.c
 )
+
+# CHIP-заголовки, подключаемые из src/matter/*.cpp, делают #include "autoconf.h"
+# (см. MATTER_CFLAGS выше — там то же самое для GN-сборки libCHIP). Только для app.
+target_include_directories(app SYSTEM PRIVATE ${ZEPHYR_BINARY_DIR}/include/generated/zephyr)
 
 # add al files by mask
 file(GLOB app_sources
@@ -202,6 +234,37 @@ generate_inc_file_for_target(
 )
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)
+
+# ------------------ PSRAM (OCTOSPI2, окно 0x70000000, регион линкера PSRAM) ------------------
+# MCUboot поднимает PSRAM и оставляет её в memory-mapped режиме до прыжка в приложение,
+# поэтому .data/.bss/.noinit можно линковать туда штатным zephyr_code_relocate():
+# копирование .data и обнуление .bss выполняются в z_prep_c() (arch/common/xip.c, init.c),
+# когда окно уже доступно. В SRAM остаются ядро (_kernel, стеки ISR/main/idle, sysworkq),
+# arch, драйверы прерываний/таймера/UART (async UART работает через DMA), USB.
+if(CONFIG_CODE_DATA_RELOCATION)
+    foreach(lib
+            app                     # приложение + Matter-исходники из chip_data_model
+            subsys__net__ip         # пулы net_pkt/net_buf, очередь net_mgmt, стеки RX/TX
+            subsys__net             # сокеты, TLS-контексты
+            subsys__net__conn_mgr
+            subsys__net__lib__dns
+            subsys__net__lib__http
+            subsys__fs              # littlefs: кеши файлов, read/prog-буферы
+            subsys__zbus)
+        if(TARGET ${lib})
+            zephyr_code_relocate(LIBRARY ${lib} LOCATION PSRAM_DATA_BSS_NOINIT NOKEEP)
+        endif()
+    endforeach()
+    zephyr_code_relocate(FILES
+            ${ZEPHYR_BASE}/subsys/logging/log_core.c                # буфер deferred-логов
+            ${ZEPHYR_BASE}/lib/libc/common/source/stdlib/malloc.c   # арена malloc (Matter, mbedTLS)
+            ${ZEPHYR_BASE}/kernel/mempool.c                         # куча k_malloc
+            ${ZEPHYR_BASE}/drivers/flash/flash_shell.c
+            LOCATION PSRAM_DATA_BSS_NOINIT NOKEEP)
+endif()
+# .bss/.noinit библиотек, объектники которых gen_relocate_app.py не находит или путает:
+# libCHIP.a (GN), libtfpsacrypto.a, settings_registry, esp_hosted_mcu (+_core, SPI без DMA).
+zephyr_linker_sources(SECTIONS src/helpers/psram_sections.ld)
 
 zephyr_linker_section(NAME http_resource_desc_http_service
         KVMA RAM_REGION GROUP RODATA_REGION)

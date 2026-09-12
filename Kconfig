@@ -31,6 +31,4 @@
 #
 # endmenu
 
-source "/Volumes/LocalData/Programming/Zephyr/latest/modules/lib/matter/config/zephyr/Kconfig"
-
 source "Kconfig.zephyr"

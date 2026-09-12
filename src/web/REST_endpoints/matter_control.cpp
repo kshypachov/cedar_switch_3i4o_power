@@ -59,7 +59,7 @@ static void do_factory_reset(intptr_t)
 }
 
 static int matter_control_cb(struct http_client_ctx *client,
-                             enum http_data_status status,
+                             enum http_transaction_status status,
                              const struct http_request_ctx *request_ctx,
                              struct http_response_ctx *response_ctx,
                              void *user_data)
@@ -126,7 +126,7 @@ static int matter_control_cb(struct http_client_ctx *client,
     } else if (client->method == HTTP_POST) {
         LOG_INF("POST /api/matter/control");
 
-        if (status == HTTP_SERVER_DATA_ABORTED) {
+        if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
             post_cursor = 0;
             return 0;
         }
@@ -139,7 +139,7 @@ static int matter_control_cb(struct http_client_ctx *client,
         memcpy(post_buf + post_cursor, request_ctx->data, request_ctx->data_len);
         post_cursor += request_ctx->data_len;
 
-        if (status != HTTP_SERVER_DATA_FINAL) {
+        if (status != HTTP_SERVER_REQUEST_DATA_FINAL) {
             return 0;
         }
 

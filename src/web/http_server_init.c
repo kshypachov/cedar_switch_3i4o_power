@@ -5,7 +5,7 @@
 #include <zephyr/net/http/service.h>
 #include <zephyr/net/http/server.h>
 #include <zephyr/logging/log.h>
-#include <autoconf.h>
+#include <zephyr/autoconf.h>
 #include "authentication.h"
 
 static uint16_t http_static_service_port = 80;
@@ -19,7 +19,7 @@ LOG_MODULE_REGISTER(http_server_init);
 //
 // Fallback handler: Redirect on /
 static int fallback_redirect_handler(struct http_client_ctx *client,
-                                     enum http_data_status status,
+                                     enum http_transaction_status status,
                                      const struct http_request_ctx *request_ctx,
                                      struct http_response_ctx *response_ctx,
                                      void *user_data)

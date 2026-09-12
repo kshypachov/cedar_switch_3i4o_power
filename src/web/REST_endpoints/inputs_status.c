@@ -15,7 +15,7 @@
 LOG_MODULE_REGISTER(REST_API_inputs_state, LOG_LEVEL_DBG);
 
 static int inputs_state_handler(struct http_client_ctx *client,
-                                enum http_data_status status,
+                                enum http_transaction_status status,
                                 const struct http_request_ctx *request_ctx,
                                 struct http_response_ctx *response_ctx,
                                 void *user_data) {

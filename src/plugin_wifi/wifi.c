@@ -69,12 +69,13 @@ void wifi_init() {
     //
     LOG_INF("WiFi reset pin configured and set to ACTIVE");
 
-    gpio_pin_set_dt(&wifi_reset_gpio, 0);
-    gpio_pin_set_dt(&wifi_boot_gpio, 0);
-    k_msleep(100);
+    /* В DTS платы GPIO_ACTIVE_LOW: 1 = линия в 0 (reset / BOOT-страп активны) */
     gpio_pin_set_dt(&wifi_reset_gpio, 1);
+    gpio_pin_set_dt(&wifi_boot_gpio, 1);
+    k_msleep(100);
+    gpio_pin_set_dt(&wifi_reset_gpio, 0);
 	k_msleep(200);
-	gpio_pin_set_dt(&wifi_boot_gpio, 1);
+	gpio_pin_set_dt(&wifi_boot_gpio, 0);
     LOG_INF("WiFi reset pin set to INACTIVE");
 
 }

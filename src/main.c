@@ -21,7 +21,11 @@
 #include <zephyr/logging/log_backend_net.h>
 #include <zephyr/logging/log_ctrl.h>
 #include <zephyr/sys/reboot.h>
+#include <zephyr/cache.h>
 
+#include <settings_registry/settings_registry.h>
+
+#include "helpers/memory.h"
 #include "web/http_server_init.h"
 #include "mqtt/ha_mqtt.h"
 #include "io/io.h"
@@ -150,9 +154,66 @@ static void ipv4_addr_add_handler(struct net_mgmt_event_callback *cb,
 
 //#include <stm32u5xx_hal_icache.h>
 
+/*
+ * PSRAM (OCTOSPI2, окно 0x70000000) поднимает MCUboot (sysbuild/mcuboot.conf,
+ * драйвер qspi-psram с chip-variant = "AUTO") и оставляет в memory-mapped
+ * режиме. Здесь инициализируем внешнюю кучу helpers/memory.c поверх этого окна
+ * и делаем короткий write/read тест, чтобы в логе было видно, что PSRAM
+ * доступна приложению.
+ */
+#define PSRAM_SELFTEST_WORDS 1024U
+
+static void psram_selftest(void)
+{
+	uint32_t *buf = NULL;
+	uint32_t bad = 0;
+
+	init_memory_helpers();
+
+	buf = allocate_external_memory(PSRAM_SELFTEST_WORDS * sizeof(uint32_t));
+	if (buf == NULL) {
+		LOG_ERR("PSRAM: allocation from external heap failed");
+		return;
+	}
+
+	for (uint32_t i = 0; i < PSRAM_SELFTEST_WORDS; i++) {
+		buf[i] = 0xA5000000U ^ (i * 0x01010101U);
+	}
+	/* Дочитать до самой PSRAM, а не до строки D-cache */
+	sys_cache_data_flush_and_invd_range(buf, PSRAM_SELFTEST_WORDS * sizeof(uint32_t));
+
+	for (uint32_t i = 0; i < PSRAM_SELFTEST_WORDS; i++) {
+		if (buf[i] != (0xA5000000U ^ (i * 0x01010101U))) {
+			bad++;
+		}
+	}
+
+	if (bad == 0) {
+		LOG_INF("PSRAM @%p: write/read %u words OK", (void *)buf,
+			PSRAM_SELFTEST_WORDS);
+	} else {
+		LOG_ERR("PSRAM @%p: %u of %u words mismatch", (void *)buf, bad,
+			PSRAM_SELFTEST_WORDS);
+	}
+
+	free_external_memory(buf);
+}
+
 int main(void)
 {
 	LOG_INF("Start main app (build: %s %s) version 8", __DATE__, __TIME__);
+
+	psram_selftest();
+
+	/*
+	 * Реестр настроек: /lfs уже смонтирован через fstab (automount), поэтому
+	 * store /lfs/settings доступен. Вызываем до первых потребителей настроек
+	 * (io_init и далее), чтобы RAM-зеркала ключей "reg/" были загружены.
+	 */
+	int err = setting_registry_init();
+	if (err != 0) {
+		LOG_ERR("settings registry init failed: %d", err);
+	}
 
 	io_init();
 	ethernet_interfaces_init();

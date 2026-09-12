@@ -1,0 +1,3 @@
+name: cedar_mcuboot_hooks
+build:
+  cmake: .

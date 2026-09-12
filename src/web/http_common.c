@@ -68,7 +68,7 @@
 // #define MAX_SIZE   (150 * 1024)
 //
 // int http_upload(struct http_client_ctx *client,
-//     enum http_data_status status,
+//     enum http_transaction_status status,
 //     const struct http_request_ctx *request_ctx,
 //     struct http_response_ctx *response_ctx,
 //     char *base_path,

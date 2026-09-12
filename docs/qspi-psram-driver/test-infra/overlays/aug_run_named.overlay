@@ -1,0 +1,13 @@
+/* Configuration 1: named part, the driver supplies the rest */
+/delete-node/ &psram0;
+
+&octospi2 {
+	psram0: psram@0 {
+		compatible = "qspi-psram";
+		reg = <0>;
+		chip-variant = "ESP64H";
+		mspi-max-frequency = <DT_FREQ_M(80)>;
+		mspi-io-mode = "MSPI_IO_MODE_QUAD";
+		memmap-config = <1 0 0 0>;
+	};
+};

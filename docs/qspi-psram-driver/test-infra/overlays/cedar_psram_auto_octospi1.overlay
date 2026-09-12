@@ -1,0 +1,60 @@
+/*
+ * AUTO chip-variant test overlay for cedar_switch_3in4out_power_rev3:
+ * replaces the legacy OSPI PSRAM node with the MSPI controller and a
+ * qspi-psram device in AUTO mode. PSRAM nCS is PA0 via OCTOSPIM port 2,
+ * IOs are the port-1 low bank, hence st,ncs-port = <2>.
+ */
+
+/delete-node/ &octospi1;
+
+/*
+ * The board DTS predates the check that MSIS hardware auto calibration
+ * (msi-pll-mode) needs the LSE, which this board leaves disabled.
+ */
+&clk_msis {
+	/delete-property/ msi-pll-mode;
+};
+
+/ {
+	aliases {
+		psram0 = &qspi_psram;
+	};
+
+	soc {
+		octospi1: spi@420d1400 {
+			compatible = "st,stm32-ospi-controller";
+			reg = <0x420d1400 0x400>, <0x90000000 DT_SIZE_M(256)>;
+			interrupts = <76 0>;
+			clock-names = "ospix", "ospi-ker", "ospi-mgr";
+			clocks = <&rcc STM32_CLOCK(AHB2_2, 4)>,
+				 <&rcc STM32_SRC_SYSCLK OCTOSPI_SEL(0)>,
+				 <&rcc STM32_CLOCK(AHB2, 21)>;
+			clock-frequency = <DT_FREQ_M(80)>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			pinctrl-0 = <&octospim_p1_clk_pb10 &octospim_p2_ncs_pa0
+				     &octospim_p1_io0_pb1 &octospim_p1_io1_pb0
+				     &octospim_p1_io2_pa7 &octospim_p1_io3_pa6>;
+			pinctrl-names = "default";
+			st,ncs-port = <2>;
+			/* Release nCS every 128 bytes, well inside the worst-case tCEM */
+			st,csbound = <7>;
+			status = "okay";
+
+			qspi_psram: psram@0 {
+				compatible = "qspi-psram", "st,psram-device";
+				reg = <0>;
+				chip-variant = "AUTO";
+				/*
+				 * The driver takes the capacity from the chip ID;
+				 * the controller and the sample still size their
+				 * window/test area from this property.
+				 */
+				size = <DT_SIZE_M(64)>;
+				mspi-max-frequency = <DT_FREQ_M(50)>;
+				mspi-io-mode = "MSPI_IO_MODE_QUAD";
+				memmap-config = <1 0 0 0>;
+			};
+		};
+	};
+};

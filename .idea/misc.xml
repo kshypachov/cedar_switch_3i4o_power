@@ -4,4 +4,12 @@
     <option name="pythonIntegrationState" value="YES" />
   </component>
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="WestSettings"><![CDATA[{
+  "westProfiles": {
+    "West": {
+      "boardName": "cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app",
+      "buildOptions": "--sysbuild"
+    }
+  }
+}]]></component>
 </project>

@@ -4,7 +4,7 @@
 
 #include "IdentifyCluster.h"
 
-#include <app/DefaultTimerDelegate.h>
+#include <platform/DefaultTimerDelegate.h>
 #include <app/clusters/identify-server/IdentifyCluster.h>
 #include <app/server-cluster/ServerClusterInterfaceRegistry.h>
 #include <data-model-providers/codegen/CodegenDataModelProvider.h>

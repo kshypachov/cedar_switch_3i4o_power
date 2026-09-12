@@ -1,0 +1,19 @@
+/* Configuration 2: everything spelled out in devicetree */
+/delete-node/ &psram0;
+
+&octospi2 {
+	psram0: psram@0 {
+		compatible = "qspi-psram";
+		reg = <0>;
+		size = <DT_SIZE_M(64)>;
+		mspi-max-frequency = <DT_FREQ_M(80)>;
+		mspi-io-mode = "MSPI_IO_MODE_QUAD";
+		read-command = <0xeb>;
+		write-command = <0x38>;
+		command-length = "INSTR_1_BYTE";
+		address-length = "ADDR_3_BYTE";
+		rx-dummy = <6>;
+		ce-break-config = <1024 8>;
+		memmap-config = <1 0 0 0>;
+	};
+};

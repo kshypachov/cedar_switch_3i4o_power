@@ -1,0 +1,49 @@
+/*
+ * MCUboot runs from internal flash: override the ext_flash_app chosen nodes
+ * (zephyr,flash = &ext_flash) so the bootloader links into boot_partition.
+ */
+/ {
+	chosen {
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &boot_partition;
+	};
+};
+
+/*
+ * MCUboot takes the slot0 base for chain-loading from devicetree
+ * (flash_device_base() -> PARTITION_ADDRESS - PARTITION_OFFSET). With a plain
+ * fixed-partitions node under the OSPI NOR that base is 0, so do_boot reads the
+ * vector table from 0x400 and faults. Describe the memory-mapped window the way
+ * ST boards do (stm32h750b_dk ext_flash_app): ranges down to the partitions and
+ * slot0 as zephyr,mapped-partition, so the base becomes 0x90000000.
+ * This replaces the custom flash_device_base() of the old bootloader and is
+ * applied to the MCUboot image only (the application link address is unchanged).
+ */
+&ext_flash_ctrl {
+	ranges = <0x0 0x90000000 DT_SIZE_M(16)>;
+};
+
+&ext_flash {
+	#address-cells = <1>;
+	#size-cells = <1>;
+	ranges;
+
+	partitions {
+		/* only mapped partitions here, otherwise flash_map lists slot0 twice */
+		/delete-property/ compatible;
+		ranges;
+	};
+};
+
+&slot0_partition {
+	compatible = "zephyr,mapped-partition";
+};
+
+&clk_lse {
+	clock-frequency = <32768>;
+	status = "okay";
+};
+
+&{/uart-bridge0} {
+	status = "disabled";
+};

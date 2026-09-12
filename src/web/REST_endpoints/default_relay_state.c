@@ -39,7 +39,7 @@ static const struct json_obj_descr relays_def_state_descr[] = {
 };
 
 static int settings_def_relay_state_handler(struct http_client_ctx *client,
-                            enum http_data_status status,
+                            enum http_transaction_status status,
                             const struct http_request_ctx *request_ctx,
                             struct http_response_ctx *response_ctx,
                             void *user_data) {
@@ -51,11 +51,11 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
     static char post_request_buff [256] = "\0";
     static size_t cursor;
     //authentication(headers, header_count, )
-    //if (status == HTTP_SERVER_DATA_FINAL) {
+    //if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 
         if (client->method == HTTP_GET) {
 
-            if (status == HTTP_SERVER_DATA_FINAL) {
+            if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 
                 relays_def_state relays_def = {0};
 
@@ -79,7 +79,7 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
                                  relays_def.relay4 ? "true" : "false");
             }
         }else if (client->method == HTTP_POST) {
-            if (status == HTTP_SERVER_DATA_ABORTED) {
+            if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
                 cursor = 0;
                 return 0;
             }
@@ -92,7 +92,7 @@ static int settings_def_relay_state_handler(struct http_client_ctx *client,
             memcpy(post_request_buff + cursor, request_ctx->data, request_ctx->data_len);
             cursor += request_ctx->data_len;
 
-            if (status == HTTP_SERVER_DATA_FINAL) {
+            if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
                 //http_settings_status_set_updated();
                 relays_def_state tmp = {0};
                 const int expected = BIT_MASK(ARRAY_SIZE(relays_def_state_descr));

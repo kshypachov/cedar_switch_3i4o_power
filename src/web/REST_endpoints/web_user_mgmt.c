@@ -36,7 +36,7 @@
 // };
 //
 // static int web_user_mgmt_handler(struct http_client_ctx *client,
-//                             enum http_data_status status,
+//                             enum http_transaction_status status,
 //                             const struct http_request_ctx *request_ctx,
 //                             struct http_response_ctx *response_ctx,
 //                             void *user_data) {
@@ -86,7 +86,7 @@
 //         static size_t cursor;
 //         static char post_request_buff[JSON_BUF_SIZE];
 //
-//         if (status == HTTP_SERVER_DATA_ABORTED) {
+//         if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
 //             cursor = 0;
 //             return 0;
 //         }
@@ -104,7 +104,7 @@
 //         memcpy(post_request_buff + cursor, request_ctx->data, request_ctx->data_len);
 //         cursor += request_ctx->data_len;
 //
-//         if (status == HTTP_SERVER_DATA_FINAL) {
+//         if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 //             web_user_credentials_t tmp = {0};
 //             const int expected = BIT_MASK(ARRAY_SIZE(web_user_cred_descr));
 //             int ret = json_obj_parse(post_request_buff, cursor, web_user_cred_descr, ARRAY_SIZE(web_user_cred_descr), &tmp);

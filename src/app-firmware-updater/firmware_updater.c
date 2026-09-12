@@ -10,6 +10,11 @@
 #include <zephyr/net/http/client.h>
 #include <zephyr/net/net_ip.h>
 #include <zephyr/net/socket.h>
+/* POSIX-имена (getaddrinfo/socket/connect/close) больше не приходят из
+ * zephyr/net/socket.h — нужны POSIX-заголовки (CONFIG_POSIX_API). */
+#include <netdb.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #include <zephyr/net/tls_credentials.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/dfu/mcuboot.h>

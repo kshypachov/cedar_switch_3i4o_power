@@ -18,7 +18,7 @@
 // /* === ADD: dynamic JSON endpoint GET /api/settings/ === */
 //
 // static int settings_handler_get(struct http_client_ctx *client,
-//                             enum http_data_status status,
+//                             enum http_transaction_status status,
 //                             const struct http_request_ctx *request_ctx,
 //                             struct http_response_ctx *response_ctx,
 //                             void *user_data)
@@ -27,7 +27,7 @@
 //     ARG_UNUSED(request_ctx);
 //     ARG_UNUSED(user_data);
 //
-//     if (status == HTTP_SERVER_DATA_FINAL) {
+//     if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 //         if (http_settings_status_get()) {
 //             sprintf(resp_buf, "{\"reboot_required\": true}");
 //         }else {

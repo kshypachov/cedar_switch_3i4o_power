@@ -59,7 +59,7 @@ static const struct json_obj_descr relays_state_descr[] = {
 };
 
 static int relays_state_handler(struct http_client_ctx *client,
-                            enum http_data_status status,
+                            enum http_transaction_status status,
                             const struct http_request_ctx *request_ctx,
                             struct http_response_ctx *response_ctx,
                             void *user_data) {
@@ -111,7 +111,7 @@ static int relays_state_handler(struct http_client_ctx *client,
     }else if (client->method == HTTP_POST) {
         LOG_INF("POST /api/relays/state");
 
-        if (status == HTTP_SERVER_DATA_ABORTED) {
+        if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
             LOG_WRN("POST /api/relays/state aborted");
             cursor = 0;
             return 0;
@@ -126,7 +126,7 @@ static int relays_state_handler(struct http_client_ctx *client,
         memcpy(post_request_buff + cursor, request_ctx->data, request_ctx->data_len);
         cursor += request_ctx->data_len;
 
-        if (status == HTTP_SERVER_DATA_FINAL) {
+        if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
 
             LOG_DBG("POST /api/relays/state: %s", post_request_buff);
 

@@ -92,11 +92,17 @@ int ethernet_interfaces_init(void)
     uint8_t mac[MAC_ADDR_LEN];
     const uint8_t fallback_mac[MAC_ADDR_LEN] = { 0x02, 0x00, 0x00, 0x12, 0x34, 0x56 };
 
-    struct net_if *iface = net_if_get_default();
+    /*
+     * С Wi-Fi (esp_hosted_mcu) сетевых интерфейсов два, и их порядок не
+     * гарантирован. Берём W5500 по устройству и оставляем его интерфейсом по
+     * умолчанию, как было до появления Wi-Fi.
+     */
+    struct net_if *iface = net_if_lookup_by_dev(DEVICE_DT_GET_ONE(wiznet_w5500));
     if (!iface) {
-        LOG_ERR("Default network interface not found");
+        LOG_ERR("W5500 network interface not found");
         return -ENODEV;
     }
+    net_if_set_default(iface);
 
     ret = read_mac_from_eeprom(mac);
     if (ret < 0) {

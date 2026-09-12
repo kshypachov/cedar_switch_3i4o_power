@@ -44,7 +44,7 @@ HTTP_SERVICE_DEFINE(upload_service, "0.0.0.0", &http_api_service_port, 4, 10, NU
 
 /* ───────── Обработчик POST /upload ───────── */
 static int upload_handler(struct http_client_ctx *client,
-                           enum http_data_status status,
+                           enum http_transaction_status status,
                            const struct http_request_ctx *request_ctx,
                            struct http_response_ctx *response_ctx,
                            void *user_data)
@@ -55,7 +55,7 @@ static int upload_handler(struct http_client_ctx *client,
     int ret = 0;
 
     /* ── Запрос прерван клиентом ── */
-    if (status == HTTP_SERVER_DATA_ABORTED) {
+    if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
         LOG_WRN("Upload aborted");
         upload_active = false;
         return 0;
@@ -108,7 +108,7 @@ static int upload_handler(struct http_client_ctx *client,
     }
 
     /* ── Последний чанк: сбрасываем остаток буфера во Flash ── */
-    if (status == HTTP_SERVER_DATA_FINAL) {
+    if (status == HTTP_SERVER_REQUEST_DATA_FINAL) {
         /*
          * flush=true — принудительно записывает оставшиеся
          * байты в буфере, даже если буфер заполнен не полностью.
