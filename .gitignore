@@ -1,0 +1,23 @@
+# Build output. west, sysbuild and CLion all default to build/ inside the
+# application directory; none of it belongs in the repository.
+/build/
+/build*/
+cmake-build-*/
+
+# Twister output, including the sim tier run through tests/ci.
+twister-out/
+twister-out.*/
+
+# macOS directory metadata.
+.DS_Store
+
+# Per-machine tool configuration. .codex/config.toml points at a localhost
+# port that differs on every machine, and Claude Code's settings.local.json is
+# local by definition; the shared parts of both live in files without
+# ".local" in the name.
+/.codex/
+/.claude/settings.local.json
+
+# Editor scratch files.
+*.swp
+*~
