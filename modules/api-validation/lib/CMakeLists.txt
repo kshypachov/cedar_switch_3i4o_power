@@ -1,0 +1,3 @@
+zephyr_library_named(api_validation)
+
+zephyr_library_sources(api_validation.c)

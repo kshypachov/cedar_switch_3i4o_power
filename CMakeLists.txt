@@ -43,6 +43,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/settings-registry # Generic per-key settings store over Zephyr Settings (CONFIG_SETTINGS_REGISTRY)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/job-manager       # Lifecycle and idempotency for long-running web API operations (CONFIG_JOB_MANAGER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/device-config-store # Durable, transactional configuration with committed/pending generations (CONFIG_DEVICE_CONFIG_STORE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/api-validation  # Shared error codes, rejections and strict parsers for the web API (CONFIG_API_VALIDATION)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",

@@ -1,0 +1,26 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig API_VALIDATION
+	bool "Shared validation and error codes for the web API"
+	help
+	  The contract's error table as code: every rejection gets its code, its
+	  HTTP status, its retryable flag, its field paths and its JSON shape
+	  from one place, so route handlers cannot drift apart. Also carries the
+	  strict parsers the contract needs for addresses and opaque ids. No
+	  dynamic allocation and no networking dependency. See
+	  include/api_validation/api_validation.h.
+
+if API_VALIDATION
+
+config API_VALIDATION_MAX_FIELDS
+	int "Field-level errors carried in one rejection"
+	default 6
+	range 1 32
+	help
+	  Each entry costs a path buffer, and an error is meant to live in a
+	  request context rather than on a deep stack, so this is deliberately
+	  small. Overflow is not silent: the rejection is marked truncated so a
+	  client knows the list is partial. Six covers every form in the first
+	  version with room to spare.
+
+endif # API_VALIDATION
