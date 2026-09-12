@@ -12,6 +12,14 @@ twister-out.*/
 .twister-tmp/
 .twister-tmp.*/
 
+# Python bytecode and pytest state from tools/api-contract. Both are generated
+# beside the sources they belong to, and neither is reproducible across
+# interpreter versions.
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
 # macOS directory metadata.
 .DS_Store
 
