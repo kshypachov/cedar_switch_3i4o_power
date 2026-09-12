@@ -4,9 +4,13 @@
 /build*/
 cmake-build-*/
 
-# Twister output, including the sim tier run through tests/ci.
+# Twister output, including the sim tier run through tests/ci. Twister does not
+# overwrite an existing output directory, it suffixes a counter, so the numbered
+# forms have to be covered too.
 twister-out/
 twister-out.*/
+.twister-tmp/
+.twister-tmp.*/
 
 # macOS directory metadata.
 .DS_Store

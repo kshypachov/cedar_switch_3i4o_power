@@ -9,7 +9,10 @@ list(APPEND ZEPHYR_EXTRA_MODULES
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(device_config_store_test)
 
+# The flash fake is shared with any other suite that needs durable storage;
+# section 12 of the plan puts the common fakes under tests/.
+target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../fakes)
 target_sources(app PRIVATE
     src/main.c
-    src/fake_storage.c
+    ../fakes/fake_storage.c
 )
