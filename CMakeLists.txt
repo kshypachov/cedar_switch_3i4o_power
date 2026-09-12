@@ -99,7 +99,6 @@ target_sources(app PRIVATE
         src/msgq_topiks.c
         src/web/http_common.c
 #        src/web/REST_endpoints/settings_status.c
-#        src/web/REST_endpoints/default_relay_state.c
 #        src/web/REST_endpoints/mqtt_settings.c
 #        src/web/REST_endpoints/relays_state.c
 #        src/web/REST_endpoints/system_reboot.c

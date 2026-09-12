@@ -6,21 +6,6 @@
 #define CEDAR_SWITCH_3IN3OUT_POWER_SETTINGS_TOPICS_H
 #include <stdbool.h>
 
-#define def_relays_state_enable_settings_topik "/settings/relays/default/enabled"
-#define def_relays1_state_settings_topik      "/settings/relays/default/1"
-#define def_relays2_state_settings_topik      "/settings/relays/default/2"
-#define def_relays3_state_settings_topik      "/settings/relays/default/3"
-#define def_relays4_state_settings_topik      "/settings/relays/default/4"
-
-typedef struct  {
-    bool enabled;
-    bool relay1;
-    bool relay2;
-    bool relay3;
-    bool relay4;
-} relays_def_state;
-
-
 #define mqtt_enabled_settings "/settings/mqtt/enabled"
 #define mqtt_secure_settings  "/settings/mqtt/secure"
 #define mqtt_host_settings    "/settings/mqtt/host"

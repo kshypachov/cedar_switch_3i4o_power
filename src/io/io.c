@@ -10,11 +10,9 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/sys/__assert.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/settings/settings.h>
 #include <string.h>
 #include <zephyr/input/input.h>
 #include "../zbus_topics.h"
-#include "../settings_topics.h"
 #include <global_var.h>
 
 
@@ -34,12 +32,6 @@ static struct k_thread io_task_thread_data;
 
 static void input_cb(struct input_event *evt, void *user_data);
 INPUT_CALLBACK_DEFINE(NULL, input_cb, NULL);
-
-
-
-relays_def_state relays_default_state;
-
-
 
 
 static const struct device *gpio_inputs_dev = DEVICE_DT_GET(DT_NODELABEL(gpio_inputs));
@@ -80,13 +72,6 @@ static void input_cb(struct input_event *evt, void *user_data)
             LOG_ERR("Failed to publish zbus event: %d", ret);
         }
     }
-}
-
-static void write_relays_once(uint8_t state) {
-    gpio_pin_set_dt(&relay1, (state & 1)? 1 : 0);
-    gpio_pin_set_dt(&relay2, (state & 2)? 1 : 0);
-    gpio_pin_set_dt(&relay3, (state & 4)? 1 : 0);
-    gpio_pin_set_dt(&relay4, (state & 8)? 1 : 0);
 }
 
 void force_get_inputs_state(void)
@@ -142,33 +127,6 @@ void io_outputs_task(void *a, void *b, void *c) {
 
 void io_init(void) {
     LOG_INF("Start io init");
-
-    if ( 0 > settings_load_one(def_relays_state_enable_settings_topik, &relays_default_state.enabled, sizeof(relays_default_state.enabled))) {
-        LOG_ERR("Failed to load topik %s init default", def_relays_state_enable_settings_topik);
-        relays_default_state.enabled = false;
-        settings_save_one(def_relays_state_enable_settings_topik, &relays_default_state.enabled, sizeof(relays_default_state.enabled));
-    }
-    if ( 0 > settings_load_one(def_relays1_state_settings_topik, &relays_default_state.relay1, sizeof(relays_default_state.relay1))) {
-        LOG_ERR("Failed to load topik %s init default", def_relays1_state_settings_topik);
-        relays_default_state.relay1 = false;
-        settings_save_one(def_relays1_state_settings_topik, &relays_default_state.relay1, sizeof(relays_default_state.relay1));
-    }
-    if ( 0 > settings_load_one(def_relays2_state_settings_topik, &relays_default_state.relay2, sizeof(relays_default_state.relay2))) {
-        LOG_ERR("Failed to load topik %s init default", def_relays2_state_settings_topik);
-        relays_default_state.relay2 = false;
-        settings_save_one(def_relays2_state_settings_topik, &relays_default_state.relay2, sizeof(relays_default_state.relay2));
-    }
-    if ( 0 > settings_load_one(def_relays3_state_settings_topik, &relays_default_state.relay3, sizeof(relays_default_state.relay3))) {
-        LOG_ERR("Failed to load topik %s init default", def_relays3_state_settings_topik);
-        relays_default_state.relay3 = false;
-        settings_save_one(def_relays3_state_settings_topik, &relays_default_state.relay3, sizeof(relays_default_state.relay3));
-    }
-
-    if (0 > settings_load_one(def_relays4_state_settings_topik, &relays_default_state.relay4, sizeof(relays_default_state.relay4))) {
-        LOG_ERR("Failed to load topik %s init default", def_relays4_state_settings_topik);
-        relays_default_state.relay4 = false;
-        settings_save_one(def_relays4_state_settings_topik, &relays_default_state.relay4, sizeof(relays_default_state.relay4));
-    }
 
     k_tid_t tid = k_thread_create(&io_task_thread_data,
                               io_task_stack,
