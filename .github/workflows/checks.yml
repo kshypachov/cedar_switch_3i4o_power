@@ -1,0 +1,165 @@
+# Section 12 of the development plan: "CI runs the sim set and the contract
+# checks on every commit."
+#
+# Two jobs rather than one, because they cost very different amounts. The
+# contract job is plain Python and finishes in seconds; the sim job needs a
+# Zephyr tree and a compiler. Splitting them means a broken contract is reported
+# immediately instead of behind a build.
+#
+# The sim job deliberately does **not** run `west update`. The sim tier needs
+# ZEPHYR_BASE and nothing else: every suite registers the module it exercises
+# through ZEPHYR_EXTRA_MODULES, and none of them touches a manifest project.
+# What it does need is a west *workspace*, because outside one Zephyr's
+# `zephyr_module.cmake` takes the `else()` branch and ignores ZEPHYR_EXTRA_MODULES
+# entirely — the build then fails with "undefined symbol JOB_MANAGER" and nothing
+# that names the real cause. `west init -l` creates the workspace without
+# fetching anything, which was measured to be sufficient: all 124 cases pass.
+# Fetching the manifest instead would add two to three gigabytes per run for
+# modules no sim test compiles.
+name: checks
+
+on:
+  push:
+  pull_request:
+
+# A force-push should not leave two runs racing, and on a PR branch push and
+# pull_request both fire; cancelling the superseded run halves that cost.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The revision the development workspace is on, pinned so a green run means
+  # the same thing next month. Bumping it is a deliberate edit, and it should be
+  # bumped together with the developer workspace rather than drifting from it:
+  # a sim tier that passes here against a different Zephyr than the one on the
+  # desk proves less than it appears to.
+  ZEPHYR_REVISION: b6a5e6e8aa9072a10a52420095af2d99f04d71fc
+  # Matches tests/ci/README.md: arm64 there, x86-64 here, and in both cases a
+  # 64-bit userspace where the 32-bit default cannot link.
+  SIM_PLATFORM: native_sim/native/64
+
+jobs:
+  contract:
+    name: contract checks and mock suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # 3.12 is the floor tests/ci/Dockerfile settles on, for the same reason.
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install the two dependencies
+        # Both are already toolchain dependencies — jsonschema is in
+        # zephyr/scripts/requirements-base.txt and both are in the sim image — so
+        # this installs nothing the project did not already require.
+        run: python -m pip install --upgrade pip jsonschema pytest
+
+      - name: Run the contract checks and the mock suite
+        run: tests/ci/run-contract-tests.sh
+
+  sim:
+    name: sim tier (twister)
+    runs-on: ubuntu-latest
+    env:
+      # native_sim compiles with the runner's own gcc. Announcing that keeps
+      # Zephyr from hunting for an SDK this job deliberately does not install,
+      # which is the same choice tests/ci/Dockerfile makes and the reason that
+      # image is about 1 GB instead of 10.
+      ZEPHYR_TOOLCHAIN_VARIANT: host
+    steps:
+      - name: Check out the application inside a west workspace
+        uses: actions/checkout@v4
+        with:
+          # The repository is the application, and twister expects it beside
+          # ZEPHYR_BASE, so the checkout goes one level down.
+          path: ws/cedar_switch_3in4out_power
+
+      - name: Install the build tools
+        # The rest of what tests/ci/Dockerfile installs is already on the runner.
+        # cmake here is 3.28 or newer, which is Zephyr's floor.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends device-tree-compiler gperf ninja-build
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install twister's Python dependencies
+        # The same list as tests/ci/Dockerfile, so a failure here and a failure
+        # in the container mean the same thing.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            anytree canopen colorama intelhex jsonschema junitparser natsort \
+            packaging ply psutil pyelftools pykwalify pyserial pytest PyYAML \
+            semver tabulate tqdm west
+
+      - name: Fetch Zephyr at the pinned revision
+        working-directory: ws
+        # A shallow fetch of one commit. Cloning the full history would move
+        # several hundred megabytes for a tree that is read and thrown away.
+        run: |
+          git init --quiet zephyr
+          cd zephyr
+          git remote add origin https://github.com/zephyrproject-rtos/zephyr
+          git fetch --quiet --depth 1 origin "$ZEPHYR_REVISION"
+          git checkout --quiet FETCH_HEAD
+          git log -1 --format='zephyr %h %s'
+
+      - name: Create the workspace without fetching modules
+        working-directory: ws
+        run: |
+          west init -l zephyr
+          west topdir
+
+      - name: Run the sim tier
+        working-directory: ws
+        env:
+          ZEPHYR_BASE: ${{ github.workspace }}/ws/zephyr
+        # Pointed at the sim suites individually rather than at tests/, because
+        # the hardware suites name `cedar_switch_3in4out_power_rev3/...` in
+        # `platform_allow` and that board lives untracked in the shared Zephyr
+        # tree, not in this repository. Twister validates `platform_allow` while
+        # it is still discovering testsuites, so on a clean Zephyr it aborts the
+        # whole run before it filters anything — `--tag sim` and
+        # `--exclude-tag hw` were both measured, and neither helps: the abort
+        # happens first.
+        #
+        # The roots are derived from the `sim` tag rather than listed, so a suite
+        # added in a later stage is picked up without editing this file. When the
+        # board moves into the repository or into a board root that CI can see —
+        # it is on the P0 list — this can go back to a single `-T tests`.
+        run: |
+          roots=""
+          for f in cedar_switch_3in4out_power/tests/*/testcase.yaml; do
+            if grep -qE '^[[:space:]]+- sim$' "$f"; then
+              roots="$roots -T $(dirname "$f")"
+            fi
+          done
+          if [ -z "$roots" ]; then
+            echo "no testsuite declares the sim tag; refusing to pass vacuously" >&2
+            exit 1
+          fi
+          echo "sim roots:$roots"
+          # shellcheck disable=SC2086
+          python zephyr/scripts/twister $roots \
+            -p "$SIM_PLATFORM" \
+            --outdir twister-out \
+            --inline-logs
+
+      - name: Keep the twister report when something failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-out
+          path: |
+            ws/twister-out/twister.log
+            ws/twister-out/twister.json
+            ws/twister-out/twister.xml
+          retention-days: 14

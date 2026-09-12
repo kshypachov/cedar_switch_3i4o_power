@@ -1,4 +1,10 @@
-# Simulated test tier
+# Test runners
+
+Two runners live here: `run-sim-tests.sh` for the simulated tier, which needs a
+Linux container, and `run-contract-tests.sh` for the API contract, which does
+not.
+
+## Why the sim tier needs a container
 
 Zephyr's POSIX architecture (`native_sim`) does not build on macOS — the
 architecture's own CMake refuses with "The POSIX architecture only works on
@@ -6,7 +12,7 @@ Linux". Since the development hosts here are macOS, the sim tier runs in a
 small Linux container instead of being downgraded to whatever happens to run
 natively.
 
-## Running
+## Running the sim tier
 
 ```sh
 colima start --cpu 4 --memory 8 --disk 60 --mount /Volumes/Programming:w
@@ -34,6 +40,45 @@ rather than the ~10 GB of `zephyrprojectrtos/ci`.
 The platform is `native_sim/native/64`, not plain `native_sim`: on Apple
 silicon the container is arm64 with a 64-bit-only userspace, where the 32-bit
 default cannot link.
+
+## The contract runner
+
+```sh
+tests/ci/run-contract-tests.sh            # both halves, one command
+tests/ci/run-contract-tests.sh -k network # extra arguments go to pytest
+```
+
+This one needs no container: it is plain Python, and it runs the checks on
+`openapi.json` and the mock server's suite, which is also the contract test.
+The tooling and the decisions behind it are in
+[`tools/api-contract/README.md`](../../tools/api-contract/README.md). It prefers
+the workspace venv and falls back to `python3`, so it also works on a CI runner
+with no west workspace.
+
+## GitHub Actions
+
+`.github/workflows/checks.yml` runs both of the above on every push and pull
+request — the owner's decision of 2026-09-12, recorded in section 12 of the
+development plan.
+
+The sim job there does not use this container. It clones Zephyr shallow at a
+pinned revision, runs `west init -l` **without** `west update`, and calls twister
+directly. Two things about that were measured rather than assumed, and both are
+worth knowing before editing the workflow:
+
+- A west *workspace* is required even though no manifest project is. Outside one,
+  Zephyr's `zephyr_module.cmake` takes its `else()` branch and ignores
+  `ZEPHYR_EXTRA_MODULES` entirely; the build then fails with "undefined symbol
+  JOB_MANAGER" and nothing naming the real cause. `west init -l` creates the
+  workspace without fetching anything, and all 124 cases pass that way on a clean
+  upstream tree.
+- Twister cannot be pointed at `tests/` as a whole on a clean Zephyr. The
+  hardware suites name `cedar_switch_3in4out_power_rev3/...` in `platform_allow`,
+  and that board lives untracked in the shared Zephyr tree rather than in this
+  repository. `platform_allow` is validated while testsuites are still being
+  discovered, so the whole run aborts before any filtering — `--tag sim` and
+  `--exclude-tag hw` were both tried and neither helps. The workflow therefore
+  derives its roots from the `sim` tag.
 
 ## Scope
 
