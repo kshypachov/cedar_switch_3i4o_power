@@ -1,0 +1,3 @@
+zephyr_library_named(device_config_store)
+
+zephyr_library_sources(device_config_store.c)

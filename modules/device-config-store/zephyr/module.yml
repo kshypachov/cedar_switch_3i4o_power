@@ -1,0 +1,7 @@
+# Zephyr module declaration for the device configuration store.
+#
+# Registered by the application via ZEPHYR_EXTRA_MODULES (see the app
+# CMakeLists.txt), the same way as settings-registry and job-manager.
+build:
+  cmake: .
+  kconfig: lib/Kconfig

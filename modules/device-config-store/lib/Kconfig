@@ -1,0 +1,28 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig DEVICE_CONFIG_STORE
+	bool "Durable, transactional device configuration store"
+	select CRC
+	help
+	  Versioned storage for the configuration the device must remember
+	  across a reboot, with separate committed and pending generations so a
+	  network change can be applied, confirmed and committed — or rolled
+	  back by a reboot that arrives before the confirmation. Secrets are
+	  held apart from the configuration and never appear in a snapshot.
+	  Fixed pools, no dynamic allocation, storage backend injected. See
+	  include/device_config_store/device_config_store.h.
+
+if DEVICE_CONFIG_STORE
+
+config DEVICE_CONFIG_STORE_LOG_LEVEL
+	int "Log level"
+	default 3
+	range 0 4
+	help
+	  Standard Zephyr levels: 0 none, 1 error, 2 warning, 3 info, 4 debug.
+	  Recovery outcomes are reported at info because "this device rolled
+	  back a network change while you were not looking" is the first thing
+	  anyone reading a boot log needs to see. Nothing here ever logs a
+	  secret, an SSID or an address.
+
+endif # DEVICE_CONFIG_STORE

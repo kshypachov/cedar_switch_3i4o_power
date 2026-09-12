@@ -1,0 +1,15 @@
+tests:
+  cedar.device_config_store:
+    # Pure logic over an injected storage backend: the sim tier from section 12
+    # of the development plan. Power loss and failing writes are produced by
+    # the fake, not staged on a board. Zephyr's POSIX architecture does not
+    # build on macOS, so this runs in the Linux container - see
+    # tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - device_config_store
+      - sim
