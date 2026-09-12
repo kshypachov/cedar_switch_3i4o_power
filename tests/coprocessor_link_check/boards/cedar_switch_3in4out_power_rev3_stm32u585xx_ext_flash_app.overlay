@@ -1,0 +1,1 @@
+&{/uart-bridge0} { status = "disabled"; };

@@ -1,0 +1,21 @@
+/* Same LittleFS mount the application uses, so the measurement reflects the
+ * real filesystem and not a fresh one. */
+/ {
+	fstab {
+		compatible = "zephyr,fstab";
+
+		lfs0: lfs0 {
+			compatible = "zephyr,fstab,littlefs";
+			mount-point = "/lfs";
+			partition = <&storage_partition>;
+			automount;
+			read-size = <256>;
+			prog-size = <256>;
+			cache-size = <2048>;
+			lookahead-size = <256>;
+			block-cycles = <1024>;
+		};
+	};
+};
+
+&{/uart-bridge0} { status = "disabled"; };

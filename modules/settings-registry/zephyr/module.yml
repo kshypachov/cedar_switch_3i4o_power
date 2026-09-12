@@ -1,0 +1,9 @@
+# Zephyr module declaration for the settings registry module.
+#
+# Registered by the application via ZEPHYR_EXTRA_MODULES (see the app
+# CMakeLists.txt). What each key provides:
+#   cmake:    module root CMakeLists.txt (adds include/ + the lib/ library)
+#   kconfig:  entry point sourced into the global Kconfig tree (CONFIG_SETTINGS_REGISTRY_*)
+build:
+  cmake: .
+  kconfig: lib/Kconfig

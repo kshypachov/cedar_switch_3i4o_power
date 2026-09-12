@@ -1,0 +1,4742 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cedar Device Web API",
+    "version": "1.0.0-draft",
+    "description": "Implementation draft, revised 2026-09-12. See api-contract.md for state transitions, authorization, package framing, retry rules and business validation. This API is not implemented yet. Transport is HTTP on a trusted local network; TLS is out of scope for this version. In the first version the coprocessor is updated over UART only: method \"ota\" is present in the schema for forward compatibility but is rejected with 503 capability_unavailable, and esp32_ota reports available=false."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "security": [
+    {
+      "adminSession": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "system"
+    },
+    {
+      "name": "matter"
+    },
+    {
+      "name": "network"
+    },
+    {
+      "name": "logs"
+    },
+    {
+      "name": "firmware"
+    },
+    {
+      "name": "coprocessor"
+    },
+    {
+      "name": "jobs"
+    }
+  ],
+  "paths": {
+    "/auth/state": {
+      "get": {
+        "operationId": "getAuthState",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Whether initial admin setup is required",
+        "description": "Whether initial admin setup is required",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthState"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/setup": {
+      "post": {
+        "operationId": "setupAdmin",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Create initial administrator during authorized physical setup",
+        "description": "Create initial administrator during authorized physical setup",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Created resource URL"
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "cedar_session=<opaque>; HttpOnly; Secure; SameSite=Strict; Path=/"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-Setup-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 128,
+              "writeOnly": true
+            }
+          }
+        ],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/session": {
+      "post": {
+        "operationId": "login",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Create admin session",
+        "description": "Create admin session",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "cedar_session=<opaque>; HttpOnly; Secure; SameSite=Strict; Path=/"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getSession",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Read session and CSRF token",
+        "description": "Read session and CSRF token",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "logout",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Revoke current session",
+        "description": "Revoke current session",
+        "responses": {
+          "204": {
+            "description": "Success",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Expire cedar_session cookie"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          }
+        ]
+      }
+    },
+    "/auth/password": {
+      "put": {
+        "operationId": "changePassword",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Change password asynchronously and revoke all sessions on success",
+        "description": "Change password asynchronously and revoke all sessions on success",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/status": {
+      "get": {
+        "operationId": "getSystemStatus",
+        "tags": [
+          "system"
+        ],
+        "summary": "Read SystemStatus",
+        "description": "Read SystemStatus",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemStatus"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/capabilities": {
+      "get": {
+        "operationId": "getCapabilities",
+        "tags": [
+          "system"
+        ],
+        "summary": "Read Capabilities",
+        "description": "Read Capabilities",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coprocessor/status": {
+      "get": {
+        "operationId": "getCoprocessorStatus",
+        "tags": [
+          "coprocessor"
+        ],
+        "summary": "Read CoprocessorStatus",
+        "description": "Read CoprocessorStatus",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoprocessorStatus"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matter/status": {
+      "get": {
+        "operationId": "getMatterStatus",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Read MatterStatus",
+        "description": "Read MatterStatus",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatterStatus"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matter/commissioning": {
+      "get": {
+        "operationId": "getCommissioningWindow",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Read CommissioningWindow",
+        "description": "Read CommissioningWindow",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommissioningWindow"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "openCommissioningWindow",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Open basic commissioning window",
+        "description": "Open basic commissioning window",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommissioningRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "closeCommissioningWindow",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Close commissioning window",
+        "description": "Close commissioning window",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ]
+      }
+    },
+    "/matter/onboarding-codes": {
+      "get": {
+        "operationId": "getOnboardingCodes",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Read OnboardingCodes",
+        "description": "Read OnboardingCodes",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingCodes"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matter/fabrics": {
+      "get": {
+        "operationId": "listFabrics",
+        "tags": [
+          "matter"
+        ],
+        "summary": "Read Fabrics",
+        "description": "Read Fabrics",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fabrics"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{job_id}": {
+      "get": {
+        "operationId": "getJob",
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Read asynchronous job",
+        "description": "Read asynchronous job",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          }
+        ]
+      }
+    },
+    "/jobs/{job_id}/cancel": {
+      "post": {
+        "operationId": "cancelJob",
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Request cancellation if cancellable",
+        "description": "Request cancellation if cancellable",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/status": {
+      "get": {
+        "operationId": "getNetworkStatus",
+        "tags": [
+          "network"
+        ],
+        "summary": "Read actual network state",
+        "description": "Read actual network state",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkStatus"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/config": {
+      "get": {
+        "operationId": "getNetworkConfig",
+        "tags": [
+          "network"
+        ],
+        "summary": "Read committed network configuration without secrets",
+        "description": "Read committed network configuration without secrets",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkConfigResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/transactions": {
+      "post": {
+        "operationId": "stageNetworkConfig",
+        "tags": [
+          "network"
+        ],
+        "summary": "Stage full candidate in RAM without applying it",
+        "description": "Stage full candidate in RAM without applying it",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkTransaction"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Created resource URL"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkTransactionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/transactions/{transaction_id}": {
+      "get": {
+        "operationId": "getNetworkTransaction",
+        "tags": [
+          "network"
+        ],
+        "summary": "Read candidate and apply state",
+        "description": "Read candidate and apply state",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NetworkTransaction"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "rollbackNetworkTransaction",
+        "tags": [
+          "network"
+        ],
+        "summary": "Discard candidate or roll back applied configuration",
+        "description": "Discard candidate or roll back applied configuration",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ]
+      }
+    },
+    "/network/transactions/{transaction_id}/apply": {
+      "post": {
+        "operationId": "applyNetworkTransaction",
+        "tags": [
+          "network"
+        ],
+        "summary": "Persist pending snapshot and apply with rollback timer",
+        "description": "Persist pending snapshot and apply with rollback timer",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetworkApplyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/transactions/{transaction_id}/confirm": {
+      "post": {
+        "operationId": "confirmNetworkTransaction",
+        "tags": [
+          "network"
+        ],
+        "summary": "Commit tested configuration using the existing apply job",
+        "description": "Commit tested configuration using the existing apply job",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/wifi/scans": {
+      "post": {
+        "operationId": "scanWiFi",
+        "tags": [
+          "network"
+        ],
+        "summary": "Start Wi-Fi scan",
+        "description": "Start Wi-Fi scan",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/network/wifi/scans/{job_id}": {
+      "get": {
+        "operationId": "getWiFiScan",
+        "tags": [
+          "network"
+        ],
+        "summary": "Read Wi-Fi scan state and results",
+        "description": "Read Wi-Fi scan state and results",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScanResults"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          }
+        ]
+      }
+    },
+    "/logs/sources": {
+      "get": {
+        "operationId": "getLogSources",
+        "tags": [
+          "logs"
+        ],
+        "summary": "Read log sources and loss counters",
+        "description": "Read log sources and loss counters",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogSources"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logs/records": {
+      "get": {
+        "operationId": "getLogRecords",
+        "tags": [
+          "logs"
+        ],
+        "summary": "Read bounded log page",
+        "description": "Read bounded log page",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogPage"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "default": "all",
+              "type": "string",
+              "enum": [
+                "all",
+                "stm32",
+                "esp32"
+              ]
+            }
+          },
+          {
+            "name": "min_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debug",
+                "info",
+                "warning",
+                "error"
+              ]
+            }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "contains",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          }
+        ]
+      }
+    },
+    "/logs/export": {
+      "get": {
+        "operationId": "exportLogs",
+        "tags": [
+          "logs"
+        ],
+        "summary": "Download bounded log snapshot",
+        "description": "Download bounded log snapshot",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "attachment; filename=\"cedar-logs.ndjson\" or cedar-logs.txt"
+              }
+            },
+            "content": {
+              "application/x-ndjson": {
+                "schema": {
+                  "type": "string",
+                  "description": "One LogRecord JSON object per line, including explicit gap records."
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "default": "all",
+              "type": "string",
+              "enum": [
+                "all",
+                "stm32",
+                "esp32"
+              ]
+            }
+          },
+          {
+            "name": "min_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "debug",
+                "info",
+                "warning",
+                "error"
+              ]
+            }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "contains",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "default": "ndjson",
+              "type": "string",
+              "enum": [
+                "ndjson",
+                "text"
+              ]
+            }
+          },
+          {
+            "name": "max_records",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2000,
+              "default": 2000
+            }
+          }
+        ]
+      }
+    },
+    "/firmware/uploads": {
+      "post": {
+        "operationId": "createUpload",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "Allocate single firmware upload",
+        "description": "Allocate single firmware upload",
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Created resource URL"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/firmware/uploads/{upload_id}": {
+      "get": {
+        "operationId": "getUpload",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "Read durable upload offset and validation state",
+        "description": "Read durable upload offset and validation state",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "deleteUpload",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "Delete unused staged package asynchronously",
+        "description": "Delete unused staged package asynchronously",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ]
+      }
+    },
+    "/firmware/uploads/{upload_id}/data": {
+      "put": {
+        "operationId": "writeUploadChunk",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "Queue chunk for durable staging; offset advances only after job success",
+        "description": "Queue chunk for durable staging; offset advances only after job success",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          },
+          "description": "At most capabilities.limits.upload_chunk_bytes raw bytes, maximum 16384. Only one outstanding chunk per upload."
+        }
+      }
+    },
+    "/firmware/uploads/{upload_id}/verify": {
+      "post": {
+        "operationId": "verifyUpload",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "Validate digest, image and compatibility; verify signature for supported signed bundles",
+        "description": "Validate digest, image and compatibility; verify signature for supported signed bundles",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            }
+          },
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coprocessor/updates": {
+      "post": {
+        "operationId": "startCoprocessorUpdate",
+        "tags": [
+          "coprocessor"
+        ],
+        "summary": "Install verified package via OTA or UART; request must arrive over working Ethernet",
+        "description": "Install verified package via OTA or UART; request must arrive over working Ethernet",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "adminSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "cedar_session",
+        "description": "Local admin session. Mutations also require X-CSRF-Token; setup/login require Origin validation."
+      }
+    },
+    "schemas": {
+      "ErrorField": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "code"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorField"
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "request_id",
+          "retryable"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "error": {
+              "code": "validation_failed",
+              "message": "Static IPv4 requires an address and prefix",
+              "request_id": "req_7b22",
+              "retryable": false,
+              "fields": [
+                {
+                  "path": "/interfaces/ethernet/ipv4/address",
+                  "code": "required"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Empty": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "AuthState": {
+        "type": "object",
+        "properties": {
+          "setup_required": {
+            "type": "boolean"
+          },
+          "setup_allowed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "setup_required",
+          "setup_allowed"
+        ],
+        "additionalProperties": false
+      },
+      "SetupRequest": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 128,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "password"
+        ],
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "password"
+        ],
+        "additionalProperties": false
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "enum": [
+              "admin"
+            ]
+          },
+          "csrf_token": {
+            "type": "string",
+            "minLength": 32
+          },
+          "idle_timeout_seconds": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "absolute_remaining_seconds": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "username",
+          "csrf_token",
+          "idle_timeout_seconds",
+          "absolute_remaining_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "PasswordRequest": {
+        "type": "object",
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "writeOnly": true
+          },
+          "new_password": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 128,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "additionalProperties": false
+      },
+      "SystemStatus": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "model": {
+            "type": "string"
+          },
+          "firmware_version": {
+            "type": "string"
+          },
+          "frontend_version": {
+            "type": "string"
+          },
+          "boot_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "uptime_ms": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "wall_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "active_job_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,64}$"
+            },
+            "minItems": 0,
+            "maxItems": 16
+          }
+        },
+        "required": [
+          "device_id",
+          "model",
+          "firmware_version",
+          "frontend_version",
+          "boot_id",
+          "uptime_ms",
+          "wall_time",
+          "active_job_ids"
+        ],
+        "additionalProperties": false
+      },
+      "FeatureAvailability": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "available",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "Capabilities": {
+        "type": "object",
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "enum": [
+              "1"
+            ]
+          },
+          "features": {
+            "type": "object",
+            "properties": {
+              "matter": {
+                "$ref": "#/components/schemas/FeatureAvailability"
+              },
+              "esp32_logs": {
+                "$ref": "#/components/schemas/FeatureAvailability"
+              },
+              "esp32_ota": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/FeatureAvailability"
+                  }
+                ],
+                "description": "Planned, not implemented in the first version: available is false with reason \"not_implemented\"."
+              },
+              "esp32_uart": {
+                "$ref": "#/components/schemas/FeatureAvailability"
+              }
+            },
+            "required": [
+              "matter",
+              "esp32_logs",
+              "esp32_ota",
+              "esp32_uart"
+            ],
+            "additionalProperties": false
+          },
+          "limits": {
+            "type": "object",
+            "properties": {
+              "json_body_bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 8192
+              },
+              "upload_chunk_bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 16384
+              },
+              "upload_max_bytes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "log_page_records": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "scan_records": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 64
+              },
+              "commissioning_min_seconds": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "commissioning_max_seconds": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "network_confirm_min_seconds": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "network_confirm_max_seconds": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "json_body_bytes",
+              "upload_chunk_bytes",
+              "upload_max_bytes",
+              "log_page_records",
+              "scan_records",
+              "commissioning_min_seconds",
+              "commissioning_max_seconds",
+              "network_confirm_min_seconds",
+              "network_confirm_max_seconds"
+            ],
+            "additionalProperties": false
+          },
+          "wifi_security_modes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "open",
+                "wpa2_psk",
+                "wpa3_sae"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 3
+          },
+          "firmware_formats": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "raw_app",
+                "cedar_package"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 2
+          },
+          "update_requires_ethernet": {
+            "const": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "api_version",
+          "features",
+          "limits",
+          "wifi_security_modes",
+          "firmware_formats",
+          "update_requires_ethernet"
+        ],
+        "additionalProperties": false
+      },
+      "Progress": {
+        "type": "object",
+        "properties": {
+          "completed": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "bytes",
+              "steps"
+            ]
+          }
+        },
+        "required": [
+          "completed",
+          "total",
+          "unit"
+        ],
+        "additionalProperties": false
+      },
+      "JobAccepted": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "job_url": {
+            "type": "string",
+            "pattern": "^/api/v1/"
+          },
+          "resource_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^/api/v1/"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "job_url",
+          "resource_url"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "job_id": "job_f0d2",
+            "job_url": "/api/v1/jobs/job_f0d2",
+            "resource_url": "/api/v1/coprocessor/status"
+          }
+        ]
+      },
+      "Job": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "boot_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "matter_open",
+              "matter_close",
+              "network_apply",
+              "network_discard",
+              "wifi_scan",
+              "upload_chunk",
+              "firmware_verify",
+              "firmware_delete",
+              "coprocessor_update",
+              "password_change"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "waiting_confirmation",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          },
+          "phase": {
+            "type": "string"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Progress"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cancellable": {
+            "type": "boolean"
+          },
+          "created_uptime_ms": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "updated_uptime_ms": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "resource_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^/api/v1/"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "boot_id",
+          "kind",
+          "state",
+          "phase",
+          "progress",
+          "cancellable",
+          "created_uptime_ms",
+          "updated_uptime_ms",
+          "resource_url",
+          "error"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "id": "job_f0d2",
+            "boot_id": "boot_03aa",
+            "kind": "coprocessor_update",
+            "state": "running",
+            "phase": "writing",
+            "progress": {
+              "completed": 262144,
+              "total": 1048576,
+              "unit": "bytes"
+            },
+            "cancellable": false,
+            "created_uptime_ms": "100000",
+            "updated_uptime_ms": "103000",
+            "resource_url": "/api/v1/coprocessor/status",
+            "error": null
+          }
+        ]
+      },
+      "MatterStatus": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "not_ready",
+              "starting",
+              "ready",
+              "failed"
+            ]
+          },
+          "commissioned": {
+            "type": "boolean"
+          },
+          "fabric_count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 254
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "state",
+          "commissioned",
+          "fabric_count",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "CommissioningRequest": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "basic"
+            ]
+          },
+          "timeout_seconds": {
+            "type": "integer",
+            "minimum": 180,
+            "maximum": 900
+          }
+        },
+        "required": [
+          "mode",
+          "timeout_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "CommissioningWindow": {
+        "type": "object",
+        "properties": {
+          "open": {
+            "type": "boolean"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "basic",
+                  "enhanced"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "web",
+                  "controller",
+                  "local"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "remaining_seconds": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 900
+          },
+          "codes_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "open",
+          "mode",
+          "source",
+          "remaining_seconds",
+          "codes_available"
+        ],
+        "additionalProperties": false
+      },
+      "OnboardingCodes": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "window_closed",
+                  "passcode_unavailable",
+                  "service_not_ready",
+                  "generation_failed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "qr_payload": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^MT:"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "manual_pairing_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^([0-9]{11}|[0-9]{21})$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "setup_passcode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{8}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "available",
+          "reason",
+          "qr_payload",
+          "manual_pairing_code",
+          "setup_passcode"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "available": false,
+            "reason": "window_closed",
+            "qr_payload": null,
+            "manual_pairing_code": null,
+            "setup_passcode": null
+          }
+        ]
+      },
+      "Fabric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "description": "Opaque identity including root identity; not a fabric index alone."
+          },
+          "fabric_index": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 254
+          },
+          "fabric_id": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{16}$"
+          },
+          "node_id": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{16}$"
+          },
+          "vendor_id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65535
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 32
+          }
+        },
+        "required": [
+          "id",
+          "fabric_index",
+          "fabric_id",
+          "node_id",
+          "vendor_id",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Fabrics": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fabric"
+            },
+            "minItems": 0,
+            "maxItems": 254
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 254
+          }
+        },
+        "required": [
+          "items",
+          "count"
+        ],
+        "additionalProperties": false
+      },
+      "IPv4Config": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "dhcp",
+              "static"
+            ]
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "ipv4"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prefix_length": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 30
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gateway": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "ipv4"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "mode",
+          "address",
+          "prefix_length",
+          "gateway"
+        ],
+        "additionalProperties": false
+      },
+      "DNSConfig": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "automatic",
+              "manual"
+            ]
+          },
+          "servers": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "format": "ipv4"
+                },
+                {
+                  "type": "string",
+                  "format": "ipv6"
+                }
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 2
+          }
+        },
+        "required": [
+          "mode",
+          "servers"
+        ],
+        "additionalProperties": false
+      },
+      "EthernetConfig": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "ipv4": {
+            "$ref": "#/components/schemas/IPv4Config"
+          }
+        },
+        "required": [
+          "enabled",
+          "ipv4"
+        ],
+        "additionalProperties": false
+      },
+      "CredentialChange": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "keep",
+                  "clear"
+                ]
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "replace"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "writeOnly": true
+              }
+            },
+            "required": [
+              "action",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "WiFiConfigInput": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "ssid_base64": {
+            "type": "string",
+            "maxLength": 44,
+            "contentEncoding": "base64",
+            "description": "Exact SSID bytes, maximum 32 decoded bytes; empty only for unconfigured/disabled Wi-Fi."
+          },
+          "security": {
+            "type": "string",
+            "enum": [
+              "open",
+              "wpa2_psk",
+              "wpa3_sae"
+            ]
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "ipv4": {
+            "$ref": "#/components/schemas/IPv4Config"
+          },
+          "credential": {
+            "$ref": "#/components/schemas/CredentialChange"
+          }
+        },
+        "required": [
+          "enabled",
+          "ssid_base64",
+          "security",
+          "hidden",
+          "ipv4",
+          "credential"
+        ],
+        "additionalProperties": false
+      },
+      "WiFiConfigOutput": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "ssid_base64": {
+            "type": "string",
+            "maxLength": 44,
+            "contentEncoding": "base64",
+            "description": "Exact SSID bytes, maximum 32 decoded bytes; empty only for unconfigured/disabled Wi-Fi."
+          },
+          "security": {
+            "type": "string",
+            "enum": [
+              "open",
+              "wpa2_psk",
+              "wpa3_sae"
+            ]
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "ipv4": {
+            "$ref": "#/components/schemas/IPv4Config"
+          },
+          "password_set": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "ssid_base64",
+          "security",
+          "hidden",
+          "ipv4",
+          "password_set"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkConfigInput": {
+        "type": "object",
+        "properties": {
+          "preferred_interface": {
+            "type": "string",
+            "enum": [
+              "ethernet",
+              "wifi"
+            ]
+          },
+          "dns": {
+            "$ref": "#/components/schemas/DNSConfig"
+          },
+          "interfaces": {
+            "type": "object",
+            "properties": {
+              "ethernet": {
+                "$ref": "#/components/schemas/EthernetConfig"
+              },
+              "wifi": {
+                "$ref": "#/components/schemas/WiFiConfigInput"
+              }
+            },
+            "required": [
+              "ethernet",
+              "wifi"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "preferred_interface",
+          "dns",
+          "interfaces"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkConfigOutput": {
+        "type": "object",
+        "properties": {
+          "preferred_interface": {
+            "type": "string",
+            "enum": [
+              "ethernet",
+              "wifi"
+            ]
+          },
+          "dns": {
+            "$ref": "#/components/schemas/DNSConfig"
+          },
+          "interfaces": {
+            "type": "object",
+            "properties": {
+              "ethernet": {
+                "$ref": "#/components/schemas/EthernetConfig"
+              },
+              "wifi": {
+                "$ref": "#/components/schemas/WiFiConfigOutput"
+              }
+            },
+            "required": [
+              "ethernet",
+              "wifi"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "preferred_interface",
+          "dns",
+          "interfaces"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkConfigResponse": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "config": {
+            "$ref": "#/components/schemas/NetworkConfigOutput"
+          },
+          "pending_transaction_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "revision",
+          "config",
+          "pending_transaction_id"
+        ],
+        "additionalProperties": false
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "family": {
+            "type": "string",
+            "enum": [
+              "ipv4",
+              "ipv6"
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "prefix_length": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 128
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "dhcp",
+              "static",
+              "slaac",
+              "link_local"
+            ]
+          }
+        },
+        "required": [
+          "family",
+          "address",
+          "prefix_length",
+          "source"
+        ],
+        "additionalProperties": false
+      },
+      "InterfaceStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "ethernet",
+              "wifi"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "link_up": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "disabled",
+              "down",
+              "connecting",
+              "connected",
+              "addressing",
+              "ready",
+              "failed"
+            ]
+          },
+          "mac_address": {
+            "type": "string"
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "minItems": 0
+          },
+          "ssid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rssi_dbm": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -127,
+                "maximum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "enabled",
+          "link_up",
+          "state",
+          "mac_address",
+          "addresses",
+          "ssid",
+          "rssi_dbm",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkStatus": {
+        "type": "object",
+        "properties": {
+          "interfaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterfaceStatus"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "default_interface": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ethernet",
+                  "wifi"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dns_servers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "maxItems": 2
+          }
+        },
+        "required": [
+          "interfaces",
+          "default_interface",
+          "dns_servers"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkTransactionRequest": {
+        "type": "object",
+        "properties": {
+          "base_revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "config": {
+            "$ref": "#/components/schemas/NetworkConfigInput"
+          }
+        },
+        "required": [
+          "base_revision",
+          "config"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "base_revision": 7,
+            "config": {
+              "preferred_interface": "ethernet",
+              "dns": {
+                "mode": "automatic",
+                "servers": []
+              },
+              "interfaces": {
+                "ethernet": {
+                  "enabled": true,
+                  "ipv4": {
+                    "mode": "dhcp",
+                    "address": null,
+                    "prefix_length": null,
+                    "gateway": null
+                  }
+                },
+                "wifi": {
+                  "enabled": true,
+                  "ssid_base64": "TXlXaUZp",
+                  "security": "wpa3_sae",
+                  "hidden": false,
+                  "credential": {
+                    "action": "replace",
+                    "value": "example-password"
+                  },
+                  "ipv4": {
+                    "mode": "dhcp",
+                    "address": null,
+                    "prefix_length": null,
+                    "gateway": null
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "NetworkApplyRequest": {
+        "type": "object",
+        "properties": {
+          "confirmation_timeout_seconds": {
+            "type": "integer",
+            "minimum": 60,
+            "maximum": 300
+          }
+        },
+        "required": [
+          "confirmation_timeout_seconds"
+        ],
+        "additionalProperties": false
+      },
+      "NetworkTransaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "boot_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "base_revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "staged",
+              "applying",
+              "awaiting_confirmation",
+              "committed",
+              "rolling_back",
+              "rolled_back",
+              "failed",
+              "expired"
+            ]
+          },
+          "candidate": {
+            "$ref": "#/components/schemas/NetworkConfigOutput"
+          },
+          "remaining_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reconnect_urls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "minItems": 0,
+            "maxItems": 8
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "boot_id",
+          "base_revision",
+          "state",
+          "candidate",
+          "remaining_seconds",
+          "reconnect_urls",
+          "job_id",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "AccessPoint": {
+        "type": "object",
+        "properties": {
+          "ssid": {
+            "type": "string"
+          },
+          "ssid_base64": {
+            "type": "string",
+            "maxLength": 44,
+            "contentEncoding": "base64"
+          },
+          "bssid": {
+            "type": "string",
+            "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+          },
+          "channel": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 233
+          },
+          "rssi_dbm": {
+            "type": "integer",
+            "minimum": -127,
+            "maximum": 0
+          },
+          "security": {
+            "type": "string",
+            "enum": [
+              "open",
+              "wpa2_psk",
+              "wpa3_sae",
+              "wpa2_wpa3_transition",
+              "enterprise",
+              "unknown"
+            ]
+          },
+          "connect_supported": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ssid",
+          "ssid_base64",
+          "bssid",
+          "channel",
+          "rssi_dbm",
+          "security",
+          "connect_supported"
+        ],
+        "additionalProperties": false
+      },
+      "ScanResults": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccessPoint"
+            },
+            "minItems": 0,
+            "maxItems": 64
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "state",
+          "items",
+          "truncated",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "LogSource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "stm32",
+              "esp32"
+            ]
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dropped_count": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
+        },
+        "required": [
+          "id",
+          "available",
+          "reason",
+          "generation",
+          "dropped_count"
+        ],
+        "additionalProperties": false
+      },
+      "LogSources": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogSource"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "LogRecord": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "stm32",
+              "esp32"
+            ]
+          },
+          "boot_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "source_generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "seq": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "uptime_ms": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "wall_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "debug",
+                  "info",
+                  "warning",
+                  "error",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "module": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Maximum 512 UTF-8 bytes; escape/replace invalid bytes."
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "message",
+              "reset",
+              "paused",
+              "gap"
+            ]
+          }
+        },
+        "required": [
+          "source",
+          "boot_id",
+          "source_generation",
+          "seq",
+          "uptime_ms",
+          "wall_time",
+          "level",
+          "module",
+          "message",
+          "truncated",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "LogPage": {
+        "type": "object",
+        "properties": {
+          "boot_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogRecord"
+            },
+            "minItems": 0,
+            "maxItems": 100
+          },
+          "next_cursor": {
+            "type": "string",
+            "maxLength": 512
+          },
+          "has_more": {
+            "type": "boolean"
+          },
+          "gap": {
+            "type": "boolean"
+          },
+          "dropped_count": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
+        },
+        "required": [
+          "boot_id",
+          "items",
+          "next_cursor",
+          "has_more",
+          "gap",
+          "dropped_count"
+        ],
+        "additionalProperties": false
+      },
+      "UpdateSummary": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "succeeded",
+              "failed",
+              "interrupted"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "ota",
+              "uart"
+            ]
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recovery_required": {
+            "type": "boolean"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "state",
+          "method",
+          "version",
+          "recovery_required",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "CoprocessorStatus": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "offline",
+              "starting",
+              "ready",
+              "updating",
+              "recovering",
+              "failed"
+            ]
+          },
+          "chip": {
+            "type": "string",
+            "enum": [
+              "esp32c6"
+            ]
+          },
+          "firmware_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "host_protocol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "partition_layout_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transport_ready": {
+            "type": "boolean"
+          },
+          "uart_mode": {
+            "type": "string",
+            "enum": [
+              "console",
+              "flashing",
+              "usb_bridge",
+              "unavailable"
+            ]
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "ota": {
+            "$ref": "#/components/schemas/FeatureAvailability"
+          },
+          "uart_update": {
+            "$ref": "#/components/schemas/FeatureAvailability"
+          },
+          "last_update": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "state",
+          "chip",
+          "firmware_version",
+          "host_protocol",
+          "partition_layout_id",
+          "transport_ready",
+          "uart_mode",
+          "generation",
+          "ota",
+          "uart_update",
+          "last_update"
+        ],
+        "additionalProperties": false
+      },
+      "UploadRequest": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "filename",
+          "size_bytes",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "filename": "cedar-c6-1.0.0.bin",
+            "size_bytes": 1048576,
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      },
+      "FirmwareImage": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "raw_app",
+              "cedar_package"
+            ]
+          },
+          "format_version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "esp32c6"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "app",
+              "recovery_bundle"
+            ]
+          },
+          "partition_layout_id": {
+            "type": "string"
+          },
+          "host_protocol": {
+            "type": "string"
+          },
+          "signature_verified": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allowed_methods": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ota",
+                "uart"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 2,
+            "description": "Methods the server would accept for this image. A method listed here can still be unavailable at runtime; capabilities and coprocessor status are authoritative."
+          }
+        },
+        "required": [
+          "format",
+          "format_version",
+          "target",
+          "version",
+          "kind",
+          "partition_layout_id",
+          "host_protocol",
+          "signature_verified",
+          "allowed_methods"
+        ],
+        "additionalProperties": false
+      },
+      "Upload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "received_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "receiving",
+              "verifying",
+              "ready",
+              "failed"
+            ]
+          },
+          "active_job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FirmwareImage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "filename",
+          "size_bytes",
+          "received_bytes",
+          "sha256",
+          "state",
+          "active_job_id",
+          "image",
+          "error"
+        ],
+        "additionalProperties": false,
+        "description": "Staged firmware file. The image is stored as a file in the device LittleFS volume; filename is a display value only and is never used as a filesystem path. received_bytes is the next acceptable offset and advances only after the chunk is flushed to storage."
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "ota",
+              "uart"
+            ],
+            "description": "Installation method. Only \"uart\" is accepted in the first version; \"ota\" is reserved and rejected with 503 capability_unavailable until ESP-Hosted OTA is implemented. Check capabilities.features before offering a method."
+          },
+          "acknowledge_recovery": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "upload_id",
+          "method",
+          "acknowledge_recovery"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "upload_id": "upload_ab12",
+            "method": "ota",
+            "acknowledge_recovery": false
+          }
+        ]
+      }
+    }
+  }
+}

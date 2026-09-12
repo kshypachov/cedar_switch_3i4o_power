@@ -1,0 +1,42 @@
+/*
+ * esp-serial-flasher target interface for the on-board ESP32-C6.
+ *
+ * USART3 (PC10/PC11) is the coprocessor's console/ROM-loader line. EN and the
+ * IO9 boot strap are wired directly, so "active" means asserted-low here, the
+ * same convention the board's gpio-outputs node already uses.
+ *
+ * Both pins are also listed under /gpio-outputs; that node's driver is not
+ * enabled in this standalone build, so the loader owns them exclusively. In the
+ * application the hand-off is explicit and belongs to coprocessor-manager.
+ */
+
+/ {
+	esp_loader0: esp_loader {
+		compatible = "espressif,esp-loader";
+		uart = <&usart3>;
+		reset-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>;
+		boot-gpios = <&gpioc 0 GPIO_ACTIVE_LOW>;
+		default-baudrate = <115200>;
+		/* Stay at the rate proven on this board; raise only after the
+		 * baseline flow is reproducible. */
+		higher-baudrate = <0>;
+		num-trials = <10>;
+		sync-timeout-ms = <100>;
+		status = "okay";
+	};
+
+	chosen {
+		zephyr,esp-loader = &esp_loader0;
+	};
+};
+
+/*
+ * The board pairs USART3 with the USB CDC-ACM bridge. Two owners of one UART is
+ * exactly what must not happen while flashing, and in this minimal build the
+ * CDC-ACM endpoint does not exist at all, so the bridge would not even link.
+ * Disable it here; in the application the bridge is suspended for the duration
+ * of an update instead.
+ */
+&{/uart-bridge0} {
+	status = "disabled";
+};

@@ -1,0 +1,204 @@
+# Контракт Web API v1
+
+Статус: проект для реализации. [OpenAPI](openapi.json) описывает HTTP surface и JSON schemas; этот документ задаёт поведение состояний, секретов и повторов. При изменении контракта обновляются оба файла. Текущие `/api/*` ещё не реализуют этот контракт.
+
+## Общие правила
+
+- Base URL `/api/v1`, UI и API одного origin. Транспорт — HTTP (HTTPS решением владельца не реализуется); frontend использует относительные URL. Cookie сессии выдаётся без флага `Secure`, и защита передаваемого пароля обеспечивается только доверенной локальной сетью — см. раздел 9 плана.
+- JSON: UTF-8, snake_case, неизвестные поля в запросах отклоняются. Ответы могут получать новые необязательные поля в пределах v1; клиент их игнорирует. Удаление/изменение смысла поля требует v2.
+- Числа размеров/секунд — JSON integers; 64-bit Matter IDs — hex-строки фиксированной длины, uptime/seq — decimal strings; нельзя терять точность в JavaScript.
+- Время состояния — `uptime_ms` и `boot_id`; wall time nullable, пока часы не синхронизированы. Таймеры используют monotonic clock.
+- `null` — значение неизвестно или неприменимо; отсутствие необязательного поля в mutation не должно неявно очищать секрет.
+- GET не меняет состояние. `201` создаёт ресурс, `202` принимает фоновую работу, `204` завершает действие без тела. `202` не означает успешное выполнение.
+- JSON request ≤ 8192 bytes; upload chunk ≤ 16384 bytes; реальные limits публикуются в capabilities. Сервер может уменьшить limits относительно проектных максимумов, клиент соблюдает объявленные значения.
+- Responses API: `Cache-Control: no-store`, `X-Request-ID`. Static hashed assets могут кешироваться; index revalidates. Неизвестный API URL → JSON 404, никогда SPA redirect.
+- POST/PUT/DELETE требуют admin cookie, `X-CSRF-Token` и `Idempotency-Key` (кроме login/setup и logout). Для login/setup — проверка Origin и отдельный `X-Setup-Token` для setup. Заголовки перечислены в OpenAPI.
+- Idempotency key — случайная строка 16–64 ASCII chars. Scope: admin principal + method + canonical URL, включая значимые query + body hash; не только текущая cookie. Повтор того же key/body возвращает тот же resource/job, другой body → `409 idempotency_conflict`. Запись живёт минимум 15 минут и весь срок активной задачи. После перезагрузки не полагаться на RAM dedupe: сначала читать resource/job/upload state.
+- Ресурсы protected, включая codes, logs, capabilities и upload. Public только auth state, login, setup и статические login assets.
+- Credential verification выполняется с ограниченными ресурсами; механизм deferred response/worker проверить в P2, не блокировать общий HTTP loop долгим KDF.
+
+Ошибка:
+
+```json
+{
+  "error": {
+    "code": "validation_failed",
+    "message": "Static IPv4 requires an address and prefix",
+    "request_id": "req_7b22",
+    "retryable": false,
+    "fields": [{"path": "/interfaces/ethernet/ipv4/address", "code": "required"}]
+  }
+}
+```
+
+| HTTP | Коды и смысл |
+|---|---|
+| 400 | `invalid_json`, `invalid_query`, `invalid_cursor` |
+| 401 | `authentication_required`, `invalid_credentials`, `session_expired` |
+| 403 | `csrf_failed`, `origin_rejected`, `setup_not_allowed` |
+| 404 | `not_found` |
+| 409 | `busy`, `stale_revision`, `invalid_state`, `offset_mismatch`, `idempotency_conflict`, `ethernet_required` |
+| 410 | `resource_expired`, `boot_changed` для непереносимого RAM resource; logs используют gap metadata |
+| 413 / 415 | `payload_too_large` / `unsupported_media_type` |
+| 422 | `validation_failed`, `invalid_image`, `unsupported_target`, `incompatible_firmware`, `signature_invalid` |
+| 429 | `rate_limited`, Retry-After seconds |
+| 503 / 507 | `service_not_ready`, `capability_unavailable` / `storage_full` |
+| 500 | `internal_error`; без stack trace/секретов клиенту |
+
+После `202` ошибки hardware/SDK записываются в job с тем же `ErrorDetail`, а не задним числом в HTTP status. При временном недоступном сервисе GET system/capabilities продолжает работать.
+
+## Сессия и устройство
+
+| Method / path | Назначение | Результат |
+|---|---|---|
+| GET `/auth/state` | Требуется ли первичная настройка | `200 AuthState` |
+| POST `/auth/setup` | Назначить первый admin password при physical setup + индивидуальном setup token | `201 Session` + cookie |
+| POST `/auth/session` | `{password}`; имя admin фиксировано | `200 Session` + cookie |
+| GET `/auth/session` | Текущая сессия и CSRF token | `200 Session` |
+| DELETE `/auth/session` | Logout | `204`, revoke cookie |
+| PUT `/auth/password` | `{current_password,new_password}` | `202 Job`; при успехе все сессии отзываются, клиент логинится заново |
+| GET `/system/status` | Версии, uptime, boot ID, active job IDs | `200 SystemStatus` |
+| GET `/capabilities` | Возможности, лимиты, поддержанные security/methods и причины недоступности | `200 Capabilities` |
+| GET `/coprocessor/status` | C6 version/state/transport/UART generation, последнее обновление | `200 CoprocessorStatus` |
+
+Cookie `cedar_session`: HttpOnly, SameSite=Strict, Path=/, Secure для HTTPS, без Domain. Idle lifetime 30 минут, absolute lifetime 8 часов — стартовые значения. После reboot повторный login. Password не хранить в localStorage; запросы и ошибки не отражают его назад. Same-origin CSRF token выдаётся в Session. Setup endpoint закрывается после успешного сохранения admin credential; создание первого admin атомарно, при гонке победитель один.
+
+## Задачи
+
+`GET /jobs/{job_id}` → `200 Job`. `POST /jobs/{job_id}/cancel` → `202 JobAccepted`, но только если `cancellable=true`. Отмена destructive phase невозможна; вернуть `409 invalid_state`. Это не принудительное отключение питания C6.
+
+```json
+{
+  "id": "job_f0d2",
+  "boot_id": "boot_03aa",
+  "kind": "coprocessor_update",
+  "state": "running",
+  "phase": "writing",
+  "progress": {"completed": 262144, "total": 1048576, "unit": "bytes"},
+  "cancellable": false,
+  "created_uptime_ms": "100000",
+  "updated_uptime_ms": "103000",
+  "resource_url": "/api/v1/coprocessor/status",
+  "error": null
+}
+```
+
+States: `queued → running → waiting_confirmation → succeeded`; возможны `failed`, `cancelled`, `interrupted`. Не все kinds имеют waiting_confirmation. Progress относится к текущей phase, может начинаться с нуля после смены phase; не изображать его как общий монотонный процент. `total=null` означает неизвестный объём.
+
+JobAccepted: `{job_id,job_url,resource_url}` + Location job URL + Retry-After. Poll interval 500–1000 ms для active jobs, до 2–5 s в background. Job manager хранит 16 полных terminal records; до 256 компактных итогов связанных с idempotency доступны через тот же GET jobs минимум 15 минут. Active records не вытесняются. При исчерпании dedupe capacity — 429 до приёма нового действия. Firmware update summary и незавершённая network transaction имеют durable journal; после boot незавершённое обновление — interrupted, network — rollback. Остальные RAM jobs не переживают reboot.
+
+## Matter
+
+| Method / path | Запрос | Ответ |
+|---|---|---|
+| GET `/matter/status` | — | ready/state, commissioned, fabric_count |
+| GET `/matter/commissioning` | — | текущее окно, mode/source, remaining_seconds, codes_available |
+| POST `/matter/commissioning` | `{mode:"basic",timeout_seconds:300}` | `202 JobAccepted` |
+| DELETE `/matter/commissioning` | — | `202 JobAccepted`, закрытие уже закрытого окна идемпотентно |
+| GET `/matter/onboarding-codes` | — | `{available,reason,qr_payload,manual_pairing_code,setup_passcode}` |
+| GET `/matter/fabrics` | — | `{items:[Fabric],count}` |
+
+Создание окна при уже открытом: повтор idempotency key возвращает исходную job; новый запрос → `409 invalid_state`, без молчаливой замены окна другого администратора. `state=not_ready` блокирует mutations с 503. Timeout сверяется с SDK limits из capabilities (проектный диапазон 180–900 секунд, сверить в P0).
+
+При закрытом окне codes response `available=false`, все три кодовых поля null. При enhanced window, созданном внешним controller, исходный PIN может быть неизвестен: `reason="passcode_unavailable"`. Показывать factory codes вместо действующих запрещено. `manual_pairing_code` строка 11 или 21 цифра; `setup_passcode` строка 8 цифр. `qr_payload` начинается `MT:`. В ответах не генерировать случайные тестовые QR, не являющиеся кодами устройства.
+
+Fabric schema: `id` opaque composite identifier (должен учитывать root identity, не один fabric_id), `fabric_index`, `fabric_id`/`node_id` по 16 hex digits, `vendor_id`, `label`. Никаких предположений об online/offline контроллеров. GET отдаёт консистентный snapshot; список небольшой, pagination v1 не нужна.
+
+## Сеть
+
+`GET /network/status` — runtime link/address/DNS/route/SSID/RSSI без секретов. `GET /network/config` — подтверждённая configuration, revision, pending_transaction_id. Это разные ресурсы.
+
+Wi-Fi discovery: `POST /network/wifi/scans` с `{}` → `202 JobAccepted`; после завершения `GET /network/wifi/scans/{job_id}` → results. Maximum 64 AP records, `truncated=true` при превышении. Сохранять BSSID: один SSID может иметь несколько AP. `ssid` — UI display, `ssid_base64` — точные 0–32 bytes, security enum и `connect_supported`, RSSI, channel. Неподдерживаемые enterprise AP видны, но не выбираются для подключения.
+
+Создание candidate: `POST /network/transactions` → `201 NetworkTransaction`. Candidate существует в RAM 300 секунд до apply, одновременно один; секреты не отражаются в response.
+
+```json
+{
+  "base_revision": 7,
+  "config": {
+    "preferred_interface": "ethernet",
+    "dns": {"mode": "automatic", "servers": []},
+    "interfaces": {
+      "ethernet": {
+        "enabled": true,
+        "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}
+      },
+      "wifi": {
+        "enabled": true,
+        "ssid_base64": "TXlXaUZp",
+        "security": "wpa3_sae",
+        "hidden": false,
+        "credential": {"action": "replace", "value": "example-password"},
+        "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}
+      }
+    }
+  }
+}
+```
+
+Значение пароля в примере вымышленное. `credential.action`: `keep` (value отсутствует), `replace` (value обязателен), `clear` (value отсутствует). Смена SSID/security с `keep` отклоняется, кроме явного совпадения сохранённого профиля. Для `open` пароль очищается явно, для enabled protected network нужен пароль. API возвращает только `password_set`.
+
+IPv4 static: address и prefix 1–30 обязательны; gateway nullable (изолированная LAN без router допустима); если задан — проверить пригодность и подсеть. DHCP требует null для static fields. DNS automatic берётся от выбранного доступного маршрута; при static-only обычно нужен manual DNS, UI сообщает это, но LAN по IP без DNS допустима. Manual DNS — 1–2 адреса IPv4/IPv6. Одновременно выключить оба интерфейса запрещено. Хотя бы один рабочий путь восстановления требуется до применения.
+
+| Method / path | Действие |
+|---|---|
+| GET `/network/transactions/{transaction_id}` | state, base_revision, redacted candidate, remaining time, reconnect hints, error |
+| POST `/network/transactions/{transaction_id}/apply` | `{confirmation_timeout_seconds:120}` → `202 JobAccepted` |
+| POST `/network/transactions/{transaction_id}/confirm` | `{}` → `202 JobAccepted`, commit на storage worker |
+| DELETE `/network/transactions/{transaction_id}` | discard candidate либо rollback applied config → `202 JobAccepted` |
+
+Transaction states: `staged → applying → awaiting_confirmation → committed`; ветка отката `rolling_back → rolled_back`, также `failed`, `expired`. Apply держит одну job до подтверждения/отката. Confirm и rollback отвечают ссылкой на ту же job, без создания второй конфликтующей network operation; discard staged может иметь отдельную короткую job. Отменять network job следует через transaction DELETE, `jobs/cancel` для неё недоступен.
+
+После записи pending journal применять сеть только после `202` либо после отсоединения исходного клиента. При потере ответа клиент восстанавливает transaction через `network/config.pending_transaction_id`. Commit только после health conditions; неверный revision → 409. Reboot до durable commit всегда восстанавливает последнюю committed config. Если commit уже устойчиво записан, reboot сохраняет новую сеть, даже если UI не увидел ответ.
+
+Смена IP меняет browser origin: автоматически переносить cookie/CSRF на новый IP нельзя. UI предлагает reconnect links/имя устройства, при необходимости пользователь логинится заново и подтверждает известный transaction ID; таймер 120 секунд учитывает это. Reconnect hints не содержат пароль/token. Endpoint confirm не подтверждает доступность всех интерфейсов лишь по факту получения HTTP запроса.
+
+## Логи
+
+| Method / path | Query / ответ |
+|---|---|
+| GET `/logs/sources` | source capabilities, available, generation, dropped counters |
+| GET `/logs/records` | `source=all|stm32|esp32`, cursor optional, `min_level`, `module`, `contains`, `limit=1..100` |
+| GET `/logs/export` | те же filters, `format=ndjson|text`, `max_records=1..2000`; attachment snapshot |
+
+`LogPage`: `{boot_id,items,next_cursor,has_more,gap,dropped_count}`. Все источники используют глобальный seq, присваиваемый STM32 при capture, чтобы source=all имел устойчивый порядок. `level=unknown`/null допускается для boot/UART output; min_level не выбрасывает unknown records. Cursor opaque, связан с фильтрами и boot. При изменении filters клиент убирает cursor. Cursor указывает следующую позицию сканирования, даже если ни одна запись не прошла filter.
+
+Без cursor вернуть последние `limit` подходящих записей от старых к новым. При wrap вернуть доступные новые записи и `gap=true`. При cursor прежнего boot вернуть текущий хвост, новый boot_id и gap=true. Повреждённый или несовместимый с filters cursor → 400. Медленный браузер теряет старые records с явным gap, не тормозит UART/Zephyr logging.
+
+Export фиксирует верхнюю seq и выдаёт bounded snapshot; копирование/пины не должны блокировать producer. Если часть snapshot потеряна, добавить явный gap record. NDJSON — по одному LogRecord в строке; text export содержит warning line. Экспорт не обещает историю до старта ring или предыдущих boot. Для live страницы polling 500–1000 ms, следующий запрос только после завершения предыдущего.
+
+## Upload и ESP32 update
+
+### Формат файла
+
+Первая версия принимает обычный app `.bin` ESP32-C6 из поддерживаемой сборки. Сервер самостоятельно определяет format, chip, version и совместимость с известным protocol/layout profile. Пользователь не вводит адрес flash. UART app update использует только проверенный boot selection и layout; OTA в первой версии недоступна (см. ниже). Нельзя подавать merged full-flash binary как app image. Raw app не меняет bootloader/partition table; полное восстановление этих компонентов остаётся сервисной процедурой, пока bundle flow не реализован.
+
+Дополнительное расширение: `.cedarfw`, содержащий приложение C6 или recovery bundle. Это не требование первой версии; поддержку объявляет `firmware_formats` в capabilities. Предлагаемый формат для будущего release tooling:
+
+Предлагаемый framing: 8 ASCII bytes `CEDARFW1`, затем `uint32_le metadata_length` (≤8192), затем UTF-8 JSON metadata, затем binary payload. Metadata содержит `manifest_base64`, `key_id`, `signature_base64`. Подпись ECDSA P-256/SHA-256 в DER над точными декодированными bytes manifest (без JSON reserialization). Manifest — UTF-8 JSON: `format_version=1`, `target`, `board_ids`, `version`, `host_protocol`, `partition_layout_id`, `kind`, `components[]`. Component: `role`, `payload_offset`, `size_bytes`, `sha256`. Offsets внутри payload, не адреса flash. Проверить пересечения, границы, дубликаты roles, trailing bytes и allowlist layout. Лимиты metadata и общей длины учитывать до allocation. Signing key provisioning решается при включении расширения bundle после базового P6.
+
+Это проект расширенного формата, подлежащий фиксации вместе с release tooling; API работает с opaque file bytes. Для raw `.bin` `signature_verified=null`, для принятого подписанного bundle — true. Наличие digest не равно проверке подписи. URL downloader в v1 отсутствует.
+
+### HTTP flow
+
+1. `POST /firmware/uploads`: `{filename,size_bytes,sha256}` → `201 Upload`, `Location`. SHA-256 здесь для всего файла, frontend считает локально; сервер независимо пересчитывает. Одна активная upload. Образ хранится файлом в LittleFS: имя на файловой системе формирует сервер, client filename сохраняется только как отображаемое значение и никогда не участвует в пути. Свободное место проверяется до приёма первого байта, и квота удерживается на всё время загрузки; `storage_full` возвращается заранее, а не по факту отказа записи.
+2. `PUT /firmware/uploads/{upload_id}/data?offset=N`, Content-Type `application/octet-stream`, chunk до capabilities limit → `202 JobAccepted`. Worker дописывает chunk в файл и выполняет `fsync`; только после этого `received_bytes` увеличивается, иначе значение нельзя предъявлять как устойчивый offset после сбоя. До завершения job следующий chunk не принимается.
+3. `GET /firmware/uploads/{upload_id}` возвращает authoritative offset/state. `received_bytes` — следующий допустимый offset, а не принятые в RAM bytes. После обрыва/повтора сначала poll, затем повторить только недостающий chunk. Повтор key возвращает ту же job; новый key со старым offset → 409, ничего не перезаписывать молча.
+4. После всех bytes `POST /firmware/uploads/{upload_id}/verify` с `{}` → `202`. Проверить full digest, image/target/layout/protocol/size; для поддерживаемого bundle также manifest/signature. `state=ready` только после всех применимых проверок.
+5. `POST /coprocessor/updates` с `{upload_id,method:"ota"|"uart",acknowledge_recovery:false}` → `202`. Для recovery_bundle нужен true; доступность метода приходит от сервера. **В первой версии поддержан только `method="uart"`**: `method="ota"` отклоняется `503 capability_unavailable`, а `capabilities.features.esp32_ota` и `coprocessor.ota` возвращают `available=false` с `reason="not_implemented"`. Значение `ota` сохранено в enum, чтобы добавление метода позже не требовало v2. Клиент выбирает метод по capabilities и не показывает недоступный как отключённый переключатель.
+6. Poll job и coprocessor/status. `succeeded` только после reset/reconnect, подтверждения версии/совместимости и требуемого rollback confirm. Если C6 не ожил, ошибка с recovery_required, а не 100% success.
+7. `DELETE /firmware/uploads/{upload_id}` → `202` cleanup job. Пока install использует файл, 409. Не выполнять автоудаление готового пакета до фиксации update outcome.
+
+Upload states: `receiving`, `verifying`, `ready`, `failed`; новый файл требует новый upload ID. Файл и метаданные переживают перезагрузку вместе с LittleFS; после старта offset восстанавливается по фактическому размеру файла, сверенному с метаданными, а незавершённые файлы прошлых попыток удаляются по метаданным, а не по факту наличия в каталоге. Upload expire через 24 ч uptime без активности, active install блокирует expire; после reboot начинается новый период. Без достоверных часов не обещать wall-clock TTL. `storage_full` обнаруживать до разрушительных действий.
+
+Install phases: `preflight`, `entering_bootloader` (UART), `begin`, `writing`, `verifying`, `activating`, `reconnecting`, `health_check`, `confirming`, `complete`; recovery outcome в job error. В первой версии фазы `activating` и `confirming` в UART-пути не используются: подтверждением служит успешный `health_check` после normal boot. В v1 требуется рабочий Ethernet и HTTP install request, пришедший через Ethernet; только link-up недостаточно. `ethernet_required` возвращается до reset/erase. Нельзя использовать Wi-Fi как источник последующих chunks уже начатой UART прошивки.
+
+Network apply/scan и firmware install конфликтуют; log GET и status GET — нет. При timeout в протоколе записи повтор произвольного блока не всегда безопасен: политику повтора backend определяет по протоколу, при неопределённости выполняется abort и recovery, а не слепой resend. После перезапуска STM32 не продолжать destructive install автоматически, сначала reconciliation и явный retry.
+
+## Совместимость и проверки контракта
+
+- Source of truth форматов — OpenAPI; бизнес-инварианты, такие как static subnet, active window, UART ownership и подпись пакета, валидируются сервисом, не только JSON schema.
+- Из OpenAPI получать client types и fixtures. Строгое C-генерирование сервера не требуется; route handlers используют общие parser/error helpers.
+- Contract checks: internal `$ref`, required path parameters, unique operationId, valid examples, undocumented route detection и responses при fragment/abort/concurrency.
+- Старые endpoints мигрировать или выключать по feature flag после проверки потребителей. Legacy relays REST не нужен новому UI; Matter управление реле сохраняется. Новую auth нельзя обойти через `/upload` на 8080.
+- Event push не входит в v1. Добавление WebSocket позже должно иметь отдельную message schema и cursor recovery, а не менять REST response semantics.

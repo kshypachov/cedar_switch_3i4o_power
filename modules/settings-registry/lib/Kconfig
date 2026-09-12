@@ -1,0 +1,66 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig SETTINGS_REGISTRY
+	bool "Generic per-key settings registry"
+	select SETTINGS
+	help
+	  Central per-key settings store for cross-module configuration
+	  (network, Matter control, OTA, lock behaviour, keypad feedback, ...).
+	  Keys are registered statically at link time (SETTING_REGISTRY_DEFINE),
+	  each with its own storage (owned/delegated), mirroring (RAM/direct),
+	  persistence (volatile/persistent via Zephyr settings, "reg/" subtree)
+	  and change-notification behaviour. See
+	  include/settings_registry/settings_registry.h for the full contract.
+
+if SETTINGS_REGISTRY
+
+config SETTINGS_REGISTRY_MAX_SUBSCRIPTIONS
+	int "Change-subscription slots (shared pool, all keys)"
+	default 16
+	help
+	  Capacity of the setting_subscribe() slot pool, shared across every
+	  registered key. Each subscription gets its own work item on the
+	  registry's notification work queue, so slow handlers do not block
+	  writers or each other. setting_subscribe() returns NULL when the
+	  pool is exhausted.
+
+config SETTINGS_REGISTRY_NOTIFY_WORKQ_STACK_SIZE
+	int "Notification work queue stack size"
+	default 2048
+	help
+	  Stack for the registry's dedicated notification work queue
+	  (reg_notify_wq): subscriber handlers run on this thread, never on
+	  the writer's.
+
+config SETTINGS_REGISTRY_NOTIFY_WORKQ_PRIORITY
+	int "Notification work queue thread priority"
+	default 10
+	help
+	  Cooperative/preemptible priority of the notification work queue
+	  thread (same convention as the other dedicated queues in this
+	  project, e.g. lock_control's notify_wq).
+
+config SETTINGS_REGISTRY_NOTIFY_BUF_SIZE
+	int "Per-subscription STRING/BYTES payload snapshot size"
+	default 64
+	help
+	  Each subscription slot carries a buffer of this size for the
+	  coalesced STRING/BYTES payload snapshot (delivery is asynchronous,
+	  so the writer's buffer cannot be referenced). Longer values are
+	  truncated in the notification payload (with a warning); the
+	  subscriber can always call setting_get() for the full value.
+
+config SETTINGS_REGISTRY_F32
+	bool "Enable SETTING_TYPE_F32 float values"
+	default n
+	help
+	  Adds the float member to struct setting_value and enables the f32
+	  range validator. While disabled, a descriptor registered with
+	  SETTING_TYPE_F32 is rejected at init, the same way an unknown type
+	  would be.
+
+module = SETTINGS_REGISTRY
+module-str = settings registry
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # SETTINGS_REGISTRY

@@ -1,0 +1,19 @@
+tests:
+  cedar.coprocessor.esp_loader_integration:
+    # Needs the real board and a real ESP32-C6 on USART3: this verifies the
+    # library integration end to end, which a simulated run cannot do.
+    platform_allow:
+      - cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+    tags:
+      - coprocessor
+      - esp_loader
+      - hw
+    harness: console
+    harness_config:
+      type: multi_line
+      ordered: true
+      regex:
+        - "esp-serial-flasher integration check"
+        - "connected, target reports: ESP32-C6"
+        - "target released to normal boot"
+        - "PASS"
