@@ -1,0 +1,144 @@
+### kernel uptime
+kernel uptime
+Uptime: 169711 ms
+
+### kernel thread stacks
+uart:~$ kernel thread stacks
+0x7001b9f8 io_to_matter_stream              (real size 4096):	unused 3832	usage  264 / 4096 ( 6 %)
+0x701829d0 CHIP                             (real size 16384):	unused 15256	usage 1128 / 16384 ( 6 %)
+0x7000a730 io_outputs_task                  (real size 1024):	unused  736	usage  288 / 1024 (28 %)
+0x70197670 reg_notify_wq                    (real size 2048):	unused 1848	usage  200 / 2048 ( 9 %)
+0x20004a58 input                            (real size 1024):	unused  824	usage  200 / 1024 (19 %)
+0x70009018 http_server_tid                  (real size 4096):	unused 2600	usage 1496 / 4096 (36 %)
+0x20003c10 shell_telnet                     (real size 4096):	unused 3344	usage  752 / 4096 (18 %)
+0x70004a08 conn_mgr_monitor                 (real size  512):	unused  208	usage  304 /  512 (59 %)
+0x7001f138 net_socket_service               (real size 2048):	unused 1192	usage  856 / 2048 (41 %)
+0x20000a10 eth_w5500                        (real size 1024):	unused  504	usage  520 / 1024 (50 %)
+0x7001e550 tx_q[0]                          (real size 2048):	unused 1424	usage  624 / 2048 (30 %)
+0x7001e448 rx_q[0]                          (real size 2560):	unused 1448	usage 1112 / 2560 (43 %)
+0x7001e268 net_mgmt                         (real size 2048):	unused 1248	usage  800 / 2048 (39 %)
+0x7001fce8 tcp_work                         (real size 1024):	unused  704	usage  320 / 1024 (31 %)
+0x20004978 usbd                             (real size 1024):	unused  416	usage  608 / 1024 (59 %)
+0x20003870 shell_uart                       (real size 4096):	unused 2144	usage 1952 / 4096 (47 %)
+0x701a0b90                                  (real size 4096):	unused 2720	usage 1376 / 4096 (33 %)
+0x701a0c70 esp_hosted_tx                    (real size 4096):	unused 3728	usage  368 / 4096 ( 8 %)
+0x20005088 otgfs@42040000                   (real size  512):	unused  248	usage  264 /  512 (51 %)
+0x7001b5f8 logging                          (real size 2048):	unused 1664	usage  384 / 2048 (18 %)
+0x200054a8 sysworkq                         (real size 4096):	unused 3328	usage  768 / 4096 (18 %)
+0x200052a8 idle                             (real size  320):	unused  216	usage  104 /  320 (32 %)
+0x20005388 main                             (real size 2048):	unused  888	usage 1160 / 2048 (56 %)
+0x20009d80 IRQ 00                           (real size 2048):	unused 1736	usage  312 / 2048 (15 %)
+
+### net iface
+uart:~$ net iface
+Hostname: zephyr000000000000
+Default interface: 1
+
+
+Interface eth0 (0x20002c90) (Ethernet) [1]
+===================================
+Link addr : 80:34:28:10:12:73
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : ETH_W5500 (0x20de594)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+	10 Mbits
+	100 Mbits
+Ethernet PHY device: ETH_W5500_phy (0x20de5b4)
+Ethernet link speed: 100 Mbits full-duplex
+IPv6 unicast addresses (max 2):
+	fe80::8234:28ff:fe10:1273 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ff10:1273
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 18491
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.14/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.14
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+
+Interface wlan0 (0x20002dc8) (WiFi) [2]
+===============================
+Link addr : E4:B3:23:A6:9E:E0
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : wifi (0x20de634)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+Ethernet PHY device: <none> (0)
+IPv6 unicast addresses (max 2):
+	fe80::e6b3:23ff:fea6:9ee0 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:e6b3:23ff:fea6:9ee0 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ffa6:9ee0
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 29098
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.10/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.10
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+
+### wifi status
+uart:~$ wifi status
+Status: successful
+==================
+State: COMPLETED
+Interface Mode: STATION
+Link Mode: WIFI 6 (802.11ax/HE)
+SSID: k2
+BSSID: D4:01:C3:A0:60:28
+Band: 2.4GHz
+Channel: 2
+Security:  WPA3-SAE-HNP
+MFP: Required
+RSSI: -57
+Beacon Interval: 0
+DTIM: 0
+TWT: Not supported
+Current PHY TX rate (Mbps) : 0.0
+
+### net stats
+uart:~$ net stats
+Set CONFIG_NET_STATISTICS to enable statistics support.
+
+### kernel heap
+uart:~$ kernel heap
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.

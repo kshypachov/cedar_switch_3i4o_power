@@ -1,0 +1,6 @@
+wifi_ctrl init
+wifi_init() executed
+[1;32muart:~$ [mwifi_ctrl reset
+ESP32 reset pulse done
+[1;32muart:~$ [m[8D[J[04:50:55.939,000] [0m<inf> wifi: Initializing WiFi reset pin...[0m
+[1;32muart:~$ [m

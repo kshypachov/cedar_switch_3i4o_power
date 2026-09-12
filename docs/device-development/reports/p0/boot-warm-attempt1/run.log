@@ -1,0 +1,2 @@
+[boot 1] warm FAIL main=3.23 http=None why=['http_ready_s missing', 'wifi_scan_ok false']
+[boot 2] warm FAIL main=3.26 http=None why=['http_ready_s missing', 'wifi_scan_ok false']

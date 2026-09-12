@@ -1,0 +1,21 @@
+[boot 11] ПОРА: снимите питание платы на 5 с и включите
+[boot 11] cold PASS main=2.58 http=4.73 why=[]
+[boot 12] ПОРА: снимите питание платы на 5 с и включите
+[boot 12] cold PASS main=2.73 http=4.86 why=[]
+[boot 13] ПОРА: снимите питание платы на 5 с и включите
+[boot 13] cold PASS main=2.73 http=8.91 why=[]
+[boot 14] ПОРА: снимите питание платы на 5 с и включите
+[boot 14] cold PASS main=2.8 http=4.96 why=[]
+[boot 15] ПОРА: снимите питание платы на 5 с и включите
+[boot 15] cold PASS main=2.91 http=9.11 why=[]
+[boot 16] ПОРА: снимите питание платы на 5 с и включите
+[boot 16] cold PASS main=2.98 http=3.15 why=[]
+[boot 17] ПОРА: снимите питание платы на 5 с и включите
+[boot 17] cold PASS main=2.99 http=5.16 why=[]
+[boot 18] ПОРА: снимите питание платы на 5 с и включите
+[boot 18] cold PASS main=3.1 http=3.23 why=[]
+[boot 19] ПОРА: снимите питание платы на 5 с и включите
+[boot 19] cold PASS main=3.19 http=9.38 why=[]
+[boot 20] ПОРА: снимите питание платы на 5 с и включите
+[boot 20] cold PASS main=3.25 http=15.49 why=[]
+10/10 passed

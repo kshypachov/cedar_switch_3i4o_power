@@ -1,0 +1,35 @@
+kernel uptime
+Uptime: 17202537 ms
+[1;32muart:~$ [mwifi status
+Status: successful
+==================
+State: DISCONNECTED
+[1;32muart:~$ [mdevmem 0x42020014
+Using data width 32
+Read value 0x120
+[1;32muart:~$ [mdevmem 0x42020814
+Using data width 32
+Read value 0xf1
+[1;32muart:~$ [mdevmem 0x42020414
+Using data width 32
+Read value 0x1104
+[1;32muart:~$ [mdevmem 0x42020010
+Using data width 32
+Read value 0xb5a7
+[1;32muart:~$ [mdevmem 0x42020810
+Using data width 32
+Read value 0x2cf9
+[1;32muart:~$ [mdevmem 0x42020410
+Using data width 32
+Read value 0xb5c7
+[1;32muart:~$ [mwifi scan
+
+Num  | SSID                             (len) | Chan (Band)   | RSSI | Security             | BSSID             | MFP     
+1    | k2                               3     | 2    (2.4GHz) | -54  | WPA3-SAE-HNP         | D4:01:C3:A0:60:28 | Disable 
+2    | dupamxixi_IoT                    14    | 6    (2.4GHz) | -60  | WPA2-PSK             | AA:AD:9F:3D:C3:04 | Disable 
+3    | dupamxixi                        10    | 6    (2.4GHz) | -61  | WPA3-SAE-HNP         | A6:AD:9F:3D:C3:04 | Disable 
+4    | A1_580A                          8     | 3    (2.4GHz) | -62  | WPA2-PSK             | 64:85:05:82:58:09 | Disable 
+5    | A1_732F                          8     | 6    (2.4GHz) | -65  | WPA2-PSK             | 70:54:F5:78:73:37 | Disable 
+Scan request done
+Scan requested
+[1;32muart:~$ [m

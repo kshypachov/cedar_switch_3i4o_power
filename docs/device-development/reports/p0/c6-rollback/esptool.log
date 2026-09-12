@@ -1,0 +1,92 @@
+== read-flash 0x8000 0xc00 -> partition-table.bin
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting....
+[1A[2K[1A[2K[1A[2K[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+MAC:                e4:b3:23:ff:fe:a6:9e:e0
+BASE MAC:           e4:b3:23:a6:9e:e0
+MAC_EXT:            ff:fe
+
+Uploading stub flasher...
+Running stub flasher...
+[1A[2K[1A[2KStub flasher running.
+
+Configuring flash size...
+[KReading from 0x00008c00 [==============================] 100.0% 3072/3072 bytes... 
+[1A[2K[1;31m
+A fatal error occurred: Failed to leave flash download mode. Only got 1 byte status response.[0m
+Read 3072 bytes from 0x00008000 in 0.3 seconds (87.6 kbit/s) to 'cedar_switch_3in4out_power/docs/device-development/reports/p0/c6-rollback/partition-table.bin'.
+
+Staying in bootloader.
+exit=2
+== read-flash 0xd000 0x2000 -> otadata.bin
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting...
+[1A[2K[1A[2K[1A[2K[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+MAC:                e4:b3:23:ff:fe:a6:9e:e0
+BASE MAC:           e4:b3:23:a6:9e:e0
+MAC_EXT:            ff:fe
+
+Stub flasher is already running. No upload is necessary.
+
+Configuring flash size...
+[KReading from 0x0000e000 [==============>               ]  50.0% 4096/8192 bytes... [KReading from 0x0000f000 [==============================] 100.0% 8192/8192 bytes... 
+[1A[2KRead 8192 bytes from 0x0000d000 in 0.7 seconds (88.8 kbit/s) to 'cedar_switch_3in4out_power/docs/device-development/reports/p0/c6-rollback/otadata.bin'.
+
+Staying in bootloader.
+exit=0
+== read-flash 0x10000 0x100 -> ota_0-head.bin
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting...
+[1A[2K[1A[2K[1A[2K[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+MAC:                e4:b3:23:ff:fe:a6:9e:e0
+BASE MAC:           e4:b3:23:a6:9e:e0
+MAC_EXT:            ff:fe
+
+Stub flasher is already running. No upload is necessary.
+
+Configuring flash size...
+[KReading from 0x00010100 [==============================] 100.0% 256/256 bytes... 
+[1A[2KRead 256 bytes from 0x00010000 in 0.0 seconds (65.1 kbit/s) to 'cedar_switch_3in4out_power/docs/device-development/reports/p0/c6-rollback/ota_0-head.bin'.
+
+Staying in bootloader.
+exit=0
+== read-flash 0x1d0000 0x100 -> ota_1-head.bin
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting...
+[1A[2K[1A[2K[1A[2K[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+MAC:                e4:b3:23:ff:fe:a6:9e:e0
+BASE MAC:           e4:b3:23:a6:9e:e0
+MAC_EXT:            ff:fe
+
+Stub flasher is already running. No upload is necessary.
+
+Configuring flash size...
+[KReading from 0x001d0100 [==============================] 100.0% 256/256 bytes... 
+[1A[2KRead 256 bytes from 0x001d0000 in 0.0 seconds (65.9 kbit/s) to 'cedar_switch_3in4out_power/docs/device-development/reports/p0/c6-rollback/ota_1-head.bin'.
+
+Staying in bootloader.
+exit=0

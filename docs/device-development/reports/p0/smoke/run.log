@@ -1,0 +1,50 @@
+{
+  "host_interface": "en7",
+  "expected_interface": "en7",
+  "duration_s": 7207,
+  "console_reopens": 0,
+  "uptime_regressions": 0,
+  "uptime_first_ms": 176598,
+  "uptime_last_ms": 7360546,
+  "events": [],
+  "shell": {
+    "probes": 719,
+    "answered": 713,
+    "timeouts": 6,
+    "p50_s": 0.011827230453491211,
+    "p95_s": 0.016937971115112305,
+    "p99_s": 0.017761945724487305,
+    "max_s": 0.02129197120666504,
+    "over_100ms": 0,
+    "over_1s": 0,
+    "longest_stall_s": 10.0
+  },
+  "ping": {
+    "rounds": 24,
+    "sent": 480,
+    "received": 480,
+    "loss_pct": 0.0,
+    "min_ms": 5.713,
+    "avg_of_avgs_ms": 6.506,
+    "max_ms": 24.183
+  },
+  "http": {
+    "rounds": 24,
+    "failures": 0,
+    "overall": {
+      "n": 360,
+      "min": 0.041573,
+      "p50": 0.043561,
+      "p95": 0.047266,
+      "max": 0.056953
+    },
+    "worst_round_p95_s": 0.056183
+  },
+  "baseline": {
+    "http_p50": 0.053,
+    "http_p95": 0.056,
+    "ping_min": 8.5,
+    "ping_max": 11.6
+  },
+  "target_http_p95_s": 0.25
+}

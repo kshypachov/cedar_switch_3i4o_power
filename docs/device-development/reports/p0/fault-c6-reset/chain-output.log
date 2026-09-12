@@ -1,0 +1,23 @@
+wifi_ctrl init
+wifi_init() executed
+read 0x0 rc=2
+read 0x2000 rc=2
+read 0x4000 rc=2
+build len 22176 chip_len 0 equal_prefix False chip_sha e3b0c44298fc1c14 local_sha f5564a2f04194dfb tail_after_all_FF True
+build-ot len 22144 chip_len 0 equal_prefix False chip_sha e3b0c44298fc1c14 local_sha 2ab156b702f5eae1 tail_after_all_FF True
+wifi_ctrl reset
+ESP32 reset pulse done
+uart:~$ [00:02:58.581,000] <inf> wifi: Initializing WiFi reset pin...
+uart:~$ [00:02:58.581,000] <inf> wifi: Initializing WiFi BOOT pin...
+[00:02:58.581,000] <inf> wifi: WiFi reset pin configured and set to ACTIVE
+[00:02:58.881,000] <inf> wifi: WiFi reset pin set to INACTIVE
+[00:03:13.112,000] <err> os: ***** BUS FAULT *****
+uart:~$ [00:03:13.112,000] <err> os:   Precise data bus error
+uart:~$ [00:03:13.112,000] <err> os:   BFAR Address: 0xc
+uart:~$ [00:03:13.112,000] <err> os: r0/a1:  0x7016a850  r1/a2:  0x000000ea  r2/a3:  0x00000000
+uart:~$ [00:03:13.112,000] <err> os: r3/a4:  0x000000ea r12/ip:  0x20000914 r14/lr:  0x0206201f
+uart:~$ [00:03:13.112,000] <err> os:  xpsr:  0x01000000
+uart:~$ [00:03:13.112,000] <err> os: Faulting instruction address (r15/pc): 0x02062032
+uart:~$ [00:03:13.112,000] <err> os: >>> ZEPHYR FATAL ERROR 25: Unknown error on CPU 0
+uart:~$ [00:03:13.112,000] <err> os: Current thread: 0x20000a10 (eth_w5500)
+uart:~$ [00:03:13.123,000] <err> os: Halting system

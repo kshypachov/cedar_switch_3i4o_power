@@ -1,0 +1,1517 @@
+-- west build: generating a build system
+Loading Zephyr module(s) (Zephyr base): sysbuild_default
+-- Found Python3: /Volumes/Programming/Zephyr/zephyr_latest/.venv/bin/python3.14 (found suitable version "3.14.7", minimum required is "3.12") found components: Interpreter
+-- Cache files will be written to: /Users/kiro/Library/Caches/zephyr
+-- Found west (found suitable version "1.5.0", minimum required is "0.14.0")
+-- Board: cedar_switch_3in4out_power_rev3, qualifiers: stm32u585xx/ext_flash_app
+Parsing /Volumes/Programming/Zephyr/zephyr_latest/zephyr/share/sysbuild/Kconfig
+Loaded configuration '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/_sysbuild/empty.conf'
+Merged configuration '/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/sysbuild.conf'
+Configuration saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/zephyr/.config'
+Kconfig header saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/_sysbuild/autoconf.h'
+-- 
+   *****************************
+   * Running CMake for mcuboot *
+   *****************************
+
+Loading Zephyr default modules (Zephyr base (cached)).
+-- Application: /Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr
+-- CMake version: 4.4.2
+-- Found Python3: /Volumes/Programming/Zephyr/zephyr_latest/.venv/bin/python3.14 (found suitable version "3.14.7", minimum required is "3.12") found components: Interpreter
+-- Cache files will be written to: /Users/kiro/Library/Caches/zephyr
+-- Zephyr version: 4.4.99 (/Volumes/Programming/Zephyr/zephyr_latest/zephyr)
+-- Found west (found suitable version "1.5.0", minimum required is "0.14.0")
+-- Board: cedar_switch_3in4out_power_rev3, qualifiers: stm32u585xx/ext_flash_app
+-- Found host-tools: zephyr 1.0.1 (/Users/kiro/zephyr-sdk-1.0.1)
+-- Found toolchain: zephyr 1.0.1 (/Users/kiro/zephyr-sdk-1.0.1)
+-- Found Dtc: /opt/homebrew/bin/dtc (found suitable version "1.8.1", minimum required is "1.4.6")
+-- Found BOARD.dts: /Volumes/Programming/Zephyr/zephyr_latest/zephyr/boards/arm/cedar_switch_3in4out_power_rev3/cedar_switch_3in4out_power_rev3_stm32u585xx_ext_flash_app.dts
+-- Found devicetree overlay: /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/sysbuild/mcuboot.overlay
+-- Generated zephyr.dts: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/zephyr.dts
+-- Generated pickled edt: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/edt.pickle
+-- Generated devicetree_generated.h: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/include/generated/zephyr/devicetree_generated.h
+Parsing /Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr/Kconfig
+Loaded configuration '/Volumes/Programming/Zephyr/zephyr_latest/zephyr/boards/arm/cedar_switch_3in4out_power_rev3/cedar_switch_3in4out_power_rev3_stm32u585xx_ext_flash_app_defconfig'
+Merged configuration '/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr/prj.conf'
+Merged configuration '/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/sysbuild/mcuboot.conf'
+Merged configuration '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/.config.sysbuild'
+Configuration saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/.config'
+Kconfig header saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/include/generated/zephyr/autoconf.h'
+-- Found Ccache: /opt/homebrew/bin/ccache (found suitable version "4.14", minimum required is "4.12")
+-- Found GnuLd: /Users/kiro/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/arm-zephyr-eabi/bin/ld.bfd (found version "2.43.1")
+-- The C compiler identification is GNU 14.3.0
+-- The CXX compiler identification is GNU 14.3.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /Users/kiro/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc
+-- Using ccache: /opt/homebrew/bin/ccache
+-- Found gen_kobject_list: /Volumes/Programming/Zephyr/zephyr_latest/zephyr/scripts/build/gen_kobject_list.py
+-- Configuring done (4.2s)
+-- Generating done (0.3s)
+-- Build files have been written to: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot
+-- 
+   ************************************************
+   * Running CMake for cedar_switch_3in4out_power *
+   ************************************************
+
+Loading Zephyr default modules (Zephyr base (cached)).
+-- Application: /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power
+-- CMake version: 4.4.2
+-- Found Python3: /Volumes/Programming/Zephyr/zephyr_latest/.venv/bin/python3.14 (found suitable version "3.14.7", minimum required is "3.12") found components: Interpreter
+-- Cache files will be written to: /Users/kiro/Library/Caches/zephyr
+-- Zephyr version: 4.4.99 (/Volumes/Programming/Zephyr/zephyr_latest/zephyr)
+-- Found west (found suitable version "1.5.0", minimum required is "0.14.0")
+-- Board: cedar_switch_3in4out_power_rev3, qualifiers: stm32u585xx/ext_flash_app
+-- Found host-tools: zephyr 1.0.1 (/Users/kiro/zephyr-sdk-1.0.1)
+-- Found toolchain: zephyr 1.0.1 (/Users/kiro/zephyr-sdk-1.0.1)
+-- Found Dtc: /opt/homebrew/bin/dtc (found suitable version "1.8.1", minimum required is "1.4.6")
+-- Found BOARD.dts: /Volumes/Programming/Zephyr/zephyr_latest/zephyr/boards/arm/cedar_switch_3in4out_power_rev3/cedar_switch_3in4out_power_rev3_stm32u585xx_ext_flash_app.dts
+-- Found devicetree overlay: /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/boards/cedar_switch_3in4out_power_rev3_stm32u585xx_ext_flash_app.overlay
+-- Generated zephyr.dts: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/zephyr.dts
+-- Generated pickled edt: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/edt.pickle
+-- Generated devicetree_generated.h: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/include/generated/zephyr/devicetree_generated.h
+
+warning: TIMESLICE_SIZE (defined at soc/sensry/ganymed/sy1xx/Kconfig.defconfig:70,
+kernel/Kconfig:574) was assigned the value '20' but got the value ''. Check these unsatisfied
+dependencies: ((SOC_SERIES_SY1XX && SOC_SERIES_SY1XX && SOC_FAMILY_GANYMED) || TIMESLICING) (=n).
+See http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_TIMESLICE_SIZE and/or look up
+TIMESLICE_SIZE in the menuconfig/guiconfig interface. The Application Development Primer, Setting
+Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be helpful
+too.
+
+
+warning: TIMESLICE_PRIORITY (defined at kernel/Kconfig:585) was assigned the value '0' but got the
+value ''. Check these unsatisfied dependencies: TIMESLICING (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_TIMESLICE_PRIORITY and/or look up
+TIMESLICE_PRIORITY in the menuconfig/guiconfig interface. The Application Development Primer,
+Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be
+helpful too.
+
+
+warning: MCUBOOT_UPDATE_FOOTER_SIZE (defined at subsys/dfu/Kconfig:56) was assigned the value
+'0xc30' but got the value ''. Check these unsatisfied dependencies: MCUBOOT_IMG_MANAGER (=n),
+IMG_MANAGER (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_MCUBOOT_UPDATE_FOOTER_SIZE and/or look up
+MCUBOOT_UPDATE_FOOTER_SIZE in the menuconfig/guiconfig interface. The Application Development
+Primer, Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual
+might be helpful too.
+
+
+warning: FS_LITTLEFS_HEAP_PER_ALLOC_OVERHEAD_SIZE (defined at subsys/fs/Kconfig.littlefs:92) was
+assigned the value '32' but got the value ''. Check these unsatisfied dependencies:
+(FS_LITTLEFS_FC_HEAP_SIZE <= 0) (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_FS_LITTLEFS_HEAP_PER_ALLOC_OVERHEAD_SIZE
+and/or look up FS_LITTLEFS_HEAP_PER_ALLOC_OVERHEAD_SIZE in the menuconfig/guiconfig interface. The
+Application Development Primer, Setting Configuration Values, and Kconfig - Tips and Best Practices
+sections of the manual might be helpful too.
+
+
+warning: USB_DEVICE_VID (defined at subsys/usb/device/Kconfig:20) was assigned the value '0x2FE3'
+but got the value ''. Check these unsatisfied dependencies: USB_DEVICE_STACK (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DEVICE_VID and/or look up
+USB_DEVICE_VID in the menuconfig/guiconfig interface. The Application Development Primer, Setting
+Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be helpful
+too.
+
+
+warning: USB_DEVICE_PID (defined at subsys/usb/device/Kconfig:26) was assigned the value '0x0001'
+but got the value ''. Check these unsatisfied dependencies: USB_DEVICE_STACK (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DEVICE_PID and/or look up
+USB_DEVICE_PID in the menuconfig/guiconfig interface. The Application Development Primer, Setting
+Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be helpful
+too.
+
+
+warning: USB_DEVICE_MANUFACTURER (defined at subsys/usb/device/Kconfig:32) was assigned the value
+'Cedar' but got the value ''. Check these unsatisfied dependencies: USB_DEVICE_STACK (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DEVICE_MANUFACTURER and/or look up
+USB_DEVICE_MANUFACTURER in the menuconfig/guiconfig interface. The Application Development Primer,
+Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be
+helpful too.
+
+
+warning: USB_DEVICE_PRODUCT (defined at subsys/usb/device/Kconfig:38) was assigned the value 'Cedar
+Switch' but got the value ''. Check these unsatisfied dependencies: USB_DEVICE_STACK (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DEVICE_PRODUCT and/or look up
+USB_DEVICE_PRODUCT in the menuconfig/guiconfig interface. The Application Development Primer,
+Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be
+helpful too.
+
+
+warning: USB_DEVICE_SN (defined at subsys/usb/device/Kconfig:44) was assigned the value '0001' but
+got the value ''. Check these unsatisfied dependencies: USB_DEVICE_STACK (=n). See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DEVICE_SN and/or look up USB_DEVICE_SN
+in the menuconfig/guiconfig interface. The Application Development Primer, Setting Configuration
+Values, and Kconfig - Tips and Best Practices sections of the manual might be helpful too.
+
+
+warning: The choice symbol MBEDTLS_LOG_LEVEL_WRN (defined at
+subsys/logging/Kconfig.template.log_config:14, subsys/logging/Kconfig.template.log_config:14) was
+selected (set =y), but no symbol ended up as the choice selection. See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_MBEDTLS_LOG_LEVEL_WRN and/or look up
+MBEDTLS_LOG_LEVEL_WRN in the menuconfig/guiconfig interface. The Application Development Primer,
+Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be
+helpful too.
+
+
+warning: The choice symbol UVB_LOG_LEVEL_DBG (defined at
+subsys/logging/Kconfig.template.log_config:20) was selected (set =y), but no symbol ended up as the
+choice selection. See http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_UVB_LOG_LEVEL_DBG
+and/or look up UVB_LOG_LEVEL_DBG in the menuconfig/guiconfig interface. The Application Development
+Primer, Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual
+might be helpful too.
+
+
+warning: The choice symbol USB_DRIVER_LOG_LEVEL_DBG (defined at
+subsys/logging/Kconfig.template.log_config:20) was selected (set =y), but no symbol ended up as the
+choice selection. See
+http://docs.zephyrproject.org/latest/kconfig.html#CONFIG_USB_DRIVER_LOG_LEVEL_DBG and/or look up
+USB_DRIVER_LOG_LEVEL_DBG in the menuconfig/guiconfig interface. The Application Development Primer,
+Setting Configuration Values, and Kconfig - Tips and Best Practices sections of the manual might be
+helpful too.
+
+
+warning: Deprecated symbol MBEDTLS_SSL_MAX_CONTENT_LEN_DEPRECATED is enabled.
+
+Parsing /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/Kconfig
+Loaded configuration '/Volumes/Programming/Zephyr/zephyr_latest/zephyr/boards/arm/cedar_switch_3in4out_power_rev3/cedar_switch_3in4out_power_rev3_stm32u585xx_ext_flash_app_defconfig'
+Merged configuration '/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/prj.conf'
+Merged configuration '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/.config.sysbuild'
+Configuration saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/.config'
+Kconfig header saved to '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/include/generated/zephyr/autoconf.h'
+-- Found Ccache: /opt/homebrew/bin/ccache (found suitable version "4.14", minimum required is "4.12")
+-- Found GnuLd: /Users/kiro/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/arm-zephyr-eabi/bin/ld.bfd (found version "2.43.1")
+-- The C compiler identification is GNU 14.3.0
+-- The CXX compiler identification is GNU 14.3.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /Users/kiro/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc
+-- Found Nanopb: /Volumes/Programming/Zephyr/zephyr_latest/modules/lib/nanopb
+-- Found protoc: /Volumes/Programming/Zephyr/zephyr_latest/modules/lib/nanopb/generator/protoc
+-- Found Python3: /Volumes/Programming/Zephyr/zephyr_latest/.venv/bin/python3.14 (found version "3.14.7") found components: Interpreter
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+CMake Warning at /Volumes/Programming/Zephyr/zephyr_latest/zephyr/modules/mbedtls/CMakeLists.txt:122 (message):
+
+
+        The option CONFIG_MBEDTLS_HAVE_TIME_DATE is required for proper
+        certificate validation. If it is not enabled, certificates will
+        not be checked for expiration or validity dates, which may lead
+        to security vulnerabilities.
+        
+
+
+-- Using ccache: /opt/homebrew/bin/ccache
+-- Found gen_kobject_list: /Volumes/Programming/Zephyr/zephyr_latest/zephyr/scripts/build/gen_kobject_list.py
+-- Including signing script: /Volumes/Programming/Zephyr/zephyr_latest/zephyr/cmake/mcuboot.cmake
+CMake Warning at /Volumes/Programming/Zephyr/zephyr_latest/zephyr/CMakeLists.txt:2357 (message):
+  __ASSERT() statements are globally ENABLED
+
+
+-- Configuring done (5.3s)
+-- Generating done (0.5s)
+-- Build files have been written to: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power
+-- Configuring done (11.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build
+-- west build: building application
+[1/16] Creating directories for 'mcuboot'
+[2/16] Creating directories for 'cedar_switch_3in4out_power'
+[3/16] No download step for 'mcuboot'
+[4/16] No download step for 'cedar_switch_3in4out_power'
+[5/16] No update step for 'mcuboot'
+[6/16] No update step for 'cedar_switch_3in4out_power'
+[7/16] No patch step for 'cedar_switch_3in4out_power'
+[8/16] No patch step for 'mcuboot'
+[9/16] No configure step for 'cedar_switch_3in4out_power'
+[9/16] Performing build step for 'cedar_switch_3in4out_power'
+[1/767] Preparing syscall dependency handling
+
+[2/767] Generating nanopb/generator/nanopb_generator.py, nanopb/generator/proto/nanopb.proto
+[3/767] Generating zephyr/include/generated/globalsign_r1.der.inc
+[4/767] Generating misc/generated/syscalls_subdirs.trigger
+[5/767] Generating nanopb/generator/proto/nanopb_pb2.py
+[6/767] Generating include/generated/zephyr/version.h
+-- Zephyr version: 4.4.99 (/Volumes/Programming/Zephyr/zephyr_latest/zephyr), build: v4.4.0-12983-gb6a5e6e8aa90
+[7/767] Generating gen/app-codegen/cpp-app/app/PluginApplicationCallbacks.h, gen/app-codegen/cpp-app/app/callback-stub.cpp, gen/app-codegen/cpp-app/app/cluster-callbacks.cpp, gen/app-codegen/cpp-app/app/static-cluster-config/Identify.h, gen/app-codegen/cpp-app/app/static-cluster-config/Groups.h, gen/app-codegen/cpp-app/app/static-cluster-config/OnOff.h, gen/app-codegen/cpp-app/app/static-cluster-config/Descriptor.h, gen/app-codegen/cpp-app/app/static-cluster-config/AccessControl.h, gen/app-codegen/cpp-app/app/static-cluster-config/BasicInformation.h, gen/app-codegen/cpp-app/app/static-cluster-config/OtaSoftwareUpdateRequestor.h, gen/app-codegen/cpp-app/app/static-cluster-config/GeneralCommissioning.h, gen/app-codegen/cpp-app/app/static-cluster-config/NetworkCommissioning.h, gen/app-codegen/cpp-app/app/static-cluster-config/DiagnosticLogs.h, gen/app-codegen/cpp-app/app/static-cluster-config/GeneralDiagnostics.h, gen/app-codegen/cpp-app/app/static-cluster-config/SoftwareDiagnostics.h, gen/app-codegen/cpp-app/app/static-cluster-config/Switch.h, gen/app-codegen/cpp-app/app/static-cluster-config/AdministratorCommissioning.h, gen/app-codegen/cpp-app/app/static-cluster-config/OperationalCredentials.h, gen/app-codegen/cpp-app/app/static-cluster-config/GroupKeyManagement.h, gen/app-codegen/cpp-app
+2026-09-12 21:55:04 INFO    Parsing idl from '/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/matter/cedar_switch_4relay.matter'
+2026-09-12 21:55:04 INFO    Running code generator 'cpp-app'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/PluginApplicationCallbacks.h'
+2026-09-12 21:55:04 INFO    Template path: 'PluginApplicationCallbacksHeader.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/PluginApplicationCallbacks.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/callback-stub.cpp'
+2026-09-12 21:55:04 INFO    Template path: 'CallbackStubSource.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/callback-stub.cpp'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/cluster-callbacks.cpp'
+2026-09-12 21:55:04 INFO    Template path: 'ClusterCallbacksSource.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/cluster-callbacks.cpp'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/Identify.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/Identify.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/Descriptor.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/Descriptor.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/AccessControl.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/AccessControl.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/BasicInformation.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/BasicInformation.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/OtaSoftwareUpdateRequestor.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/OtaSoftwareUpdateRequestor.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/GeneralCommissioning.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/GeneralCommissioning.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/NetworkCommissioning.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/NetworkCommissioning.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/DiagnosticLogs.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/DiagnosticLogs.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/GeneralDiagnostics.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/GeneralDiagnostics.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/SoftwareDiagnostics.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/SoftwareDiagnostics.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/AdministratorCommissioning.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/AdministratorCommissioning.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/OperationalCredentials.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/OperationalCredentials.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/GroupKeyManagement.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/GroupKeyManagement.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/Groups.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/Groups.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/OnOff.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/OnOff.h'
+2026-09-12 21:55:04 INFO    File to be generated: 'app/static-cluster-config/Switch.h'
+2026-09-12 21:55:04 INFO    Template path: 'ServerClusterConfig.jinja', CWD: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power'
+2026-09-12 21:55:04 INFO    Writing new data to: '/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/static-cluster-config/Switch.h'
+2026-09-12 21:55:04 INFO    Done
+[8/767] Generating misc/generated/syscalls.json, misc/generated/struct_tags.json
+[9/767] Generating include/generated/device-api-sections.ld, include/generated/device-api-sections.cmake
+[10/767] Generating include/generated/zephyr/syscall_dispatch.c, include/generated/zephyr/syscall_exports_llext.c, syscall_weakdefs_llext.c, include/generated/zephyr/syscall_list.h
+[11/767] Generating include/generated/zephyr/driver-validation.h
+[12/767] Generating include/generated/zephyr/kobj-types-enum.h, include/generated/zephyr/otype-to-str.h, include/generated/zephyr/otype-to-size.h
+[13/767] Building C object zephyr/lib/heap/CMakeFiles/heap_constants.dir/heap_constants.c.obj
+[14/767] Generating ../../include/generated/zephyr/heap_constants.h
+[15/767] Building C object zephyr/CMakeFiles/offsets.dir/arch/arm/core/offsets/offsets.c.obj
+[16/767] Generating include/generated/zephyr/offsets.h
+[17/767] Running C++ protocol buffer compiler using nanopb plugin on esp_hosted_mcu_rpc.proto
+[18/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/version.c.obj
+[19/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mem_slab.c.obj
+[20/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/busy_wait.c.obj
+[21/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/float.c.obj
+[22/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mailbox.c.obj
+[23/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/idle.c.obj
+[24/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/msg_q.c.obj
+[25/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/main_weak.c.obj
+[26/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/queue.c.obj
+[27/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/device.c.obj
+[28/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/kheap.c.obj
+[29/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/init.c.obj
+[30/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/fatal.c.obj
+[31/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sem.c.obj
+[32/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/stack.c.obj
+[33/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/condvar.c.obj
+[34/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/spinlock_validate.c.obj
+[35/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread_monitor.c.obj
+[36/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/system_work_q.c.obj
+[37/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/scheduler.c.obj
+[38/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/pipe.c.obj
+[39/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sleep.c.obj
+[40/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sched.c.obj
+[41/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mutex.c.obj
+[42/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/work.c.obj
+[43/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread.c.obj
+[44/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timeout.c.obj
+[45/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/events.c.obj
+[46/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timer.c.obj
+[47/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/poll.c.obj
+[48/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/everest/CMakeFiles/everest.dir/library/Hacl_Curve25519_joined.c.obj
+[49/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/everest/CMakeFiles/everest.dir/library/x25519.c.obj
+[50/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/aes.c.obj
+[51/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/aesce.c.obj
+[52/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/aesni.c.obj
+[53/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/p256-m/CMakeFiles/p256-m.dir/p256-m_driver_entrypoints.c.obj
+[54/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/aria.c.obj
+[55/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/p256-m/CMakeFiles/p256-m.dir/p256-m/p256-m.c.obj
+[56/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/bignum.c.obj
+[57/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/bignum_mod.c.obj
+[58/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/bignum_core.c.obj
+[59/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/bignum_mod_raw.c.obj
+[60/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/camellia.c.obj
+[61/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/block_cipher.c.obj
+[62/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/chacha20.c.obj
+[63/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ccm.c.obj
+[64/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/chachapoly.c.obj
+[65/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/chacha20_neon.c.obj
+[66/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/usage.c.obj
+[67/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/cipher_wrap.c.obj
+[68/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/cipher.c.obj
+[69/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/cmac.c.obj
+[70/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/dynamic_disabled.c.obj
+[71/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ecjpake.c.obj
+[72/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ecdsa.c.obj
+[73/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ecp_curves_new.c.obj
+[74/767] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mempool.c.obj
+[75/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ecp_curves.c.obj
+[76/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ecp.c.obj
+[77/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/md5.c.obj
+[78/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/hmac_drbg.c.obj
+[79/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/entropy_poll.c.obj
+[80/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ctr_drbg.c.obj
+[81/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/poly1305.c.obj
+[82/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/gcm.c.obj
+[83/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/entropy.c.obj
+[84/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_aead.c.obj
+[85/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_cipher.c.obj
+[86/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_ecp.c.obj
+[87/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_hash.c.obj
+[88/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_mac.c.obj
+[89/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_ffdh.c.obj
+[90/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/ripemd160.c.obj
+[91/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_pake.c.obj
+[92/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_util_internal.c.obj
+[93/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/sha1.c.obj
+[94/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/rsa_alt_helpers.c.obj
+[95/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_xof.c.obj
+[96/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/psa_crypto_rsa.c.obj
+[97/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/rsa.c.obj
+[98/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/sha512.c.obj
+[99/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/sha3.c.obj
+[100/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/pqcp/CMakeFiles/pqcp.dir/src/psa_crypto_mldsa.c.obj
+[101/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/builtin/CMakeFiles/builtin.dir/src/sha256.c.obj
+[102/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/drivers/pqcp/CMakeFiles/pqcp.dir/src/wrap_mldsa_native.c.obj
+[103/767] Linking C static library zephyr/kernel/libkernel.a
+[104/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/lmots.c.obj
+[105/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/lms.c.obj
+[106/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/nist_kw.c.obj
+[107/767] Creating directories for 'chip-gn'
+[108/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pk_rsa.c.obj
+[109/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/md.c.obj
+[110/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pk_ecc.c.obj
+[111/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pk.c.obj
+[112/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pk_wrap.c.obj
+[113/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pkparse.c.obj
+[114/767] No download step for 'chip-gn'
+[115/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/extras/CMakeFiles/extras.dir/pkwrite.c.obj
+[116/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/platform/CMakeFiles/platform.dir/threading.c.obj
+[117/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/platform/CMakeFiles/platform.dir/memory_buffer_alloc.c.obj
+[118/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/platform/CMakeFiles/platform.dir/platform_util.c.obj
+[119/767] No update step for 'chip-gn'
+[120/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/platform/CMakeFiles/platform.dir/platform.c.obj
+[121/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/utilities/CMakeFiles/utilities.dir/asn1parse.c.obj
+[122/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/utilities/CMakeFiles/utilities.dir/asn1write.c.obj
+[123/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/utilities/CMakeFiles/utilities.dir/base64.c.obj
+[124/767] No patch step for 'chip-gn'
+[124/767] No configure step for 'chip-gn'
+[129/767] Building C object modules/mbedtls/mbedtls/tf-psa-crypto/utilities/CMakeFiles/utilities.dir/pkcs5.c.obj
+[130/767] Performing build step for 'chip-gn'
+Starting Matter library build in /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/modules/connectedhomeip
+Generating compile_commands took 205ms
+Done. Made 6224 targets from 539 files in 1155ms
+[1/443] ACTION //src/inet:gen_inet_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[2/443] ACTION //src/ble:gen_ble_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[3/443] ACTION //src/app/icd/server:gen_icd-server-buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[4/443] ACTION //src/system:gen_system_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[5/443] ACTION //src/lib/support:gen_chip_version(//config/zephyr/chip-gn/toolchain:zephyr)
+[6/443] ACTION //src/platform:gen_platform_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[7/443] ACTION //src/lib/asn1:gen_asn1oid(//config/zephyr/chip-gn/toolchain:zephyr)
+[8/443] ACTION //src/lib/core:gen_chip_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[9/443] ACTION //src/setup_payload:gen_additional_data_payload_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[10/443] ACTION //src/crypto:gen_crypto_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[11/443] ACTION //src/access:gen_access_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[12/443] ACTION //src/tracing:gen_tracing_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[13/443] ACTION //src/app:gen_app_buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[14/443] cc obj/third_party/uriparser/repo/src/uriparser.UriIp4Base.c.o
+[15/443] ACTION //src/credentials:gen_build_time_header(//config/zephyr/chip-gn/toolchain:zephyr)
+[16/443] cc obj/third_party/uriparser/repo/src/uriparser.UriCompare.c.o
+[17/443] cc obj/third_party/uriparser/repo/src/uriparser.UriCopy.c.o
+[18/443] cc obj/third_party/uriparser/repo/src/uriparser.UriMemory.c.o
+[19/443] cc obj/third_party/uriparser/repo/src/uriparser.UriIp4.c.o
+[20/443] cc obj/third_party/uriparser/repo/src/uriparser.UriFile.c.o
+[21/443] c++ obj/src/lib/support/libSupportLayer.Base64.cpp.o
+[22/443] cc obj/third_party/uriparser/repo/src/uriparser.UriEscape.c.o
+[23/443] cc obj/third_party/uriparser/repo/src/uriparser.UriCommon.c.o
+[24/443] cc obj/third_party/uriparser/repo/src/uriparser.UriNormalize.c.o
+[25/443] c++ obj/src/lib/core/error.CHIPError.cpp.o
+[26/443] c++ obj/src/lib/support/libSupportLayer.FixedBufferAllocator.cpp.o
+[27/443] c++ obj/src/lib/support/libSupportLayer.FibonacciUtils.cpp.o
+[28/443] c++ obj/src/lib/core/error.ErrorStr.cpp.o
+[29/443] c++ obj/src/lib/support/memory.CHIPMem-Malloc.cpp.o
+[30/443] c++ obj/src/lib/support/libSupportLayer.Base85.cpp.o
+[31/443] c++ obj/src/lib/support/memory.CHIPMem.cpp.o
+[32/443] c++ obj/src/lib/support/memory.CHIPPlatformMemory.cpp.o
+[33/443] c++ obj/src/lib/support/libSupportLayer.BufferReader.cpp.o
+[34/443] c++ obj/src/lib/support/verhoeff/libSupportLayer.Verhoeff.cpp.o
+[35/443] c++ obj/src/lib/support/libSupportLayer.BufferWriter.cpp.o
+[36/443] c++ obj/src/lib/support/libSupportLayer.BytesCircularBuffer.cpp.o
+[37/443] c++ obj/src/lib/support/verhoeff/libSupportLayer.Verhoeff10.cpp.o
+[38/443] c++ obj/src/lib/support/libSupportLayer.StringBuilder.cpp.o
+[39/443] c++ obj/src/lib/support/libSupportLayer.PersistentStorageAudit.cpp.o
+[40/443] c++ obj/src/lib/support/libSupportLayer.BytesToHex.cpp.o
+[41/443] c++ obj/src/lib/support/libSupportLayer.ThreadDiscoveryCode.cpp.o
+[42/443] c++ obj/src/lib/support/libSupportLayer.Pool.cpp.o
+[43/443] c++ obj/src/lib/support/libSupportLayer.PrivateHeap.cpp.o
+[44/443] c++ obj/src/lib/support/libSupportLayer.ReadOnlyBuffer.cpp.o
+[45/443] c++ obj/src/lib/support/libSupportLayer.IniEscaping.cpp.o
+[46/443] c++ obj/src/lib/support/libSupportLayer.ThreadOperationalDataset.cpp.o
+[47/443] c++ obj/src/lib/support/logging/libSupportLayer.BinaryLogging.cpp.o
+[48/443] c++ obj/src/lib/support/libSupportLayer.ZclString.cpp.o
+[49/443] c++ obj/src/lib/support/libSupportLayer.utf8.cpp.o
+[50/443] c++ obj/src/lib/support/libSupportLayer.TimeUtils.cpp.o
+[51/443] c++ obj/src/lib/support/logging/text_only_logging.TextOnlyLogging.cpp.o
+[52/443] ar libSupportLayer.a
+[53/443] c++ obj/src/system/libSystemLayer.SystemError.cpp.o
+[54/443] c++ obj/src/system/libSystemLayer.SystemClock.cpp.o
+[55/443] c++ obj/src/system/libSystemLayer.TLVPacketBufferBackingStore.cpp.o
+[56/443] c++ obj/src/system/libSystemLayer.SystemLayer.cpp.o
+[57/443] c++ obj/src/inet/libInetLayer.InetInterfaceImplDefault.cpp.o
+[58/443] c++ obj/src/system/libSystemLayer.SystemTimer.cpp.o
+[59/443] c++ obj/src/system/libSystemLayer.SystemMutex.cpp.o
+[60/443] c++ obj/src/system/libSystemLayer.SystemStats.cpp.o
+[61/443] c++ obj/src/inet/libInetLayer.IPPacketInfo.cpp.o
+[62/443] c++ obj/src/system/libSystemLayer.SystemPacketBuffer.cpp.o
+[63/443] c++ obj/src/inet/libInetLayer.IPPrefix.cpp.o
+[64/443] c++ obj/src/system/libSystemLayer.WakeEvent.cpp.o
+[65/443] c++ obj/src/inet/libInetLayer.IPAddress.cpp.o
+[66/443] c++ obj/src/inet/libInetLayer.IPAddress-StringFuncts.cpp.o
+[67/443] c++ obj/src/system/libSystemLayer.SystemLayerImplSelect.cpp.o
+[68/443] ar libSystemLayer.a
+[69/443] c++ obj/src/lib/core/libChipCore.CHIPKeyIds.cpp.o
+[70/443] c++ obj/src/lib/core/libChipCore.TLVCircularBuffer.cpp.o
+[71/443] c++ obj/src/lib/core/libChipCore.TLVTags.cpp.o
+[72/443] c++ obj/src/lib/core/libChipCore.OTAImageHeader.cpp.o
+[73/443] c++ obj/src/inet/libInetLayer.InetError.cpp.o
+[74/443] c++ obj/src/lib/core/libChipCore.TLVDebug.cpp.o
+[75/443] c++ obj/src/inet/libInetLayer.InetInterface.cpp.o
+[76/443] c++ obj/src/lib/core/libChipCore.TLVReader.cpp.o
+[77/443] c++ obj/src/lib/core/libChipCore.TLVUpdater.cpp.o
+[78/443] c++ obj/src/lib/core/libChipCore.TLVUtilities.cpp.o
+[79/443] c++ obj/src/lib/asn1/libASN1.ASN1Error.cpp.o
+[80/443] c++ obj/src/lib/asn1/libASN1.ASN1OID.cpp.o
+[81/443] c++ obj/src/inet/libInetLayer.UDPEndPoint.cpp.o
+[82/443] c++ obj/src/lib/asn1/libASN1.ASN1Reader.cpp.o
+[83/443] c++ obj/src/lib/core/libChipCore.TLVWriter.cpp.o
+[84/443] c++ obj/src/inet/libInetLayer.UDPEndPointImplSockets.cpp.o
+[85/443] ar libInetLayer.a
+[86/443] ar libChipCore.a
+[87/443] c++ obj/src/crypto/libChipCrypto.RandUtils.cpp.o
+[88/443] c++ obj/src/crypto/libChipCrypto.PSAOperationalKeystore.cpp.o
+[89/443] c++ obj/src/crypto/libChipCrypto.CHIPCryptoPAL.cpp.o
+[90/443] c++ obj/src/lib/asn1/libASN1.ASN1Writer.cpp.o
+[91/443] c++ obj/src/crypto/libChipCrypto.PSASessionKeystore.cpp.o
+[92/443] c++ obj/src/crypto/libChipCrypto.PersistentStorageOperationalKeystore.cpp.o
+[93/443] c++ obj/src/lib/asn1/libASN1.ASN1Time.cpp.o
+[94/443] ar libASN1.a
+[95/443] c++ obj/src/crypto/cryptopal_psa.CHIPCryptoPALmbedTLSCert.cpp.o
+[96/443] c++ obj/src/crypto/cryptopal_psa.CHIPCryptoPALPSA.cpp.o
+[97/443] ar libChipCrypto.a
+[98/443] c++ obj/src/app/util/types.attribute-metadata.cpp.o
+[99/443] c++ obj/src/app/util/types.ember-strings.cpp.o
+[100/443] c++ obj/src/platform/libDeviceLayer.CommissionableDataProvider.cpp.o
+[101/443] c++ obj/src/platform/Zephyr.SingletonConfigurationManager.cpp.o
+[102/443] c++ obj/src/setup_payload/additional_data_payload.AdditionalDataPayloadGenerator.cpp.o
+[103/443] c++ obj/src/setup_payload/additional_data_payload.AdditionalDataPayloadParser.cpp.o
+[104/443] c++ obj/src/platform/Zephyr/Zephyr.DeviceInstanceInfoProviderImpl.cpp.o
+[105/443] c++ obj/src/platform/Zephyr/Zephyr.BLEManagerImpl.cpp.o
+[106/443] c++ obj/src/platform/Zephyr/Zephyr.BLEAdvertisingArbiter.cpp.o
+[107/443] c++ obj/src/platform/Zephyr/Zephyr.ConnectivityManagerImpl.cpp.o
+[108/443] c++ obj/src/platform/Zephyr/Zephyr.KeyValueStoreManagerImpl.cpp.o
+[109/443] c++ obj/src/platform/Zephyr/Zephyr.InetUtils.cpp.o
+[110/443] c++ obj/src/platform/Zephyr/Zephyr.ConfigurationManagerImpl.cpp.o
+[111/443] c++ obj/src/platform/libDeviceLayer.LockTracker.cpp.o
+[112/443] c++ obj/src/platform/libDeviceLayer.RuntimeOptionsProvider.cpp.o
+[113/443] c++ obj/src/platform/Zephyr/Zephyr.ZephyrConfig.cpp.o
+[114/443] c++ obj/src/platform/libDeviceLayer.DeviceInstanceInfoProvider.cpp.o
+[115/443] c++ obj/src/platform/Zephyr/Zephyr.SystemTimeSupport.cpp.o
+[116/443] c++ obj/src/platform/libDeviceLayer.Entropy.cpp.o
+[117/443] c++ obj/src/tracing/tracing.registry_disabled.cpp.o
+[118/443] c++ obj/src/platform/libDeviceLayer.DefaultTimerDelegate.cpp.o
+[119/443] c++ obj/src/credentials/libCredentials.DeviceAttestationConstructor.cpp.o
+[120/443] c++ obj/src/platform/libDeviceLayer.DeviceControlServer.cpp.o
+[121/443] c++ obj/src/credentials/libCredentials.CHIPCertFromX509.cpp.o
+[122/443] c++ obj/src/credentials/libCredentials.CHIPCertToX509.cpp.o
+[123/443] c++ obj/src/credentials/libCredentials.DeviceAttestationCredsProvider.cpp.o
+[124/443] c++ obj/src/platform/libDeviceLayer.GeneralUtils.cpp.o
+[125/443] c++ obj/src/credentials/libCredentials.CertificationDeclaration.cpp.o
+[126/443] c++ obj/src/platform/libDeviceLayer.Globals.cpp.o
+[127/443] c++ obj/src/platform/Zephyr/Zephyr.DiagnosticDataProviderImplGetter.cpp.o
+[128/443] c++ obj/src/platform/libDeviceLayer.PlatformEventSupport.cpp.o
+[129/443] c++ obj/src/platform/libDeviceLayer.PersistedStorage.cpp.o
+[130/443] ar tracing.a
+[131/443] c++ obj/src/credentials/libCredentials.CHIPCert.cpp.o
+[132/443] c++ obj/src/platform/Zephyr/Zephyr.DiagnosticDataProviderImpl.cpp.o
+[133/443] c++ obj/src/credentials/attestation_verifier/libCredentials.DeviceAttestationVerifier.cpp.o
+[134/443] c++ obj/src/credentials/examples/libCredentials.ExamplePAI.cpp.o
+[135/443] c++ obj/src/platform/libDeviceLayer.DeviceInfoProvider.cpp.o
+[136/443] c++ obj/src/credentials/examples/libCredentials.ExampleDACs.cpp.o
+[137/443] c++ obj/src/platform/Zephyr/Zephyr.PlatformManagerImpl.cpp.o
+[138/443] ar Zephyr.a
+[139/443] c++ obj/src/credentials/examples/libCredentials.DeviceAttestationCredsExample.cpp.o
+[140/443] c++ obj/src/platform/libDeviceLayer.DiagnosticDataProvider.cpp.o
+[141/443] c++ obj/src/credentials/libCredentials.FabricTable.cpp.o
+[142/443] c++ obj/src/credentials/libCredentials.GenerateChipX509Cert.cpp.o
+[143/443] ar libDeviceLayer.a
+[144/443] c++ obj/src/credentials/libCredentials.PersistentStorageOpCertStore.cpp.o
+[145/443] c++ obj/src/credentials/libCredentials.GroupDataProviderImpl.cpp.o
+[146/443] c++ obj/src/access/examples/libaccess.PermissiveAccessControlDelegate.cpp.o
+[147/443] c++ obj/src/access/examples/libaccess.ExampleAccessControlDelegate.cpp.o
+[148/443] c++ obj/src/access/libaccess.AccessControl.cpp.o
+[149/443] c++ obj/src/credentials/libCredentials.LastKnownGoodTime.cpp.o
+[150/443] ar libCredentials.a
+[151/443] c++ obj/src/access/examples/libaccess.GroupAuxiliaryAccessControlDelegateImpl.cpp.o
+[152/443] c++ obj/src/setup_payload/libSetupPayload.Base38Decode.cpp.o
+[153/443] c++ obj/src/protocols/secure_channel/libSecureChannelTypes.StatusReport.cpp.o
+[154/443] c++ obj/src/lib/dnssd/dnssd.IPAddressSorter.cpp.o
+[155/443] c++ obj/src/setup_payload/libSetupPayload.Base38Encode.cpp.o
+[156/443] c++ obj/src/lib/dnssd/dnssd.Advertiser.cpp.o
+[157/443] ar libaccess.a
+[158/443] ar libSecureChannelTypes.a
+[159/443] c++ obj/src/lib/dnssd/dnssd.Resolver.cpp.o
+[160/443] c++ obj/src/setup_payload/libSetupPayload.ManualSetupPayloadGenerator.cpp.o
+[161/443] c++ obj/src/setup_payload/libSetupPayload.ManualSetupPayloadParser.cpp.o
+[162/443] c++ obj/src/lib/dnssd/naming.ServiceNaming.cpp.o
+[163/443] c++ obj/src/lib/dnssd/dnssd.ResolverProxy.cpp.o
+[164/443] c++ obj/src/transport/raw/libRawTransport.MessageHeader.cpp.o
+[165/443] c++ obj/src/lib/dnssd/dnssd.Advertiser_ImplNone.cpp.o
+[166/443] c++ obj/src/setup_payload/libSetupPayload.QRCodeSetupPayloadGenerator.cpp.o
+[167/443] c++ obj/src/lib/dnssd/dnssd.TxtFields.cpp.o
+[168/443] c++ obj/src/lib/dnssd/dnssd.Resolver_ImplNone.cpp.o
+[169/443] ar dnssd.a
+[170/443] c++ obj/src/setup_payload/libSetupPayload.QRCodeSetupPayloadParser.cpp.o
+[171/443] c++ obj/src/transport/raw/libRawTransport.GroupcastTesting.cpp.o
+[172/443] c++ obj/src/transport/libTransportLayer.CryptoContext.cpp.o
+[173/443] c++ obj/src/setup_payload/libSetupPayload.SetupPayload.cpp.o
+[174/443] ar libSetupPayload.a
+[175/443] c++ obj/src/transport/libTransportLayer.GroupPeerMessageCounter.cpp.o
+[176/443] c++ obj/src/transport/raw/libRawTransport.PeerAddress.cpp.o
+[177/443] c++ obj/src/messaging/libMessagingLayer.ErrorCategory.cpp.o
+[178/443] c++ obj/src/transport/raw/libRawTransport.UDP.cpp.o
+[179/443] ar libRawTransport.a
+[180/443] c++ obj/src/protocols/interaction_model/libInteractionModel.StatusCode.cpp.o
+[181/443] c++ obj/src/transport/libTransportLayer.SecureMessageCodec.cpp.o
+[182/443] c++ obj/src/transport/libTransportLayer.SecureSession.cpp.o
+[183/443] c++ obj/src/transport/libTransportLayer.SecureSessionTable.cpp.o
+[184/443] c++ obj/src/transport/libTransportLayer.TransportMgrBase.cpp.o
+[185/443] ar libInteractionModel.a
+[186/443] c++ obj/src/transport/libTransportLayer.SessionHolder.cpp.o
+[187/443] c++ obj/src/transport/libTransportLayer.Session.cpp.o
+[188/443] c++ obj/src/app/data-model/data-model.PreEncodedValue.cpp.o
+[189/443] c++ obj/src/app/data-model/data-model.FabricScopedPreEncodedValue.cpp.o
+[190/443] c++ obj/src/app/data-model/encode-decode.StructDecodeIterator.cpp.o
+[191/443] c++ obj/src/app/data-model/encode-decode.WrappedStructEncoder.cpp.o
+[192/443] c++ obj/src/messaging/libMessagingLayer.ApplicationExchangeDispatch.cpp.o
+[193/443] c++ obj/src/messaging/libMessagingLayer.ExchangeMessageDispatch.cpp.o
+[194/443] c++ obj/src/protocols/secure_channel/check-in-counter.CheckInCounter.cpp.o
+[195/443] c++ obj/src/messaging/libMessagingLayer.ReliableMessageContext.cpp.o
+[196/443] c++ obj/src/messaging/libMessagingLayer.ExchangeContext.cpp.o
+[197/443] c++ obj/src/messaging/libMessagingLayer.ExchangeMgr.cpp.o
+[198/443] c++ obj/src/messaging/libMessagingLayer.ReliableMessageProtocolConfig.cpp.o
+[199/443] c++ obj/src/messaging/libMessagingLayer.ReliableMessageMgr.cpp.o
+[200/443] c++ obj/src/transport/libTransportLayer.SessionManager.cpp.o
+[201/443] ar libTransportLayer.a
+[202/443] ar libMessagingLayer.a
+[203/443] c++ obj/src/protocols/secure_channel/check-in-message.CheckinMessage.cpp.o
+[204/443] c++ obj/src/protocols/secure_channel/libSecureChannel.DefaultSessionResumptionStorage.cpp.o
+[205/443] c++ obj/src/protocols/secure_channel/libSecureChannel.CASEDestinationId.cpp.o
+[206/443] c++ obj/src/protocols/secure_channel/libSecureChannel.SimpleSessionResumptionStorage.cpp.o
+[207/443] c++ obj/src/protocols/secure_channel/libSecureChannel.CASEServer.cpp.o
+[208/443] c++ obj/src/app/MessageDef/MessageDef.ArrayBuilder.cpp.o
+[209/443] c++ obj/src/app/attribute-access.AttributeAccessInterfaceRegistry.cpp.o
+[210/443] c++ obj/src/app/attribute-access.AttributeReportBuilder.cpp.o
+[211/443] c++ obj/src/app/MessageDef/MessageDef.ArrayParser.cpp.o
+[212/443] c++ obj/src/app/attribute-access.AttributeValueEncoder.cpp.o
+[213/443] c++ obj/src/app/MessageDef/MessageDef.AttributeDataIBs.cpp.o
+[214/443] c++ obj/src/app/MessageDef/MessageDef.AttributeDataIB.cpp.o
+[215/443] c++ obj/src/app/MessageDef/MessageDef.AttributePathIB.cpp.o
+[216/443] c++ obj/src/protocols/secure_channel/libSecureChannel.PairingSession.cpp.o
+[217/443] c++ obj/src/protocols/secure_channel/libSecureChannel.SessionEstablishmentExchangeDispatch.cpp.o
+[218/443] c++ obj/src/protocols/secure_channel/libSecureChannel.PASESession.cpp.o
+[219/443] c++ obj/src/app/MessageDef/MessageDef.AttributePathIBs.cpp.o
+[220/443] c++ obj/src/protocols/secure_channel/libSecureChannel.UnsolicitedStatusHandler.cpp.o
+[221/443] c++ obj/src/protocols/secure_channel/libSecureChannel.CASESession.cpp.o
+[222/443] c++ obj/src/app/MessageDef/MessageDef.AttributeReportIB.cpp.o
+[223/443] c++ obj/src/app/MessageDef/MessageDef.Builder.cpp.o
+[224/443] c++ obj/src/app/MessageDef/MessageDef.AttributeReportIBs.cpp.o
+[225/443] c++ obj/src/app/MessageDef/MessageDef.AttributeStatusIB.cpp.o
+[226/443] c++ obj/src/app/MessageDef/MessageDef.AttributeStatusIBs.cpp.o
+[227/443] c++ obj/src/app/MessageDef/MessageDef.ClusterPathIB.cpp.o
+[228/443] c++ obj/src/app/MessageDef/MessageDef.CommandPathIB.cpp.o
+[229/443] c++ obj/src/app/MessageDef/MessageDef.CommandDataIB.cpp.o
+[230/443] c++ obj/src/app/MessageDef/MessageDef.CommandStatusIB.cpp.o
+[231/443] c++ obj/src/app/MessageDef/MessageDef.DataVersionFilterIB.cpp.o
+[232/443] c++ obj/src/app/MessageDef/MessageDef.DataVersionFilterIBs.cpp.o
+[233/443] c++ obj/src/app/MessageDef/MessageDef.EventDataIB.cpp.o
+[234/443] c++ obj/src/app/MessageDef/MessageDef.EventFilterIB.cpp.o
+[235/443] c++ obj/src/app/MessageDef/MessageDef.EventFilterIBs.cpp.o
+[236/443] c++ obj/src/app/MessageDef/MessageDef.EventPathIB.cpp.o
+[237/443] c++ obj/src/app/MessageDef/MessageDef.EventPathIBs.cpp.o
+[238/443] c++ obj/src/app/MessageDef/MessageDef.EventReportIBs.cpp.o
+[239/443] c++ obj/src/app/MessageDef/MessageDef.EventStatusIB.cpp.o
+[240/443] c++ obj/src/app/MessageDef/MessageDef.EventReportIB.cpp.o
+[241/443] c++ obj/src/app/MessageDef/MessageDef.InvokeRequestMessage.cpp.o
+[242/443] c++ obj/src/app/MessageDef/MessageDef.InvokeRequests.cpp.o
+[243/443] c++ obj/src/app/MessageDef/MessageDef.InvokeResponseIB.cpp.o
+[244/443] c++ obj/src/app/MessageDef/MessageDef.InvokeResponseIBs.cpp.o
+[245/443] c++ obj/src/app/MessageDef/MessageDef.MessageDefHelper.cpp.o
+[246/443] c++ obj/src/app/MessageDef/MessageDef.ListBuilder.cpp.o
+[247/443] c++ obj/src/app/MessageDef/MessageDef.InvokeResponseMessage.cpp.o
+[248/443] c++ obj/src/app/MessageDef/MessageDef.ListParser.cpp.o
+[249/443] c++ obj/src/app/MessageDef/MessageDef.MessageBuilder.cpp.o
+[250/443] c++ obj/src/app/MessageDef/MessageDef.Parser.cpp.o
+[251/443] ar libSecureChannel.a
+[252/443] c++ obj/src/app/MessageDef/MessageDef.MessageParser.cpp.o
+[253/443] c++ obj/src/app/MessageDef/MessageDef.ReadRequestMessage.cpp.o
+[254/443] c++ obj/src/app/MessageDef/MessageDef.StatusResponseMessage.cpp.o
+[255/443] c++ obj/src/app/MessageDef/MessageDef.StatusIB.cpp.o
+[256/443] c++ obj/src/app/MessageDef/MessageDef.StructBuilder.cpp.o
+[257/443] c++ obj/src/app/MessageDef/MessageDef.ReportDataMessage.cpp.o
+[258/443] c++ obj/src/app/MessageDef/MessageDef.StructParser.cpp.o
+[259/443] c++ obj/src/app/MessageDef/MessageDef.SubscribeRequestMessage.cpp.o
+[260/443] c++ obj/src/app/MessageDef/MessageDef.SubscribeResponseMessage.cpp.o
+[261/443] c++ obj/src/app/MessageDef/MessageDef.TimedRequestMessage.cpp.o
+[262/443] c++ obj/src/app/MessageDef/MessageDef.WriteRequestMessage.cpp.o
+[263/443] c++ obj/src/app/MessageDef/MessageDef.WriteResponseMessage.cpp.o
+[264/443] c++ obj/src/lib/address_resolve/address_resolve.AddressResolve.cpp.o
+[265/443] c++ obj/zzz_generated/app-common/app-common/zap-generated/libClusterObjects.cluster-objects.cpp.o
+[266/443] ar libClusterObjects.a
+[267/443] c++ obj/src/app/interaction-model.PendingResponseTrackerImpl.cpp.o
+[268/443] c++ obj/src/lib/address_resolve/address_resolve.AddressResolve_DefaultImpl.cpp.o
+[269/443] c++ obj/src/app/command-handler.CommandHandler.cpp.o
+[270/443] c++ obj/src/app/command-handler-interface.CommandHandlerInterfaceRegistry.cpp.o
+[271/443] c++ obj/src/app/interaction-model.CASEClient.cpp.o
+[272/443] c++ obj/src/app/interaction-model.CommandSender.cpp.o
+[273/443] c++ obj/src/app/global-attributes.GlobalAttributes.cpp.o
+[274/443] c++ obj/src/app/interaction-model.DeviceProxy.cpp.o
+[275/443] ar attribute-access.a
+[276/443] c++ obj/src/app/interaction-model.CASESessionManager.cpp.o
+[277/443] c++ obj/src/app/interaction-model.TimedHandler.cpp.o
+[278/443] c++ obj/src/app/interaction-model.TimedRequest.cpp.o
+[279/443] c++ obj/src/app/interaction-model.InteractionModelDelegatePointers.cpp.o
+[280/443] c++ obj/src/app/data-model-provider/data-model-provider.ActionReturnStatus.cpp.o
+[281/443] ar address_resolve.a
+[282/443] c++ obj/src/app/interaction-model.OperationalSessionSetup.cpp.o
+[283/443] c++ obj/src/app/data-model-provider/data-model-provider.MetadataLookup.cpp.o
+[284/443] c++ obj/src/app/util/callbacks.MatterCallbacks.cpp.o
+[285/443] c++ obj/src/app/data-model-provider/data-model-provider.EventsGenerator.cpp.o
+[286/443] c++ obj/src/app/data-model-provider/data-model-provider.ProviderMetadataTree.cpp.o
+[287/443] c++ obj/src/app/command-handler-impl.CommandHandlerImpl.cpp.o
+[288/443] c++ obj/src/app/path-expansion.AttributePathExpandIterator.cpp.o
+[289/443] c++ obj/src/app/reporting/interaction-model.ReportSchedulerImpl.cpp.o
+[290/443] c++ obj/src/app/interaction-model.WriteClient.cpp.o
+[291/443] c++ obj/src/protocols/bdx/libBdx.BdxMessages.cpp.o
+[292/443] c++ obj/src/app/reporting/interaction-model.reporting.cpp.o
+[293/443] c++ obj/src/app/reporting/interaction-model.SynchronizedReportSchedulerImpl.cpp.o
+[294/443] c++ obj/src/protocols/bdx/libBdx.StatusCode.cpp.o
+[295/443] c++ obj/src/app/status-response.StatusResponse.cpp.o
+[296/443] c++ obj/src/protocols/bdx/libBdx.BdxUri.cpp.o
+[297/443] c++ obj/src/protocols/bdx/libBdx.BdxTransferProxyDiagnosticLog.cpp.o
+[298/443] c++ obj/src/app/data-model-provider/data-model-provider.Provider.cpp.o
+[299/443] c++ obj/src/protocols/bdx/libBdx.AsyncTransferFacilitator.cpp.o
+[300/443] c++ obj/src/app/interaction-model.InteractionModelEngine.cpp.o
+[301/443] c++ obj/src/protocols/bdx/libBdx.BdxTransferDiagnosticLog.cpp.o
+[302/443] c++ obj/src/app/reporting/interaction-model.Engine.cpp.o
+[303/443] ar interaction-model.a
+[304/443] c++ obj/src/protocols/bdx/libBdx.BdxTransferServer.cpp.o
+[305/443] c++ obj/src/protocols/bdx/libBdx.BdxTransferSession.cpp.o
+[306/443] c++ obj/src/protocols/bdx/libBdx.TransferFacilitator.cpp.o
+[307/443] ar libBdx.a
+[308/443] c++ obj/src/app/libCHIPDataModel.FailSafeContext.cpp.o
+[309/443] c++ obj/src/app/libCHIPDataModel.ChunkedWriteCallback.cpp.o
+[310/443] c++ obj/src/app/storage-wrapper.StorageDelegateWrapper.cpp.o
+[311/443] c++ obj/src/app/attribute-persistence.SafeAttributePersistenceProvider.cpp.o
+[312/443] c++ obj/src/protocols/libChipProtocols.Protocols.cpp.o
+[313/443] c++ obj/src/protocols/echo/libChipProtocols.EchoServer.cpp.o
+[314/443] c++ obj/src/protocols/echo/libChipProtocols.EchoClient.cpp.o
+[315/443] c++ obj/src/app/persistence/persistence.String.cpp.o
+[316/443] c++ obj/src/app/libCHIPDataModel.CommandResponseSender.cpp.o
+[317/443] c++ obj/src/app/persistence/persistence.AttributePersistence.cpp.o
+[318/443] c++ obj/src/app/libCHIPDataModel.EventManagement.cpp.o
+[319/443] c++ obj/src/protocols/secure_channel/libChipProtocols.MessageCounterManager.cpp.o
+[320/443] c++ obj/src/protocols/user_directed_commissioning/libChipProtocols.UserDirectedCommissioningClient.cpp.o
+[321/443] c++ obj/src/app/libCHIPDataModel.WriteHandler.cpp.o
+[322/443] c++ obj/src/app/libCHIPDataModel.ReadHandler.cpp.o
+[323/443] ar libCHIPDataModel.a
+[324/443] c++ obj/src/protocols/user_directed_commissioning/libChipProtocols.UserDirectedCommissioningServer.cpp.o
+[325/443] ar libChipProtocols.a
+[326/443] c++ obj/src/app/clusters/actions-server/actions-server.ActionsCluster.cpp.o
+[327/443] cc obj/third_party/uriparser/repo/src/uriparser.UriNormalizeBase.c.o
+[328/443] cc obj/third_party/uriparser/repo/src/uriparser.UriParseBase.c.o
+[329/443] c++ obj/src/app/server-cluster/server-cluster.AttributeListBuilder.cpp.o
+[330/443] cc obj/third_party/uriparser/repo/src/uriparser.UriQuery.c.o
+[331/443] cc obj/third_party/uriparser/repo/src/uriparser.UriParse.c.o
+[332/443] cc obj/third_party/uriparser/repo/src/uriparser.UriResolve.c.o
+[333/443] cc obj/third_party/uriparser/repo/src/uriparser.UriRecompose.c.o
+[334/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetFragment.c.o
+[335/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostAuto.c.o
+[336/443] c++ obj/src/app/server-cluster/server-cluster.DefaultServerCluster.cpp.o
+[337/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostCommon.c.o
+[338/443] c++ obj/src/app/server-cluster/server-cluster.ServerClusterExtension.cpp.o
+[339/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostIp4.c.o
+[340/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostIp6.c.o
+[341/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostIpFuture.c.o
+[342/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetHostRegName.c.o
+[343/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetPort.c.o
+[344/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetQuery.c.o
+[345/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetPath.c.o
+[346/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetScheme.c.o
+[347/443] c++ obj/src/credentials/attestation_verifier/test_paa_store.TestPAAStore.cpp.o
+[348/443] cc obj/third_party/uriparser/repo/src/uriparser.UriSetUserInfo.c.o
+[349/443] cc obj/third_party/uriparser/repo/src/uriparser.UriShorten.c.o
+[350/443] cc obj/third_party/uriparser/repo/src/uriparser.UriVersion.c.o
+[351/443] c++ obj/src/credentials/attestation_verifier/libDefaultAttestationVerifier.DacOnlyPartialAttestationVerifier.cpp.o
+[352/443] c++ obj/src/credentials/attestation_verifier/libDefaultAttestationVerifier.DefaultDeviceAttestationVerifier.cpp.o
+[353/443] c++ obj/src/app/server-cluster/server-cluster.ServerClusterInterface.cpp.o
+[354/443] c++ obj/src/app/server/libCHIPAppServer.EchoHandler.cpp.o
+[355/443] c++ obj/src/app/server/libCHIPAppServer.Dnssd.cpp.o
+[356/443] c++ obj/src/app/server/libCHIPAppServer.AclStorage.cpp.o
+[357/443] c++ obj/src/app/server/libCHIPAppServer.DefaultAclStorage.cpp.o
+[358/443] c++ obj/src/app/clusters/access-control-server/access-control-event-helper.AccessControlEventHelper.cpp.o
+[359/443] c++ obj/src/app/clusters/air-quality-server/air-quality-server.AirQualityCluster.cpp.o
+[360/443] c++ obj/src/app/server/libCHIPAppServer.CommissioningWindowManager.cpp.o
+[361/443] c++ obj/src/app/clusters/boolean-state-configuration-server/boolean-state-configuration-server.BooleanStateConfigurationCluster.cpp.o
+[362/443] c++ obj/src/app/clusters/administrator-commissioning-server/administrator-commissioning-server.AdministratorCommissioningLogic.cpp.o
+[363/443] c++ obj/src/app/clusters/administrator-commissioning-server/administrator-commissioning-server.AdministratorCommissioningCluster.cpp.o
+[364/443] c++ obj/src/app/clusters/bridged-device-basic-information-server/bridged-device-basic-information-server.BridgedDeviceBasicInformationCluster.cpp.o
+[365/443] c++ obj/src/app/clusters/access-control-server/arl-encoder.ArlEncoder.cpp.o
+[366/443] c++ obj/src/app/clusters/chime-server/chime-server.ChimeCluster.cpp.o
+[367/443] c++ obj/src/app/clusters/closure-control-server/closure-control-server.ClosureControlCluster.cpp.o
+[368/443] c++ obj/examples/providers/libMatterDeviceInfoProviderExample.DeviceInfoProviderImpl.cpp.o
+[369/443] c++ obj/src/app/server/libCHIPAppServer.Server.cpp.o
+[370/443] c++ obj/src/app/clusters/boolean-state-server/boolean-state-server.BooleanStateCluster.cpp.o
+[371/443] c++ obj/src/app/clusters/camera-av-settings-user-level-management-server/camera-av-settings-user-level-management-server.CameraAvSettingsUserLevelManagementCluster.cpp.o
+[372/443] c++ obj/src/app/clusters/access-control-server/access-control-server.access-control-cluster.cpp.o
+[373/443] c++ obj/src/app/clusters/descriptor/descriptor.DescriptorCluster.cpp.o
+[374/443] c++ obj/src/app/clusters/fan-control-server/fan-control-server.FanControlCluster.cpp.o
+[375/443] c++ obj/src/app/clusters/flow-measurement-server/flow-measurement-server.FlowMeasurementCluster.cpp.o
+[376/443] c++ obj/src/app/clusters/humidistat-server/humidistat-server.HumidistatCluster.cpp.o
+[377/443] c++ obj/src/app/clusters/camera-av-settings-user-level-management-server/camera-av-settings-user-level-management-server.CameraAvSettingsUserLevelManagementLogic.cpp.o
+[378/443] c++ obj/src/app/clusters/groups-server/groups-server.GroupsCluster.cpp.o
+[379/443] c++ obj/src/app/clusters/groupcast/groupcast.GroupcastCluster.cpp.o
+[380/443] c++ obj/src/app/clusters/network-commissioning/thread-response-encoding.ThreadScanResponse.cpp.o
+[381/443] c++ obj/src/app/clusters/commissioner-control-server/commissioner-control-server.CommissionerControlCluster.cpp.o
+[382/443] c++ obj/src/app/clusters/closure-dimension-server/closure-dimension-server.ClosureDimensionCluster.cpp.o
+[383/443] c++ obj/src/app/clusters/concentration-measurement-server/concentration-measurement-server.ConcentrationMeasurementCluster.cpp.o
+[384/443] c++ obj/src/app/clusters/illuminance-measurement-server/illuminance-measurement-server.IlluminanceMeasurementCluster.cpp.o
+[385/443] c++ obj/src/app/clusters/network-commissioning/wifi-response-encoding.WifiScanResponse.cpp.o
+[386/443] c++ obj/src/app/clusters/microwave-oven-control-server/microwave-oven-control-server.MicrowaveOvenControlCluster.cpp.o
+[387/443] c++ obj/src/app/clusters/network-identity-management-server/network-identity-management-server.NetworkAdministratorSecret.cpp.o
+[388/443] c++ obj/src/app/clusters/network-identity-management-server/network-identity-management-server.NetworkIdentityStorage.cpp.o
+[389/443] c++ obj/src/app/clusters/network-identity-management-server/network-identity-management-server.DefaultNetworkIdentityStorage.cpp.o
+[390/443] c++ obj/src/app/clusters/group-key-mgmt-server/group-key-mgmt-server.GroupKeyManagementCluster.cpp.o
+[391/443] c++ obj/src/app/clusters/general-diagnostics-server/general-diagnostics-server.GeneralDiagnosticsCluster.cpp.o
+[392/443] c++ obj/src/app/clusters/general-commissioning-server/general-commissioning-server.GeneralCommissioningCluster.cpp.o
+[393/443] c++ obj/src/app/clusters/identify-server/identify-server.IdentifyCluster.cpp.o
+[394/443] c++ obj/src/app/clusters/network-identity-management-server/network-identity-management-server.NetworkIdentityManagementCluster.cpp.o
+[395/443] c++ obj/src/app/clusters/resource-monitoring-server/resource-monitoring-server.MigrateResourceMonitoringServerStorage.cpp.o
+[396/443] c++ obj/src/app/clusters/scenes-server/scenes.ExtensionFieldSetsImpl.cpp.o
+[397/443] c++ obj/src/app/clusters/network-commissioning/network-commissioning.NetworkCommissioningCluster.cpp.o
+[398/443] c++ obj/src/app/clusters/pressure-measurement-server/pressure-measurement-server.PressureMeasurementCluster.cpp.o
+[399/443] c++ obj/src/app/clusters/relative-humidity-measurement-server/relative-humidity-measurement-server.RelativeHumidityMeasurementCluster.cpp.o
+[400/443] c++ obj/src/app/clusters/proximity-ranging-server/proximity-ranging-server.ProximityRangingCluster.cpp.o
+[401/443] c++ obj/src/app/clusters/level-control/level-control.LevelControlCluster.cpp.o
+[402/443] c++ obj/src/app/clusters/on-off-server/on-off-server.OnOffCluster.cpp.o
+[403/443] c++ obj/src/app/clusters/software-diagnostics-server/software-fault-listener.software-fault-listener.cpp.o
+[404/443] c++ obj/src/app/clusters/occupancy-sensor-server/occupancy-sensor-server.OccupancySensingCluster.cpp.o
+[405/443] c++ obj/src/app/clusters/on-off-server/on-off-server.OnOffLightingCluster.cpp.o
+[406/443] c++ obj/src/app/clusters/smoke-co-alarm-server/smoke-co-alarm-server.SmokeCoAlarmCluster.cpp.o
+[407/443] c++ obj/src/app/clusters/resource-monitoring-server/resource-monitoring-server.resource-monitoring-cluster-objects.cpp.o
+[408/443] c++ obj/src/app/clusters/thread-network-directory-server/thread-network-directory-server.DefaultThreadNetworkDirectoryStorage.cpp.o
+[409/443] c++ obj/src/app/clusters/push-av-stream-transport-server/push-av-stream-transport-server.PushAVStreamTransportCluster.cpp.o
+[410/443] c++ obj/src/app/clusters/resource-monitoring-server/resource-monitoring-server.ResourceMonitoringCluster.cpp.o
+[411/443] c++ obj/src/app/clusters/scenes-server/scenes.SceneHandlerImpl.cpp.o
+[412/443] c++ obj/src/app/clusters/temperature-measurement-server/temperature-measurement-server.TemperatureMeasurementCluster.cpp.o
+[413/443] c++ obj/src/app/clusters/operational-credentials-server/operational-credentials-server.OperationalCredentialsCluster.cpp.o
+[414/443] c++ obj/src/app/clusters/thread-border-router-management-server/thread-border-router-management-server.ThreadBorderRouterManagementCluster.cpp.o
+[415/443] c++ obj/src/app/clusters/soil-measurement-server/soil-measurement-server.SoilMeasurementCluster.cpp.o
+[416/443] c++ obj/src/app/clusters/software-diagnostics-server/software-diagnostics-server.SoftwareDiagnosticsCluster.cpp.o
+[417/443] c++ obj/src/app/clusters/temperature-control-server/temperature-control-server.TemperatureControlCluster.cpp.o
+[418/443] c++ obj/src/app/clusters/scenes-server/scenes-server.ScenesManagementCluster.cpp.o
+[419/443] c++ obj/src/app/clusters/push-av-stream-transport-server/push-av-stream-transport-server.PushAVStreamTransportLogic.cpp.o
+[420/443] ar actions-server.a
+[421/443] ar libCHIPAppServer.a
+[422/443] ar libDefaultAttestationVerifier.a
+[423/443] c++ obj/src/app/clusters/thread-network-directory-server/thread-network-directory-server.ThreadNetworkDirectoryCluster.cpp.o
+[424/443] c++ obj/src/app/persistence/default.DefaultAttributePersistenceProvider.cpp.o
+[425/443] c++ obj/src/app/clusters/scenes-server/scenes.SceneTableImpl.cpp.o
+[426/443] ACTION //src/data-model-providers/codegen:gen_processing-buildconfig(//config/zephyr/chip-gn/toolchain:zephyr)
+[427/443] ar libMatterDeviceInfoProviderExample.a
+[428/443] ar uriparser.a
+[429/443] c++ obj/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-server.DirectThreadNetworkDiagnosticsProvider.cpp.o
+[430/443] c++ obj/src/app/persistence/singleton.AttributePersistenceProviderInstance.cpp.o
+[431/443] c++ obj/src/app/persistence/migration.AttributePersistenceMigration.cpp.o
+[432/443] c++ obj/src/app/clusters/tls-client-management-server/tls-client-management-server.TLSClientManagementCluster.cpp.o
+[433/443] c++ obj/src/app/clusters/tls-certificate-management-server/tls-certificate-management-server.TLSCertificateManagementCluster.cpp.o
+[434/443] c++ obj/src/platform/Zephyr/logging.Logging.cpp.o
+[435/443] c++ obj/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-server.ThreadNetworkDiagnosticsCluster.cpp.o
+[436/443] c++ obj/src/app/clusters/wifi-network-management-server/wifi-network-management-server.WiFiNetworkManagementCluster.cpp.o
+[437/443] c++ obj/src/setup_payload/onboarding-codes-utils.OnboardingCodesUtil.cpp.o
+[438/443] c++ obj/src/app/clusters/water-heater-management-server/water-heater-management-server.Delegate.cpp.o
+[439/443] c++ obj/src/app/clusters/water-heater-management-server/water-heater-management-server.WaterHeaterManagementCluster.cpp.o
+[440/443] c++ obj/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-server.WiFiNetworkDiagnosticsCluster.cpp.o
+[441/443] c++ obj/src/app/clusters/tls-certificate-management-server/certificate-table.CertificateTableImpl.cpp.o
+[442/443] c++ obj/src/app/clusters/webrtc-transport-provider-server/webrtc-transport-provider-server.WebRTCTransportProviderCluster.cpp.o
+[443/443] ar libCHIP.a
+Matter library build complete
+[521/767] Building C object zephyr/drivers/wifi/esp_hosted_mcu/CMakeFiles/esp_hosted_mcu.dir/esp_hosted_mcu.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/wifi/esp_hosted_mcu/esp_hosted_mcu.c:255:12: warning: 'esp_hosted_mcu_ap_authmode' defined but not used [-Wunused-function]
+  255 | static int esp_hosted_mcu_ap_authmode(enum wifi_security_type security)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+[637/767] Generating gen/app-zapgen/zapgen/app-templates/zap-generated/access.h, gen/app-zapgen/zapgen/app-templates/zap-generated/endpoint_config.h, gen/app-zapgen/zapgen/app-templates/zap-generated/gen_config.h, gen/app-zapgen/zapgen/app-templates/zap-generated/IMClusterCommandHandler.cpp, gen/app-zapgen/zapgen/app-templates/zap-generated/CodeDrivenInitShutdown.cpp, gen/app-zapgen/zapgen/app-templates/zap-generated/CodeDrivenCallback.h
+🔧 Using temporary state directory: /var/folders/0q/jt88rrts7_77_gpmjqwt4c1m0000gn/T/zap.GAaY1j
+🤖 ZAP generation started:
+    🔍 input files: /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/matter/cedar_switch_4relay.zap
+    🔍 input Extension files: 
+    🔍 output pattern: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated
+    🔍 using templates: /Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/zap-templates/app-templates.json
+    🔍 using zcl data: /Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/zap-templates/zcl/zcl.json
+    🔍 zap version: ver. 2026.5.12, featureLevel 109, commit: 3513106c2d247de7bdde40f99556f062ef40742f from 2026-05-12T17:46:36.000Z, mode: binary, exe: zap-cli
+🔧 Setup time: 7s 864ms
+🔧 🔧 using input file: /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/matter/cedar_switch_4relay.zap
+
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+Application has missing response commands for enabled commands as follows: 
+
+  - On endpoint 0, cluster: Diagnostic Logs server, outgoing command: RetrieveLogsResponse should be enabled as it is the response to the enabled incoming command: RetrieveLogsRequest.
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+
+
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+Application is failing the Device Type Specification as follows: 
+
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Identify server, command: Identify incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Identify server, command: TriggerEffect incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenes incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenesResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RecallScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembership incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembershipResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopyScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 1, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopySceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Identify server, command: Identify incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Identify server, command: TriggerEffect incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenes incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenesResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RecallScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembership incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembershipResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopyScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 2, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopySceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Identify server, command: Identify incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Identify server, command: TriggerEffect incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenes incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenesResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RecallScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembership incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembershipResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopyScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 3, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopySceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Identify server, command: Identify incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Identify server, command: TriggerEffect incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: AddSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: ViewSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenes incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RemoveAllScenesResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: StoreSceneResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: RecallScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembership incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: GetSceneMembershipResponse outgoing needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopyScene incoming needs to be enabled
+  - ⚠️ Check Device Type Compliance on endpoint: 4, device type: MA-onoffpluginunit, cluster: Scenes Management server, command: CopySceneResponse outgoing needs to be enabled
+
+Application is failing the Cluster Specification as follows: 
+
+  - ⚠️ Check Cluster Compliance on endpoint: 0, cluster: Diagnostic Logs server, mandatory command: RetrieveLogsResponse outgoing needs to be enabled
+  - ⚠️ Check Cluster Compliance on endpoint: 1, cluster: Identify server, mandatory command: Identify incoming needs to be enabled
+  - ⚠️ Check Cluster Compliance on endpoint: 2, cluster: Identify server, mandatory command: Identify incoming needs to be enabled
+  - ⚠️ Check Cluster Compliance on endpoint: 3, cluster: Identify server, mandatory command: Identify incoming needs to be enabled
+  - ⚠️ Check Cluster Compliance on endpoint: 4, cluster: Identify server, mandatory command: Identify incoming needs to be enabled
+
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+
+🔧 using output destination: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated
+🔧 File loading time: 7s 791ms
+{"level":40,"time":"2026-09-12T18:55:26.830Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/zap-templates/templates/app/gen_config.zapt : Helper isServer is deprecated. Use is_server instead."}
+{"level":50,"time":"2026-09-12T18:55:26.955Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'char_string' in cluster 'Basic Information': {\"id\":29,\"name\":\"char_string\",\"description\":\"Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'long_char_string' in cluster 'Basic Information': {\"id\":30,\"name\":\"long_char_string\",\"description\":\"Long Character String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":50,"time":"2026-09-12T18:55:26.956Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"In processZclTypeSignAndSize, unhandled discriminatorName 'STRING' for type 'octet_string' in cluster 'Network Commissioning': {\"id\":25,\"name\":\"octet_string\",\"description\":\"Octet String\",\"descriminatorId\":5,\"packageId\":2,\"discriminatorName\":\"STRING\"}"}
+{"level":40,"time":"2026-09-12T18:55:27.018Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/zap-templates/templates/app/im-cluster-command-handler.zapt : Helper isServer is deprecated. Use is_server instead."}
+{"level":40,"time":"2026-09-12T18:55:27.577Z","pid":12241,"hostname":"Kirills-MacBook-Pro-M4.local","name":"zap","msg":"/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/zap-templates/templates/app/access.zapt : Helper isStrEqual is deprecated. Use is_str_equal instead."}
+🤖 Generating files:
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/CodeDrivenCallback.h
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/IMClusterCommandHandler.cpp
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/CodeDrivenInitShutdown.cpp
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/gen_config.h
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/endpoint_config.h
+✍ /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/access.h
+🕐 Generation time: 3s 998ms 
+Files generated in: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated
+[639/767] No install step for 'chip-gn'
+[640/767] Completed 'chip-gn'
+[641/767] Building C object CMakeFiles/app.dir/src/mqtt/ha_mqtt_adapter.c.obj
+[642/767] Building C object CMakeFiles/app.dir/src/mqtt/ha_mqtt_helpers.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/mqtt/ha_mqtt_helpers.c:246:1: warning: multi-line comment [-Wcomment]
+  246 | //                      len = snprintf(payload, payload_len, ha_universal_conf_template, dev_class_power, ha_mqtt_keepalive_sec, dev_system, \
+      | ^
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/mqtt/ha_mqtt_helpers.c:265:1: warning: multi-line comment [-Wcomment]
+  265 | //                      len = snprintf(payload, payload_len, ha_universal_conf_template, dev_class_switch, ha_mqtt_keepalive_sec, dev_system, \
+      | ^
+[643/767] Building C object CMakeFiles/app.dir/src/mqtt/ha_mqtt.c.obj
+[644/767] Building C object CMakeFiles/app.dir/src/web/http_common.c.obj
+[645/767] Building C object CMakeFiles/app.dir/src/web/authentication.c.obj
+[646/767] Building C object CMakeFiles/app.dir/src/energy_monitoring/HLW8032.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/energy_monitoring/HLW8032.c:156:14: warning: 'CalculateCurrentRAW' defined but not used [-Wunused-function]
+  156 | static float CalculateCurrentRAW(void) {
+      |              ^~~~~~~~~~~~~~~~~~~
+[647/767] Building C object CMakeFiles/app.dir/src/msgq_topiks.c.obj
+[648/767] Building C object CMakeFiles/app.dir/src/zbus_topics.c.obj
+[649/767] Building C object CMakeFiles/app.dir/src/littlefs/littlefs_mount.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/littlefs/littlefs_mount.c:21:13: warning: Macro is deprecated
+   21 |     .storage_dev = (void *)LFS_PARTITION_ID,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/littlefs/littlefs_mount.c: In function 'mount_or_mkfs':
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/littlefs/littlefs_mount.c:31:13: warning: Macro is deprecated
+   31 |     rc = fs_mkfs(FS_LITTLEFS, (uintptr_t)LFS_PARTITION_ID, NULL, 0); /* 4-арг API */
+      |             ^~~~~~~~~~~~~~~~~~~~~
+[650/767] Building C object CMakeFiles/app.dir/src/web/http_server_init.c.obj
+[651/767] Building C object CMakeFiles/app.dir/src/littlefs/filesystem_helpers.c.obj
+[652/767] Building C object CMakeFiles/app.dir/src/events/events.c.obj
+[653/767] Building C object CMakeFiles/app.dir/src/web/static_resources.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/static_resources.c:9:40: warning: "/*" within comment [-Wcomment]
+    9 |  * Generated from src/web/frontend/dist/* in CMakeLists.txt.
+[654/767] Building C object CMakeFiles/app.dir/src/test_functions.c.obj
+[655/767] Building C object CMakeFiles/app.dir/src/io/io.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/io/io.c:85:13: warning: 'write_relays_once' defined but not used [-Wunused-function]
+   85 | static void write_relays_once(uint8_t state) {
+      |             ^~~~~~~~~~~~~~~~~
+[656/767] Building C object CMakeFiles/app.dir/src/plugin_wifi/wifi_shell.c.obj
+[657/767] Building C object CMakeFiles/app.dir/src/helpers/memory.c.obj
+[658/767] Building C object CMakeFiles/app.dir/src/app-firmware-updater/firmware_updater.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/app-firmware-updater/firmware_updater.c: In function 'firmware_updater_fetch_and_print_prjconf':
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/app-firmware-updater/firmware_updater.c:147:20: warning: Macro is deprecated
+  147 |         st = flash_area_open(FIXED_PARTITION_ID(slot1_partition), &slot1_fa);
+      |                    ^~~~~~~~~~~~~~~~~~~~~
+[659/767] Building C object CMakeFiles/app.dir/src/plugin_wifi/wifi.c.obj
+[660/767] Building C object CMakeFiles/app.dir/src/mqtt/ha_mqtt_callback.c.obj
+[661/767] Building C object CMakeFiles/app.dir/src/app-firmware-updater/firmware_updater_shell.c.obj
+[662/767] Building C object CMakeFiles/app.dir/src/lib-init/common_init.c.obj
+[663/767] Building C object CMakeFiles/app.dir/src/config/device-config.c.obj
+[664/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/login.c.obj
+[665/767] Building C object CMakeFiles/app.dir/src/mqtt/ha_task.c.obj
+[666/767] Building C object CMakeFiles/app.dir/src/diagnostic/diag_report.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/diagnostic/diag_report.c:369:13: warning: 'net_diag_thread_fn' defined but not used [-Wunused-function]
+  369 | static void net_diag_thread_fn(void *a, void *b, void *c)
+      |             ^~~~~~~~~~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/diagnostic/diag_report.c:43:24: warning: 'net_diag_thread' defined but not used [-Wunused-variable]
+   43 | static struct k_thread net_diag_thread;
+      |                        ^~~~~~~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/diagnostic/diag_report.c:18:32: warning: 'stats_timer' defined but not used [-Wunused-variable]
+   18 | static struct k_work_delayable stats_timer;
+      |                                ^~~~~~~~~~~
+[667/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/matter_control.c.obj
+[668/767] Building C object CMakeFiles/app.dir/src/energy_monitoring/energy_monitoring.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/energy_monitoring/energy_monitoring.c:43:13: warning: 'uart_irq_cb' defined but not used [-Wunused-function]
+   43 | static void uart_irq_cb(const struct device *dev, void *user_data) {
+      |             ^~~~~~~~~~~
+[669/767] Building CXX object CMakeFiles/app.dir/src/matter/crypto_bench.cpp.obj
+[670/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/default_relay_state.c.obj
+[671/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/settings_status.c.obj
+[672/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/device_info.c.obj
+[673/767] Building C object CMakeFiles/app.dir/src/main.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/main.c:74:13: warning: 'ipv4_addr_add_handler' defined but not used [-Wunused-function]
+   74 | static void ipv4_addr_add_handler(struct net_mgmt_event_callback *cb,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+[674/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/web_user_mgmt.c.obj
+[675/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/inputs_status.c.obj
+[676/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/mqtt_settings.c.obj
+[677/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/system_reboot.c.obj
+[678/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/SafeAttributePersistenceProvider.cpp.obj
+[679/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/fw_update.c.obj
+[680/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/StorageDelegateWrapper.cpp.obj
+[681/767] Building C object CMakeFiles/app.dir/src/web/REST_endpoints/relays_state.c.obj
+[682/767] Building C object CMakeFiles/app.dir/src/lib-init/net_init.c.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/lib-init/net_init.c:143:12: warning: 'warmup_settings_cb' defined but not used [-Wunused-function]
+  143 | static int warmup_settings_cb(const char *key,
+      |            ^~~~~~~~~~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/lib-init/net_init.c:33:39: warning: 'cb' defined but not used [-Wunused-variable]
+   33 | static struct net_mgmt_event_callback cb;
+      |                                       ^~
+[683/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/DefaultTermsAndConditionsProvider.cpp.obj
+[684/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/EchoHandler.cpp.obj
+[685/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/Dnssd.cpp.obj
+[686/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/AclStorage.cpp.obj
+[687/767] Building CXX object CMakeFiles/app.dir/src/matter/clusters/IdentifyCluster.cpp.obj
+[688/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/DefaultAclStorage.cpp.obj
+[689/767] Building CXX object CMakeFiles/app.dir/src/matter/clusters/NetworkCommissioningCluster.cpp.obj
+[690/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/diagnostic-logs-server/BDXDiagnosticLogsProvider.cpp.obj
+[691/767] Building CXX object CMakeFiles/app.dir/src/matter/matter_event_loop.cpp.obj
+[692/767] Building CXX object CMakeFiles/app.dir/src/matter/matter_init.cpp.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/matter/matter_init.cpp:48:13: warning: 'void log_matter_onboarding_codes()' defined but not used [-Wunused-function]
+   48 | static void log_matter_onboarding_codes()
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/matter/matter_init.cpp:31:22: warning: 'matter_start_work' defined but not used [-Wunused-variable]
+   31 | static struct k_work matter_start_work;
+      |                      ^~~~~~~~~~~~~~~~~
+[693/767] Building CXX object CMakeFiles/app.dir/src/matter/shell.cpp.obj
+[694/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/on-off-server/codegen/level-control-integration.cpp.obj
+[695/767] Building CXX object CMakeFiles/app.dir/src/web/REST_endpoints/matter_control.cpp.obj
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp: In function 'int matter_control_cb(http_client_ctx*, http_transaction_status, const http_request_ctx*, http_response_ctx*, void*)':
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:86:22: warning: ignoring returned value of type 'CHIP_ERROR' {aka 'chip::ChipError'}, declared with attribute 'nodiscard' [-Wunused-result]
+   86 |             GetQRCode(qr_span,
+      |             ~~~~~~~~~^~~~~~~~~
+   87 |                       RendezvousInformationFlags(RendezvousInformationFlag::kOnNetwork));
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:15:
+../../../modules/lib/matter/src/setup_payload/OnboardingCodesUtil.h:33:12: note: in call to 'CHIP_ERROR GetQRCode(chip::MutableCharSpan&, chip::RendezvousInformationFlags)', declared here
+   33 | CHIP_ERROR GetQRCode(chip::MutableCharSpan & aQRCode, chip::RendezvousInformationFlags aRendezvousFlags);
+      |            ^~~~~~~~~
+In file included from ../../../modules/lib/matter/src/lib/support/CodeUtils.h:30,
+                 from ../../../modules/lib/matter/src/lib/core/CASEAuthTag.h:25,
+                 from ../../../modules/lib/matter/src/access/SubjectDescriptor.h:23,
+                 from ../../../modules/lib/matter/src/access/AccessControl.h:30,
+                 from ../../../modules/lib/matter/src/app/server/Server.h:23,
+                 from /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:13:
+../../../modules/lib/matter/src/lib/core/CHIPError.h:503:7: note: 'CHIP_ERROR' {aka 'chip::ChipError'} declared here
+  503 | using CHIP_ERROR = ::chip::ChipError;
+      |       ^~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:88:33: warning: ignoring returned value of type 'CHIP_ERROR' {aka 'chip::ChipError'}, declared with attribute 'nodiscard' [-Wunused-result]
+   88 |             GetManualPairingCode(
+      |             ~~~~~~~~~~~~~~~~~~~~^
+   89 |                 pin_span,
+      |                 ~~~~~~~~~        
+   90 |                 RendezvousInformationFlags(RendezvousInformationFlag::kOnNetwork));
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../modules/lib/matter/src/setup_payload/OnboardingCodesUtil.h:52:12: note: in call to 'CHIP_ERROR GetManualPairingCode(chip::MutableCharSpan&, chip::RendezvousInformationFlags)', declared here
+   52 | CHIP_ERROR GetManualPairingCode(chip::MutableCharSpan & aManualPairingCode, chip::RendezvousInformationFlags aRendezvousFlags);
+      |            ^~~~~~~~~~~~~~~~~~~~
+../../../modules/lib/matter/src/lib/core/CHIPError.h:503:7: note: 'CHIP_ERROR' {aka 'chip::ChipError'} declared here
+  503 | using CHIP_ERROR = ::chip::ChipError;
+      |       ^~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:168:39: warning: ignoring returned value of type 'CHIP_ERROR' {aka 'chip::ChipError'}, declared with attribute 'nodiscard' [-Wunused-result]
+  168 |             PlatformMgr().ScheduleWork(do_open_commissioning_window, 0);
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../../../modules/lib/matter/src/include/platform/CHIPDeviceLayer.h:31,
+                 from ../../../modules/lib/matter/src/app/CASESessionManager.h:28,
+                 from ../../../modules/lib/matter/src/app/server/Server.h:28:
+../../../modules/lib/matter/src/include/platform/PlatformManager.h:401:19: note: in call to 'CHIP_ERROR chip::DeviceLayer::PlatformManager::ScheduleWork(chip::DeviceLayer::AsyncWorkFunct, intptr_t)', declared here
+  401 | inline CHIP_ERROR PlatformManager::ScheduleWork(AsyncWorkFunct workFunct, intptr_t arg)
+      |                   ^~~~~~~~~~~~~~~
+../../../modules/lib/matter/src/lib/core/CHIPError.h:503:7: note: 'CHIP_ERROR' {aka 'chip::ChipError'} declared here
+  503 | using CHIP_ERROR = ::chip::ChipError;
+      |       ^~~~~~~~~~
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/src/web/REST_endpoints/matter_control.cpp:175:39: warning: ignoring returned value of type 'CHIP_ERROR' {aka 'chip::ChipError'}, declared with attribute 'nodiscard' [-Wunused-result]
+  175 |             PlatformMgr().ScheduleWork(do_factory_reset, 0);
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+../../../modules/lib/matter/src/include/platform/PlatformManager.h:401:19: note: in call to 'CHIP_ERROR chip::DeviceLayer::PlatformManager::ScheduleWork(chip::DeviceLayer::AsyncWorkFunct, intptr_t)', declared here
+  401 | inline CHIP_ERROR PlatformManager::ScheduleWork(AsyncWorkFunct workFunct, intptr_t arg)
+      |                   ^~~~~~~~~~~~~~~
+../../../modules/lib/matter/src/lib/core/CHIPError.h:503:7: note: 'CHIP_ERROR' {aka 'chip::ChipError'} declared here
+  503 | using CHIP_ERROR = ::chip::ChipError;
+      |       ^~~~~~~~~~
+[696/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/on-off-server/codegen/mode-base-integration.cpp.obj
+[697/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/CommissioningWindowManager.cpp.obj
+[698/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/on-off-server/codegen/mode-select-integration.cpp.obj
+[699/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/descriptor/CodegenIntegration.cpp.obj
+[700/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server/Server.cpp.obj
+[701/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/administrator-commissioning-server/CodegenIntegration.cpp.obj
+[702/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/access-control-server/CodegenIntegration.cpp.obj
+[703/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/basic-information/CodegenIntegration.cpp.obj
+[704/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/DefaultOTARequestorStorage.cpp.obj
+[705/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/diagnostic-logs-server/CodegenIntegration.cpp.obj
+[706/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/diagnostic-logs-server/DiagnosticLogsCluster.cpp.obj
+[707/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/OTATestEventTriggerHandler.cpp.obj
+[708/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/DefaultOTARequestorDriver.cpp.obj
+[709/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/groups-server/CodegenIntegration.cpp.obj
+[710/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/general-commissioning-server/CodegenIntegration.cpp.obj
+[711/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/general-diagnostics-server/CodegenIntegration.cpp.obj
+[712/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/group-key-mgmt-server/CodegenIntegration.cpp.obj
+[713/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/network-commissioning/CodegenInstance.cpp.obj
+[714/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/identify-server/CodegenIntegration.cpp.obj
+[715/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/on-off-server/codegen/scenes-integration.cpp.obj
+[716/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/OTARequestorCluster.cpp.obj
+[717/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/on-off-server/codegen/on-off-server.cpp.obj
+[718/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/operational-credentials-server/CodegenIntegration.cpp.obj
+[719/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/BDXDownloader.cpp.obj
+[720/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/OTARequestorAttributes.cpp.obj
+[721/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/zzz_generated/app-common/app-common/zap-generated/attributes/Accessors.cpp.obj
+[722/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/switch-server/SwitchCluster.cpp.obj
+[723/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/CodegenIntegration.cpp.obj
+[724/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/privilege-storage.cpp.obj
+[725/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/DefaultOTARequestor.cpp.obj
+[726/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/ember-io-storage.cpp.obj
+[727/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/persistence/AttributePersistenceMigration.cpp.obj
+[728/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/persistence/AttributePersistenceProviderInstance.cpp.obj
+[729/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/persistence/DefaultAttributePersistenceProvider.cpp.obj
+[730/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/ota-requestor/ExtendedOTARequestorDriver.cpp.obj
+[731/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/reporting/reporting.cpp.obj
+[732/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/EmberAttributeDataBuffer.cpp.obj
+[733/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/switch-server/CodegenIntegration.cpp.obj
+[734/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/clusters/software-diagnostics-server/CodegenIntegration.cpp.obj
+[735/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/persistence/String.cpp.obj
+[736/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/persistence/AttributePersistence.cpp.obj
+[737/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/attribute-table.cpp.obj
+[738/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server-cluster/AttributeListBuilder.cpp.obj
+[739/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/DataModelHandler.cpp.obj
+[740/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/attribute-storage.cpp.obj
+[741/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server-cluster/ServerClusterInterface.cpp.obj
+[742/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server-cluster/DefaultServerCluster.cpp.obj
+[743/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/util.cpp.obj
+[744/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/util/generic-callback-stubs.cpp.obj
+[745/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server-cluster/ServerClusterInterfaceRegistry.cpp.obj
+[746/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/ClusterIntegration.cpp.obj
+[747/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/CodegenDataModelProvider_Read.cpp.obj
+[748/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/Instance.cpp.obj
+[749/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/CodegenDataModelProvider.cpp.obj
+[750/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/data-model-providers/codegen/CodegenDataModelProvider_Write.cpp.obj
+[751/767] Building CXX object CMakeFiles/app.dir/Volumes/Programming/Zephyr/zephyr_latest/modules/lib/matter/src/app/server-cluster/SingleEndpointServerClusterRegistry.cpp.obj
+[752/767] Building CXX object CMakeFiles/app.dir/gen/app-zapgen/zapgen/app-templates/zap-generated/CodeDrivenInitShutdown.cpp.obj
+[753/767] Building CXX object CMakeFiles/app.dir/gen/app-codegen/cpp-app/app/callback-stub.cpp.obj
+[754/767] Building CXX object CMakeFiles/app.dir/gen/app-codegen/cpp-app/app/cluster-callbacks.cpp.obj
+[755/767] Building CXX object CMakeFiles/app.dir/gen/app-zapgen/zapgen/app-templates/zap-generated/IMClusterCommandHandler.cpp.obj
+[756/767] Linking CXX static library app/libapp.a
+[757/767] Generating code_relocation.c, include/generated/linker_relocate.ld
+/Volumes/Programming/Zephyr/zephyr_latest/zephyr/scripts/build/gen_relocate_app.py:679: UserWarning: File: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-codegen/cpp-app/app/PluginApplicationCallbacks.h.rule Not found
+  rel_dict, phdrs = create_dict_wrt_mem()
+/Volumes/Programming/Zephyr/zephyr_latest/zephyr/scripts/build/gen_relocate_app.py:679: UserWarning: File: /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/gen/app-zapgen/zapgen/app-templates/zap-generated/access.h.rule Not found
+  rel_dict, phdrs = create_dict_wrt_mem()
+[758/767] Building C object zephyr/CMakeFiles/code_relocation_source_lib.dir/code_relocation.c.obj
+[759/767] Linking C static library zephyr/libcode_relocation_source_lib.a
+[760/767] Generating linker_zephyr_pre0.cmd
+[761/767] Building C object zephyr/CMakeFiles/zephyr_pre0.dir/misc/empty_file.c.obj
+[762/767] Linking CXX executable zephyr/zephyr_pre0.elf; Logical command for additional byproducts on target: zephyr_pre0
+[763/767] Generating linker.cmd
+[764/767] Generating isr_tables.c, isr_tables_vt.ld, isr_tables_swi.ld
+[765/767] Building C object zephyr/CMakeFiles/zephyr_final.dir/misc/empty_file.c.obj
+[766/767] Building C object zephyr/CMakeFiles/zephyr_final.dir/isr_tables.c.obj
+[767/767] Linking CXX executable zephyr/zephyr.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:     1136440 B    4191144 B     27.12%
+             RAM:       54216 B       768 KB      6.89%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:     1746984 B         8 MB     20.83%
+        IDT_LIST:           0 B        32 KB      0.00%
+Generating files from /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/cedar_switch_3in4out_power/zephyr/zephyr.elf for board: cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+[10/16] No configure step for 'mcuboot'
+[11/16] Performing build step for 'mcuboot'
+[1/251] Preparing syscall dependency handling
+
+[2/251] Generating misc/generated/syscalls_subdirs.trigger
+[3/251] Generating include/generated/zephyr/app_version.h
+[4/251] Generating include/generated/zephyr/version.h
+-- Zephyr version: 4.4.99 (/Volumes/Programming/Zephyr/zephyr_latest/zephyr), build: v4.4.0-12983-gb6a5e6e8aa90
+[5/251] Generating misc/generated/syscalls.json, misc/generated/struct_tags.json
+[6/251] Generating include/generated/device-api-sections.ld, include/generated/device-api-sections.cmake
+[7/251] Generating include/generated/zephyr/syscall_dispatch.c, include/generated/zephyr/syscall_exports_llext.c, syscall_weakdefs_llext.c, include/generated/zephyr/syscall_list.h
+[8/251] Generating include/generated/zephyr/driver-validation.h
+[9/251] Generating include/generated/zephyr/kobj-types-enum.h, include/generated/zephyr/otype-to-str.h, include/generated/zephyr/otype-to-size.h
+[10/251] Building C object zephyr/lib/heap/CMakeFiles/heap_constants.dir/heap_constants.c.obj
+[11/251] Generating ../../include/generated/zephyr/heap_constants.h
+[12/251] Building C object zephyr/CMakeFiles/offsets.dir/arch/arm/core/offsets/offsets.c.obj
+[13/251] Generating include/generated/zephyr/offsets.h
+[14/251] Building C object CMakeFiles/app.dir/keys.c.obj
+[15/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/printk.c.obj
+[16/251] Building C object zephyr/arch/common/CMakeFiles/isr_tables.dir/isr_tables.c.obj
+[17/251] Building C object CMakeFiles/app.dir/io.c.obj
+[18/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/clock.c.obj
+[19/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/dec.c.obj
+[20/251] Building C object CMakeFiles/app.dir/os.c.obj
+[21/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/cbprintf_nano.c.obj
+[22/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/cbprintf_packaged.c.obj
+[23/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/assert.c.obj
+[24/251] Building C object CMakeFiles/app.dir/watchdog.c.obj
+[25/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/boot_banner.c.obj
+[26/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/libc/validate_libc.c.obj
+[27/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/hex.c.obj
+[28/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/set.c.obj
+[29/251] Building C object CMakeFiles/app.dir/flash_map_extended.c.obj
+[30/251] Building C object CMakeFiles/app.dir/arch/arm.c.obj
+[31/251] Building C object CMakeFiles/app.dir/main.c.obj
+[32/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/timeutil.c.obj
+[33/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/heap/heap.c.obj
+[34/251] Building C object zephyr/CMakeFiles/zephyr.dir/misc/generated/configs.c.obj
+[35/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/last_section_id.c.obj
+[36/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/ring_buffer.c.obj
+[37/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/bitmask.c.obj
+[38/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/common/stm32_cache.c.obj
+[39/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/storage/flash_map/flash_map.c.obj
+[40/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/storage/flash_map/flash_map_layout.c.obj
+[41/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/rb.c.obj
+[42/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/bitarray.c.obj
+[43/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/getopt/getopt_common.c.obj
+[44/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/common/stm32_backup_domain.c.obj
+[45/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/storage/flash_map/flash_map_default.c.obj
+[46/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/common/stm32cube_hal.c.obj
+[47/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/stm32u5x/soc.c.obj
+[48/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/common/soc_config.c.obj
+[49/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/mem_mgmt/mem_attr.c.obj
+[50/251] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/getopt/getopt.c.obj
+[51/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_minimal.c.obj
+[52/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/kernel_shell.c.obj
+[53/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/tracing/tracing_none.c.obj
+[54/251] Building C object zephyr/CMakeFiles/zephyr.dir/soc/st/stm32/common/gpioport_mgr.c.obj
+[55/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/uptime.c.obj
+[56/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/sleep.c.obj
+[57/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/cycles.c.obj
+[58/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/resume.c.obj
+[59/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/stacks.c.obj
+[60/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/version.c.obj
+[61/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/suspend.c.obj
+[62/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/list.c.obj
+[63/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/thread.c.obj
+[64/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/kernel_service/thread/kill.c.obj
+[65/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_fprintf.c.obj
+[66/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell.c.obj
+[67/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/app_version_service.c.obj
+[68/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/device_service.c.obj
+[69/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/devmem_service.c.obj
+[70/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_ops.c.obj
+[71/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/modules/date_service.c.obj
+[72/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_utils.c.obj
+[73/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_history.c.obj
+[74/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_cmds.c.obj
+[75/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/backends/shell_uart.c.obj
+[76/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_help.c.obj
+[77/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/encrypted.c.obj
+[78/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_img_security_cnt.c.obj
+[79/251] Building C object zephyr/CMakeFiles/zephyr.dir/kernel/sys/sem.c.obj
+[80/251] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/shell/shell_wildcard.c.obj
+[81/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/image_ed25519.c.obj
+[82/251] Building C object zephyr/CMakeFiles/zephyr.dir/kernel/sys/thread_entry.c.obj
+[83/251] Building C object zephyr/CMakeFiles/zephyr.dir/drivers/flash/flash_util.c.obj
+[84/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/fault_injection_hardening.c.obj
+[85/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_find_key.c.obj
+[86/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/image_ecdsa.c.obj
+[87/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/ext/tinycrypt/lib/source/sha256.c.obj
+[88/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/ext/tinycrypt/lib/source/utils.c.obj
+[89/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_img_hash.c.obj
+[90/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/caps.c.obj
+[91/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/image_rsa.c.obj
+[92/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_misc.c.obj
+[93/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/image_validate.c.obj
+[94/251] Generating linker_zephyr_pre0.cmd
+[95/251] Building C object zephyr/arch/common/CMakeFiles/arch__common.dir/instr_mem.c.obj
+[96/251] Linking C static library zephyr/arch/common/libisr_tables.a
+[97/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_loader.c.obj
+[98/251] Building ASM object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/nmi_on_reset.S.obj
+[99/251] Building C object zephyr/arch/common/CMakeFiles/arch__common.dir/init.c.obj
+[100/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr/cleanup/arm_cortex_m.c.obj
+[101/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr/kernel/banner.c.obj
+[102/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fault_s.S.obj
+[103/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/swap_misc.c.obj
+[104/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/reset.S.obj
+[105/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/vector_table.S.obj
+[106/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/tlv.c.obj
+[107/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/loader.c.obj
+[108/251] Building C object zephyr/arch/common/CMakeFiles/arch__common.dir/sw_isr_common.c.obj
+[109/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/zephyr/flash_check.c.obj
+[110/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/svc.S.obj
+[111/251] Building C object zephyr/arch/common/CMakeFiles/arch__common.dir/xip.c.obj
+[112/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_area.c.obj
+[113/251] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/nmi.c.obj
+[114/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fpu.c.obj
+[115/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/__aeabi_read_tp.S.obj
+[116/251] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/swap_helper.S.obj
+[117/251] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/tls.c.obj
+[118/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/irq_manage.c.obj
+[119/251] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/fatal.c.obj
+[120/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/exc_exit.c.obj
+[121/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/prep_c.c.obj
+[122/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/thread.c.obj
+[123/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/scb.c.obj
+[124/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/irq_init.c.obj
+[125/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/thread_abort.c.obj
+[126/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/isr_wrapper.c.obj
+[127/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/cpu_idle.c.obj
+[128/251] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_core_mpu.c.obj
+[129/251] Building C object zephyr/CMakeFiles/zephyr.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/swap_scratch.c.obj
+[130/251] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_mpu_regions.c.obj
+[131/251] Building C object zephyr/subsys/portability/posix/c_lib_ext/CMakeFiles/subsys__portability__posix__c_lib_ext.dir/fnmatch.c.obj
+[132/251] Building C object zephyr/arch/arch/arm/core/cortex_m/cmse/CMakeFiles/arch__arm__core__cortex_m__cmse.dir/arm_core_cmse.c.obj
+[133/251] Building C object zephyr/lib/libc/common/CMakeFiles/lib__libc__common.dir/source/time/time.c.obj
+[134/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/assert.c.obj
+[135/251] Building C object zephyr/lib/libc/common/CMakeFiles/lib__libc__common.dir/source/stdlib/abort.c.obj
+[136/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/locks.c.obj
+[137/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/chk_fail.c.obj
+[138/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/exit.c.obj
+[139/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/errno_wrap.c.obj
+[140/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/cbprintf.c.obj
+[141/251] Building C object zephyr/subsys/portability/posix/c_lib_ext/CMakeFiles/subsys__portability__posix__c_lib_ext.dir/getentropy.c.obj
+[142/251] Building C object zephyr/lib/libc/common/CMakeFiles/lib__libc__common.dir/source/errno/errno.c.obj
+[143/251] Building C object zephyr/lib/libc/common/CMakeFiles/lib__libc__common.dir/source/stdlib/malloc.c.obj
+[144/251] Building C object zephyr/subsys/portability/posix/c_lib_ext/CMakeFiles/subsys__portability__posix__c_lib_ext.dir/getopt_shim.c.obj
+[145/251] Building C object zephyr/lib/libc/picolibc/CMakeFiles/lib__libc__picolibc.dir/stdio.c.obj
+[146/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/flash_page_layout.c.obj
+[147/251] Building C object zephyr/drivers/interrupt_controller/CMakeFiles/drivers__interrupt_controller.dir/intc_gpio_stm32.c.obj
+[148/251] Building C object zephyr/drivers/cache/CMakeFiles/drivers__cache.dir/cache_stm32.c.obj
+[149/251] Building C object zephyr/drivers/console/CMakeFiles/drivers__console.dir/uart_console.c.obj
+[150/251] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_mpu.c.obj
+[151/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/jesd216.c.obj
+[152/251] Building C object zephyr/drivers/bbram/CMakeFiles/drivers__bbram.dir/bbram_stm32.c.obj
+[153/251] Building C object zephyr/drivers/clock_control/CMakeFiles/drivers__clock_control.dir/clock_stm32_ll_u5.c.obj
+[154/251] Building C object zephyr/drivers/mspi/CMakeFiles/drivers__mspi.dir/mspi_stm32_common.c.obj
+[155/251] Building C object zephyr/drivers/pinctrl/CMakeFiles/drivers__pinctrl.dir/common.c.obj
+[156/251] Building C object zephyr/drivers/gpio/CMakeFiles/drivers__gpio.dir/gpio_stm32.c.obj
+[157/251] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fault.c.obj
+[158/251] Building C object zephyr/drivers/pinctrl/CMakeFiles/drivers__pinctrl.dir/pinctrl_stm32.c.obj
+[159/251] Building C object zephyr/drivers/rtc/CMakeFiles/drivers__rtc.dir/rtc_utils.c.obj
+[160/251] Building C object zephyr/drivers/reset/CMakeFiles/drivers__reset.dir/reset_stm32.c.obj
+[161/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/soc/system_stm32u5xx.c.obj
+[162/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal.c.obj
+[163/251] Building C object zephyr/drivers/timer/CMakeFiles/drivers__timer.dir/sys_clock_init.c.obj
+[164/251] Building C object zephyr/drivers/timer/CMakeFiles/drivers__timer.dir/cortex_m_systick.c.obj
+[165/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/flash_stm32l5x.c.obj
+[166/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal_rcc.c.obj
+[167/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal_dma.c.obj
+[168/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal_rcc_ex.c.obj
+[169/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal_dma_ex.c.obj
+[170/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/flash_stm32.c.obj
+[171/251] Building C object zephyr/drivers/serial/CMakeFiles/drivers__serial.dir/uart_stm32.c.obj
+[172/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_hal_ospi.c.obj
+[173/251] Building C object zephyr/drivers/interrupt_controller/CMakeFiles/drivers__interrupt_controller.dir/intc_exti_stm32.c.obj
+[174/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_ll_dlyb.c.obj
+[175/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_ll_icache.c.obj
+[176/251] Building C object modules/hal_stm32/stm32cube/CMakeFiles/..__modules__hal__stm32__stm32cube.dir/stm32u5xx/drivers/src/stm32u5xx_ll_utils.c.obj
+[177/251] Building C object zephyr/drivers/rtc/CMakeFiles/drivers__rtc.dir/rtc_stm32.c.obj
+[178/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/busy_wait.c.obj
+[179/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/version.c.obj
+[180/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/main_weak.c.obj
+[181/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/device.c.obj
+[182/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/float.c.obj
+[183/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mem_slab.c.obj
+[184/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/kheap.c.obj
+[185/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/init.c.obj
+[186/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/fatal.c.obj
+[187/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/spi_nor.c.obj
+[188/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/idle.c.obj
+[189/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mailbox.c.obj
+[190/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/msg_q.c.obj
+[191/251] Building C object zephyr/drivers/mspi/CMakeFiles/drivers__mspi.dir/mspi_stm32_ospi.c.obj
+[192/251] Building C object zephyr/drivers/memc/CMakeFiles/drivers__memc.dir/memc_mspi_qspi_psram.c.obj
+[193/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/queue.c.obj
+[194/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/stack.c.obj
+[195/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sem.c.obj
+[196/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/system_work_q.c.obj
+[197/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/work.c.obj
+[198/251] Building C object zephyr/drivers/spi/CMakeFiles/drivers__spi.dir/spi_stm32.c.obj
+[199/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/condvar.c.obj
+[200/251] Building C object modules/mcuboot/CMakeFiles/mcuboot_util.dir/Volumes/Programming/Zephyr/zephyr_latest/bootloader/mcuboot/boot/bootutil/src/bootutil_public.c.obj
+[201/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread.c.obj
+[202/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sleep.c.obj
+[203/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/pipe.c.obj
+[204/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timeslicing.c.obj
+[205/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread_monitor.c.obj
+[206/251] Linking C static library app/libapp.a
+[207/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timeout.c.obj
+[208/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sched.c.obj
+[209/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/scheduler.c.obj
+[210/251] Building C object zephyr/CMakeFiles/zephyr_pre0.dir/misc/empty_file.c.obj
+[211/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/events.c.obj
+[212/251] Linking C static library zephyr/arch/arch/arm/core/libarch__arm__core.a
+[213/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/dynamic_disabled.c.obj
+[214/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mempool.c.obj
+[215/251] Linking C static library zephyr/arch/common/libarch__common.a
+[216/251] Linking C static library zephyr/arch/arch/arm/core/cortex_m/cmse/libarch__arm__core__cortex_m__cmse.a
+[217/251] Linking C static library zephyr/arch/arch/arm/core/mpu/libarch__arm__core__mpu.a
+[218/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mutex.c.obj
+[219/251] Linking C static library zephyr/lib/libc/common/liblib__libc__common.a
+[220/251] Linking C static library zephyr/lib/libc/picolibc/liblib__libc__picolibc.a
+[221/251] Linking C static library zephyr/arch/arch/arm/core/cortex_m/libarch__arm__core__cortex_m.a
+[222/251] Linking C static library zephyr/subsys/portability/posix/c_lib_ext/libsubsys__portability__posix__c_lib_ext.a
+[223/251] Linking C static library zephyr/drivers/bbram/libdrivers__bbram.a
+[224/251] Linking C static library zephyr/drivers/interrupt_controller/libdrivers__interrupt_controller.a
+[225/251] Linking C static library zephyr/drivers/console/libdrivers__console.a
+[226/251] Linking C static library zephyr/drivers/cache/libdrivers__cache.a
+[227/251] Linking C static library zephyr/drivers/clock_control/libdrivers__clock_control.a
+[228/251] Linking C static library zephyr/drivers/gpio/libdrivers__gpio.a
+[229/251] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timer.c.obj
+[230/251] Linking C static library zephyr/drivers/memc/libdrivers__memc.a
+[231/251] Linking C static library zephyr/drivers/reset/libdrivers__reset.a
+[232/251] Linking C static library zephyr/drivers/pinctrl/libdrivers__pinctrl.a
+[233/251] Linking C static library zephyr/drivers/mspi/libdrivers__mspi.a
+[234/251] Linking C static library zephyr/drivers/rtc/libdrivers__rtc.a
+[235/251] Linking C static library zephyr/drivers/serial/libdrivers__serial.a
+[236/251] Linking C static library zephyr/drivers/timer/libdrivers__timer.a
+[237/251] Linking C static library zephyr/drivers/spi/libdrivers__spi.a
+[238/251] Linking C static library modules/mcuboot/libmcuboot_util.a
+[239/251] Linking C static library modules/hal_stm32/stm32cube/lib..__modules__hal__stm32__stm32cube.a
+[240/251] Linking C static library zephyr/libzephyr.a
+[241/251] Linking C static library zephyr/kernel/libkernel.a
+[242/251] Building C object modules/cedar_mcuboot_hooks/CMakeFiles/..__cedar_switch_3in4out_power__sysbuild__mcuboot_hooks.dir/boot-hook.c.obj
+[243/251] Linking C static library modules/cedar_mcuboot_hooks/lib..__cedar_switch_3in4out_power__sysbuild__mcuboot_hooks.a
+[244/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/flash_stm32_ospi.c.obj
+[245/251] Linking C static library zephyr/drivers/flash/libdrivers__flash.a
+[246/251] Linking C executable zephyr/zephyr_pre0.elf; Logical command for additional byproducts on target: zephyr_pre0
+[247/251] Generating linker.cmd
+[248/251] Generating isr_tables.c, isr_tables_vt.ld, isr_tables_swi.ld
+[249/251] Building C object zephyr/CMakeFiles/zephyr_final.dir/misc/empty_file.c.obj
+[250/251] Building C object zephyr/CMakeFiles/zephyr_final.dir/isr_tables.c.obj
+[251/251] Linking C executable zephyr/zephyr.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       85872 B       128 KB     65.52%
+             RAM:       44736 B       768 KB      5.69%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:           0 B         8 MB      0.00%
+        IDT_LIST:           0 B        32 KB      0.00%
+Generating files from /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/d23b665b-7cf9-4a0b-b810-b4cda6ef0168/scratchpad/p0/build/mcuboot/zephyr/zephyr.elf for board: cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+[13/16] Completed 'cedar_switch_3in4out_power'
+[15/16] No install step for 'mcuboot'
+[16/16] Completed 'mcuboot'
+exit=0

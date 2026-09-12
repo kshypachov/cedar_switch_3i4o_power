@@ -1,0 +1,11 @@
+[boot 1] warm PASS main=3.52 http=7.9 why=[]
+[boot 2] warm PASS main=3.58 http=5.92 why=[]
+[boot 3] warm FAIL main=3.62 http=14.64 why=['safe_state_match false']
+[boot 4] warm FAIL main=3.93 http=9.34 why=['safe_state_match false']
+[boot 5] warm FAIL main=4.11 http=19.87 why=['safe_state_match false']
+[boot 6] warm FAIL main=4.02 http=17.75 why=['safe_state_match false']
+[boot 7] warm FAIL main=4.09 http=9.76 why=['safe_state_match false']
+[boot 8] warm FAIL main=4.2 http=22.52 why=['safe_state_match false']
+[boot 9] warm PASS main=4.28 http=16.65 why=[]
+[boot 10] warm PASS main=2.44 http=6.93 why=[]
+4/10 passed

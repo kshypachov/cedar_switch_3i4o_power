@@ -1,0 +1,19 @@
+wifi_ctrl init
+wifi_init() executed
+[1;32muart:~$ [mwifi_ctrl reset
+ESP32 reset pulse done
+[1;32muart:~$ [m[8D[J[00:02:58.581,000] [0m<inf> wifi: Initializing WiFi reset pin...[0m
+[1;32muart:~$ [m[1B[9D[00:02:58.581,000] [0m<inf> wifi: Initializing WiFi BOOT pin...[0m
+[00:02:58.581,000] [0m<inf> wifi: WiFi reset pin configured and set to ACTIVE[0m
+[00:02:58.881,000] [0m<inf> wifi: WiFi reset pin set to INACTIVE[0m
+[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: ***** BUS FAULT *****[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os:   Precise data bus error[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os:   BFAR Address: 0xc[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: r0/a1:  0x7016a850  r1/a2:  0x000000ea  r2/a3:  0x00000000[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: r3/a4:  0x000000ea r12/ip:  0x20000914 r14/lr:  0x0206201f[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os:  xpsr:  0x01000000[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: Faulting instruction address (r15/pc): 0x02062032[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: >>> ZEPHYR FATAL ERROR 25: Unknown error on CPU 0[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.112,000] [1;31m<err> os: Current thread: 0x20000a10 (eth_w5500)[0m
+[1;32muart:~$ [m[8D[J[8D[J[00:03:13.123,000] [1;31m<err> os: Halting system[0m
+[1;32muart:~$ [m

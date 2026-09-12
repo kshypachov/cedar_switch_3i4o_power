@@ -1,0 +1,1785 @@
+kernel uptime
+Uptime: 169711 ms
+[1;32muart:~$ [mkernel thread stacks
+0x7001b9f8 io_to_matter_stream              (real size 4096):	unused 3832	usage  264 / 4096 ( 6 %)
+0x701829d0 CHIP                             (real size 16384):	unused 15256	usage 1128 / 16384 ( 6 %)
+0x7000a730 io_outputs_task                  (real size 1024):	unused  736	usage  288 / 1024 (28 %)
+0x70197670 reg_notify_wq                    (real size 2048):	unused 1848	usage  200 / 2048 ( 9 %)
+0x20004a58 input                            (real size 1024):	unused  824	usage  200 / 1024 (19 %)
+0x70009018 http_server_tid                  (real size 4096):	unused 2600	usage 1496 / 4096 (36 %)
+0x20003c10 shell_telnet                     (real size 4096):	unused 3344	usage  752 / 4096 (18 %)
+0x70004a08 conn_mgr_monitor                 (real size  512):	unused  208	usage  304 /  512 (59 %)
+0x7001f138 net_socket_service               (real size 2048):	unused 1192	usage  856 / 2048 (41 %)
+0x20000a10 eth_w5500                        (real size 1024):	unused  504	usage  520 / 1024 (50 %)
+0x7001e550 tx_q[0]                          (real size 2048):	unused 1424	usage  624 / 2048 (30 %)
+0x7001e448 rx_q[0]                          (real size 2560):	unused 1448	usage 1112 / 2560 (43 %)
+0x7001e268 net_mgmt                         (real size 2048):	unused 1248	usage  800 / 2048 (39 %)
+0x7001fce8 tcp_work                         (real size 1024):	unused  704	usage  320 / 1024 (31 %)
+0x20004978 usbd                             (real size 1024):	unused  416	usage  608 / 1024 (59 %)
+0x20003870 shell_uart                       (real size 4096):	unused 2144	usage 1952 / 4096 (47 %)
+0x701a0b90                                  (real size 4096):	unused 2720	usage 1376 / 4096 (33 %)
+0x701a0c70 esp_hosted_tx                    (real size 4096):	unused 3728	usage  368 / 4096 ( 8 %)
+0x20005088 otgfs@42040000                   (real size  512):	unused  248	usage  264 /  512 (51 %)
+0x7001b5f8 logging                          (real size 2048):	unused 1664	usage  384 / 2048 (18 %)
+0x200054a8 sysworkq                         (real size 4096):	unused 3328	usage  768 / 4096 (18 %)
+0x200052a8 idle                             (real size  320):	unused  216	usage  104 /  320 (32 %)
+0x20005388 main                             (real size 2048):	unused  888	usage 1160 / 2048 (56 %)
+0x20009d80 IRQ 00                           (real size 2048):	unused 1736	usage  312 / 2048 (15 %)
+[1;32muart:~$ [mnet iface
+Hostname: zephyr000000000000
+Default interface: 1
+
+
+Interface eth0 (0x20002c90) (Ethernet) [1]
+===================================
+Link addr : 80:34:28:10:12:73
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : ETH_W5500 (0x20de594)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+	10 Mbits
+	100 Mbits
+Ethernet PHY device: ETH_W5500_phy (0x20de5b4)
+Ethernet link speed: 100 Mbits full-duplex
+IPv6 unicast addresses (max 2):
+	fe80::8234:28ff:fe10:1273 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ff10:1273
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 18491
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.14/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.14
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+
+Interface wlan0 (0x20002dc8) (WiFi) [2]
+===============================
+Link addr : E4:B3:23:A6:9E:E0
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : wifi (0x20de634)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+Ethernet PHY device: <none> (0)
+IPv6 unicast addresses (max 2):
+	fe80::e6b3:23ff:fea6:9ee0 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:e6b3:23ff:fea6:9ee0 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ffa6:9ee0
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 29098
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.10/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.10
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+[1;32muart:~$ [mwifi status
+Status: successful
+==================
+State: COMPLETED
+Interface Mode: STATION
+Link Mode: WIFI 6 (802.11ax/HE)
+SSID: k2
+BSSID: D4:01:C3:A0:60:28
+Band: 2.4GHz
+Channel: 2
+Security:  WPA3-SAE-HNP
+MFP: Required
+RSSI: -57
+Beacon Interval: 0
+DTIM: 0
+TWT: Not supported
+Current PHY TX rate (Mbps) : 0.0
+[1;32muart:~$ [mnet stats
+[1;32mSet CONFIG_NET_STATISTICS to enable statistics support.
+[m[1;32muart:~$ [mkernel heap
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [mkernel uptime
+Uptime: 176598 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 186605 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 196608 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 206615 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 216622 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 226627 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 236629 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 246640 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 256648 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 266651 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 276655 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 286657 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 296664 ms
+[1;32muart:~$ [m[8D[J[00:05:02.662,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 306671 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 316677 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 326684 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 336687 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 346694 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 356697 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 366703 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 376707 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 386714 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 396721 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 406726 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 416732 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 426739 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 436745 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 446751 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 456757 ms
+[1;32muart:~$ [m[8D[J[00:07:38.766,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 466763 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 476767 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 486772 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 496775 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 506779 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 516782 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 526785 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 536792 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 546798 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 556805 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 566811 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 576817 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 586822 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 596826 ms
+[1;32muart:~$ [m[8D[J[00:10:02.782,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 606832 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 616835 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 626839 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 636843 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 646851 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 656858 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 666864 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 676870 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 686875 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 696879 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 706886 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 716891 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 726895 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 736902 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 746909 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 756916 ms
+[1;32muart:~$ [m[8D[J[00:12:38.897,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 766922 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 776927 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 786930 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 796937 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 806943 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 816947 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 826953 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 836957 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 846960 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 856965 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 866969 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 876976 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 886983 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 896988 ms
+[1;32muart:~$ [m[8D[J[00:15:02.913,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 906996 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 917000 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 927002 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 937009 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 947016 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 957022 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 967029 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 977035 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 987040 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 997043 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1007045 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1017052 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1027060 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1037063 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1047069 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1057074 ms
+[1;32muart:~$ [m[8D[J[00:17:39.015,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1067078 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1077080 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1087085 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1097088 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1107094 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1117100 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1127105 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1137112 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1147118 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1157122 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1167128 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1177134 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1187138 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1197145 ms
+[1;32muart:~$ [m[8D[J[00:20:05.041,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1207152 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1217156 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1227164 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1237167 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1247171 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1257178 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1267184 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1277191 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1287198 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1297201 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1307207 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1317212 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1327217 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1337220 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1347226 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1357233 ms
+[1;32muart:~$ [m[8D[J[00:22:39.143,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1367237 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1377244 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1387247 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1397253 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1407258 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1417265 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1427268 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1437272 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1447278 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1457282 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1467289 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1477296 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1487302 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1497306 ms
+[1;32muart:~$ [m[8D[J[00:25:05.159,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1507311 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1517319 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1527326 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1537332 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1547338 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1557345 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1567348 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1577354 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1587357 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1597360 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1607367 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1617369 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1627374 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1637380 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1647386 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1657394 ms
+[1;32muart:~$ [m[8D[J[00:27:39.261,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1667401 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1677406 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1687411 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1697414 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1707420 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1717426 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1727433 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1737440 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1747447 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1757454 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1767460 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1777463 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1787468 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1797471 ms
+[1;32muart:~$ [m[8D[J[00:30:05.277,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1807476 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1817481 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1827487 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1837489 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1847493 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1857499 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1867506 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1877514 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1887519 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1897524 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1907527 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1917532 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1927536 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1937540 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1947546 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1957554 ms
+[1;32muart:~$ [m[8D[J[00:32:39.382,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 1967561 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1977566 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1987574 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 1997576 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2007582 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2017590 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2027593 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2037599 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2047605 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2057608 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2067615 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2077622 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2087626 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2097631 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2107638 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2117645 ms
+[1;32muart:~$ [m[8D[J[00:35:16.900,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2127647 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2137653 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2147659 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2157666 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2167671 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2177674 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2187676 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2197679 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2207686 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2217692 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2227699 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2237704 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2247707 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2257712 ms
+[1;32muart:~$ [m[8D[J[00:37:40.014,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2267718 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2277722 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2287724 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2297731 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2307736 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2317740 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2327746 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2337754 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2347759 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2357766 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2367769 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2377777 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2387783 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2397788 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2407795 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2417802 ms
+[1;32muart:~$ [m[8D[J[00:40:17.030,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2427806 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2437811 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2447817 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2457824 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2467831 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2477837 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2487842 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2497849 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2507856 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2517860 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2527867 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2537875 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2547879 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2557886 ms
+[1;32muart:~$ [m[8D[J[00:42:40.135,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2567892 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2577898 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2587902 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2597909 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2607912 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2617918 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2627922 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2637926 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2647929 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2657936 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2667940 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2677947 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2687953 ms
+[1;32muart:~$ [mkernel ptime
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [mkernel uptime
+Uptime: 2707963 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2717968 ms
+[1;32muart:~$ [m[8D[J[00:45:17.152,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2727973 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2737979 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2747983 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2757990 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2767996 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2778002 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2788006 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2798014 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2808021 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2818024 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2828031 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2838038 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2848045 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2858051 ms
+[1;32muart:~$ [m[8D[J[00:47:40.253,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 2868057 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2878061 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2888064 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2898070 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2908073 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2918079 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2928085 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2938090 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2948094 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2958098 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2968104 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2978108 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2988114 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 2998121 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3008127 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3018134 ms
+[1;32muart:~$ [m[8D[J[00:50:17.270,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3028139 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3038145 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3048152 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3058159 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3068165 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3078173 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3088180 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3098185 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3108188 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3118193 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3128200 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3138207 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3148210 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3158216 ms
+[1;32muart:~$ [m[8D[J[00:52:40.373,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3168219 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3178224 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3188229 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3198234 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3208241 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3218247 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3228254 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3238258 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3248263 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3258270 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3268274 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3278276 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3288281 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3298286 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3308292 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3318299 ms
+[1;32muart:~$ [m[8D[J[00:55:17.403,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3328303 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3338308 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3348311 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3358316 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3368323 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3378329 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3388335 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3398342 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3408349 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3418356 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3428362 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3438367 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3448374 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3458380 ms
+[1;32muart:~$ [m[8D[J[00:57:40.506,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3468387 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3478395 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3488400 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3498407 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3508411 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3518414 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3528421 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3538427 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3548434 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3558437 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3568441 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3578447 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3588453 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3598461 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3608467 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3618474 ms
+[1;32muart:~$ [m[8D[J[01:00:17.523,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3628480 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3638486 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3648489 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3658495 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3668502 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3678508 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3688514 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3698521 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3708524 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3718530 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3728538 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3738545 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3748549 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3758553 ms
+[1;32muart:~$ [m[8D[J[01:02:40.624,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 3768557 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3778564 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3788570 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3798576 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3808583 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3818589 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3828594 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3838601 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3848608 ms
+[1;32muart:~$ [mkernel upime
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [mkernel uptime
+Uptime: 3868621 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3878627 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3888630 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3898637 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3908644 ms
+[1;32muart:~$ [m[8D[J[01:05:17.641,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [mkernel uptime
+Uptime: 3918656 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3928654 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3938659 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3948664 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3958669 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3968674 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3978677 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3988685 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 3998688 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4008695 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4018700 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4028707 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4038714 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4048719 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4058725 ms
+[1;32muart:~$ [m[8D[J[01:07:40.749,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4068731 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4078738 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4088744 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4098751 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4108758 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4118764 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4128770 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4138776 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4148783 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4158790 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4168795 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4178802 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4188809 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4198813 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4208820 ms
+[1;32muart:~$ [m[8D[J[01:10:17.765,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4218823 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4228829 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4238835 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4248842 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4258849 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4268852 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4278855 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4288861 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4298864 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4308867 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4318871 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4328875 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4338882 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4348885 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4358888 ms
+[1;32muart:~$ [m[8D[J[01:12:40.869,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4368895 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4378898 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4388905 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4398911 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4408918 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4418925 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4428932 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4438939 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4448942 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4458948 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4468954 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4478956 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4488961 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4498967 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4508973 ms
+[1;32muart:~$ [m[8D[J[01:15:17.886,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4518980 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4528988 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4538991 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4548997 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4559000 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4569007 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4579014 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4589021 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4599027 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4609032 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4619039 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4629045 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4639052 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4649058 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4659065 ms
+[1;32muart:~$ [m[8D[J[01:17:40.989,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4669071 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4679078 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4689084 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4699091 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4709097 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4719103 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4729105 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4739111 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4749118 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4759123 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4769130 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4779136 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4789142 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4799148 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4809154 ms
+[1;32muart:~$ [m[8D[J[01:20:18.005,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4819161 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4829168 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4839175 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4849179 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4859184 ms
+[1;32muart:~$ [mkernel ptime
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [mkernel uptime
+Uptime: 4879195 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4889202 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4899206 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4909211 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4919216 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4929223 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4939228 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4949233 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4959239 ms
+[1;32muart:~$ [m[8D[J[01:22:41.107,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 4969247 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4979250 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4989255 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 4999260 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5009267 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5019273 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5029278 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5039285 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5049290 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5059294 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5069300 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5079304 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5089312 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5099316 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5109320 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5119324 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5129327 ms
+[1;32muart:~$ [m[8D[J[01:25:32.370,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5139333 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5149340 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5159347 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5169351 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5179358 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5189365 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5199369 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5209375 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5219378 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5229381 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5239388 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5249394 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5259402 ms
+[1;32muart:~$ [m[8D[J[01:27:41.473,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5269407 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5279414 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5289420 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5299426 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5309430 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5319437 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5329443 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5339451 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5349458 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5359465 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5369471 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5379473 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5389478 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5399485 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5409488 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5419495 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5429502 ms
+[1;32muart:~$ [m[8D[J[01:30:32.489,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5439505 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5449508 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5459511 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5469518 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5479523 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5489526 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5499533 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5509537 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5519542 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5529549 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5539552 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5549556 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5559560 ms
+[1;32muart:~$ [m[8D[J[01:32:41.590,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5569567 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5579570 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5589574 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5599579 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5609586 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5619593 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5629595 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5639603 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5649607 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5659614 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5669621 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5679626 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5689633 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5699640 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5709647 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5719652 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5729657 ms
+[1;32muart:~$ [m[8D[J[01:35:32.606,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5739660 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5749668 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5759674 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5769679 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5779686 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5789690 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5799695 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5809701 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5819707 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5829710 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5839714 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5849720 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5859722 ms
+[1;32muart:~$ [m[8D[J[01:37:41.709,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 5869726 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5879730 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5889737 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5899744 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5909750 ms
+[1;32muart:~$ [mkerneluptime
+[1;31mkerneluptime: command not found
+[m[1;32muart:~$ [mkernel uptime
+Uptime: 5929758 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5939764 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5949768 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5959772 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5969778 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5979785 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5989790 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 5999797 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6009800 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6019808 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6029811 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6039817 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6049822 ms
+[1;32muart:~$ [m[8D[J[01:40:50.959,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6059828 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6069835 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6079838 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6089845 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6099848 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6109853 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6119859 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6129863 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6139866 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6149872 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6159877 ms
+[1;32muart:~$ [m[8D[J[01:42:42.066,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6169880 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6179885 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6189889 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6199892 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6209898 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6219905 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6229912 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6239916 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6249923 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6259926 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6269932 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6279939 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6289945 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6299948 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6309952 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6319959 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6329965 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6339970 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6349978 ms
+[1;32muart:~$ [m[8D[J[01:45:51.097,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6359984 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6369986 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6379990 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6389994 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6399997 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6410003 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6420010 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6430016 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6440022 ms
+[1;32muart:~$ [mkrnel uptime
+[1;31mkrnel: command not found
+[m[1;32muart:~$ [mkernel uptime
+Uptime: 6460032 ms
+[1;32muart:~$ [m[8D[J[01:47:42.214,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6470039 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6480046 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6490053 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6500056 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6510059 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6520062 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6530066 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6540074 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6550081 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6560083 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6570090 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6580097 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6590101 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6600108 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6610115 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6620122 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6630130 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6640137 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6650143 ms
+[1;32muart:~$ [m[8D[J[01:50:51.231,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6660150 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6670157 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6680162 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6690165 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6700171 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6710175 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6720183 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6730189 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6740192 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6750195 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6760201 ms
+[1;32muart:~$ [m[8D[J[01:52:42.341,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6770207 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6780214 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6790220 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6800227 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6810230 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6820237 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6830243 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6840250 ms
+[1;32muart:~$ [mkernel utime
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [mkernel uptime
+Uptime: 6860259 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6870266 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6880270 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6890276 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6900283 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6910290 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6920294 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6930301 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6940306 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6950312 ms
+[1;32muart:~$ [m[8D[J[01:55:59.257,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 6960318 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6970324 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6980330 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 6990334 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7000340 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7010346 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7020351 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7030357 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7040364 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7050371 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7060378 ms
+[1;32muart:~$ [m[8D[J[01:57:43.363,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 7070382 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7080389 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7090395 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7100399 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7110406 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7120413 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7130418 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7140421 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7150427 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7160433 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7170440 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7180447 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7190450 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7200452 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7210459 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7220465 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7230472 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7240479 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7250485 ms
+[1;32muart:~$ [m[8D[J[02:00:59.379,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 7260492 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7270496 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7280504 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7290510 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7300517 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7310521 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7320526 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7330531 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7340536 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7350541 ms
+[1;32muart:~$ [mkernel uptime
+Uptime: 7360546 ms
+[1;32muart:~$ [m[8D[J[02:02:43.498,000] [1;33m<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+Uptime: 7370549 ms
+[1;32muart:~$ [mkernel thread stacks
+0x7001b9f8 io_to_matter_stream              (real size 4096):	unused 3832	usage  264 / 4096 ( 6 %)
+0x701829d0 CHIP                             (real size 16384):	unused 15256	usage 1128 / 16384 ( 6 %)
+0x7000a730 io_outputs_task                  (real size 1024):	unused  736	usage  288 / 1024 (28 %)
+0x70197670 reg_notify_wq                    (real size 2048):	unused 1848	usage  200 / 2048 ( 9 %)
+0x20004a58 input                            (real size 1024):	unused  824	usage  200 / 1024 (19 %)
+0x70009018 http_server_tid                  (real size 4096):	unused 2600	usage 1496 / 4096 (36 %)
+0x20003c10 shell_telnet                     (real size 4096):	unused 3344	usage  752 / 4096 (18 %)
+0x70004a08 conn_mgr_monitor                 (real size  512):	unused  208	usage  304 /  512 (59 %)
+0x7001f138 net_socket_service               (real size 2048):	unused 1192	usage  856 / 2048 (41 %)
+0x20000a10 eth_w5500                        (real size 1024):	unused  504	usage  520 / 1024 (50 %)
+0x7001e550 tx_q[0]                          (real size 2048):	unused 1424	usage  624 / 2048 (30 %)
+0x7001e448 rx_q[0]                          (real size 2560):	unused 1448	usage 1112 / 2560 (43 %)
+0x7001e268 net_mgmt                         (real size 2048):	unused 1248	usage  800 / 2048 (39 %)
+0x7001fce8 tcp_work                         (real size 1024):	unused  696	usage  328 / 1024 (32 %)
+0x20004978 usbd                             (real size 1024):	unused  416	usage  608 / 1024 (59 %)
+0x20003870 shell_uart                       (real size 4096):	unused 2144	usage 1952 / 4096 (47 %)
+0x701a0b90                                  (real size 4096):	unused 2720	usage 1376 / 4096 (33 %)
+0x701a0c70 esp_hosted_tx                    (real size 4096):	unused 3728	usage  368 / 4096 ( 8 %)
+0x20005088 otgfs@42040000                   (real size  512):	unused  248	usage  264 /  512 (51 %)
+0x7001b5f8 logging                          (real size 2048):	unused 1664	usage  384 / 2048 (18 %)
+0x200054a8 sysworkq                         (real size 4096):	unused 3328	usage  768 / 4096 (18 %)
+0x200052a8 idle                             (real size  320):	unused  216	usage  104 /  320 (32 %)
+0x20005388 main                             (real size 2048):	unused  888	usage 1160 / 2048 (56 %)
+0x20009d80 IRQ 00                           (real size 2048):	unused 1736	usage  312 / 2048 (15 %)
+[1;32muart:~$ [mnet iface
+Hostname: zephyr000000000000
+Default interface: 1
+
+
+Interface eth0 (0x20002c90) (Ethernet) [1]
+===================================
+Link addr : 80:34:28:10:12:73
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : ETH_W5500 (0x20de594)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+	10 Mbits
+	100 Mbits
+Ethernet PHY device: ETH_W5500_phy (0x20de5b4)
+Ethernet link speed: 100 Mbits full-duplex
+IPv6 unicast addresses (max 2):
+	fe80::8234:28ff:fe10:1273 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ff10:1273
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 18491
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.14/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.14
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+
+Interface wlan0 (0x20002dc8) (WiFi) [2]
+===============================
+Link addr : E4:B3:23:A6:9E:E0
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : wifi (0x20de634)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+Ethernet PHY device: <none> (0)
+IPv6 unicast addresses (max 2):
+	fe80::e6b3:23ff:fea6:9ee0 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:e6b3:23ff:fea6:9ee0 autoconf preferred
+IPv6 multicast addresses (max 3):
+	ff02::1
+	ff02::1:ffa6:9ee0
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 29098
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.10/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.10
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+[1;32muart:~$ [mwifi status
+Status: successful
+==================
+State: COMPLETED
+Interface Mode: STATION
+Link Mode: WIFI 6 (802.11ax/HE)
+SSID: k2
+BSSID: D4:01:C3:A0:60:28
+Band: 2.4GHz
+Channel: 2
+Security:  WPA3-SAE-HNP
+MFP: Required
+RSSI: -53
+Beacon Interval: 0
+DTIM: 0
+TWT: Not supported
+Current PHY TX rate (Mbps) : 0.0
+[1;32muart:~$ [mnet stats
+[1;32mSet CONFIG_NET_STATISTICS to enable statistics support.
+[m[1;32muart:~$ [mkernel heap
+kernel - Kernel commands
+Subcommands:
+  cycles     : Kernel cycles.
+  log_level  : <module name> <severity (0-4)>
+  reboot     : Reboot.
+  sleep      : ms
+  thread     : Kernel threads.
+  uptime     : Kernel uptime. Can be called with the -p or --pretty options
+  version    : Kernel version.
+[1;32muart:~$ [m

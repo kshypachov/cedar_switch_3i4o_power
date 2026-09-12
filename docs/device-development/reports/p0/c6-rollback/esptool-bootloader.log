@@ -1,0 +1,52 @@
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting....
+[1A[2K[1A[2K[1A[2K[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+MAC:                e4:b3:23:ff:fe:a6:9e:e0
+BASE MAC:           e4:b3:23:a6:9e:e0
+MAC_EXT:            ff:fe
+
+Uploading stub flasher...
+Running stub flasher...
+[1A[2K[1A[2KStub flasher running.
+
+Configuring flash size...
+[KReading from 0x00001000 [==>                           ]  12.5% 4096/32768 bytes... [KReading from 0x00002000 [======>                       ]  25.0% 8192/32768 bytes... 
+Staying in bootloader.
+[1;31m
+A fatal error occurred: Serial data stream stopped: Possible serial noise or corruption.[0m
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting....
+[1A[2K[1A[2K[1A[2K[1;31m
+A fatal error occurred: Packet content transfer stopped [0m
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting....
+[1A[2K[1A[2K[1A[2K[1;31m
+A fatal error occurred: Packet content transfer stopped [0m
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz
+esptool v5.3.1
+Serial port /dev/cu.usbmodem21301:
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting....
+[1A[2K[1A[2K[1A[2K[1;31m
+A fatal error occurred: Packet content transfer stopped [0m
+[1;36mNote:[0m Pre-connection option "no-reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connected to ESP32-C6 on /dev/cu.usbmodem21301:
+Chip type:          ESP32-C6FH4 (QFN32) (revision v0.1)
+Features:           Wi-Fi 6, BT 5 (LE), IEEE802.15.4, Single Core + LP Core, 160MHz, Embedded Flash 4MB
+Crystal frequency:  40MHz

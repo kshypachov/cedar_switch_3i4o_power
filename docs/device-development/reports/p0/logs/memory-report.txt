@@ -1,0 +1,14 @@
+Memory region         Used Size  Region Size  %age Used
+           FLASH:     1136440 B    4191144 B     27.12%
+             RAM:       54216 B       768 KB      6.89%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:     1746984 B         8 MB     20.83%
+        IDT_LIST:           0 B        32 KB      0.00%
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       85872 B       128 KB     65.52%
+             RAM:       44736 B       768 KB      5.69%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:           0 B         8 MB      0.00%
+        IDT_LIST:           0 B        32 KB      0.00%

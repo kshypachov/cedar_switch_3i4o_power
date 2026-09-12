@@ -1,0 +1,20 @@
+wifi_ctrl reset
+ESP32 reset pulse done
+[1;32muart:~$ [m[8D[J[04:47:40.037,000] [0m<inf> wifi: Initializing WiFi reset pin...[0m
+[1;32muart:~$ [m[8D[J[04:47:40.037,000] [0m<inf> wifi: Initializing WiFi BOOT pin...[0m
+[1;32muart:~$ [m[8D[J[04:47:40.038,000] [0m<inf> wifi: WiFi reset pin configured and set to ACTIVE[0m
+[1;32muart:~$ [m[8D[J[04:47:40.338,000] [0m<inf> wifi: WiFi reset pin set to INACTIVE[0m
+[1;32muart:~$ [m[8D[J[04:48:26.909,000] [0m<inf> esp_hosted_mcu_core: coprocessor priv event 34[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [mwifi scan
+[1;33mScan request failed
+[m[1;32muart:~$ [mwifi status
+Status: successful
+==================
+State: DISCONNECTED
+[1;32muart:~$ [mkernel uptime
+Uptime: 17369116 ms
+[1;32muart:~$ [mwifi scan
+[1;33mScan request failed
+[m[1;32muart:~$ [mwifi scan
+[1;33mScan request failed
+[m[1;32muart:~$ [m

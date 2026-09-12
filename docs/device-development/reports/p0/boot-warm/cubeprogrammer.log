@@ -1,0 +1,221 @@
+[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m[36m[01m      -------------------------------------------------------------------
+[39;49m[0m[36m[01m                        STM32CubeProgrammer v2.23.0                  
+[39;49m[0m[36m[01m      -------------------------------------------------------------------
+
+[39;49m[0m[90mST-LINK SN  : 002F002B3233510739363634
+[39;49m[0m[90mST-LINK FW  : V3J16M9B5S1
+[39;49m[0m[90mBoard       : STLINK-V3SET
+[39;49m[0m[90mVoltage     : 3.30V
+[39;49m[0m[90mSWD freq    : 8000 KHz
+[39;49m[0m[90mConnect mode: Normal
+[39;49m[0m[90mReset mode  : Software reset
+[39;49m[0m[90mDevice ID   : 0x482
+[39;49m[0m[90mRevision ID : Rev U
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDevice name : STM32U575/STM32U585
+[39;49m[0m[39;49mNVM size    : 2 MBytes
+[39;49m[0m[39;49mDevice type : MCU
+[39;49m[0m[39;49mDevice CPU  : Cortex-M33
+[39;49m[0m[39;49mBL Version  : 0x93
+[39;49m[0m[39;49mDebug in Low Power mode enabled
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m[00;32m
+Hard reset is performed
+[39;49m[0m[39;49m[0m
