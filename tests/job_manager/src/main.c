@@ -117,6 +117,20 @@ ZTEST(job_manager, test_legal_state_path)
 	zassert_equal(job_active_count(), 0);
 }
 
+/* A network apply waits for its confirmation, then works again to commit it. */
+ZTEST(job_manager, test_a_waiting_job_resumes_running)
+{
+	struct job_snapshot s;
+
+	zassert_equal(create("k", 1, false, &s), JOB_CREATE_NEW);
+	zassert_ok(job_set_state(s.id, JOB_STATE_RUNNING));
+	zassert_ok(job_set_state(s.id, JOB_STATE_WAITING_CONFIRMATION));
+	zassert_ok(job_set_state(s.id, JOB_STATE_RUNNING));
+	zassert_ok(job_get(s.id, &s));
+	zassert_equal(s.state, JOB_STATE_RUNNING);
+	zassert_ok(job_set_state(s.id, JOB_STATE_SUCCEEDED));
+}
+
 ZTEST(job_manager, test_illegal_transitions_rejected)
 {
 	struct job_snapshot s;
