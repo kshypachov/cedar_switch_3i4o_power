@@ -1,0 +1,75 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=9A=D0=B8=D1=80=D0=B8=D0=BB=D0=BE=20=D0=A8=D0=B8=D0=BF=D0=B0=D1=87=D0=BE=D0=B2?= <kshypachov@gmail.com>
+Date: Sun, 13 Sep 2026 00:00:00 +0300
+Subject: [PATCH] drivers: ethernet: w5500: reopen socket 0 when the receive
+ state is inconsistent
+
+w5500_rx() takes the frame length from the two-byte header in the chip's
+receive buffer and checks it only from below. net_pkt_rx_alloc_with_buffer()
+caps the allocation at MTU + Ethernet header for NET_AF_UNSPEC, so a larger
+length walks the copy loop past the packet's last fragment and faults on a
+NULL net_buf (BFAR 0xc at net_buf_tailroom()). A length of 2 or less is
+logged and the function returns, leaving Sn_RX_RD where it was.
+
+On this product the first halts one of two identical boards at every boot,
+9 s after start; the board shares SPI2 between the W5500 and an ESP32-C6
+without firmware, and in those moments Sn_RX_RSR and the header read as
+all-ones (65535, 65533). An earlier version of this patch discarded the
+buffered bytes by advancing Sn_RX_RD by Sn_RX_RSR. With a value read in that
+state the pointer moved away from the data, every later header read as 0,
+and the interface received nothing again until reset (IPv4 and IPv6, link
+up; logs in the application repository, docs/device-development/reports/p4/hw).
+
+Now a header of 2 or less, larger than Sn_RX_RSR, or longer than
+NET_ETH_MAX_FRAME_SIZE closes socket 0 and opens it again. OPEN resets the
+chip's receive pointers; Sn_MR is kept across CLOSE, so MACRAW mode and the
+filters stay as configured. Why the reads go wrong is not established here.
+
+Upstream PR #115626 rewrites w5500_rx() and adds a comparison with
+Sn_RX_RSR; this patch is dropped when that is merged.
+---
+--- a/drivers/ethernet/eth_w5500.c
++++ b/drivers/ethernet/eth_w5500.c
+@@ -204,6 +204,20 @@
+ 	return 0;
+ }
+ 
++/*
++ * Socket 0 closed and opened again. OPEN resets the chip's receive pointers,
++ * which is the only way back once the length header and Sn_RX_RD disagree:
++ * advancing the pointer by a length read in that state only moves it further
++ * from the data. Sn_MR survives CLOSE, so the MACRAW mode and filters stay.
++ */
++static void w5500_rx_resync(const struct device *dev, uint16_t header, uint16_t buffered)
++{
++	LOG_ERR("W5500 receive state inconsistent (header %u, %u buffered): socket reopened",
++		header, buffered);
++	w5500_command(dev, S0_CR_CLOSE);
++	w5500_command(dev, S0_CR_OPEN);
++}
++
+ static void w5500_rx(const struct device *dev)
+ {
+ 	uint8_t header[2];
+@@ -230,8 +244,19 @@
+ 	if (w5500_readbuf(dev, off, header, 2) < 0) {
+ 		return;
+ 	}
+-	if (sys_get_be16(header) <= 2U) {
+-		LOG_ERR("Invalid W5500 header size %u", sys_get_be16(header));
++	/*
++	 * The length is read from the chip's buffer and nothing else checks it.
++	 * One that cannot be a frame, or is larger than the bytes actually
++	 * buffered, means the read pointer and the data disagree. Returning
++	 * without fixing that leaves the pointer where it is, and every later
++	 * frame is read from the same wrong place; walking a too-large length
++	 * runs past the last fragment net_pkt_rx_alloc_with_buffer() gave us and
++	 * faults on a NULL fragment.
++	 */
++	if (sys_get_be16(header) <= 2U || sys_get_be16(header) > rx_buf_len ||
++	    sys_get_be16(header) - 2U > NET_ETH_MAX_FRAME_SIZE) {
++		eth_stats_update_errors_rx(ctx->iface);
++		w5500_rx_resync(dev, sys_get_be16(header), rx_buf_len);
+ 		return;
+ 	}
+ 	rx_len = sys_get_be16(header) - 2;

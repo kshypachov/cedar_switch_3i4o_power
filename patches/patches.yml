@@ -32,3 +32,28 @@ patches:
       deliberately left clear because Matter needs IPv6 multicast. Both bits
       were characterised on the board, not taken from the datasheet. Upstream
       request drafted in docs/upstream/w5500-multicast-filtering-request.md.
+
+  - path: zephyr/eth_w5500-reopen-socket-on-inconsistent-rx.patch
+    sha256sum: 1de08f1de330cbdaba6e5792dacf166aed8c39760e5c298962f1e8e57b227d08
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-13
+    upstreamable: false
+    merge-pr: https://github.com/zephyrproject-rtos/zephyr/pull/115626
+    merge-status: false
+    comments: >-
+      Closes and reopens socket 0 when the receive length header is 2 or
+      less, larger than the bytes buffered (Sn_RX_RSR) or than
+      NET_ETH_MAX_FRAME_SIZE, instead of copying past the last fragment of the
+      packet and halting on a bus fault (board B, every boot) or leaving
+      Sn_RX_RD in place. Replaces the first version of this entry
+      (eth_w5500-drop-frames-longer-than-buffered.patch, sha256 a133effd…),
+      which advanced Sn_RX_RD by Sn_RX_RSR: read as 65535 in that state, it
+      left board B receiving nothing until reset
+      (docs/device-development/reports/p4/hw). Not sent upstream on its own:
+      PR #115626 rewrites w5500_rx() with a comparison against Sn_RX_RSR, and
+      this entry goes when that PR is merged. Applied to the shared zephyr
+      checkout on 2026-09-13 with the owner's permission, on its own: the
+      multicast entry above was already applied, and `west patch apply` stops
+      at the first patch that does not.

@@ -14,6 +14,7 @@ dropped.
 | What | Where it lives | Restored by | Drop it when |
 |---|---|---|---|
 | W5500 IPv4 multicast blocking | `zephyr/drivers/ethernet/eth_w5500.c`, `eth_w5500_priv.h` | `west patch apply`, see below | Upstream accepts the request in `docs/upstream/`, or [#115626](https://github.com/zephyrproject-rtos/zephyr/issues/115626) makes the RX thread preemptible |
+| W5500 socket reopened when the receive state is inconsistent | `zephyr/drivers/ethernet/eth_w5500.c` (`w5500_rx`) | `west patch apply`, see below | [#115626](https://github.com/zephyrproject-rtos/zephyr/pull/115626) is merged — its rewrite of `w5500_rx` compares the length with `Sn_RX_RSR` |
 | Manifest entries for Matter and the three Cedar repositories | `zephyr/west.yml` | `git apply` of `workspace/west.yml.patch` | The workspace moves to an application-owned manifest repository |
 | esp-serial-flasher submanifest | `zephyr/submanifests/esp-serial-flasher.yaml` | copy from `workspace/submanifests/` | Same as above |
 
@@ -24,12 +25,13 @@ patches/
   patches.yml                                          west patch definitions
   zephyr/
     eth_w5500-block-ipv4-multicast-in-macraw-mode.patch
+    eth_w5500-reopen-socket-on-inconsistent-rx.patch
   workspace/
     west.yml.patch                                     manifest edit
     submanifests/esp-serial-flasher.yaml               verbatim copy
 ```
 
-Only the first is a `west patch` entry. The other two are not patches against a
+Only the two under `zephyr/` are `west patch` entries. The other two are not patches against a
 module — one edits the manifest that west itself reads, the other is a new file
 west has no record of — so they are restored by hand and kept here verbatim.
 
@@ -62,8 +64,28 @@ Verify:
 
 ```sh
 git -C zephyr diff --stat -- drivers/ethernet/eth_w5500.c drivers/ethernet/eth_w5500_priv.h
-# 2 files changed, 11 insertions(+), 2 deletions(-)
+# 2 files changed, 38 insertions(+), 4 deletions(-)
 ```
+
+### One new entry on a checkout that already has the others
+
+`west patch apply` runs every entry and stops at the first that fails, and an
+entry already applied fails. Its `-r` would then roll back — through the clean
+command, `git clean`. So a new entry goes on by itself: a list holding only that
+entry, inside the workspace (`-l` is refused as an absolute path together with
+`-sm`, and `-sm` must be inside the workspace), and never `-r`. P4 applied the
+frame-length patch this way:
+
+```sh
+cp one-entry.yml "$APP/patches/apply-one.yml"
+west patch -sm "$APP" -b patches -l patches/apply-one.yml -dm zephyr apply
+rm "$APP/patches/apply-one.yml"
+git -C zephyr status --short   # the same lines as before; only the diff of the patched file grew
+```
+
+`west patch list` validates the whole file against the schema first — run it
+after editing `patches.yml`: a key the schema does not define (`pr` instead of
+`merge-pr`) makes every later `apply` fail.
 
 **Never run `west patch clean` in this workspace.** Its default clean command is
 `git clean -d -f -x`, and the zephyr checkout holds untracked work from other
@@ -97,6 +119,32 @@ the starvation: any other sustained flow on the segment reaches the same state.
 That is upstream issue #115626, where the position is already that these threads
 should not be cooperative, and waiting for that is cheaper than carrying a
 scheduling fix of our own in a foreign driver.
+
+## The receive-state patch
+
+`w5500_rx()` reads the two-byte frame length from the chip's MACRAW header and
+copies that many bytes into a packet it allocated for the length the header
+claimed — but never compares the length with `Sn_RX_RSR`, the bytes actually
+buffered, or with `NET_ETH_MAX_FRAME_SIZE`. When they disagree, the copy walks
+past the last fragment and dereferences a NULL buffer: `BUS FAULT`, `BFAR 0xc`,
+`eth_w5500.c:256`. P0 saw it after a coprocessor reset; board B in P4 hit it on
+every boot, 9 s in (`docs/device-development/reports/p4/hw`). A length of 2 or
+less is only logged, and the read pointer stays where it was.
+
+On board B those moments read `Sn_RX_RSR` as 65535 and the header as 65533 —
+all-ones, on the SPI bus the W5500 shares with a C6 that has no firmware. The
+first version of the patch discarded the buffered bytes by advancing `Sn_RX_RD`
+by `Sn_RX_RSR`; with that value the pointer left the data, every later header
+read as 0, and the interface received nothing, IPv4 or IPv6, until reset.
+
+The patch now closes socket 0 and opens it again whenever the header is 2 or
+less, larger than `Sn_RX_RSR`, or longer than a frame. OPEN resets the chip's
+receive pointers; `Sn_MR` survives CLOSE, so MACRAW mode and the filters stay.
+Each of the two commands can busy-wait up to 100 ms in the cooperative RX thread
+while the bus reads wrong. Why the reads go wrong is not established.
+
+It is not sent upstream on its own because PR #115626 rewrites `w5500_rx()` with
+a comparison against `Sn_RX_RSR`; the entry goes when that PR is merged.
 
 ## Adding an entry
 
