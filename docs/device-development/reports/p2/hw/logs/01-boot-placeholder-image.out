@@ -1,0 +1,21 @@
+banner: +54.7s Starting bootloader
+main: +57.4s
+web: +57.5s uart:~$ [00:00:01.757,000] <inf> web_server: web interface cedar-2037394c3543501200550045, firmware d30ae91e88bf-dirty, frontend placeholder, boot_5296fbdee11a09e3
+--- errors/warnings
+uart:~$ [00:00:00.846,000] <err> mb85rsxx: invalid device ID: 04 7F 03 02
+uart:~$ [00:00:00.846,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+uart:~$ [00:00:01.343,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002cb8)
+uart:~$ [00:00:01.570,000] <inf> settings_registry: 6 keys registered, 0 rejected
+uart:~$ [00:00:01.756,000] <wrn> web_server: no administrator yet: setup is open on the web page
+uart:~$ [00:00:01.757,000] <inf> web_server: web interface cedar-2037394c3543501200550045, firmware d30ae91e88bf-dirty, frontend placeholder, boot_5296fbdee11a09e3
+uart:~$ [00:00:02.873,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
+uart:~$ [00:00:02.889,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
+uart:~$ [00:00:10.225,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+uart:~$ [00:00:10.225,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+uart:~$ [00:00:15.896,000] <err> chip: [DIS]DNS-SD advertising not available. DNS-SD init disabled.
+uart:~$ [00:00:15.897,000] <err> chip: [DIS]Failed to initialize advertiser: 2d
+uart:~$ [00:00:15.897,000] <err> chip: [DIS]DNS-SD advertising not available. Removing services failed.
+uart:~$ [00:00:15.898,000] <err> chip: [DIS]Failed to remove advertised services: 2d
+uart:~$ [00:00:15.898,000] <err> chip: [DIS]DNS-SD advertising not available. Finalizing service update failed.
+uart:~$ [00:00:15.899,000] <err> chip: [DIS]Failed to finalize service update: 2d
+--- total lines 109 reopens 0

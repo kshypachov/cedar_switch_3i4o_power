@@ -1,0 +1,222 @@
+*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+Running TESTSUITE spike
+===================================================================
+START - test_a_204_keepalive
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=0
+---- A1 DELETE -> 204: 81 bytes, peer open
+HTTP/1.1 204\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+0\r\n
+\r\n
+
+---- end A1 DELETE -> 204
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=0
+---- A2 GET on same connection after 204: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end A2 GET on same connection after 204
+ PASS - test_a_204_keepalive in 0.740 seconds
+===================================================================
+START - test_b_second_client_during_body
+[cb] dyn url=/dyn first-cb data_len=10 hdr_status=0 count=0
+---- B1 second client GET while first holds body: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end B1 second client GET while first holds body
+---- B2 first client after rest of body: 90 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+4\r\n
+done\r\n
+0\r\n
+\r\n
+
+---- end B2 first client after rest of body
+B body callbacks=2 total=20
+ PASS - test_b_second_client_during_body in 0.640 seconds
+===================================================================
+START - test_c_abort_by_close
+[cb] dyn url=/dyn first-cb data_len=10 hdr_status=0 count=0
+[cb] dyn ABORTED
+C aborted after close = 1
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=0
+---- C2 GET after aborted client closed: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end C2 GET after aborted client closed
+ PASS - test_c_abort_by_close in 0.950 seconds
+===================================================================
+START - test_d_stalled_client
+[cb] dyn url=/dyn first-cb data_len=10 hdr_status=0 count=0
+---- D probe at 110 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 110 ms
+---- D probe at 320 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 320 ms
+---- D probe at 530 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 530 ms
+---- D probe at 740 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 740 ms
+---- D probe at 950 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 950 ms
+---- D probe at 1160 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 1160 ms
+---- D probe at 1370 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 1370 ms
+---- D probe at 1580 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 1580 ms
+---- D probe at 1790 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 1790 ms
+---- D probe at 2000 ms: 25 bytes, peer CLOSED
+HTTP/1.1 409 Conflict\r\n
+\r\n
+
+---- end D probe at 2000 ms
+[cb] dyn ABORTED
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=0
+---- D probe at 2210 ms: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end D probe at 2210 ms
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=0
+---- D probe at 2730 ms: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end D probe at 2730 ms
+D aborted=1
+ PASS - test_d_stalled_client in 3.370 seconds
+===================================================================
+START - test_e_long_cookie
+[cb] dyn url=/dyn first-cb data_len=0 hdr_status=0 count=3
+---- E long cookie: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end E long cookie
+E hdr_status=0 count=3 cookie='cedar_session=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' (MAX_HEADER_LEN=256)
+ PASS - test_e_long_cookie in 0.430 seconds
+===================================================================
+START - test_f_wildcard_order
+[cb] jobs url=/api/v1/jobs/job_1 first-cb data_len=0 hdr_status=0 count=0
+---- F1: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end F1
+F1 /api/v1/jobs/job_1 matched=jobs
+[cb] jobs-cancel url=/api/v1/jobs/job_1/cancel first-cb data_len=0 hdr_status=0 count=0
+---- F2: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end F2
+F2 /api/v1/jobs/job_1/cancel matched=jobs-cancel
+[cb] jobs url=/api/v1/jobs/job_1?x=1 first-cb data_len=4 hdr_status=0 count=0
+---- F3: 91 bytes, peer open
+HTTP/1.1 200\r\n
+Transfer-Encoding: chunked\r\n
+Content-Type: application/json\r\n
+\r\n
+5\r\n
+hello\r\n
+0\r\n
+\r\n
+
+---- end F3
+F3 with query matched=jobs
+ PASS - test_f_wildcard_order in 1.050 seconds
+===================================================================
+TESTSUITE spike succeeded
+
+------ TESTSUITE SUMMARY START ------
+
+SUITE PASS - 100.00% [spike]: pass = 6, fail = 0, skip = 0, total = 6 duration = 7.180 seconds
+ - PASS - [spike.test_a_204_keepalive] duration = 0.740 seconds
+ - PASS - [spike.test_b_second_client_during_body] duration = 0.640 seconds
+ - PASS - [spike.test_c_abort_by_close] duration = 0.950 seconds
+ - PASS - [spike.test_d_stalled_client] duration = 3.370 seconds
+ - PASS - [spike.test_e_long_cookie] duration = 0.430 seconds
+ - PASS - [spike.test_f_wildcard_order] duration = 1.050 seconds
+
+------ TESTSUITE SUMMARY END ------
+
+===================================================================
+RunID: 8426140753673a353ef0d5112fbbe366
+PROJECT EXECUTION SUCCESSFUL

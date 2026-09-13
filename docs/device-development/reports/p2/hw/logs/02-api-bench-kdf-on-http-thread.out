@@ -1,0 +1,33 @@
+auth_state_ipv4: status=200, body={'setup_required': True, 'setup_allowed': True, 'setup_token': '1t3paPowDxiOKzJVOH-slG6DK3Fglo7C'}, ms=69.7, request_id=req_0f044de0, cache=no-store
+auth_state_ipv6_link_local: status=200, ms=94.2, same_shape=True
+page: status=200, type=text/html; charset=utf-8, csp=default-src 'self'; script-src 'self'; s, bytes=571, ms=105.0
+legacy GET /api/relays/state: status=404, type=application/json, code=not_found
+legacy POST /api/system/reboot: status=404, type=application/json, code=not_found
+legacy GET /api/device/info: status=404, type=application/json, code=not_found
+legacy POST /api/mqtt/settings: status=404, type=application/json, code=not_found
+legacy_port_8080: open=False, error=ConnectionRefusedError
+foreign_host: status=403, code=origin_rejected, leaks_token=False
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e21cc110-4114-4898-a001-ed6abbd83130/scratchpad/p2/hw/api_bench.py", line 231, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e21cc110-4114-4898-a001-ed6abbd83130/scratchpad/p2/hw/api_bench.py", line 101, in main
+    status, h, body, dt = call("POST", "/api/v1/auth/setup", {"password": PASSWORD},
+                          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               headers={"Origin": ORIGIN, "X-Setup-Token": state["setup_token"]})
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e21cc110-4114-4898-a001-ed6abbd83130/scratchpad/p2/hw/api_bench.py", line 47, in call
+    resp = conn.getresponse()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1478, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 343, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 304, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 729, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+TimeoutError: timed out

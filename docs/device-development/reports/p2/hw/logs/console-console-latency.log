@@ -1,0 +1,28 @@
+[8D[J[00:06:04.295,000] [1;31m<err> net_conn: Not enough connection contexts. Consider increasing CONFIG_NET_MAX_CONN.[0m
+[1;32muart:~$ [m[8D[J[00:06:04.295,000] [1;31m<err> net_tcp: net_conn_register(): -2[0m
+[1;32muart:~$ [m[8D[J[00:06:04.295,000] [1;31m<err> net_tcp: Cannot allocate a new TCP connection[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [mnet conn
+     Context   	Iface  Flags            Local             Remote
+[ 1] 0x7001c170	1      4ST         0.0.0.0:23	       0.0.0.0:0
+[ 2] 0x7001c238	1      6ST            [::]:23	          [::]:0
+[ 3] 0x7001c300	1      6ST            [::]:80	          [::]:0
+[ 4] 0x7001c3c8	1      4DU      0.0.0.0:39866	       0.0.0.0:0
+[ 5] 0x7001c490	1      4DU      0.0.0.0:35389	       0.0.0.0:0
+[ 6] 0x7001c558	1      6DU          [::]:5540	          [::]:0
+
+     Handler    Callback  Proto            Local                  Remote
+[ 1] 0x70004ffc 0x2039f65  UDP	       [::]:5540	          [::]:0
+[ 2] 0x70005044 0x2039f65  UDP	   0.0.0.0:35389	       0.0.0.0:0
+[ 3] 0x7000508c 0x2039f65  UDP	   0.0.0.0:39866	       0.0.0.0:0
+[ 4] 0x700050d4 0x2041fe1  TCP	         [::]:80	          [::]:0
+[ 5] 0x7000511c 0x2041fe1  TCP	         [::]:23	          [::]:0
+[ 6] 0x70005164 0x2041fe1  TCP	      0.0.0.0:23	       0.0.0.0:0
+[ 7] 0x700051ac 0x20444c9  UDP	        [::]:546	          [::]:0
+[ 8] 0x700051f4 0x2045331  UDP	      0.0.0.0:68	       0.0.0.0:0
+
+TCP        Context   Src port Dst port   Send-Seq   Send-Ack  MSS    State
+0x7017d608 0x7001c170      23        0          0          0  1460   LISTEN
+0x7017d8b8 0x7001c238      23        0          0          0  1440   LISTEN
+0x7017db68 0x7001c300      80        0          0          0  1440   LISTEN
+[1;32mSet CONFIG_NET_TCP_LOG_LEVEL_DBG to enable TCP debugging support.
+[m[1;32muart:~$ [m

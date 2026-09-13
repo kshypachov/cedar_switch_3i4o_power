@@ -1,0 +1,4 @@
+baseline GET: [68, 85, 85] ms
+login failed: TimeoutError 18.0 s
+probes during login: 5 ok: 0 failed: ['TimeoutError']
+probes before/after ok: 3 of 3

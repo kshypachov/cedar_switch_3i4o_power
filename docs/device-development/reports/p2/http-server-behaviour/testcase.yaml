@@ -1,0 +1,10 @@
+tests:
+  spike.http.hdr32:
+    platform_allow: [native_sim/native/64]
+    tags: [spike]
+  spike.http.hdr256:
+    platform_allow: [native_sim/native/64]
+    tags: [spike]
+    extra_configs:
+      - CONFIG_HTTP_SERVER_MAX_HEADER_LEN=256
+      - CONFIG_HTTP_SERVER_CAPTURE_HEADER_BUFFER_SIZE=512

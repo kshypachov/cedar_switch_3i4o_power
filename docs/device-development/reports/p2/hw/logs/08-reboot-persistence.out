@@ -1,0 +1,9 @@
+before reset: login 200 1.08s | session 200
+reset: True
+web line: web_server: web interface cedar-2037394c3543501200550045, firmware d30ae91e88bf-dirty, frontend 0.1.0+d30ae91e88bf-dirty, boot_5c4c97387c4d7b39
+setup-open warning after reset: False
+auth state after reset: 200 {"setup_required":false,"setup_allowed":false,"setup_token":null}
+old cookie after reset: 401 authentication_required
+login after reset: 200 1.17s
+boot_id changed: True boot_46beb08bb961b4c2 -> boot_5c4c97387c4d7b39
+first password after reset: 401

@@ -1,0 +1,22 @@
+web up: uart:~$ [00:00:02.623,000] <inf> web_server: web interface cedar-2037394c3543501200550045, firmware d30ae91e88bf-dirty, frontend placeholder, boot_bcd2716113a95bd0
+shell: pbkdf2-hmac-sha256 100 iterations: 33 ms (rc 0, configured 10000)
+shell: no answer for 1000
+shell: pbkdf2-hmac-sha256 3000 iterations: 943 ms (rc 0, configured 10000)
+login: 200 3.48 s
+during login: http ok 0 of 1 | shell answered 4 of 4 max shell latency ms 16
+ping over whole window: replies 32 timeouts 0
+0x20005d18 web_auth_kdf
+	options: 0x0, priority: 14 timeout: 0
+	state: pending, entry: 0x20708b5
+	Total execution cycles: 653192215 (1 %)
+	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+0x700049c8 web_v1_jobs
+	options: 0x0, priority: 10 timeout: 0
+	state: pending, entry: 0x2074be5
+	Total execution cycles: 8805 (0 %)
+	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+0x70007ad8 http_server_tid
+	options: 0x0, priority: -1 timeout: 0
+	state: pending, entry: 0x204b149
+	Total execution cycles: 28486114 (0 %)
+	stack size 6144, unused 4144, usage 2000 / 6144 (32 %)

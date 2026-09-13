@@ -15,7 +15,10 @@
 - POST/PUT/DELETE требуют admin cookie, `X-CSRF-Token` и `Idempotency-Key` (кроме login/setup и logout). Для login/setup — проверка Origin и отдельный `X-Setup-Token` для setup. Заголовки перечислены в OpenAPI.
 - Idempotency key — случайная строка 16–64 ASCII chars. Scope: admin principal + method + canonical URL, включая значимые query + body hash; не только текущая cookie. Повтор того же key/body возвращает тот же resource/job, другой body → `409 idempotency_conflict`. Запись живёт минимум 15 минут и весь срок активной задачи. После перезагрузки не полагаться на RAM dedupe: сначала читать resource/job/upload state.
 - Ресурсы protected, включая codes, logs, capabilities и upload. Public только auth state, login, setup и статические login assets.
-- Credential verification выполняется с ограниченными ресурсами; механизм deferred response/worker проверить в P2, не блокировать общий HTTP loop долгим KDF.
+- Credential verification выполняется с ограниченными ресурсами. **Проверено в P2:** у HTTP/1-сервера Zephyr нет отложенного ответа, а его единственный поток кооперативный; KDF, посчитанный прямо в нём, останавливал всю систему (>18 с при 10000 итераций). Устройство считает PBKDF2 на отдельном вытесняемом потоке, HTTP-поток ждёт его на семафоре; сеть, Matter и шелл при этом работают, но сервер другим клиентам не отвечает, поэтому число итераций — бюджет задержки: 3000, ≈1 с на вход (`reports/p2`).
+- Host каждого запроса к `/api/` — IP-литерал (IPv4 или `[IPv6]`), `localhost` или имя из `CONFIG_WEB_API_EXTRA_HOSTS`, с необязательным портом, иначе `403 origin_rejected` до маршрутизации. Причина: `GET /auth/state` публикует setup token, а страница с DNS rebinding для браузера same-origin с устройством; IP-литерал в Host она отправить не может.
+- Разбор JSON строгий и одинаков у устройства и mock: дубли имён, `NaN`, не-UTF-8, вложенность больше 8 и больше 64 членов объекта — `400 invalid_json`; целое — это значение (`120.0` = 120); строка с U+0000 или одиночным суррогатом — `invalid_format`. В `fields` одна запись на значение (приоритет too_long, out_of_range, invalid_format, not_allowed), все неизвестные члены, сортировка по сегментам указателя, индексы как числа.
+- Заголовок, который устройство не смогло прочитать (не поместился в буфер захвата) или получило дважды, — `422 validation_failed` без `fields`.
 
 Ошибка:
 
@@ -47,11 +50,23 @@
 
 После `202` ошибки hardware/SDK записываются в job с тем же `ErrorDetail`, а не задним числом в HTTP status. При временном недоступном сервисе GET system/capabilities продолжает работать.
 
+### Ответы вне таблицы
+
+HTTP-сервер Zephyr отвечает сам, до кода приложения, в трёх случаях; тела `Error` у этих ответов нет (измерено в P2, `reports/p2/http-server-behaviour`):
+
+| Ответ | Когда | Что делать клиенту |
+|---|---|---|
+| `409 Conflict` без тела, соединение закрыто | другой клиент в этот момент досылает тело запроса к тому же пути; держится до конца его запроса или до таймаута неактивности (10 с) | повторить: ничего не выполнялось; мутацию — с тем же `Idempotency-Key` |
+| `500 Internal Server Error`, `text/plain` | запрос не разбирается как HTTP/1.1 (например, тело длиннее `Content-Length`) | ошибка клиента |
+| `405` | метод, которого ресурс не объявляет (HEAD) | не использовать |
+
+Ответы `204` и `304` устройство отправляет с `Connection: close`: сервер обрамляет их как chunked и дописывает завершающий chunk, который клиент, правильно не читающий тело, иначе прочтёт перед следующим ответом.
+
 ## Сессия и устройство
 
 | Method / path | Назначение | Результат |
 |---|---|---|
-| GET `/auth/state` | Требуется ли первичная настройка | `200 AuthState` |
+| GET `/auth/state` | Требуется ли первичная настройка; пока настройка открыта — setup token | `200 AuthState` |
 | POST `/auth/setup` | Назначить первый admin password при physical setup + индивидуальном setup token | `201 Session` + cookie |
 | POST `/auth/session` | `{password}`; имя admin фиксировано | `200 Session` + cookie |
 | GET `/auth/session` | Текущая сессия и CSRF token | `200 Session` |
@@ -61,7 +76,13 @@
 | GET `/capabilities` | Возможности, лимиты, поддержанные security/methods и причины недоступности | `200 Capabilities` |
 | GET `/coprocessor/status` | C6 version/state/transport/UART generation, последнее обновление | `200 CoprocessorStatus` |
 
-Cookie `cedar_session`: HttpOnly, SameSite=Strict, Path=/, Secure для HTTPS, без Domain. Idle lifetime 30 минут, absolute lifetime 8 часов — стартовые значения. После reboot повторный login. Password не хранить в localStorage; запросы и ошибки не отражают его назад. Same-origin CSRF token выдаётся в Session. Setup endpoint закрывается после успешного сохранения admin credential; создание первого admin атомарно, при гонке победитель один.
+Cookie `cedar_session`: HttpOnly, SameSite=Strict, Path=/, Secure для HTTPS, без Domain. Idle lifetime 30 минут, absolute lifetime 8 часов — стартовые значения. После reboot повторный login. Password не хранить в localStorage; запросы и ошибки не отражают его назад. Same-origin CSRF token выдаётся в Session. Setup endpoint закрывается после успешного сохранения admin credential; создание первого admin атомарно, при гонке победитель один (проигравший получает `409 busy`; если сохранение не удалось, настройка открывается снова с тем же токеном).
+
+Setup token публикуется в `AuthState.setup_token`, пока `setup_allowed=true`, иначе `null` (решение владельца, раздел 13 плана). Он случаен на каждый старт и привязывает настройку к клиенту, прочитавшему состояние именно этого устройства, но **не доказывает физический доступ**: пароль назначит тот, кто первым откроет страницу в сети. Защита в момент первого включения — доверенная сеть, проверка Host и Origin.
+
+Попытки ограничены (setup с неверным токеном, login, проверка текущего пароля): 5 бесплатных неудач с одного адреса, дальше ожидание удваивается до 300 с; и не больше 30 неудач со всех адресов за 5 минут. Ответ — `429 rate_limited` с `Retry-After`; успешный вход сбрасывает счётчик своего адреса. Проверка лимита идёт до KDF, отклонённая попытка процессор не тратит.
+
+Смена пароля: неверный `current_password` — `401 invalid_credentials` сразу, в ответ на `PUT` (решение mock, принятое устройством); принятая смена — `202`, задача выводит и сохраняет новый verifier и завершает все сессии. Опрос задачи после этого получает `401 session_expired` — клиент читает это как успех и просит войти с новым паролем. Повреждённый сохранённый verifier блокирует вход (`503 service_not_ready`), а не открывает setup; восстановления в первой версии нет.
 
 ## Задачи
 
@@ -199,6 +220,6 @@ Network apply/scan и firmware install конфликтуют; log GET и status
 
 - Source of truth форматов — OpenAPI; бизнес-инварианты, такие как static subnet, active window, UART ownership и подпись пакета, валидируются сервисом, не только JSON schema.
 - Из OpenAPI получать client types и fixtures. Строгое C-генерирование сервера не требуется; route handlers используют общие parser/error helpers.
-- Contract checks: internal `$ref`, required path parameters, unique operationId, valid examples, undocumented route detection и responses при fragment/abort/concurrency.
-- Старые endpoints мигрировать или выключать по feature flag после проверки потребителей. Legacy relays REST не нужен новому UI; Matter управление реле сохраняется. Новую auth нельзя обойти через `/upload` на 8080.
+- Contract checks: internal `$ref`, required path parameters, unique operationId, valid examples, undocumented route detection (с P2: таблица маршрутов устройства `src/web/api/v1/routes.h` сверяется с документом, включая флаги) и responses при fragment/abort/concurrency (sim-сюита `tests/web_api_http` на настоящем сервере Zephyr).
+- ~~Старые endpoints мигрировать или выключать по feature flag после проверки потребителей.~~ **Решение владельца 2026-09-13: весь legacy HTTP удалён в P2** — сервис на 8080 с `/upload` (запись образа STM32 без авторизации) и все `/api/*` без авторизации (reboot, relays, mqtt, device info, matter control). Их URL отвечают JSON 404. Обновление STM32 по сети недоступно до отдельного этапа; Matter управление реле сохраняется. Проверено на плате: legacy-пути — 404, порт 8080 закрыт.
 - Event push не входит в v1. Добавление WebSocket позже должно иметь отдельную message schema и cursor recovery, а не менять REST response semantics.
