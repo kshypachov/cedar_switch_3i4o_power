@@ -8,6 +8,8 @@
 
 #include <zephyr/kernel.h>
 
+#include <matter_service/matter_service.h>
+
 #include "v1_internal.h"
 
 /* -- system status ------------------------------------------------------- */
@@ -16,8 +18,12 @@ void v1_get_system_status(struct web_api_call *call)
 {
 	const struct web_api_v1_identity *id = v1_identity();
 	char ids[16][JOB_ID_MAX_LEN + 1];
-	size_t count = MIN(job_active_ids(ids, ARRAY_SIZE(ids)), ARRAY_SIZE(ids));
-	struct web_json_writer *w = web_api_json(call);
+	/* Not inside MIN(), which would evaluate the call twice. */
+	size_t count = job_active_ids(ids, ARRAY_SIZE(ids));
+	struct web_json_writer *w;
+
+	count = MIN(count, ARRAY_SIZE(ids));
+	w = web_api_json(call);
 
 	web_json_object_begin(w);
 	web_json_key(w, "device_id");
@@ -55,8 +61,6 @@ void v1_get_system_status(struct web_api_call *call)
 #define UPLOAD_CHUNK_BYTES       16384 /* firmware-store, P6 */
 #define UPLOAD_MAX_BYTES         (2 * 1024 * 1024) /* firmware-store, P6 */
 #define LOG_PAGE_RECORDS         100   /* log-store, P5 */
-#define COMMISSIONING_MIN_SECONDS 180  /* matter-service, P3: SDK limits not yet read */
-#define COMMISSIONING_MAX_SECONDS 900
 
 #if defined(CONFIG_NETWORK_MANAGER)
 #define SCAN_RECORDS         CONFIG_NETWORK_MANAGER_SCAN_MAX_RESULTS
@@ -83,16 +87,24 @@ static void feature(struct web_json_writer *w, const char *name, bool available,
 void v1_get_capabilities(struct web_api_call *call)
 {
 	struct web_json_writer *w = web_api_json(call);
+	struct matter_status matter;
+	uint32_t window_min_s;
+	uint32_t window_max_s;
+
+	matter_service_window_limits(&window_min_s, &window_max_s);
 
 	web_json_object_begin(w);
 	web_json_key(w, "api_version");
 	web_json_string(w, "1");
 
 	/* Every feature answers from what this build serves, not from what the
-	 * hardware might do: none of these has its API yet (plan section 10). */
+	 * hardware might do. Matter is available once its stack runs; the others
+	 * have no API yet (plan section 10). */
 	web_json_key(w, "features");
 	web_json_object_begin(w);
-	feature(w, "matter", false, "not_implemented");
+	matter_service_get_status(&matter);
+	feature(w, "matter", matter.state == MATTER_STATE_READY,
+		matter.state == MATTER_STATE_READY ? NULL : matter_state_str(matter.state));
 	feature(w, "esp32_logs", false, "not_implemented");
 	feature(w, "esp32_ota", false, "not_implemented");
 	feature(w, "esp32_uart", false, "not_implemented");
@@ -111,9 +123,9 @@ void v1_get_capabilities(struct web_api_call *call)
 	web_json_key(w, "scan_records");
 	web_json_int(w, SCAN_RECORDS);
 	web_json_key(w, "commissioning_min_seconds");
-	web_json_int(w, COMMISSIONING_MIN_SECONDS);
+	web_json_int(w, window_min_s);
 	web_json_key(w, "commissioning_max_seconds");
-	web_json_int(w, COMMISSIONING_MAX_SECONDS);
+	web_json_int(w, window_max_s);
 	web_json_key(w, "network_confirm_min_seconds");
 	web_json_int(w, CONFIRM_MIN_SECONDS);
 	web_json_key(w, "network_confirm_max_seconds");
@@ -145,6 +157,9 @@ const char *v1_job_resource_url(enum job_kind kind)
 	switch (kind) {
 	case JOB_KIND_PASSWORD_CHANGE:
 		return WEB_API_BASE_PATH "/auth/session";
+	case JOB_KIND_MATTER_OPEN:
+	case JOB_KIND_MATTER_CLOSE:
+		return WEB_API_BASE_PATH "/matter/commissioning";
 	default:
 		return NULL;
 	}

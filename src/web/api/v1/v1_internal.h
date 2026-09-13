@@ -32,9 +32,17 @@ struct v1_password_body {
 	char new_password[WEB_AUTH_PASSWORD_MAX_BYTES + 1];
 };
 
+/* CommissioningRequest; mode is checked against its enum, so 16 bytes hold
+ * every value a client might send before it is refused. */
+struct v1_commissioning_body {
+	char mode[16];
+	int64_t timeout_seconds;
+};
+
 extern const struct web_json_object v1_setup_schema;
 extern const struct web_json_object v1_login_schema;
 extern const struct web_json_object v1_password_schema;
+extern const struct web_json_object v1_commissioning_schema;
 
 void v1_get_auth_state(struct web_api_call *call);
 void v1_setup_admin(struct web_api_call *call);
@@ -45,6 +53,12 @@ void v1_change_password(struct web_api_call *call);
 void v1_get_system_status(struct web_api_call *call);
 void v1_get_capabilities(struct web_api_call *call);
 void v1_get_job(struct web_api_call *call);
+void v1_get_matter_status(struct web_api_call *call);
+void v1_get_commissioning_window(struct web_api_call *call);
+void v1_open_commissioning_window(struct web_api_call *call);
+void v1_close_commissioning_window(struct web_api_call *call);
+void v1_get_onboarding_codes(struct web_api_call *call);
+void v1_list_fabrics(struct web_api_call *call);
 
 /** The identity given to web_api_v1_init(). */
 const struct web_api_v1_identity *v1_identity(void);

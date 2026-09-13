@@ -125,6 +125,17 @@ JobAccepted: `{job_id,job_url,resource_url}` + Location job URL + Retry-After. P
 
 Fabric schema: `id` opaque composite identifier (должен учитывать root identity, не один fabric_id), `fabric_index`, `fabric_id`/`node_id` по 16 hex digits, `vendor_id`, `label`. Никаких предположений об online/offline контроллеров. GET отдаёт консистентный snapshot; список небольшой, pagination v1 не нужна.
 
+**Реализовано в P3** (`modules/matter-service/README.md`). Решения там, где контракт молчал:
+
+- GET-ресурсы Matter отвечают из снимка, который обновляет поток Matter по событиям стека; HTTP-обработчик Matter не ждёт. До старта стека окно закрыто, fabrics пусты, коды — `service_not_ready`, а `MatterStatus.state` говорит, что данные ещё не прочитаны.
+- `remaining_seconds` известен только для окна, открытого через веб. Окно, открытое контроллером или на самом устройстве (`source=local`, отладочная команда шелла), отдаёт `0`: SDK не раскрывает запрошенный ими timeout.
+- Коды есть у любого basic-окна, кто бы его ни открыл: basic использует собственный passcode устройства. У enhanced-окна — `passcode_unavailable`.
+- `DELETE /matter/commissioning` закрывает любое открытое окно, в том числе открытое контроллером: действие явное и принадлежит локальному администратору.
+- 422, 503 и 409 проверяются до создания задачи, поэтому отказ не оставляет записи под `Idempotency-Key`, и исправленный повтор не получает старый отказ. Если между приёмом запроса и его исполнением окно открылось другим путём или стек отказал (идёт commissioning), задача завершается `failed` с `invalid_state`.
+- Пределы окна в `capabilities` — диапазон контракта 180–900 с, сужаемый пределами SDK; на закреплённом SDK они совпадают (минимум 3 минуты, максимум 15 минут без extended advertising).
+- `capabilities.features.matter.reason`, пока стек не `ready`, — его состояние: `not_ready`, `starting` или `failed`.
+- Окно объявляется только через DNS-SD: BLE на плате нет.
+
 ## Сеть
 
 `GET /network/status` — runtime link/address/DNS/route/SSID/RSSI без секретов. `GET /network/config` — подтверждённая configuration, revision, pending_transaction_id. Это разные ресурсы.

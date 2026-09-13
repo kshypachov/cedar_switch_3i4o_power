@@ -6,6 +6,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${APP_ROOT}/modules/job-manager
     ${APP_ROOT}/modules/web-auth
     ${APP_ROOT}/modules/web-api
+    ${APP_ROOT}/modules/matter-service
     ${APP_ROOT}/modules/web-assets
 )
 
@@ -34,6 +35,7 @@ target_sources(app PRIVATE
     ${V1_DIR}/router.c
     ${V1_DIR}/auth.c
     ${V1_DIR}/system.c
+    ${V1_DIR}/matter.c
 )
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)

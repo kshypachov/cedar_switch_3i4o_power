@@ -32,6 +32,7 @@
 #include "littlefs/littlefs_mount.h"
 #include "plugin_wifi/wifi.h"
 #include "matter/matter_init.h"
+#include "matter/matter_service_chip.h"
 
 #include "test_functions.h"
 #include  "diagnostic/diag_report.h"
@@ -214,6 +215,8 @@ int main(void)
 	}
 
 	io_init();
+	/* Before the network: the first IPv6 address starts the Matter stack. */
+	matter_service_chip_init();
 	ethernet_interfaces_init();
 	app_web_init();
 

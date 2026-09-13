@@ -25,4 +25,8 @@ WEB_API_V1_RESOURCE(web_api_03_auth_password, "/api/v1/auth/password")
 WEB_API_V1_RESOURCE(web_api_04_system_status, "/api/v1/system/status")
 WEB_API_V1_RESOURCE(web_api_05_capabilities, "/api/v1/capabilities")
 WEB_API_V1_RESOURCE(web_api_06_jobs, "/api/v1/jobs/*")
+WEB_API_V1_RESOURCE(web_api_07_matter_status, "/api/v1/matter/status")
+WEB_API_V1_RESOURCE(web_api_08_matter_commissioning, "/api/v1/matter/commissioning")
+WEB_API_V1_RESOURCE(web_api_09_matter_onboarding_codes, "/api/v1/matter/onboarding-codes")
+WEB_API_V1_RESOURCE(web_api_10_matter_fabrics, "/api/v1/matter/fabrics")
 /* clang-format on */

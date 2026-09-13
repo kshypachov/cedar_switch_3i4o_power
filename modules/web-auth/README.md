@@ -87,6 +87,13 @@ afterwards.
 `.bss` is 2.3 KB and the derivation stack should be in the faster memory.
 Measured stack high-water: `web_auth_kdf` 1624 of 4096 bytes.
 
+The firmware sets `CONFIG_WEB_AUTH_KDF_THREAD_PRIORITY=13`, one level above the
+Matter thread (P3): at the default 14 the two shared a priority with time
+slicing off. This did not remove the symptom it was meant for - on the board a
+sign-in still sometimes took more than 10 s while Matter spent seconds in
+storage work, with ping and the shell answering. The cause is open
+(`docs/device-development/reports/p3/STATUS.md`).
+
 `web_auth kdf [iterations]` on the shell times one derivation on the production
 path (`CONFIG_WEB_AUTH_SHELL`). It touches no stored credential.
 

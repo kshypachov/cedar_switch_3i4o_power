@@ -28,4 +28,10 @@ WEB_API_V1_ROUTE(changePassword, PUT, "/auth/password", WEB_API_CSRF | WEB_API_I
 WEB_API_V1_ROUTE(getSystemStatus, GET, "/system/status", 0, V1_NO_BODY, NULL, NULL, v1_get_system_status)
 WEB_API_V1_ROUTE(getCapabilities, GET, "/capabilities", 0, V1_NO_BODY, NULL, NULL, v1_get_capabilities)
 WEB_API_V1_ROUTE(getJob, GET, "/jobs/{job_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_job)
+WEB_API_V1_ROUTE(getMatterStatus, GET, "/matter/status", 0, V1_NO_BODY, NULL, NULL, v1_get_matter_status)
+WEB_API_V1_ROUTE(getCommissioningWindow, GET, "/matter/commissioning", 0, V1_NO_BODY, NULL, NULL, v1_get_commissioning_window)
+WEB_API_V1_ROUTE(openCommissioningWindow, POST, "/matter/commissioning", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_commissioning_body), &v1_commissioning_schema, NULL, v1_open_commissioning_window)
+WEB_API_V1_ROUTE(closeCommissioningWindow, DELETE, "/matter/commissioning", WEB_API_CSRF | WEB_API_IDEMPOTENT, V1_NO_BODY, NULL, NULL, v1_close_commissioning_window)
+WEB_API_V1_ROUTE(getOnboardingCodes, GET, "/matter/onboarding-codes", 0, V1_NO_BODY, NULL, NULL, v1_get_onboarding_codes)
+WEB_API_V1_ROUTE(listFabrics, GET, "/matter/fabrics", 0, V1_NO_BODY, NULL, NULL, v1_list_fabrics)
 /* clang-format on */

@@ -26,6 +26,7 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libnetwork_manager.a:*(.bss .bss.* COMMON)
 	*libweb_api.a:*(.bss .bss.* COMMON)
 	*libweb_assets.a:*(.bss .bss.* COMMON)
+	*libmatter_service.a:*(.bss .bss.* COMMON)
 	. = ALIGN(4);
 	__psram_ext_bss_end = .;
 	*libCHIP.a:*(.noinit .noinit.*)
@@ -39,6 +40,7 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libnetwork_manager.a:*(.noinit .noinit.*)
 	*libweb_api.a:*(.noinit .noinit.*)
 	*libweb_assets.a:*(.noinit .noinit.*)
+	*libmatter_service.a:*(.noinit .noinit.*)
 	. = ALIGN(4);
 	__psram_used_end = .;
 } GROUP_LINK_IN(PSRAM)

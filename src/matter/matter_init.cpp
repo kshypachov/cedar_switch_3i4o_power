@@ -25,6 +25,9 @@
 #include <platform/NetworkCommissioning.h>
 #include "clusters/IdentifyCluster.h"
 #include "clusters/NetworkCommissioningCluster.h"
+#include "matter_service_chip.h"
+
+#include <matter_service/matter_service.h>
 
 LOG_MODULE_REGISTER(matter);
 
@@ -77,13 +80,13 @@ static void log_matter_onboarding_codes()
     LOG_INF("Matter manual pairing code: %s", manualCodeBuffer);
 }
 
-static void matter_init()
+static CHIP_ERROR matter_init()
 {
     CHIP_ERROR err;
 
     if (initialized) {
         LOG_INF("Matter already initialized");
-        return;
+        return CHIP_NO_ERROR;
     }
 
     LOG_INF("Init CHIP stack");
@@ -92,7 +95,7 @@ static void matter_init()
     if (err != CHIP_NO_ERROR)
     {
         LOG_ERR("Platform::MemoryInit() failed");
-        return;
+        return err;
     }
 
 
@@ -100,7 +103,7 @@ static void matter_init()
     err = PlatformMgr().InitChipStack();
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("Matter init failed: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
 
     chip::Credentials::SetDeviceAttestationCredentialsProvider(
@@ -109,48 +112,52 @@ static void matter_init()
     err = serverInitParams.InitializeStaticResourcesBeforeServerInit();
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("Failed to init static resources: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
 
     serverInitParams.dataModelProvider = chip::app::CodegenDataModelProviderInstance(serverInitParams.persistentStorageDelegate);
+    // matter-service follows the commissioning window through these callbacks.
+    serverInitParams.appDelegate = matter_service_chip_app_delegate();
 
     err = matter_network_commissioning_init();
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("NetworkCommissioning init failed: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
 
     err = matter_identify_cluster_init();
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("IdentifyCluster init failed: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
 
     err = chip::Server::GetInstance().Init(serverInitParams);
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("Matter Server Init failed: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
+
+    matter_service_chip_server_initialized();
 
     initialized = true;
     LOG_INF("Matter stack initialized");
 
-
+    return CHIP_NO_ERROR;
 }
 
-static void matter_start()
+static CHIP_ERROR matter_start()
 {
     CHIP_ERROR err;
 
     if (started) {
         LOG_INF("Matter already started");
-        return;
+        return CHIP_NO_ERROR;
     }
 
     err = PlatformMgr().StartEventLoopTask();
     if (err != CHIP_NO_ERROR) {
         LOG_ERR("Failed to start Matter loop: %" CHIP_ERROR_FORMAT, err.Format());
-        return;
+        return err;
     }
 
     started = true;
@@ -170,6 +177,8 @@ static void matter_start()
     // } else {
     //     LOG_INF("Commissioning window is closed");
     // }
+
+    return CHIP_NO_ERROR;
 }
 
 static void matter_start_work_handler(void * p1, void * p2, void * p3) {
@@ -177,18 +186,29 @@ static void matter_start_work_handler(void * p1, void * p2, void * p3) {
     ARG_UNUSED(p2);
     ARG_UNUSED(p3);
 
-    matter_init();
-    matter_start();
+    matter_service_report_starting();
+
+    CHIP_ERROR err = matter_init();
+    if (err == CHIP_NO_ERROR) {
+        err = matter_start();
+    }
+    matter_service_chip_report_started(err);
+
     start_io_to_matter_stream();
 
     k_thread_abort(k_current_get());
 }
 
-void start_matter()
+void start_matter(struct net_mgmt_event_callback *cb, uint64_t mgmt_event, struct net_if *iface)
 {
-    LOG_INF("Net callback IPv6 got, start matter after 5 sec");
+    ARG_UNUSED(cb);
+    ARG_UNUSED(mgmt_event);
+    ARG_UNUSED(iface);
 
-    k_msleep(5000);
+    // A net_mgmt callback runs on the event thread every other subscriber
+    // shares: it only starts the boot thread, and never waits (plan section 2;
+    // it used to sleep 5 s here).
+    LOG_INF("IPv6 address added, starting Matter");
 
     if (!atomic_cas(&matter_start_work_submitted, 0, 1)) {
         LOG_INF("Matter start work already submitted");

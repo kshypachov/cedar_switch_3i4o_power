@@ -12,6 +12,7 @@
 #include <zephyr/ztest.h>
 
 #include <job_manager/job_manager.h>
+#include <matter_service/matter_service.h>
 
 #include "harness.h"
 #include "web_api_v1.h"
@@ -120,6 +121,151 @@ static void change_password(const char *current, const char *next, const char *k
 	send_v1();
 }
 
+
+/* -- a fake Matter stack for the Matter bindings ------------------------- */
+
+struct matter_work {
+	void (*fn)(void *arg);
+	void *arg;
+};
+
+static struct {
+	struct matter_work queue[4];
+	size_t queued;
+	struct matter_window_reading window;
+	int open_result;
+	struct matter_fabric table[2];
+	size_t count;
+	uint32_t min_s;
+	uint32_t max_s;
+} mf;
+
+static int mf_schedule(void (*fn)(void *arg), void *arg)
+{
+	if (mf.queued == ARRAY_SIZE(mf.queue)) {
+		return -ENOMEM;
+	}
+	mf.queue[mf.queued++] = (struct matter_work){fn, arg};
+	return 0;
+}
+
+static int64_t mf_now(void)
+{
+	return fake_now;
+}
+
+static int mf_open(uint32_t timeout_seconds)
+{
+	ARG_UNUSED(timeout_seconds);
+	if (mf.open_result == 0) {
+		mf.window = (struct matter_window_reading){.open = true};
+	}
+	return mf.open_result;
+}
+
+static void mf_close(void)
+{
+	mf.window = (struct matter_window_reading){0};
+}
+
+static void mf_read_window(struct matter_window_reading *out)
+{
+	*out = mf.window;
+}
+
+static int mf_read_codes(struct matter_codes *out)
+{
+	strcpy(out->qr_payload, "MT:Y.K9042C00KA0648G00");
+	strcpy(out->manual_pairing_code, "01234567890");
+	strcpy(out->setup_passcode, "00012345");
+	return 0;
+}
+
+static size_t mf_read_fabrics(struct matter_fabric *out, size_t max)
+{
+	size_t n = MIN(max, mf.count);
+
+	memcpy(out, mf.table, n * sizeof(*out));
+	return n;
+}
+
+static uint32_t mf_min(void)
+{
+	return mf.min_s;
+}
+
+static uint32_t mf_max(void)
+{
+	return mf.max_s;
+}
+
+static const struct matter_service_platform mf_platform = {
+	.schedule = mf_schedule,
+	.now_ms = mf_now,
+	.open_basic_window = mf_open,
+	.close_window = mf_close,
+	.read_window = mf_read_window,
+	.read_codes = mf_read_codes,
+	.read_fabrics = mf_read_fabrics,
+	.min_window_seconds = mf_min,
+	.max_window_seconds = mf_max,
+};
+
+/* A stack that has not started: the state every v1 test begins in. */
+static void matter_reset(void)
+{
+	memset(&mf, 0, sizeof(mf));
+	mf.min_s = 180;
+	mf.max_s = 900;
+	zassert_ok(matter_service_init(&mf_platform));
+}
+
+static void matter_ready(void)
+{
+	matter_service_report_starting();
+	matter_service_report_started(0);
+}
+
+/* Run what the service queued, as the Matter thread would. */
+static void matter_drain(void)
+{
+	while (mf.queued > 0) {
+		struct matter_work w = mf.queue[0];
+
+		memmove(mf.queue, mf.queue + 1, (mf.queued - 1) * sizeof(mf.queue[0]));
+		mf.queued--;
+		w.fn(w.arg);
+	}
+}
+
+static void matter_open_request(const char *json, const char *key)
+{
+	request(WEB_API_POST, "/api/v1/matter/commissioning");
+	ctx.req.headers.cookie = cookie;
+	ctx.req.headers.csrf_token = csrf;
+	ctx.req.headers.idempotency_key = key;
+	request_body(json);
+	send_v1();
+}
+
+static void matter_close_request(const char *key)
+{
+	request(WEB_API_DELETE, "/api/v1/matter/commissioning");
+	ctx.req.headers.cookie = cookie;
+	ctx.req.headers.csrf_token = csrf;
+	ctx.req.headers.idempotency_key = key;
+	send_v1();
+}
+
+static void get_job(const char *job_id)
+{
+	char path[64];
+
+	snprintf(path, sizeof(path), "/api/v1/jobs/%s", job_id);
+	get(path);
+	zassert_equal(ctx.rsp.status, 200, "%s", body);
+}
+
 static void *suite_setup(void)
 {
 	zassert_ok(web_api_v1_init(&identity));
@@ -130,6 +276,7 @@ static void before(void *f)
 {
 	ARG_UNUSED(f);
 	harness_reset();
+	matter_reset();
 	cookie[0] = '\0';
 	csrf[0] = '\0';
 }
@@ -470,7 +617,7 @@ ZTEST(v1, test_capabilities)
 	zassert_str_equal(
 		body,
 		"{\"api_version\":\"1\",\"features\":{"
-		"\"matter\":{\"available\":false,\"reason\":\"not_implemented\"},"
+		"\"matter\":{\"available\":false,\"reason\":\"not_ready\"},"
 		"\"esp32_logs\":{\"available\":false,\"reason\":\"not_implemented\"},"
 		"\"esp32_ota\":{\"available\":false,\"reason\":\"not_implemented\"},"
 		"\"esp32_uart\":{\"available\":false,\"reason\":\"not_implemented\"}},"
@@ -524,4 +671,249 @@ ZTEST(v1, test_jobs)
 	zassert_true(body_has(expected), "%s", body);
 	zassert_true(body_has("\"resource_url\":null"));
 	zassert_true(body_has("\"kind\":\"upload_chunk\""));
+}
+
+/* -- Matter ---------------------------------------------------------------- */
+
+ZTEST(v1, test_matter_before_the_stack_starts)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+
+	setup_device();
+
+	get("/api/v1/matter/status");
+	zassert_equal(ctx.rsp.status, 200);
+	zassert_str_equal(body, "{\"state\":\"not_ready\",\"commissioned\":false,\"fabric_count\":0,"
+				"\"error\":null}");
+	get("/api/v1/matter/commissioning");
+	zassert_str_equal(body, "{\"open\":false,\"mode\":null,\"source\":null,"
+				"\"remaining_seconds\":0,\"codes_available\":false}");
+	get("/api/v1/matter/onboarding-codes");
+	zassert_str_equal(body, "{\"available\":false,\"reason\":\"service_not_ready\","
+				"\"qr_payload\":null,\"manual_pairing_code\":null,"
+				"\"setup_passcode\":null}");
+	get("/api/v1/matter/fabrics");
+	zassert_str_equal(body, "{\"items\":[],\"count\":0}");
+
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 503, "%s", body);
+	zassert_true(body_has("\"code\":\"service_not_ready\""), "%s", body);
+	zassert_true(body_has("\"retryable\":true"), "%s", body);
+	matter_close_request("matter-close-0000001");
+	zassert_equal(ctx.rsp.status, 503, "%s", body);
+	zassert_equal(mf.queued, 0, "nothing reaches the stack");
+
+	/* Once the stack runs, the same keys are new requests: the refusals left
+	 * no job behind to answer them with. */
+	matter_ready();
+	matter_close_request("matter-close-0000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"running\""), "%s", body);
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"running\""), "%s", body);
+}
+
+ZTEST(v1, test_matter_opening_a_window_is_a_job_the_matter_thread_finishes)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char location[80];
+
+	setup_device();
+	matter_ready();
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_has("\"resource_url\":\"/api/v1/matter/commissioning\""), "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	snprintf(location, sizeof(location), "/api/v1/jobs/%s", job_id);
+	zassert_str_equal(response_header("Location"), location);
+
+	get_job(job_id);
+	zassert_true(body_has("\"kind\":\"matter_open\""), "%s", body);
+	zassert_true(body_has("\"state\":\"running\""), "%s", body);
+	zassert_true(body_has("\"phase\":\"opening\""), "%s", body);
+	get("/api/v1/matter/commissioning");
+	zassert_true(body_has("\"open\":false"), "not open before the Matter thread ran: %s", body);
+
+	matter_drain();
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"succeeded\""), "%s", body);
+	zassert_true(body_has("\"resource_url\":\"/api/v1/matter/commissioning\""), "%s", body);
+
+	get("/api/v1/matter/commissioning");
+	zassert_str_equal(body, "{\"open\":true,\"mode\":\"basic\",\"source\":\"web\","
+				"\"remaining_seconds\":300,\"codes_available\":true}");
+	get("/api/v1/matter/onboarding-codes");
+	zassert_str_equal(body, "{\"available\":true,\"reason\":null,"
+				"\"qr_payload\":\"MT:Y.K9042C00KA0648G00\","
+				"\"manual_pairing_code\":\"01234567890\","
+				"\"setup_passcode\":\"00012345\"}");
+}
+
+ZTEST(v1, test_matter_a_refused_open_leaves_nothing_under_its_key)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+
+	setup_device();
+	matter_ready();
+	mf.window = (struct matter_window_reading){.open = true};
+	matter_service_report_window_changed();
+
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 409, "%s", body);
+	zassert_true(body_has("\"code\":\"invalid_state\""), "%s", body);
+
+	mf.window = (struct matter_window_reading){0};
+	matter_service_report_window_changed();
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "the corrected retry is not answered with the refusal: %s",
+		      body);
+	/* A new job, not a failed one the refusal left under the key. */
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"running\""), "%s", body);
+}
+
+ZTEST(v1, test_matter_a_retry_of_an_accepted_open_gets_the_same_job)
+{
+	char first[JOB_ID_MAX_LEN + 1];
+	char second[JOB_ID_MAX_LEN + 1];
+
+	setup_device();
+	matter_ready();
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", first, sizeof(first)));
+	matter_drain();
+
+	/* The window is open now; the retry is still the same request. */
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", second, sizeof(second)));
+	zassert_str_equal(first, second);
+	zassert_equal(mf.queued, 0, "and nothing is asked of the stack again");
+
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":600}", "matter-open-00000001");
+	zassert_true(body_has("\"code\":\"idempotency_conflict\""), "%s", body);
+
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000002");
+	zassert_equal(ctx.rsp.status, 409, "a new request finds the window open: %s", body);
+}
+
+ZTEST(v1, test_matter_window_request_validation)
+{
+	setup_device();
+	matter_ready();
+
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":179}", "matter-check-0000001");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/timeout_seconds\",\"code\":\"out_of_range\"}]"),
+		     "%s", body);
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":901}", "matter-check-0000002");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	matter_open_request("{\"mode\":\"enhanced\",\"timeout_seconds\":300}", "matter-check-0000003");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/mode\",\"code\":\"not_allowed\"}]"), "%s", body);
+	matter_open_request("{\"timeout_seconds\":300}", "matter-check-0000004");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", NULL);
+	zassert_equal(ctx.rsp.status, 422, "the Idempotency-Key is required: %s", body);
+	zassert_equal(mf.queued, 0);
+}
+
+ZTEST(v1, test_matter_narrower_sdk_limits_are_published_and_enforced)
+{
+	setup_device();
+	mf.min_s = 300;
+	mf.max_s = 600;
+	matter_ready();
+
+	get("/api/v1/capabilities");
+	zassert_true(body_has("\"matter\":{\"available\":true,\"reason\":null}"), "%s", body);
+	zassert_true(body_has("\"commissioning_min_seconds\":300,\"commissioning_max_seconds\":600"),
+		     "%s", body);
+	/* Inside the document's range, outside the device's. */
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":250}", "matter-check-0000001");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/timeout_seconds\",\"code\":\"out_of_range\"}]"),
+		     "%s", body);
+}
+
+ZTEST(v1, test_matter_a_stack_refusal_fails_the_job)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+
+	setup_device();
+	matter_ready();
+	mf.open_result = -EBUSY;
+	matter_open_request("{\"mode\":\"basic\",\"timeout_seconds\":300}", "matter-open-00000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	matter_drain();
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"failed\""), "%s", body);
+	zassert_true(body_has("\"code\":\"invalid_state\""), "%s", body);
+}
+
+ZTEST(v1, test_matter_closing_a_closed_window_succeeds)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+
+	setup_device();
+	matter_ready();
+	matter_close_request("matter-close-0000001");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	get_job(job_id);
+	zassert_true(body_has("\"kind\":\"matter_close\""), "%s", body);
+	zassert_true(body_has("\"phase\":\"closing\""), "%s", body);
+	matter_drain();
+	get_job(job_id);
+	zassert_true(body_has("\"state\":\"succeeded\""), "%s", body);
+}
+
+ZTEST(v1, test_matter_a_failed_stack_reports_why)
+{
+	char request_id[65];
+
+	setup_device();
+	matter_service_report_starting();
+	matter_service_report_started(-5);
+	get("/api/v1/matter/status");
+	zassert_equal(ctx.rsp.status, 200);
+	zassert_true(body_has("{\"state\":\"failed\",\"commissioned\":false,\"fabric_count\":0,"
+			      "\"error\":{\"code\":\"service_not_ready\",\"message\":\"The Matter stack "
+			      "failed to start (0xfffffffb)\",\"request_id\":\""),
+		     "%s", body);
+	snprintf(request_id, sizeof(request_id), "\"request_id\":\"%s\"",
+		 response_header("X-Request-ID"));
+	zassert_true(body_has(request_id), "the error carries this request's id: %s", body);
+	get("/api/v1/capabilities");
+	zassert_true(body_has("\"matter\":{\"available\":false,\"reason\":\"failed\"}"), "%s", body);
+}
+
+ZTEST(v1, test_matter_fabrics_are_hex_and_labels_are_escaped)
+{
+	setup_device();
+	mf.count = 1;
+	strcpy(mf.table[0].id, "00112233AABBCCDD:FAB0000000000001");
+	mf.table[0].fabric_index = 1;
+	mf.table[0].fabric_id = 0xFAB0000000000001ULL;
+	mf.table[0].node_id = 0x1B669ULL;
+	mf.table[0].vendor_id = 0xFFF1;
+	strcpy(mf.table[0].label, "say \"hi\"");
+	matter_ready();
+
+	get("/api/v1/matter/fabrics");
+	zassert_str_equal(body, "{\"items\":[{\"id\":\"00112233AABBCCDD:FAB0000000000001\","
+				"\"fabric_index\":1,\"fabric_id\":\"FAB0000000000001\","
+				"\"node_id\":\"000000000001B669\",\"vendor_id\":65521,"
+				"\"label\":\"say \\\"hi\\\"\"}],\"count\":1}");
+	get("/api/v1/matter/status");
+	zassert_str_equal(body, "{\"state\":\"ready\",\"commissioned\":true,\"fabric_count\":1,"
+				"\"error\":null}");
 }

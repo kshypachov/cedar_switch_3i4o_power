@@ -7,6 +7,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/job-manager
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/web-auth
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/web-api
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/matter-service
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -25,4 +26,5 @@ target_sources(app PRIVATE
     ${V1_DIR}/router.c
     ${V1_DIR}/auth.c
     ${V1_DIR}/system.c
+    ${V1_DIR}/matter.c
 )

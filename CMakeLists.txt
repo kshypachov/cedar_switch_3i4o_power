@@ -48,6 +48,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-auth         # Local administrator: setup, sessions, CSRF, guessing limit (CONFIG_WEB_AUTH)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-api          # API v1 request pipeline, strict JSON, HTTP server adapter (CONFIG_WEB_API)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-assets       # Browser application from flash: MIME, ETag, gzip, cache (CONFIG_WEB_ASSETS)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/matter-service   # Matter snapshot and commissioning window requests for the web API (CONFIG_MATTER_SERVICE)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -88,6 +89,7 @@ target_sources(app PRIVATE
         src/web/api/v1/router.c
         src/web/api/v1/auth.c
         src/web/api/v1/system.c
+        src/web/api/v1/matter.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c
@@ -99,6 +101,7 @@ target_sources(app PRIVATE
         src/energy_monitoring/HLW8032.c
         src/mqtt/mqtt_settings_keys.c
         src/diagnostic/diag_report.c
+        src/diagnostic/storage_bench.c
         src/plugin_wifi/wifi.c
         src/plugin_wifi/wifi_shell.c
         src/app-firmware-updater/firmware_updater.c
@@ -106,6 +109,7 @@ target_sources(app PRIVATE
         src/helpers/memory.c
         src/events/events.c
         src/matter/matter_init.cpp
+        src/matter/matter_service_chip.cpp
         src/matter/matter_event_loop.cpp
         src/matter/shell.cpp
         src/matter/crypto_bench.cpp
