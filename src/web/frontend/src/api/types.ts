@@ -11,6 +11,10 @@ export type Job = S['Job'];
 export type NetworkStatus = S['NetworkStatus'];
 export type InterfaceStatus = S['InterfaceStatus'];
 export type MatterStatus = S['MatterStatus'];
+export type CommissioningWindow = S['CommissioningWindow'];
+export type OnboardingCodes = S['OnboardingCodes'];
+export type Fabric = S['Fabric'];
+export type Fabrics = S['Fabrics'];
 export type CoprocessorStatus = S['CoprocessorStatus'];
 
 export const TERMINAL_JOB_STATES: ReadonlySet<Job['state']> = new Set([

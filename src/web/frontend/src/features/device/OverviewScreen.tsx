@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import {
   getCoprocessorStatus,
   getJob,
@@ -7,35 +5,16 @@ import {
   getNetworkStatus,
   getSystemStatus,
 } from '../../api/device';
-import { isApiFailure } from '../../api/errors';
 import type { InterfaceStatus } from '../../api/types';
-import { ErrorNotice } from '../../components/ErrorNotice';
 import { formatDuration, uptimeSeconds } from '../../components/format';
-import { Card, Facts, Loading } from '../../components/ui';
+import { Body } from '../../components/Polled';
+import { Card, Facts } from '../../components/ui';
 import { type MessageKey, t } from '../../i18n';
-import { useAuth } from '../../state/auth';
-import { type Polled, usePolling } from '../../state/usePolling';
+import { usePolling } from '../../state/usePolling';
+import { notServed, useSessionGuard } from '../../state/useSessionGuard';
 
 const STATUS_MS = 5_000;
 const JOB_MS = 1_000;
-
-/** A resource this firmware does not serve yet (its stage is later). */
-const notServed = (error: unknown) => isApiFailure(error, 'not_found');
-
-function useSessionGuard(...polls: Polled<unknown>[]) {
-  const { signedOut } = useAuth();
-  const expired = polls.some((p) => isApiFailure(p.error) && p.error.status === 401);
-  useEffect(() => {
-    if (expired) signedOut('session_ended');
-  }, [expired, signedOut]);
-}
-
-function Body<T>({ polled, render }: { polled: Polled<T>; render: (data: T) => React.ReactNode }) {
-  if (polled.data) return <>{render(polled.data)}</>;
-  if (notServed(polled.error)) return <p className="muted">{t('overview.unavailable')}</p>;
-  if (polled.error) return <ErrorNotice error={polled.error} />;
-  return <Loading />;
-}
 
 const yesNo = (value: boolean) => t(value ? 'value.yes' : 'value.no');
 

@@ -4,11 +4,15 @@
 // (patterns, formats, bounds).
 import type {
   AuthState,
+  Capabilities,
+  CommissioningWindow,
   CoprocessorStatus,
+  Fabrics,
   Job,
   JobAccepted,
   MatterStatus,
   NetworkStatus,
+  OnboardingCodes,
   Session,
   SystemStatus,
 } from '../api/types';
@@ -113,6 +117,106 @@ export const passwordJobRunning: Job = {
   error: null,
 };
 
+
+export const capabilities: Capabilities = {
+  api_version: '1',
+  features: {
+    matter: { available: true, reason: null },
+    esp32_logs: { available: false, reason: 'not_implemented' },
+    esp32_ota: { available: false, reason: 'not_implemented' },
+    esp32_uart: { available: false, reason: 'not_implemented' },
+  },
+  limits: {
+    json_body_bytes: 8192,
+    upload_chunk_bytes: 16384,
+    upload_max_bytes: 2097152,
+    log_page_records: 100,
+    scan_records: 64,
+    commissioning_min_seconds: 180,
+    commissioning_max_seconds: 900,
+    network_confirm_min_seconds: 30,
+    network_confirm_max_seconds: 900,
+  },
+  wifi_security_modes: ['open', 'wpa2_psk', 'wpa3_sae'],
+  firmware_formats: ['raw_app'],
+  update_requires_ethernet: true,
+};
+
+export const windowClosed: CommissioningWindow = {
+  open: false,
+  mode: null,
+  source: null,
+  remaining_seconds: 0,
+  codes_available: false,
+};
+
+export const windowOpenFromWeb: CommissioningWindow = {
+  open: true,
+  mode: 'basic',
+  source: 'web',
+  remaining_seconds: 297,
+  codes_available: true,
+};
+
+export const windowOpenByController: CommissioningWindow = {
+  open: true,
+  mode: 'enhanced',
+  source: 'controller',
+  remaining_seconds: 0,
+  codes_available: false,
+};
+
+/** Leading zeros on purpose: the page must keep them (plan section 6). */
+export const onboardingCodes: OnboardingCodes = {
+  available: true,
+  reason: null,
+  qr_payload: 'MT:Y.K9042C00KA0648G00',
+  manual_pairing_code: '01234567890',
+  setup_passcode: '00012345',
+};
+
+export const fabrics: Fabrics = {
+  items: [
+    {
+      id: '9B02575873B12C99:0000000000000001',
+      fabric_index: 1,
+      fabric_id: '0000000000000001',
+      node_id: '0000000000000001',
+      vendor_id: 65521,
+      label: '<b>lab</b>',
+    },
+    {
+      id: '3700EC0D6DAB4145:0000000000000002',
+      fabric_index: 2,
+      fabric_id: '0000000000000002',
+      node_id: '00000000000000A7',
+      vendor_id: 4937,
+      label: '',
+    },
+  ],
+  count: 2,
+};
+
+export const matterOpenAccepted: JobAccepted = {
+  job_id: 'job_00000002',
+  job_url: '/api/v1/jobs/job_00000002',
+  resource_url: '/api/v1/matter/commissioning',
+};
+
+export const matterOpenSucceeded: Job = {
+  id: 'job_00000002',
+  boot_id: 'boot_0123456789abcdef',
+  kind: 'matter_open',
+  state: 'succeeded',
+  phase: 'opening',
+  progress: null,
+  cancellable: false,
+  created_uptime_ms: '100000',
+  updated_uptime_ms: '100300',
+  resource_url: '/api/v1/matter/commissioning',
+  error: null,
+};
+
 export const all: Record<string, [string, unknown]> = {
   authStateFresh: ['AuthState', authStateFresh],
   authStateConfigured: ['AuthState', authStateConfigured],
@@ -123,4 +227,12 @@ export const all: Record<string, [string, unknown]> = {
   coprocessorStatus: ['CoprocessorStatus', coprocessorStatus],
   passwordAccepted: ['JobAccepted', passwordAccepted],
   passwordJobRunning: ['Job', passwordJobRunning],
+  capabilities: ['Capabilities', capabilities],
+  windowClosed: ['CommissioningWindow', windowClosed],
+  windowOpenFromWeb: ['CommissioningWindow', windowOpenFromWeb],
+  windowOpenByController: ['CommissioningWindow', windowOpenByController],
+  onboardingCodes: ['OnboardingCodes', onboardingCodes],
+  fabrics: ['Fabrics', fabrics],
+  matterOpenAccepted: ['JobAccepted', matterOpenAccepted],
+  matterOpenSucceeded: ['Job', matterOpenSucceeded],
 };

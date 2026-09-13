@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 
 /**
- * Two screens do not need a router library. Paths are real URLs - the device
+ * Three screens do not need a router library. Paths are real URLs - the device
  * answers any path without an extension with the page (SPA fallback) - so a
  * reload or a bookmark lands on the same screen.
  */
-export type Route = 'overview' | 'access';
+export type Route = 'overview' | 'matter' | 'access';
 
-const PATHS: Record<Route, string> = { overview: '/', access: '/access' };
+const PATHS: Record<Route, string> = { overview: '/', matter: '/matter', access: '/access' };
 
 export function routeOf(pathname: string): Route {
-  return pathname === PATHS.access ? 'access' : 'overview';
+  if (pathname === PATHS.access) return 'access';
+  if (pathname === PATHS.matter) return 'matter';
+  return 'overview';
 }
 
 export function navigate(route: Route): void {

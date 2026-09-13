@@ -5,6 +5,7 @@ import { AccessScreen } from './features/auth/AccessScreen';
 import { LoginScreen } from './features/auth/LoginScreen';
 import { SetupScreen } from './features/auth/SetupScreen';
 import { OverviewScreen } from './features/device/OverviewScreen';
+import { MatterScreen } from './features/matter/MatterScreen';
 import { t } from './i18n';
 import { AuthProvider, useAuth } from './state/auth';
 import { useRoute } from './state/router';
@@ -39,7 +40,13 @@ function Shell() {
     case 'signed_in':
       return (
         <Layout session={view.session} route={route}>
-          {route === 'access' ? <AccessScreen session={view.session} /> : <OverviewScreen />}
+          {route === 'access' ? (
+            <AccessScreen session={view.session} />
+          ) : route === 'matter' ? (
+            <MatterScreen session={view.session} />
+          ) : (
+            <OverviewScreen />
+          )}
         </Layout>
       );
   }

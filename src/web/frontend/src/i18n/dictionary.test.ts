@@ -49,6 +49,19 @@ describe('the dictionary covers what the device can say', () => {
     }
   });
 
+  // Nullable enums are declared as anyOf [enum, null].
+  it.each([
+    ['CommissioningWindow', 'mode', 'matter.mode'],
+    ['CommissioningWindow', 'source', 'matter.source'],
+    ['OnboardingCodes', 'reason', 'matter.codes'],
+  ])('%s.%s values all have text', (schema, property, prefix) => {
+    const values: string[] = schemas[schema].properties[property].anyOf.find((s: { enum?: string[] }) => s.enum).enum;
+    expect(values.length).toBeGreaterThan(0);
+    for (const value of values) {
+      expect(ru, `${prefix}.${value}`).toHaveProperty(`${prefix}.${value}`);
+    }
+  });
+
   it('fills placeholders and leaves unknown ones visible', () => {
     expect(t('password.too_short', { min: 12 })).toBe('Не короче 12 символов.');
     expect(t('error.request_id', {})).toContain('{id}');

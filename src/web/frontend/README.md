@@ -31,7 +31,7 @@ src/api/        typed client over the generated schema: refusals, retries, jobs
 src/state/      auth view, the one polling scheduler, the router, usePolling
 src/i18n/       ru.ts - every string - and t()
 src/components/ layout, cards, fields, error display, formatting
-src/features/   auth (setup, login, access) and device (overview)
+src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics)
 e2e/            Playwright, against the mock or the board
 ```
 
@@ -58,6 +58,16 @@ Decisions that are easy to undo by accident:
   only the CSRF token, in memory.
 - **Text is text.** SSIDs and other device strings are rendered by React, never
   as markup.
+- **The QR code is drawn here, from the payload the device sends** (plan section
+  6). `uqr` (MIT, a port of Nayuki's generator, 0.1.3 pinned) turns it into a
+  module matrix and the page draws one SVG path; no markup is built from a
+  string. The manual code and the PIN are separate fields, kept as strings so
+  leading zeros survive.
+- **Codes are asked for once per window**, when the window reports
+  `codes_available`; they do not change while it stays open. A window opened
+  by a controller shows no timer: the device does not know its timeout.
+- **A window request keeps its Idempotency-Key** for every retry until its job
+  finishes, like the password change.
 
 ## Commands
 

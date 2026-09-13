@@ -10,7 +10,7 @@ const password = process.env.E2E_DEVICE_PASSWORD ?? '';
 
 test.skip(!process.env.E2E_DEVICE_URL || !password, 'E2E_DEVICE_URL and E2E_DEVICE_PASSWORD are not set');
 
-test('the board serves the application, signs in, shows itself, and signs out', async ({ page, baseURL }) => {
+test('the board serves the application, signs in, shows itself and Matter, and signs out', async ({ page, baseURL }) => {
   test.setTimeout(90_000);
   const watch = watchPage(page);
   await page.goto('/');
@@ -22,8 +22,15 @@ test('the board serves the application, signs in, shows itself, and signs out', 
   await page.getByRole('button', { name: t('login.submit') }).click();
   await expect(page.getByRole('heading', { name: t('overview.title') })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText('cedar_switch_3in4out_power')).toBeVisible();
-  // This firmware does not serve network, Matter or coprocessor status yet.
+  // This firmware does not serve network or coprocessor status yet.
   await expect(page.getByText(t('overview.unavailable')).first()).toBeVisible();
+
+  // Matter is served since P3. Read-only here: opening a window on the board
+  // is a hardware check with a controller, not part of this run.
+  await page.getByRole('link', { name: t('nav.matter') }).click();
+  await expect(page.getByRole('heading', { level: 1, name: t('matter.title'), exact: true })).toBeVisible();
+  await expect(page.getByText(t('matter.ready')).first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole('button', { name: t('matter.open_submit') }).or(page.getByRole('button', { name: t('matter.close_submit') }))).toBeVisible();
 
   await page.goto('/access');
   await expect(page.getByRole('heading', { name: t('access.title') })).toBeVisible();
