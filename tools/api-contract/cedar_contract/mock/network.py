@@ -11,6 +11,12 @@ awaiting_confirmation -> committed` with a rollback branch is the only flow in
 this API where the client can lose the connection it is being reconfigured
 through, and every one of its edges — a stale revision, a candidate that
 expired, a confirmation that never came — is a screen someone has to build.
+
+P4 brought the device's network-manager to these rules and, where the device
+had a reason to differ, this module to the device's: the confirmation deadline
+starts at apply, a Wi-Fi coprocessor that is not ready refuses Wi-Fi, a confirm
+is refused while the changed interfaces are not working yet, and an address is
+judged by the same host rule as `api_ipv4_is_usable_host()` in C.
 """
 
 from __future__ import annotations
@@ -73,9 +79,31 @@ class Network:
             else None,
         }
 
+    def wifi_radio_error(self) -> ApiError | None:
+        """Why Wi-Fi cannot be used right now, or None when it can.
+
+        The radio is the coprocessor, so its state is the coprocessor's. The
+        device reports the same thing when the C6 does not answer ESP-Hosted at
+        boot — an empty flash, a failed update — and the error is carried even
+        while Wi-Fi is disabled, because that is when the screen has to explain
+        why enabling it is refused.
+        """
+        state = self._scenario.coprocessor_state
+        if state == "ready":
+            return None
+        return error("capability_unavailable", f"The Wi-Fi coprocessor is {state}")
+
     def status_json(self) -> dict[str, object]:
         eth = self.config["interfaces"]["ethernet"]
         wifi = self.config["interfaces"]["wifi"]
+        radio_error = self.wifi_radio_error()
+        wifi_up = wifi["enabled"] and radio_error is None
+        if not wifi["enabled"]:
+            wifi_state = "disabled"
+        elif radio_error is not None:
+            wifi_state = "failed"
+        else:
+            wifi_state = "ready"
         interfaces = [
             {
                 "id": "ethernet",
@@ -101,21 +129,19 @@ class Network:
             {
                 "id": "wifi",
                 "enabled": wifi["enabled"],
-                "link_up": wifi["enabled"],
-                "state": "ready" if wifi["enabled"] else "disabled",
+                "link_up": wifi_up,
+                "state": wifi_state,
                 "mac_address": "02:00:5e:10:12:74",
-                "addresses": _addresses_for(wifi["ipv4"], "192.168.88.21")
-                if wifi["enabled"]
-                else [],
-                "ssid": ssid_text(wifi["ssid_base64"]) if wifi["enabled"] else None,
-                "rssi_dbm": -58 if wifi["enabled"] else None,
-                "error": None,
+                "addresses": _addresses_for(wifi["ipv4"], "192.168.88.21") if wifi_up else [],
+                "ssid": ssid_text(wifi["ssid_base64"]) if wifi_up else None,
+                "rssi_dbm": -58 if wifi_up else None,
+                "error": None if radio_error is None else detail(radio_error),
             },
         ]
         return {
             "interfaces": interfaces,
             "default_interface": self.config["preferred_interface"]
-            if any(i["enabled"] for i in interfaces)
+            if any(i["link_up"] for i in interfaces)
             else None,
             "dns_servers": list(self.config["dns"]["servers"]) or ["192.168.88.1"],
         }
@@ -125,7 +151,7 @@ class Network:
         remaining: int | None
         if tx.state == "staged":
             remaining = max(0, (tx.created_ms + CANDIDATE_TTL_MS - self._clock.now_ms()) // 1000)
-        elif tx.state == "awaiting_confirmation" and tx.deadline_ms is not None:
+        elif tx.state in ("applying", "awaiting_confirmation") and tx.deadline_ms is not None:
             remaining = max(0, (tx.deadline_ms - self._clock.now_ms()) // 1000)
         else:
             remaining = None
@@ -148,6 +174,11 @@ class Network:
         if self.transaction is None or self.transaction.id != transaction_id:
             raise error("not_found", "No such network transaction")
         return self.transaction
+
+    def change_in_progress(self) -> bool:
+        """A change the radio must not be taken away from: scanning waits."""
+        tx = self.transaction
+        return tx is not None and tx.state in ("applying", "awaiting_confirmation", "rolling_back")
 
     # -- transitions -----------------------------------------------------
 
@@ -175,12 +206,20 @@ class Network:
         return self.transaction
 
     def apply(self, tx: Transaction, timeout_seconds: int) -> str:
+        """Journal, answer, then change the network.
+
+        DEVICE RULE. The confirmation deadline starts here, not when the
+        interfaces have been changed: a worker that never runs, or stops half
+        way, must still end in a rollback instead of leaving the device on a
+        configuration nobody confirmed. So the countdown is visible while the
+        change is still being applied.
+        """
         if tx.state != "staged":
             raise error("invalid_state", f"A transaction in state {tx.state!r} cannot be applied")
 
         def applied() -> None:
-            tx.state = "awaiting_confirmation"
-            tx.deadline_ms = self._clock.now_ms() + timeout_seconds * 1000
+            if tx.state == "applying":
+                tx.state = "awaiting_confirmation"
 
         job = self._jobs.create(
             "network_apply",
@@ -193,7 +232,7 @@ class Network:
         )
         tx.state = "applying"
         tx.job_id = job.id
-        tx.deadline_ms = None
+        tx.deadline_ms = self._clock.now_ms() + timeout_seconds * 1000
         return job.id
 
     def confirm(self, tx: Transaction) -> str:
@@ -202,12 +241,24 @@ class Network:
                 "invalid_state",
                 f"A transaction in state {tx.state!r} cannot be confirmed",
             )
+        if self._scenario.network_health == "unhealthy":
+            # DEVICE RULE. Reaching this endpoint proves only the client's own
+            # path; the device checks link, address and route of every enabled
+            # interface first, and a DHCP lease that has not arrived yet is
+            # refused rather than committed.
+            raise error(
+                "invalid_state",
+                "Not every enabled interface is working yet; confirm again shortly",
+            )
         job = self._jobs.get(tx.job_id or "")
         if job is None:
             raise error("internal_error", "The apply job is gone")
 
         def committed() -> None:
             self.config = deep_copy(tx.candidate)
+            # What `keep` is judged against from now on: the store derives
+            # password_set from the secret that survived the commit.
+            self._stored_password = bool(tx.candidate["interfaces"]["wifi"]["password_set"])
             self.revision += 1
             tx.state = "committed"
             tx.deadline_ms = None
@@ -256,7 +307,7 @@ class Network:
             )
             return
         if (
-            tx.state == "awaiting_confirmation"
+            tx.state in ("applying", "awaiting_confirmation")
             and tx.deadline_ms is not None
             and now >= tx.deadline_ms
         ):
@@ -321,6 +372,12 @@ class Network:
         if not eth["enabled"] and not wifi["enabled"]:
             err.add_field("/config/interfaces/ethernet/enabled", "conflicting")
             err.add_field("/config/interfaces/wifi/enabled", "conflicting")
+        elif wifi["enabled"] and self.wifi_radio_error() is not None:
+            # DEVICE RULE. A Wi-Fi interface that cannot come up would make
+            # every change unconfirmable — confirm waits for each enabled
+            # interface — so it is refused at the field, while the device is
+            # still reachable and the operator can see why.
+            err.add_field("/config/interfaces/wifi/enabled", "not_allowed")
 
         for name, iface in (("ethernet", eth), ("wifi", wifi)):
             base = f"/config/interfaces/{name}/ipv4"
@@ -331,6 +388,11 @@ class Network:
             err.add_field("/config/dns/servers", "not_allowed")
         if dns["mode"] == "manual" and not dns["servers"]:
             err.add_field("/config/dns/servers", "required")
+        for index, server in enumerate(dns["servers"]):
+            if ipaddress.ip_address(server).is_unspecified:
+                # DEVICE RULE. 0.0.0.0 and :: pass the schema's formats and are
+                # never a resolver.
+                err.add_field(f"/config/dns/servers/{index}", "invalid_format")
 
         if config["preferred_interface"] == "wifi" and not wifi["enabled"]:
             err.add_field("/config/preferred_interface", "conflicting")
@@ -360,17 +422,20 @@ class Network:
         except ValueError:
             err.add_field(f"{base}/address", "invalid_format")
             return
-        if iface.ip in (iface.network.network_address, iface.network.broadcast_address):
+        if not _usable_host(iface.ip, iface.network):
             # The network and broadcast addresses of the prefix are not hosts,
             # and a device configured with one is a device nobody can reach.
             err.add_field(f"{base}/address", "out_of_range")
+            # DEVICE RULE. A gateway is not judged against an address that is
+            # already wrong: the second message would be noise.
+            return
         if ipv4["gateway"] is not None:
             try:
                 gateway = ipaddress.IPv4Address(ipv4["gateway"])
             except ValueError:
                 err.add_field(f"{base}/gateway", "invalid_format")
                 return
-            if gateway not in iface.network:
+            if gateway not in iface.network or not _usable_host(gateway, iface.network):
                 # An isolated LAN with no router is allowed, per the contract;
                 # a gateway outside the prefix is not reachable by definition.
                 err.add_field(f"{base}/gateway", "out_of_range")
@@ -415,8 +480,25 @@ class Network:
 _PENDING_STATES = frozenset({"staged", "applying", "awaiting_confirmation", "rolling_back"})
 
 
+def _usable_host(address: ipaddress.IPv4Address, network: ipaddress.IPv4Network) -> bool:
+    """`api_ipv4_is_usable_host()` from api_validation.c, rule for rule.
+
+    Besides the prefix's own network and broadcast addresses: 0.0.0.0/8,
+    loopback, multicast and class E, and link-local — each accepted by an IP
+    stack and then simply not working.
+    """
+    if address in (network.network_address, network.broadcast_address):
+        return False
+    first = address.packed[0]
+    if first == 0 or first == 127 or first >= 224:
+        return False
+    return not (first == 169 and address.packed[1] == 254)
+
+
 def _sets_password(wifi: dict[str, Any]) -> bool:
-    return wifi["enabled"] and wifi["credential"]["action"] == "replace"
+    """A replaced password is stored whether or not Wi-Fi is enabled, as the
+    device's store does: a profile can be prepared and switched on later."""
+    return wifi["credential"]["action"] == "replace"
 
 
 def _redact(config: dict[str, Any], password_set: bool) -> dict[str, Any]:
@@ -449,8 +531,11 @@ def _addresses_for(ipv4: dict[str, Any], dhcp_address: str) -> list[dict[str, ob
 def _reconnect_urls(candidate: dict[str, Any]) -> list[str]:
     """Where the UI should look for the device after the address changes.
 
-    A `.local` name is a hint and not a guarantee, which is why it is offered
-    alongside an address rather than instead of one.
+    DEVICE RULE. Only addresses the candidate names: a static IPv4 of an
+    enabled interface. A DHCP address is not known until the lease arrives, and
+    the device has no name it can promise — its only mDNS responder is Matter's,
+    which does not advertise the web interface — so a DHCP change yields no URL
+    and the UI says to look the device up in the router.
     """
     urls: list[str] = []
     for iface in ("ethernet", "wifi"):
@@ -460,5 +545,4 @@ def _reconnect_urls(candidate: dict[str, Any]) -> list[str]:
         ipv4 = config["ipv4"]
         if ipv4["mode"] == "static" and ipv4["address"]:
             urls.append(f"http://{ipv4['address']}/")
-    urls.append("http://cedar-switch.local/")
     return urls[:8]

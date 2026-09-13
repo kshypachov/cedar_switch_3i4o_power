@@ -52,7 +52,7 @@ class DeviceState:
         self.jobs = JobStore(self.clock, self.boot_id)
         self.auth = Auth(self.clock, self.scenario)
         self.network = Network(self.clock, self.jobs, self.scenario)
-        self.wifi = WiFiScans(self.clock, self.jobs, self.scenario)
+        self.wifi = WiFiScans(self.clock, self.jobs, self.scenario, self.network)
         self.matter = Matter(self.clock, self.jobs, self.scenario)
         self.firmware = Firmware(self.clock, self.jobs, self.scenario)
         self.coprocessor = Coprocessor(self.clock, self.jobs, self.scenario, self.firmware)

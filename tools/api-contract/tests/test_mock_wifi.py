@@ -126,6 +126,86 @@ def test_a_scan_can_be_repeated_once_the_first_finished(harness: Harness) -> Non
     assert harness.client.post("/network/wifi/scans", {}).status == 202
 
 
+def test_a_scan_is_unavailable_while_the_coprocessor_is_not_ready(document: Document) -> None:
+    harness = build(document, setup_required=False, coprocessor_state="failed")
+    harness.client.login()
+    refused = harness.client.post("/network/wifi/scans", {})
+    assert refused.status == 503
+    assert refused.json["error"]["code"] == "capability_unavailable"
+
+
+def test_a_scan_is_refused_while_a_network_change_is_applied(harness: Harness) -> None:
+    """Forbidden by the contract: a scan takes the radio off the channel of an
+    interface whose new configuration is not confirmed yet."""
+    from .conftest import VALID_CANDIDATE
+
+    revision = harness.client.get("/network/config").json["revision"]
+    transaction = harness.client.post(
+        "/network/transactions", {"base_revision": revision, "config": VALID_CANDIDATE}
+    ).json["id"]
+    assert harness.client.post("/network/wifi/scans", {}).status == 202, (
+        "a staged candidate has not touched the radio"
+    )
+    harness.advance(SCANNED)
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    refused = harness.client.post("/network/wifi/scans", {})
+    assert refused.status == 409
+    assert refused.json["error"]["code"] == "busy"
+
+
+def test_a_scan_stays_refused_until_the_network_change_is_finished(harness: Harness) -> None:
+    """Awaiting confirmation and rolling back are still the change: first the new
+    configuration is unconfirmed, then the previous one is being restored, and a
+    scan would take the radio off its channel in either. Only a finished
+    transaction frees the radio."""
+    from cedar_contract.mock.constants import NETWORK_APPLY_MS, NETWORK_ROLLBACK_MS
+
+    from .conftest import VALID_CANDIDATE
+
+    revision = harness.client.get("/network/config").json["revision"]
+    transaction = harness.client.post(
+        "/network/transactions", {"base_revision": revision, "config": VALID_CANDIDATE}
+    ).json["id"]
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    harness.advance((QUEUE_MS + NETWORK_APPLY_MS) * SECOND + 0.1)
+    assert (
+        harness.client.get(f"/network/transactions/{transaction}").json["state"]
+        == "awaiting_confirmation"
+    )
+    awaiting = harness.client.post("/network/wifi/scans", {})
+    assert awaiting.status == 409 and awaiting.json["error"]["code"] == "busy", awaiting.body
+
+    harness.client.delete(f"/network/transactions/{transaction}")
+    assert (
+        harness.client.get(f"/network/transactions/{transaction}").json["state"] == "rolling_back"
+    )
+    rolling = harness.client.post("/network/wifi/scans", {})
+    assert rolling.status == 409 and rolling.json["error"]["code"] == "busy", rolling.body
+
+    harness.advance(NETWORK_ROLLBACK_MS * SECOND + 0.1)
+    assert (
+        harness.client.get(f"/network/transactions/{transaction}").json["state"] == "rolled_back"
+    )
+    assert harness.client.post("/network/wifi/scans", {}).status == 202
+
+
+def test_only_the_latest_scan_keeps_its_results(harness: Harness) -> None:
+    """The device holds one scan's records; an older scan's job still exists, its
+    results do not."""
+    first = harness.client.post("/network/wifi/scans", {}).json["job_id"]
+    harness.advance(SCANNED)
+    second = harness.client.post("/network/wifi/scans", {}).json["job_id"]
+    harness.advance(SCANNED)
+    old = harness.client.get(f"/network/wifi/scans/{first}")
+    assert old.status == 410
+    assert old.json["error"]["code"] == "resource_expired"
+    assert harness.client.get(f"/network/wifi/scans/{second}").status == 200
+
+
 def test_an_unknown_scan_is_not_found(harness: Harness) -> None:
     assert harness.client.get("/network/wifi/scans/job_ffff").status == 404
 

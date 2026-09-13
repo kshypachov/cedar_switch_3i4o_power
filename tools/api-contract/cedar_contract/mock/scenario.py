@@ -32,6 +32,10 @@ class Scenario:
     setup_token: str = "cedar-mock-setup-token"
     #: "normal" | "truncated" | "failed"
     wifi_scan: str = "normal"
+    #: "healthy" | "unhealthy". "unhealthy" refuses confirm with invalid_state,
+    #: as the device does while a changed interface has no link, address or
+    #: requested route yet.
+    network_health: str = "healthy"
     #: Fabrics present at startup. A commissioning window that closes adds one.
     fabrics: int = 0
     #: "not_ready" | "starting" | "ready" | "failed"

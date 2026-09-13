@@ -144,6 +144,25 @@ device's headers, and each is tested on both sides.
 | A string holding U+0000 or an unpaired surrogate is `invalid_format` | a C string cannot hold it; Python can |
 | One entry per value, by precedence too_long, out_of_range, invalid_format, not_allowed; entries sorted by pointer segment, indices numerically; a segment with a control character, or one that would make the pointer longer than 63 bytes, is left off | the same list on both sides, so the same entries survive truncation |
 
+P4 did the same for the network section (`mock/network.py`, `mock/wifi.py`;
+the device in `modules/network-manager` and `src/web/api/v1/network.c`). Where
+the mock had been looser than a device can be, the mock moved:
+
+| Rule | Why |
+|---|---|
+| Candidate errors are checked in one order — interfaces, IPv4 per interface, DNS, preferred, Wi-Fi — and a wrong address stops the checks of its gateway | the error keeps six fields; the order decides which reach the frontend |
+| An address or gateway that is not a usable host (0/8, 127/8, 169.254/16, 224/4 and above, the subnet or broadcast address) is `out_of_range` | `api_ipv4_is_usable_host()` on the device |
+| A DNS server `0.0.0.0` or `::` is `invalid_format` at its index | a resolver that cannot be asked |
+| Anything wrong inside a `CredentialChange` or a DNS server value is one `conflicting` entry on that value | both are `oneOf`; a schema validator reports every branch, the device reads one value (`WEB_JSON_ONEOF`) |
+| The confirmation deadline starts at apply; `remaining_seconds` rounds down | the device arms it before touching an interface, so a stuck worker still ends in a rollback |
+| Confirm is `409 invalid_state` while an enabled interface has no link, address or asked-for route (`scenario.network_health`) | the device checks health before it commits |
+| Wi-Fi with the coprocessor not ready: status carries `capability_unavailable`, `wifi.enabled=true` is `not_allowed`, scan is `503` | board B's C6 has no firmware |
+| Scan during a change is `409 busy`; only the latest scan keeps results, an older one is `410 resource_expired` | the device keeps one result buffer and scans on the network worker |
+| `reconnect_urls` holds static IPv4 addresses only, never a `.local` name | the device announces no mDNS name of its own |
+
+One device rule has no mock counterpart: staging needs a link on at least one
+enabled interface, and the mock's links are always up.
+
 ## The control plane
 
 `/__mock/*` — outside `/api/v1`, which the device never serves, so nothing here

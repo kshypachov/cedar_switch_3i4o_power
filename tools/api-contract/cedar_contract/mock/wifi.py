@@ -17,6 +17,7 @@ from ..errors import error
 from .clock import Clock
 from .constants import QUEUE_MS, SCAN_RECORDS, WIFI_SCAN_MS
 from .jobs import JobStore, Step
+from .network import Network
 from .scenario import Scenario
 from .util import detail
 
@@ -108,13 +109,22 @@ _BASE_SCAN: tuple[dict[str, object], ...] = (
 class WiFiScans:
     """`POST` a scan, poll the job, read the results by job id."""
 
-    def __init__(self, clock: Clock, jobs: JobStore, scenario: Scenario) -> None:
+    def __init__(self, clock: Clock, jobs: JobStore, scenario: Scenario, network: Network) -> None:
         self._clock = clock
         self._jobs = jobs
         self._scenario = scenario
+        self._network = network
         self._scans: dict[str, dict[str, Any]] = {}
+        self._latest: str | None = None
 
     def start(self) -> str:
+        radio_error = self._network.wifi_radio_error()
+        if radio_error is not None:
+            raise error("capability_unavailable", f"{radio_error.message}; scanning is unavailable")
+        if self._network.change_in_progress():
+            # The contract forbids a scan during an apply: it takes the radio off
+            # the channel of an interface whose new configuration is unconfirmed.
+            raise error("busy", "A network change is being applied; scan after it finishes")
         for job_id in self._scans:
             job = self._jobs.get(job_id)
             if job is not None and not job.is_terminal:
@@ -135,12 +145,18 @@ class WiFiScans:
                 "service_not_ready", "The coprocessor did not answer the scan request"
             )
         self._scans[job.id] = {"mode": self._scenario.wifi_scan}
+        self._latest = job.id
         return job.id
 
     def results_json(self, job_id: str) -> dict[str, object]:
         job = self._jobs.get(job_id)
         if job is None or job.kind != "wifi_scan":
             raise error("not_found", "No such Wi-Fi scan")
+        if job.id != self._latest:
+            # DEVICE RULE. The device keeps the results of one scan — 64 records
+            # are kilobytes of RAM — so an older scan's job still exists but its
+            # results are gone, which is the 410 row of the table.
+            raise error("resource_expired", "A newer scan replaced these results")
         mode = self._scans[job.id]["mode"]
         done = job.state == "succeeded"
         items: list[dict[str, object]] = []
