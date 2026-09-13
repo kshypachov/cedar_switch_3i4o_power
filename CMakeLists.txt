@@ -45,6 +45,9 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/device-config-store # Durable, transactional configuration with committed/pending generations (CONFIG_DEVICE_CONFIG_STORE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/api-validation  # Shared error codes, rejections and strict parsers for the web API (CONFIG_API_VALIDATION)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/network-manager  # Validate/journal/apply/confirm transaction for the network configuration (CONFIG_NETWORK_MANAGER)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-auth         # Local administrator: setup, sessions, CSRF, guessing limit (CONFIG_WEB_AUTH)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-api          # API v1 request pipeline, strict JSON, HTTP server adapter (CONFIG_WEB_API)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-assets       # Browser application from flash: MIME, ETag, gzip, cache (CONFIG_WEB_ASSETS)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -58,20 +61,6 @@ project(cedar_switch_3in4out_power)
 
 include(${CHIP_ROOT}/src/app/chip_data_model.cmake)
 
-# target for build frondend files
-set(FRONTEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/web/frontend)
-find_program(NPM_EXECUTABLE npm)
-if(NPM_EXECUTABLE)
-    add_custom_target(frontend_build
-            COMMAND ${NPM_EXECUTABLE} install
-            COMMAND ${NPM_EXECUTABLE} run build
-            WORKING_DIRECTORY ${FRONTEND_DIR}
-            COMMENT "Run npm install and npm run build for frontend"
-            USES_TERMINAL
-    )
-else()
-    message(WARNING "npm not found: target frontend_build is unavailable")
-endif()
 
 zephyr_include_directories(
         src
@@ -87,8 +76,6 @@ target_include_directories(app SYSTEM PRIVATE ${ZEPHYR_BINARY_DIR}/include/gener
 file(GLOB app_sources
         src/lib-init/*.c
         src/config/*.c
-        src/web/REST_endpoints/*.c
-        src/web/REST_endpoints/*.cpp
     )
 
 target_sources(app PRIVATE
@@ -97,19 +84,10 @@ target_sources(app PRIVATE
         src/littlefs/filesystem_helpers.c
         src/zbus_topics.c
         src/msgq_topiks.c
-        src/web/http_common.c
-#        src/web/REST_endpoints/settings_status.c
-#        src/web/REST_endpoints/mqtt_settings.c
-#        src/web/REST_endpoints/relays_state.c
-#        src/web/REST_endpoints/system_reboot.c
-#        src/web/REST_endpoints/webui_delete.c
-#        src/web/REST_endpoints/webui_mkdir.c
-#        src/web/REST_endpoints/webui_upload.c
-#        src/web/REST_endpoints/login.c
-#        src/web/REST_endpoints/web_user_mgmt.c
-#        src/web/REST_endpoints/fw_update.c
-        src/web/static_resources.c
-        src/web/http_server_init.c
+        src/web/web_server.c
+        src/web/api/v1/router.c
+        src/web/api/v1/auth.c
+        src/web/api/v1/system.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c
@@ -119,7 +97,7 @@ target_sources(app PRIVATE
         src/io/io.c
         src/energy_monitoring/energy_monitoring.c
         src/energy_monitoring/HLW8032.c
-        src/web/authentication.c
+        src/mqtt/mqtt_settings_keys.c
         src/diagnostic/diag_report.c
         src/plugin_wifi/wifi.c
         src/plugin_wifi/wifi_shell.c
@@ -133,7 +111,6 @@ target_sources(app PRIVATE
         src/matter/crypto_bench.cpp
         src/matter/clusters/IdentifyCluster.cpp
         src/matter/clusters/NetworkCommissioningCluster.cpp
-#        src/web/REST_endpoints/matter_control.cpp
 #        src/lib-init/net_init.c
         ${app_sources}
 #        /Users/kiro/zephyrproject/modules/hal/stm32/stm32cube/stm32u5xx/drivers/src/stm32u5xx_hal_icache.c
@@ -151,84 +128,67 @@ chip_configure_data_model(app
 # Include dir with generated files
 set(gen_dir ${ZEPHYR_BINARY_DIR}/include/generated)
 
-# ------------------ Generate files/resources for web ------------------
-file(GLOB_RECURSE WEB_DIST_FILES
-        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-        src/web/frontend/dist/*
+# ------------------ Browser application and revision ------------------
+# The frontend is built by npm (src/web/frontend, `npm ci && npm run build`)
+# and embedded here: tools/web-assets/gen_web_assets.py turns dist/ into a C
+# table at build time - the file list is read when the command runs, not when
+# CMake configures - and fails the build over the plan's 512 KiB gzip budget.
+# A firmware build does not run npm itself: without a built frontend it stops
+# and says how to get one, or embeds a placeholder page when asked to.
+#
+# Both knobs are read with zephyr_get(), so they can be given as -D, as an
+# environment variable, or through sysbuild as -D<image>_<name> - sysbuild copies
+# its cache into the image's with the prefix intact, and plain option() would
+# not see it:
+#   APP_WEB_UI_PLACEHOLDER  embed a placeholder page instead of the frontend
+#   APP_WEB_DIST            a built frontend somewhere other than the default
+zephyr_get(APP_WEB_UI_PLACEHOLDER SYSBUILD LOCAL)
+zephyr_get(APP_WEB_DIST SYSBUILD LOCAL)
+if(NOT APP_WEB_DIST)
+    set(APP_WEB_DIST ${CMAKE_CURRENT_SOURCE_DIR}/src/web/frontend/dist)
+endif()
+if(APP_WEB_UI_PLACEHOLDER)
+    set(web_dist ${CMAKE_CURRENT_SOURCE_DIR}/tools/web-assets/placeholder)
+elseif(EXISTS ${APP_WEB_DIST}/index.html)
+    set(web_dist ${APP_WEB_DIST})
+else()
+    message(FATAL_ERROR
+        "No built frontend in ${APP_WEB_DIST}.\n"
+        "Build it:  cd src/web/frontend && npm ci && npm run build\n"
+        "or configure with -DAPP_WEB_UI_PLACEHOLDER=ON for firmware without the interface.")
+endif()
+
+set(app_gen_dir ${CMAKE_BINARY_DIR}/generated/app)
+set(web_assets_c ${app_gen_dir}/web_assets_data.c)
+set(web_assets_manifest ${app_gen_dir}/web_assets_manifest.json)
+set(web_assets_gen ${CMAKE_CURRENT_SOURCE_DIR}/tools/web-assets/gen_web_assets.py)
+set(web_assets_depends ${web_assets_gen} ${web_dist}/index.html)
+if(EXISTS ${web_dist}/.cedar-build.json)
+    list(APPEND web_assets_depends ${web_dist}/.cedar-build.json)
+endif()
+add_custom_command(
+    OUTPUT ${web_assets_c} ${web_assets_manifest}
+    COMMAND ${PYTHON_EXECUTABLE} ${web_assets_gen}
+            --dist ${web_dist}
+            --out-c ${web_assets_c}
+            --out-manifest ${web_assets_manifest}
+            --budget-kib 512
+    DEPENDS ${web_assets_depends}
+    COMMENT "Embedding the browser application from ${web_dist}"
+    VERBATIM
 )
-#define name of HTTP service for static files
-set(HTTP_STATIC_SERVICE http_service)
-set(WEB_RESOURCES_INC ${gen_dir}/web_resources.inc)
-file(WRITE ${WEB_RESOURCES_INC} "/* Auto-generated by CMake. Do not edit. */\n")
+target_sources(app PRIVATE ${web_assets_c})
 
-foreach(rel_file IN LISTS WEB_DIST_FILES)
-    set(src_file ${CMAKE_CURRENT_SOURCE_DIR}/${rel_file})
-    if(IS_DIRECTORY "${src_file}")
-        continue()
-    endif()
-
-    # Safe C identifier suffix from path
-    string(REPLACE "/" "_" symbol_suffix "${rel_file}")
-    string(REPLACE "." "_" symbol_suffix "${symbol_suffix}")
-    string(MAKE_C_IDENTIFIER "${symbol_suffix}" symbol_suffix)
-
-    # URL path served by HTTP server (strip dist prefix)
-    string(REGEX REPLACE "^src/web/frontend/dist" "" url_path "${rel_file}")
-    if(url_path STREQUAL "")
-        continue()
-    endif()
-
-    # Content-Type by extension
-    set(content_type "application/octet-stream")
-    if(rel_file MATCHES "\\.html$")
-        set(content_type "text/html")
-    elseif(rel_file MATCHES "\\.css$")
-        set(content_type "text/css")
-    elseif(rel_file MATCHES "\\.js$")
-        set(content_type "application/javascript")
-    elseif(rel_file MATCHES "\\.json$")
-        set(content_type "application/json")
-    elseif(rel_file MATCHES "\\.svg$")
-        set(content_type "image/svg+xml")
-    elseif(rel_file MATCHES "\\.png$")
-        set(content_type "image/png")
-    elseif(rel_file MATCHES "\\.jpe?g$")
-        set(content_type "image/jpeg")
-    elseif(rel_file MATCHES "\\.woff2$")
-        set(content_type "font/woff2")
-    elseif(rel_file MATCHES "\\.woff$")
-        set(content_type "font/woff")
-    endif()
-
-    # Binary include file per resource
-    set(bin_inc ${gen_dir}/${symbol_suffix}.inc)
-    generate_inc_file_for_target(app "${rel_file}" "${bin_inc}")
-
-    file(APPEND ${WEB_RESOURCES_INC}
-"static const uint8_t web_data_${symbol_suffix}[] = {\n#include \"${symbol_suffix}.inc\"\n};\n"
-    )
-    file(APPEND ${WEB_RESOURCES_INC}
-"static struct http_resource_detail_static web_detail_${symbol_suffix} = {\n"
-"    .common = {\n"
-"        .type = HTTP_RESOURCE_TYPE_STATIC,\n"
-"        .bitmask_of_supported_http_methods = BIT(HTTP_GET),\n"
-"        .content_type = \"${content_type}\",\n"
-"    },\n"
-"    .static_data = web_data_${symbol_suffix},\n"
-"    .static_data_len = sizeof(web_data_${symbol_suffix}),\n"
-"};\n"
-    )
-    file(APPEND ${WEB_RESOURCES_INC}
-"HTTP_RESOURCE_DEFINE(web_res_${symbol_suffix}, ${HTTP_STATIC_SERVICE}, \"${url_path}\", &web_detail_${symbol_suffix});\n\n"
-    )
-
-    if(url_path STREQUAL "/index.html")
-        file(APPEND ${WEB_RESOURCES_INC}
-"HTTP_RESOURCE_DEFINE(web_res_root_${symbol_suffix}, ${HTTP_STATIC_SERVICE}, \"/\", &web_detail_${symbol_suffix});\n\n"
-        )
-    endif()
-endforeach()
-# ------------------ Generate files/resources for web END --------------
+set(cedar_version_h ${app_gen_dir}/cedar_version.h)
+add_custom_target(cedar_version
+    COMMAND ${CMAKE_COMMAND} -DAPP_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DOUT=${cedar_version_h}
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cedar_version.cmake
+    BYPRODUCTS ${cedar_version_h}
+    COMMENT "Recording the application revision"
+)
+add_dependencies(app cedar_version)
+target_include_directories(app PRIVATE ${app_gen_dir})
+# ------------------ Browser application and revision END ------------------
 
 generate_inc_file_for_target(
         app
@@ -270,12 +230,6 @@ endif()
 zephyr_linker_sources(SECTIONS src/helpers/psram_sections.ld)
 
 zephyr_linker_section(NAME http_resource_desc_http_service
-        KVMA RAM_REGION GROUP RODATA_REGION)
-
-zephyr_linker_section(NAME http_resource_desc_http_api_service
-        KVMA RAM_REGION GROUP RODATA_REGION)
-
-zephyr_linker_section(NAME http_resource_desc_upload_service
         KVMA RAM_REGION GROUP RODATA_REGION)
 
 # Линкуем Matter (CHIP) к твоему приложению

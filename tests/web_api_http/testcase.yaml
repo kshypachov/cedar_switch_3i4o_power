@@ -1,0 +1,14 @@
+tests:
+  cedar.web_api_http:
+    # web-api's adapter against Zephyr's own HTTP server over loopback: the
+    # timing cases section 12 lists for web-api (fragmented body, abort, two
+    # clients) and web-assets (SPA fallback against JSON 404), without a board.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - web_api
+      - web_assets
+      - sim

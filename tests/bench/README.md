@@ -20,7 +20,8 @@ cd tests/bench
 ```
 
 HTTP readiness is probed by waiting for ping and then sending one request at a
-time with a long timeout. Polling with short timeouts keeps this server busy:
+time with a long timeout. Since P2 the request is `GET /api/v1/auth/state`: the legacy REST routes
+it used to poll were removed. Polling with short timeouts keeps this server busy:
 it has four client slots and a 10 s inactivity timeout, and on 2026-09-12 a
 request every ~2 s with a 2 s timeout got no answer for 180 s.
 
@@ -68,3 +69,14 @@ with the baseline stops meaning anything.
   register bits of PA5, PC4, PC5 and PB2 after boot. The coils are driven
   through a ULN2003, so a bit at 1 means an energised coil; what happens between
   reset and GPIO init needs eyes on the relay LEDs or a logic analyser.
+
+## What changed under the baseline in P2
+
+`smoke.py` still measures `GET /` the P0 way. Since P2 that URL is the browser
+application served by web-assets through a dynamic resource (ETag,
+Cache-Control, a Content-Security-Policy and five more headers), not the legacy
+static resource the 2026-09-12 baseline measured. On the same board the P0
+method gave p50 125 / p95 137 ms for `/` against the baseline's 53 / 56, and
+p50 89 / p95 97 ms for `/api/v1/auth/state`. A smoke run after P2 is comparable
+with other runs after P2, not with the baseline; details are in
+`docs/device-development/reports/p2`.

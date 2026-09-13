@@ -1,1 +1,0 @@
-/* Implementation moved to matter_control.cpp (requires C++ Matter SDK) */

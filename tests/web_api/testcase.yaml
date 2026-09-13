@@ -1,0 +1,12 @@
+tests:
+  cedar.web_api:
+    # The request pipeline, strict JSON and the v1 bindings as values, with
+    # web-auth's platform faked: the sim tier from section 12 of the plan.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - web_api
+      - sim

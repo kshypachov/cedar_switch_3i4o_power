@@ -25,7 +25,7 @@
 #include <settings_registry/settings_registry.h>
 
 #include "helpers/memory.h"
-#include "web/http_server_init.h"
+#include "web/web_server.h"
 #include "mqtt/ha_mqtt.h"
 #include "io/io.h"
 #include "energy_monitoring/energy_monitoring.h"
@@ -96,7 +96,6 @@ static void ipv4_addr_add_handler(struct net_mgmt_event_callback *cb,
 		return;
 	}
 
-	//app_http_server_init();
 
 	// char addr_str[NET_IPV4_ADDR_LEN];
 	// struct net_if_addr *ifaddr = net_if_ipv4_get_global_addr(iface, NET_ADDR_DHCP);
@@ -216,7 +215,7 @@ int main(void)
 
 	io_init();
 	ethernet_interfaces_init();
-	app_http_server_init();
+	app_web_init();
 
 	while (1)
 	{

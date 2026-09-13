@@ -1,0 +1,61 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig WEB_API
+	bool "Web API v1: routing, middleware and JSON"
+	select API_VALIDATION
+	select WEB_AUTH
+	select JOB_MANAGER
+	help
+	  The contract's request pipeline - Host, session, Origin, CSRF,
+	  required headers, body limits and strict JSON, idempotency scope - and
+	  the helpers handlers answer with. See include/web_api/web_api.h.
+
+if WEB_API
+
+config WEB_API_JSON_BODY_MAX
+	int "Largest JSON request body, in bytes"
+	default 8192
+	range 512 8192
+	help
+	  The contract's limit is 8192 and a server may publish less. Bytes past
+	  this are counted and discarded, never buffered, and the request is
+	  answered 413.
+
+config WEB_API_RESPONSE_BODY_MAX
+	int "Largest response body built in RAM, in bytes"
+	default 4096
+	range 1024 65536
+	help
+	  Per HTTP client. A handler whose JSON does not fit answers 500 rather
+	  than a truncated document.
+
+config WEB_API_DECODED_BODY_MAX
+	int "Scratch space a request body decodes into, in bytes"
+	default 2048
+	range 256 16384
+	help
+	  Per HTTP client. Every route's decoded struct must fit; that is
+	  checked at build time by the route table.
+
+config WEB_API_EXTRA_HOSTS
+	string "Host names accepted besides IP literals and localhost"
+	default ""
+	help
+	  Comma-separated, without ports. Requests under /api/ whose Host is not
+	  an IP literal, localhost or one of these are refused, which is what
+	  keeps a DNS-rebinding page from reading this device's API as
+	  same-origin. Add the device's DNS name here if it is reached by name.
+
+config WEB_API_HTTP
+	bool "Adapter for Zephyr's HTTP server"
+	default y
+	depends on HTTP_SERVER && HTTP_SERVER_CAPTURE_HEADERS
+	help
+	  Header capture, per-client request contexts, body accumulation with
+	  the limit, abort, and the mapping of a response onto the server's.
+
+module = WEB_API
+module-str = web_api
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # WEB_API

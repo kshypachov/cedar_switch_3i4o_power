@@ -14,13 +14,15 @@ For every start it records, from the console and from the network:
 
 - time from the MCUboot banner to handover, Zephyr boot, `Start main app`,
   PSRAM self-test, Ethernet up and the ESP-Hosted handshake;
-- time until HTTP answers (`GET /api/relays/state`);
+- time until HTTP answers (`GET /api/v1/auth/state`, the API's one public
+  resource; the legacy `/api/relays/state` it used to poll was removed with
+  every unauthenticated legacy route in P2);
 - DHCP lease and carrier from `net iface`, and whether `wifi scan` works,
   which is the only cheap proof that the C6 transport is really up;
-- what `/api/relays/state` reports and the output register bits of the four
+- what `/api/v1/auth/state` reports, and the output register bits of the four
   relay pins, so a relay that is logically off but electrically driven shows.
   The relay default state is Matter's StartUpOnOff (owner's decision,
-  2026-09-12); the legacy `/api/relays/safe_state` endpoint was removed;
+  2026-09-12); there is no relay REST any more, Matter owns the relays;
 - every console line that marks a known defect or a failure: FRAM RDID,
   LittleFS formatting, settings that failed to load, MCUboot errors, faults,
   and a second bootloader banner inside the settle window.
@@ -109,7 +111,7 @@ def wait_http(host, timeout):
         return None, None, {"ping": "no reply"}
     while time.time() - start < timeout:
         r = subprocess.run(["curl", "-s", "-m", "20", "-o", "/dev/null", "-w", "%{http_code}",
-                            f"http://{host}/api/relays/state"],
+                            f"http://{host}/api/v1/auth/state"],
                            capture_output=True, text=True)
         if r.returncode == 0 and r.stdout.strip() == "200":
             return reachable, time.time(), failures
@@ -188,7 +190,7 @@ def one_boot(console, index, mode, args, out):
     scan = console.collect("wifi scan", quiet=4.0, timeout=40) or ""
     rec["wifi_scan_ok"] = "Scan request done" in scan and "Scan request failed" not in scan
 
-    rec["relays_state"] = http_get_json(args.host, "/api/relays/state")
+    rec["auth_state"] = http_get_json(args.host, "/api/v1/auth/state")
 
     odr = {}
     for label, address, bit in RELAY_PINS:
@@ -209,7 +211,7 @@ def one_boot(console, index, mode, args, out):
     for key in ("main_s", "http_ready_s", "net_up_s", "hosted_s"):
         if rec[key] is None:
             why.append(f"{key} missing")
-    for key in ("psram_ok", "carrier_on", "dhcp_bound", "wifi_scan_ok", "relays_state"):
+    for key in ("psram_ok", "carrier_on", "dhcp_bound", "wifi_scan_ok", "auth_state"):
         if not rec[key]:
             why.append(f"{key} false")
     for key in ("lfs_format", "settings_load_fail", "mcuboot_error", "fatal"):

@@ -1,0 +1,4 @@
+# Zephyr module declaration for web-api.
+build:
+  cmake: .
+  kconfig: lib/Kconfig
