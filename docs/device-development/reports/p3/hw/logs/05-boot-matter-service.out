@@ -1,0 +1,87 @@
+flash rc=0 in 49.6s
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDownload in Progress:
+[39;49m[0m[00;32mDownload verified successfully
+reset rc=0 at 11:50:25
++  50.11s I: Starting bootloader
++  53.13s uart:~$ [00:00:00.848,000] <err> mb85rsxx: invalid device ID: 04 7F 03 02
++  53.15s uart:~$ [00:00:00.848,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
++  53.16s uart:~$ [00:00:00.848,000] <inf> eth_w5500: ETH_W5500: interrupt mode
++  53.25s uart:~$ [00:00:01.347,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d10)
++  53.26s uart:~$ [00:00:01.348,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
++  53.40s uart:~$ [00:00:02.237,000] <inf> web_server: web interface cedar-2037394c3543501200550045, firmware 31cfd0a7c580-dirty, frontend 0.1.0+31cfd0a7c580-dirty, boot_4c4cdfaf5d94de51
++  53.43s uart:~$ [00:00:02.367,000] <inf> matter: IPv6 address added, starting Matter
++  53.44s uart:~$ [00:00:02.389,000] <inf> matter: Init CHIP stack
++  55.54s uart:~$ uart:~$ uart:~$ [00:00:03.672,000] <inf> matter: IPv6 address added, starting Matter
++  55.56s uart:~$ [00:00:03.672,000] <inf> matter: Matter start work already submitted
++  58.17s uart:~$ uart:~$ uart:~$ [00:00:06.298,000] <inf> chip: [SVR]Initializing session resumption storage...
++  58.17s uart:~$ [00:00:06.300,000] <inf> chip: [SVR]Server initializing...
++  58.19s uart:~$ [00:00:06.300,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
++  59.25s uart:~$ uart:~$ uart:~$ [00:00:07.377,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
++  59.26s uart:~$ [00:00:07.393,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
++  59.28s uart:~$ [00:00:07.449,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
++  63.69s uart:~$ uart:~$ uart:~$ [00:00:11.804,000] <inf> chip: [FP]Fabric index 0x1 was retrieved from storage. Compressed FabricId 0xED33A4AE816D49D8, FabricId 0x0000000000000001, NodeId 0x0000000000000001, VendorId 0xFFF1
++  64.78s uart:~$ uart:~$ [00:00:12.908,000] <inf> chip: [DMG]AccessControl: initializing
++  64.79s uart:~$ [00:00:12.909,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
++  64.80s uart:~$ [00:00:12.910,000] <inf> chip: [DMG]AccessControl: setting
++  64.81s uart:~$ [00:00:12.910,000] <inf> chip: [DMG]DefaultAclStorage: initializing
++  66.97s uart:~$ uart:~$ uart:~$ [00:00:15.101,000] <inf> chip: [DMG]DefaultAclStorage: 1 entries loaded
++  66.98s uart:~$ [00:00:15.101,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
++  66.99s uart:~$ [00:00:15.102,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
++  67.00s uart:~$ [00:00:15.105,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
++  67.01s uart:~$ [00:00:15.106,000] <dbg> chip.LogV: [IN]TransportMgr initialized
++  71.63s uart:~$ uart:~$ uart:~$ [00:00:19.758,000] <inf> chip: [ZCL]Using ZAP configuration...
++  72.75s uart:~$ uart:~$ [00:00:20.874,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
++  73.86s uart:~$ uart:~$ [00:00:21.988,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
++  74.97s uart:~$ uart:~$ [00:00:23.102,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
++  76.09s uart:~$ uart:~$ [00:00:24.216,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
++  77.20s uart:~$ uart:~$ [00:00:25.329,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
++  78.31s uart:~$ uart:~$ [00:00:26.448,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
++  79.44s uart:~$ uart:~$ [00:00:27.562,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
++  79.56s uart:~$ uart:~$ [00:00:28.675,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
++  79.57s uart:~$ [00:00:28.680,000] <dbg> chip.LogV: [DL]Boot reason: 1
++  79.58s uart:~$ [00:00:28.683,000] <inf> chip: [ZCL]Boot reason: 1
++  79.59s uart:~$ [00:00:28.684,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
++  79.60s uart:~$ [00:00:28.686,000] <inf> chip: [ZCL]Boot reason: 1
++  79.61s uart:~$ [00:00:28.687,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
++  79.62s uart:~$ [00:00:28.688,000] <inf> chip: [ZCL]Boot reason: 1
++  79.63s uart:~$ [00:00:28.689,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
++  79.64s uart:~$ [00:00:28.692,000] <inf> chip: [ZCL]Boot reason: 1
++  79.65s uart:~$ [00:00:28.692,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
++  80.69s uart:~$ uart:~$ uart:~$ [00:00:28.816,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000002F0000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x00000000000057F1
++  81.92s uart:~$ uart:~$ [00:00:31.040,000] <inf> chip: [DMG]AccessControlCluster: initializing
++  81.94s uart:~$ [00:00:31.042,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  81.95s uart:~$ [00:00:31.048,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
++  81.96s uart:~$ [00:00:31.051,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
++  81.98s uart:~$ [00:00:31.052,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
++  81.99s uart:~$ [00:00:31.054,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
++  82.00s uart:~$ [00:00:31.055,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
++  82.02s uart:~$ [00:00:31.056,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
++  82.03s uart:~$ [00:00:31.057,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
++  82.04s uart:~$ [00:00:31.058,000] <dbg> chip.LogV: [DIS]Responding with _IED33A4AE816D49D8._sub._matter._tcp.local
++  82.06s uart:~$ [00:00:31.113,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
++  83.09s uart:~$ uart:~$ uart:~$ [00:00:31.228,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  83.10s uart:~$ [00:00:31.229,000] <inf> chip: [IN]CASE Server enabling CASE session setups
++  83.11s uart:~$ [00:00:31.231,000] <dbg> chip.LogV: [IN]SecureSession[0x70001588]: Allocated Type:2 LSID:13231
++  83.13s uart:~$ [00:00:31.231,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x70001588) - waiting for Sigma1 msg
++  83.14s uart:~$ [00:00:31.232,000] <inf> chip: [SVR]Joining Multicast groups
++  83.27s uart:~$ uart:~$ uart:~$ [00:00:32.398,000] <dbg> chip.LogV: [ZCL]Emitting StartUp event
++  83.29s uart:~$ [00:00:32.401,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000002F0001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000065F2
++  83.31s uart:~$ [00:00:32.401,000] <inf> chip: [SVR]Server initialization complete
++  83.31s uart:~$ [00:00:32.402,000] <inf> chip: [SVR]Server Listening...
++  83.32s uart:~$ [00:00:32.402,000] <inf> matter: Matter stack initialized
++  83.33s uart:~$ [00:00:32.403,000] <inf> matter: Matter event loop started
++  83.34s uart:~$ [00:00:32.404,000] <inf> matter_event_loop: Init io_to_matter_stream
++  83.35s uart:~$ [00:00:32.404,000] <inf> matter_event_loop: Start io_to_matter_stream
++  83.36s uart:~$ [00:00:32.405,000] <inf> chip: [DL]CHIP task running
++  83.37s uart:~$ [00:00:32.407,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  83.47s uart:~$ uart:~$ uart:~$ [00:00:32.514,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
++  83.48s uart:~$ [00:00:32.578,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
++  83.50s uart:~$ [00:00:32.579,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
++  83.51s uart:~$ [00:00:32.581,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
++  83.52s uart:~$ [00:00:32.582,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
++  83.54s uart:~$ [00:00:32.583,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
++  83.55s uart:~$ [00:00:32.584,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
++  83.57s uart:~$ [00:00:32.585,000] <dbg> chip.LogV: [DIS]Responding with _IED33A4AE816D49D8._sub._matter._tcp.local
++  83.58s uart:~$ [00:00:32.586,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
++  83.59s uart:~$ [00:00:32.609,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  83.61s uart:~$ [00:00:32.657,000] <err> chip: [DL]Long dispatch time: 246 ms, for event type 32786

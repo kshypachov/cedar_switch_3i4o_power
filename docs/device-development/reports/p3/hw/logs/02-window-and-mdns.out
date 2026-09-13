@@ -1,0 +1,98 @@
+### matter commissioning open
+
+Matter commissioning window open scheduled
+~$ [00:02:48.463,000] <dbg> chip.LogV: [IN]SecureSession[0x700015d8]: Allocated Type:1 LSID:16104
+~$ ~$ [00:02:48.463,000] <dbg> chip.LogV: [SC]Assigned local session key ID 16104
+~$ ~$ [00:02:48.464,000] <dbg> chip.LogV: [SC]Waiting for PBKDF param request
+~$ ~$ [00:02:48.465,000] <inf> chip: [DIS]Updating services using commissioning mode 1
+~$ ~$ [00:02:48.470,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+~$ ~$ [00:02:48.474,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+~$ ~$ [00:02:48.975,000] <dbg> chip.LogV: [DIS]DNS-SD Pairing Instruction not set
+~$ ~$ [00:02:48.976,000] <inf> chip: [DIS]Advertise commission parameter vendorID=65521 productID=32769 discriminator=3840/15 cm=1 cp=0 jf=0
+~$ ~$ [00:02:48.978,000] <dbg> chip.LogV: [DIS]Responding with _matterc._udp.local
+~$ ~$ [00:02:48.979,000] <dbg> chip.LogV: [DIS]Responding with F731F836E2B3A56E._matterc._udp.local
+~$ ~$ 
+### matter commissioning status
+
+Matter commissioning status scheduled
+~$ [00:02:49.358,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+~$ ~$ [00:02:49.359,000] <dbg> chip.LogV: [DIS]Responding with _V65521._sub._matterc._udp.local
+~$ ~$ [00:02:49.360,000] <dbg> chip.LogV: [DIS]Responding with _S15._sub._matterc._udp.local
+~$ ~$ [00:02:49.361,000] <dbg> chip.LogV: [DIS]Responding with _L3840._sub._matterc._udp.local
+~$ ~$ [00:02:49.362,000] <dbg> chip.LogV: [DIS]Responding with _CM._sub._matterc._udp.local
+~$ ~$ [00:02:49.364,000] <dbg> chip.LogV: [DIS]Responding with F731F836E2B3A56E._matterc._udp.local
+~$ ~$ [00:02:49.364,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Commissionable node device'; instance name: F731F836E2B3A56E.
+~$ ~$ [00:02:49.404,000] <inf> chip: [DIS]mDNS service published: _matterc._udp
+~$ ~$ [00:02:49.404,000] <inf> matter_shell: Commissioning window is open
+~$ ~$ [00:02:51.807,000] <inf> matter_shell: Matter QR code: MT:<redacted-in-summary>
+~$ ~$ [00:02:51.807,000] <inf> matter_shell: Matter manual pairing code: 34970112332
+~$ ~$ [00:02:51.808,000] <err> chip: [DL]Long dispatch time: 4866 ms, for event type 2
+~$ ~$ [00:02:51.808,000] <inf> matter_shell: Matter fabric count: 0
+~$ ~$ [00:02:51.808,000] <inf> matter_shell: Commissioning window is open
+~$ ~$ 
+### net ipv6
+
+IPv6 support                              : enabled
+IPv6 fragmentation support                : disabled
+Multicast Listener Discovery support      : enabled
+Neighbor cache support                    : enabled
+Neighbor discovery support                : enabled
+Duplicate address detection (DAD) support : enabled
+Router advertisement RDNSS option support : enabled
+6lo header compression support            : disabled
+Privacy extension support                 : disabled
+SLAAC IID generation method               : EUI-64 (RFC 4862)
+Path MTU Discovery (PMTU)                 : disabled
+IPv6 forwarding                           : disabled
+IPv6 routing                              : enabled
+Transmit IPv6 RA messages                 : disabled
+DHCPv6 client                             : enabled
+DHCPv6 requesting router (downstream RA)  : disabled
+DHCPv6 max downstream links               : 1
+DHCPv6 server                             : disabled
+Max number of IPv6 network interfaces in the system          : 4
+Max number of unicast IPv6 addresses per network interface   : 2
+Max number of multicast IPv6 addresses per network interface : 14
+Max number of IPv6 prefixes per network interface            : 2
+
+IPv6 addresses for interface 1 (0x20002cf8) (Ethernet)
+====================================================
+Unicast:
+
+Type      	State    	Lifetime (sec)	Ref	Address
+autoconf  	preferred	      infinite	1	fe80::8234:28ff:fe10:1273/128
+autoconf  	preferred	     134676363	1	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273/64
+
+Multicast:
+
+Joined	Ref	Address
+yes	1	ff02::1
+yes	1	ff02::1:ff10:1273
+yes	4	ff02::fb
+
+IPv6 addresses for interface 2 (0x20002e30) (WiFi)
+================================================
+No IPv6 config found for this interface.
+~$ 
+### dns-sd browse _matterc._udp
+Browsing for _matterc._udp.local.
+DATE: ---Sun 13 Sep 2026---
+11:28:41.294  ...STARTING...
+Timestamp     A/R    Flags  if Domain               Service Type         Instance Name
+11:28:41.295  Add        3  23 local.               _matterc._udp.       F731F836E2B3A56E
+11:28:41.295  Add        2  14 local.               _matterc._udp.       F731F836E2B3A56E
+### dns-sd browse _matter._tcp
+Browsing for _matter._tcp.local.
+DATE: ---Sun 13 Sep 2026---
+11:28:47.297  ...STARTING...
+Timestamp     A/R    Flags  if Domain               Service Type         Instance Name
+11:28:47.297  Add        3  23 local.               _matter._tcp.        3700EC0D6DAB4145-0000000072197CCC
+11:28:47.297  Add        3  23 local.               _matter._tcp.        9B02575873B12C99-84E37241C1AC706C
+11:28:47.297  Add        3  14 local.               _matter._tcp.        3700EC0D6DAB4145-0000000072197CCC
+11:28:47.297  Add        3  14 local.               _matter._tcp.        9B02575873B12C99-84E37241C1AC706C
+11:28:47.297  Add        3  23 local.               _matter._tcp.        9B02575873B12C99-70F38E8D8615FFB1
+11:28:47.297  Add        3  23 local.               _matter._tcp.        3700EC0D6DAB4145-0000000063468A18
+11:28:47.297  Add        3  23 local.               _matter._tcp.        0276B5DAA1937E6D-00000000F225FCA7
+11:28:47.297  Add        3  14 local.               _matter._tcp.        9B02575873B12C99-70F38E8D8615FFB1
+11:28:47.297  Add        3  14 local.               _matter._tcp.        3700EC0D6DAB4145-0000000063468A18
+11:28:47.297  Add        2  14 local.               _matter._tcp.        0276B5DAA1937E6D-00000000F225FCA7

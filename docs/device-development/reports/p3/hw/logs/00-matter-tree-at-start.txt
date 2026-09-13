@@ -1,0 +1,11 @@
+2026-09-13T08:14:01Z
+250a9e6c50ee2068107f3c4808b680f5f2925415
+ M config/zephyr/chip-module/CMakeLists.txt
+ M src/inet/TCPEndPointImplSockets.cpp
+ M src/platform/Zephyr/InetPlatformConfig.h
+ M src/transport/raw/TCP.cpp
+ config/zephyr/chip-module/CMakeLists.txt |  6 ++++
+ src/inet/TCPEndPointImplSockets.cpp      | 52 ++++++++++++++++++++------------
+ src/platform/Zephyr/InetPlatformConfig.h |  6 ++++
+ src/transport/raw/TCP.cpp                | 11 ++++++-
+ 4 files changed, 55 insertions(+), 20 deletions(-)

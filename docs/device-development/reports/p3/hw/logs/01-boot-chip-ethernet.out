@@ -1,0 +1,67 @@
+flash rc=0 in 49.1s
+[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49m[0m[39;49mDownload in Progress:
+[39;49m[0m[00;32mDownload verified successfully
+reset rc=0 at 11:25:43
++  49.63s I: Starting bootloader
++  52.32s uart:~$ uart:~$ [00:00:00.846,000] <err> mb85rsxx: invalid device ID: 04 7F 03 02
++  52.34s uart:~$ uart:~$ [00:00:00.846,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
++  52.36s uart:~$ uart:~$ [00:00:00.847,000] <inf> eth_w5500: ETH_W5500: interrupt mode
++  52.44s uart:~$ uart:~$ [00:00:01.357,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002cf8)
++  52.46s uart:~$ uart:~$ [00:00:01.358,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
++  52.69s uart:~$ uart:~$ [00:00:01.905,000] <inf> web_server: web interface cedar-2037394c3543501200550045, firmware 31cfd0a7c580-dirty, frontend 0.1.0+82601a6824f4, boot_4436a596a1b94996
++  55.27s uart:~$ uart:~$ [00:00:03.876,000] <inf> matter: Net callback IPv6 got, start matter after 5 sec
++  55.29s uart:~$ uart:~$ [00:00:03.885,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
++  55.31s uart:~$ uart:~$ [00:00:03.899,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
++  60.26s uart:~$ uart:~$ [00:00:08.880,000] <inf> matter: Net callback IPv6 got, start matter after 5 sec
++  60.28s uart:~$ uart:~$ [00:00:08.880,000] <inf> matter: Init CHIP stack
++  61.98s uart:~$ uart:~$ [00:00:10.601,000] <inf> chip: [SVR]Initializing session resumption storage...
++  61.99s uart:~$ uart:~$ [00:00:10.603,000] <inf> chip: [SVR]Server initializing...
++  62.01s uart:~$ uart:~$ [00:00:10.604,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
++  62.03s uart:~$ uart:~$ [00:00:11.068,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
++  63.44s uart:~$ uart:~$ [00:00:12.067,000] <inf> chip: [DMG]AccessControl: initializing
++  63.45s uart:~$ uart:~$ [00:00:12.068,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
++  63.47s uart:~$ uart:~$ [00:00:12.068,000] <inf> chip: [DMG]AccessControl: setting
++  63.49s uart:~$ uart:~$ [00:00:12.069,000] <inf> chip: [DMG]DefaultAclStorage: initializing
++  63.50s uart:~$ uart:~$ [00:00:12.069,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
++  63.52s uart:~$ uart:~$ [00:00:12.070,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
++  63.54s uart:~$ uart:~$ [00:00:12.071,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
++  63.56s uart:~$ uart:~$ [00:00:12.074,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
++  63.57s uart:~$ uart:~$ [00:00:12.074,000] <dbg> chip.LogV: [IN]TransportMgr initialized
++  65.26s uart:~$ uart:~$ [00:00:13.880,000] <inf> matter: Matter start work already submitted
++  65.27s uart:~$ uart:~$ [00:00:14.488,000] <inf> chip: [ZCL]Using ZAP configuration...
++  66.41s uart:~$ uart:~$ [00:00:15.028,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
++  66.43s uart:~$ uart:~$ [00:00:15.537,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
++  67.48s uart:~$ uart:~$ [00:00:16.105,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
++  67.51s uart:~$ uart:~$ [00:00:16.607,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
++  68.54s uart:~$ uart:~$ [00:00:17.162,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
++  68.56s uart:~$ uart:~$ [00:00:17.666,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
++  69.11s uart:~$ uart:~$ [00:00:18.218,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
++  69.14s uart:~$ uart:~$ [00:00:18.721,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
++  69.15s uart:~$ uart:~$ [00:00:18.725,000] <dbg> chip.LogV: [DL]Boot reason: 1
++  69.17s uart:~$ uart:~$ [00:00:18.728,000] <inf> chip: [ZCL]Boot reason: 1
++  69.18s uart:~$ uart:~$ [00:00:18.729,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
++  69.20s uart:~$ uart:~$ [00:00:18.730,000] <inf> chip: [ZCL]Boot reason: 1
++  69.22s uart:~$ uart:~$ [00:00:18.731,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
++  69.23s uart:~$ uart:~$ [00:00:18.733,000] <inf> chip: [ZCL]Boot reason: 1
++  69.25s uart:~$ uart:~$ [00:00:18.734,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
++  69.26s uart:~$ uart:~$ [00:00:18.736,000] <inf> chip: [ZCL]Boot reason: 1
++  70.29s uart:~$ uart:~$ [00:00:18.910,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
++  70.32s uart:~$ uart:~$ [00:00:18.922,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000002E0000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x000000000000207B
++  70.37s uart:~$ uart:~$ [00:00:19.980,000] <inf> chip: [DMG]AccessControlCluster: initializing
++  70.39s uart:~$ uart:~$ [00:00:19.981,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  70.40s uart:~$ uart:~$ [00:00:19.987,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
++  70.42s uart:~$ uart:~$ [00:00:19.991,000] <inf> chip: [IN]CASE Server enabling CASE session setups
++  70.44s uart:~$ uart:~$ [00:00:19.992,000] <dbg> chip.LogV: [IN]SecureSession[0x70001500]: Allocated Type:2 LSID:16103
++  70.46s uart:~$ uart:~$ [00:00:19.993,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x70001500) - waiting for Sigma1 msg
++  70.48s uart:~$ uart:~$ [00:00:19.994,000] <inf> chip: [SVR]Joining Multicast groups
++  70.50s uart:~$ uart:~$ [00:00:19.995,000] <dbg> chip.LogV: [ZCL]Emitting StartUp event
++  70.53s uart:~$ uart:~$ [00:00:19.998,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000002E0001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000024B0
++  70.54s uart:~$ uart:~$ [00:00:19.998,000] <inf> chip: [SVR]Server initialization complete
++  71.56s uart:~$ uart:~$ [00:00:20.193,000] <inf> chip: [SVR]Server Listening...
++  71.58s uart:~$ uart:~$ [00:00:20.194,000] <inf> matter: Matter stack initialized
++  71.59s uart:~$ uart:~$ [00:00:20.195,000] <inf> matter: Matter event loop started
++  71.61s uart:~$ uart:~$ [00:00:20.195,000] <inf> matter_event_loop: Init io_to_matter_stream
++  71.63s uart:~$ uart:~$ [00:00:20.195,000] <inf> matter_event_loop: Start io_to_matter_stream
++  71.64s uart:~$ uart:~$ [00:00:20.196,000] <inf> chip: [DL]CHIP task running
++  71.66s uart:~$ uart:~$ [00:00:20.198,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  71.68s uart:~$ uart:~$ [00:00:20.203,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.

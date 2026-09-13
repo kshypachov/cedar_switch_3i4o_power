@@ -1,0 +1,28 @@
+### matter fabric count
+
+Matter fabric count: 1
+~$ 
+### matter commissioning status
+
+Matter commissioning status scheduled
+~$ [00:08:36.675,000] <inf> matter_shell: Matter fabric count: 1
+~$ ~$ [00:08:36.676,000] <inf> matter_shell: Commissioning window is closed
+~$ ~$ 
+### dns-sd _matter._tcp
+Browsing for _matter._tcp.local.
+DATE: ---Sun 13 Sep 2026---
+11:34:24.034  ...STARTING...
+Timestamp     A/R    Flags  if Domain               Service Type         Instance Name
+11:34:24.034  Add        3  23 local.               _matter._tcp.        9B02575873B12C99-70F38E8D8615FFB1
+11:34:24.034  Add        3  23 local.               _matter._tcp.        3700EC0D6DAB4145-0000000063468A18
+11:34:24.034  Add        3  23 local.               _matter._tcp.        0276B5DAA1937E6D-00000000F225FCA7
+11:34:24.034  Add        3  14 local.               _matter._tcp.        9B02575873B12C99-70F38E8D8615FFB1
+11:34:24.034  Add        3  14 local.               _matter._tcp.        3700EC0D6DAB4145-0000000063468A18
+11:34:24.034  Add        3  14 local.               _matter._tcp.        0276B5DAA1937E6D-00000000F225FCA7
+11:34:24.034  Add        3  23 local.               _matter._tcp.        ED33A4AE816D49D8-0000000000000001
+11:34:24.034  Add        3  23 local.               _matter._tcp.        9B02575873B12C99-84E37241C1AC706C
+11:34:24.034  Add        3  23 local.               _matter._tcp.        3700EC0D6DAB4145-0000000072197CCC
+11:34:24.034  Add        3  14 local.               _matter._tcp.        9B02575873B12C99-84E37241C1AC706C
+11:34:24.034  Add        2  14 local.               _matter._tcp.        3700EC0D6DAB4145-0000000072197CCC
+11:34:24.177  Add        2  14 local.               _matter._tcp.        ED33A4AE816D49D8-0000000000000001
+### dns-sd _matterc._udp

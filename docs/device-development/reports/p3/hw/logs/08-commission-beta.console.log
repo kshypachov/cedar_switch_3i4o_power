@@ -1,0 +1,519 @@
+ng mode 1
+uart:~$ [8[00:02:10.771,000] <err> chip: [DL]Long dispatch time: 10827 ms, for event type 2
+uart:~$ uart:~$ [00:02:12.884,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242546] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:20 (SecureChannel:PBKDFParamRequest) (B:98)
+uart:~$ [00:02:12.885,000] <dbg> chip.LogV: [EM]Handling via exchange: 21210r, Delegate: 0x70003850
+uart:~$ [00:02:12.888,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642445 (Ack:147242546)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:02:12.903,000] <dbg> chip.LogV: [EM]Flushed pending ack for MessageCounter:147242546 on exchange 21210r
+uart:~$ [00:02:12.904,000] <dbg> chip.LogV: [SC]Received PBKDF param request
+uart:~$ [00:02:12.906,000] <dbg> chip.LogV: [SC]Peer assigned session ID 12325
+uart:~$ [00:02:12.906,000] <dbg> chip.LogV: [SC]Found MRP parameters in the message
+uart:~$ [00:02:12.915,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642446 (Ack:147242546)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:21 (SecureChannel:PBKDFParamResponse) (B:158)
+uart:~$ [00:02:12.924,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642446] (U) Msg Retransmission to 0:0000000000000000 scheduled for 332ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:12.925,000] <dbg> chip.LogV: [SC]Sent PBKDF param response
+uart:~$ [00:02:12.950,000] <inf> chip: [SVR]Commissioning session establishment step started
+uart:~$ [00:02:13.033,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242547 (Ack:135642446)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:22 (SecureChannel:PASE_Pake1) (B:96)
+uart:~$ [00:02:13.043,000] <dbg> chip.LogV: [EM]Found matching exchange: 21210r, Delegate: 0x70003850
+uart:~$ [00:02:13.066,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:135642446 from Retrans Table on exchange 21210r
+uart:~$ [00:02:13.124,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642447 (Ack:147242547)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ uart:~$ uart:~$ [00:02:13.171,000] <dbg> chip.LogV: [EM]Flushed pending ack for MessageCounter:147242547 on exchange 21210r
+uart:~$ [00:02:13.175,000] <dbg> chip.LogV: [SC]Received spake2p msg1
+uart:~$ uart:~$ uart:~$ [00:02:22.815,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642448 (Ack:147242547)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:23 (SecureChannel:PASE_Pake2) (B:131)
+uart:~$ [00:02:22.824,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642448] (U) Msg Retransmission to 0:0000000000000000 scheduled for 657ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:02:22.825,000] <dbg> chip.LogV: [SC]Sent spake2p msg2
+uart:~$ [00:02:22.852,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242548 (Ack:135642448)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:24 (SecureChannel:PASE_Pake3) (B:63)
+uart:~$ [00:02:22.853,000] <dbg> chip.LogV: [EM]Found matching exchange: 21210r, Delegate: 0x70003850
+uart:~$ [00:02:22.854,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:135642448 from Retrans Table on exchange 21210r
+uart:~$ [00:02:22.857,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642449 (Ack:147242548)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:02:22.864,000] <dbg> chip.LogV: [EM]Flushed pending ack for MessageCounter:147242548 on exchange 21210r
+uart:~$ [00:02:22.864,000] <dbg> chip.LogV: [SC]Received spake2p msg3
+uart:~$ [00:02:22.871,000] <dbg> chip.LogV: [SC]Sending status report. Protocol code 0, exchange 21210
+uart:~$ [00:02:22.941,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642450 (Ack:147242548)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:40 (SecureChannel:StatusReport) (B:34)
+uart:~$ [00:02:23.012,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000 scheduled for 335ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ uart:~$ uart:~$ [00:02:23.131,000] <inf> chip: [SC]SecureSession[0x70001660, LSID:13232]: State change 'kEstablishing' --> 'kActive'
+uart:~$ [00:02:23.132,000] <dbg> chip.LogV: [IN]SecureSession[0x70001660]: Activated - Type:1 LSID:13232
+uart:~$ [00:02:23.133,000] <dbg> chip.LogV: [IN]New secure session activated for device <FFFFFFFB00000000, 0>, LSID:13232 PSID:12325!
+uart:~$ [00:02:23.134,000] <inf> chip: [SVR]Commissioning completed session establishment step
+uart:~$ [00:02:23.137,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+uart:~$ [00:02:23.143,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+uart:~$ [00:02:23.309,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+uart:~$ [00:02:23.310,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
+uart:~$ [00:02:23.312,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
+uart:~$ [00:02:23.313,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:02:23.376,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:02:23.390,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+uart:~$ [00:02:23.410,000] <dbg> chip.LogV: [DIS]Responding with _IED33A4AE816D49D8._sub._matter._tcp.local
+uart:~$ [00:02:23.429,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
+uart:~$ uart:~$ uart:~$ [00:02:23.537,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
+uart:~$ uart:~$ [00:02:25.748,000] <inf> chip: [SVR]Device completed Rendezvous process
+uart:~$ [00:02:25.752,000] <inf> chip: [EM]<<1 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000
+uart:~$ [00:02:25.760,000] <inf> chip: [EM]??2 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000 scheduled for 347ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:25.770,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
+uart:~$ [00:02:25.771,000] <dbg> chip.LogV: [EM]Handling via exchange: 21211r, Delegate: 0x70185ec4
+uart:~$ [00:02:25.772,000] <dbg> chip.LogV: [IM]Received Read request
+uart:~$ [00:02:25.797,000] <dbg> chip.LogV: [DMG]IM RH moving to [CanStartReporting]
+uart:~$ [00:02:25.800,000] <dbg> chip.LogV: [DMG]Building Reports for ReadHandler with LastReportGeneration = 0x00000000 DirtyGeneration = 0x00000000
+uart:~$ [00:02:25.810,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 28, Attribute 4 is dirty
+uart:~$ [00:02:25.817,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0028 Endpoint=0x0 AttributeId=0x0000_0004 (expanded=0)
+uart:~$ uart:~$ uart:~$ [00:02:25.983,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 28, Attribute 2 is dirty
+uart:~$ [00:02:25.989,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0028 Endpoint=0x0 AttributeId=0x0000_0002 (expanded=0)
+uart:~$ [00:02:26.000,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute c is dirty
+uart:~$ [00:02:26.010,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586
+uart:~$ [00:02:26.020,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute 3 is dirty
+uart:~$ [00:02:26.026,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0030 Endpoint=0x0 AttributeId=0x0000_0003 (expanded=0)
+uart:~$ [00:02:26.037,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute 2 is dirty
+uart:~$ [00:02:26.043,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0030 Endpoint=0x0 AttributeId=0x0000_0002 (expanded=0)
+uart:~$ uart:~$ uart:~$ [00:02:27.287,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute 1 is dirty
+uart:~$ [00:02:27.293,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0030 Endpoint=0x0 AttributeId=0x0000_0001 (expanded=0)
+uart:~$ [00:02:27.303,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute 0 is dirty
+uart:~$ [00:02:27.309,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0030 Endpoint=0x0 AttributeId=0x0000_0000 (expanded=0)
+uart:~$ [00:02:27.320,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 30, Attribute 4 is dirty
+uart:~$ [00:02:27.326,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0030 Endpoint=0x0 AttributeId=0x0000_0004 (expanded=0)
+uart:~$ [00:02:27.332,000] <dbg> chip.LogV: [DMG]<RE> Sending report (payload has 223 bytes)...
+uart:~$ [00:02:27.342,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355688 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:05 (IM:ReportData) (B:257)
+uart:~$ [00:02:27.357,000] <inf> chip: [EM]??1 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 398ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:27.359,000] <dbg> chip.LogV: [DMG]<RE> OnReportConfirm: NumReports = 0
+uart:~$ [00:02:27.402,000] <dbg> chip.LogV: [DMG]<RE> ReportsInFlight = 0 with readHandler 0, RE has no more messages
+uart:~$ [00:02:27.409,000] <dbg> chip.LogV: [DMG]IM RH moving to [AwaitingDestruction]
+uart:~$ [00:02:27.418,000] <dbg> chip.LogV: [DMG]All ReadHandler-s are clean, clear GlobalDirtySet
+uart:~$ [00:02:27.472,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242549 (Ack:135642450)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:02:27.479,000] <dbg> chip.LogV: [EM]Found matching exchange: 21210r, Delegate: 0
+uart:~$ [00:02:27.493,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:135642450 from Retrans Table on exchange 21210r
+uart:~$ uart:~$ uart:~$ [00:02:27.615,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.631,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
+uart:~$ [00:02:27.632,000] <dbg> chip.LogV: [EM]Found matching exchange: 21211r, Delegate: 0
+uart:~$ [00:02:27.633,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.637,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355689 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:27.651,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.653,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
+uart:~$ [00:02:27.653,000] <dbg> chip.LogV: [EM]Found matching exchange: 21211r, Delegate: 0
+uart:~$ [00:02:27.654,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.659,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355690 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:27.834,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.854,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
+uart:~$ [00:02:27.861,000] <dbg> chip.LogV: [EM]Found matching exchange: 21211r, Delegate: 0
+uart:~$ [00:02:27.871,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.876,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355691 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:27.885,000] <inf> chip: [EM]<<1 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:27.898,000] <inf> chip: [EM]??2 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 338ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:27.904,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:27.906,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
+uart:~$ [00:02:27.906,000] <dbg> chip.LogV: [EM]Found matching exchange: 21211r, Delegate: 0
+uart:~$ [00:02:27.942,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512787 on exchange 21211r
+uart:~$ [00:02:28.005,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355692 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:28.150,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
+uart:~$ [00:02:28.158,000] <dbg> chip.LogV: [EM]Handling via exchange: 21212r, Delegate: 0x70185ec4
+uart:~$ [00:02:28.159,000] <dbg> chip.LogV: [IM]Received Read request
+uart:~$ [00:02:28.166,000] <dbg> chip.LogV: [DMG]IM RH moving to [CanStartReporting]
+uart:~$ [00:02:28.169,000] <dbg> chip.LogV: [DMG]Building Reports for ReadHandler with LastReportGeneration = 0x00000000 DirtyGeneration = 0x00000000
+uart:~$ [00:02:28.198,000] <dbg> chip.LogV: [DMG]<RE:Run> Cluster 31, Attribute fffc is dirty
+uart:~$ [00:02:28.203,000] <dbg> chip.LogV: [DMG]Reading attribute: Cluster=0x0000_0031 Endpoint=0x0 AttributeId=0x0000_FFFC (expanded=1)
+uart:~$ [00:02:28.224,000] <dbg> chip.LogV: [DMG]<RE> Sending report (payload has 37 bytes)...
+uart:~$ [00:02:28.230,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355693 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:05 (IM:ReportData) (B:71)
+uart:~$ [00:02:28.243,000] <inf> chip: [EM]??1 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 359ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:28.290,000] <dbg> chip.LogV: [DMG]<RE> OnReportConfirm: NumReports = 0
+uart:~$ [00:02:28.299,000] <dbg> chip.LogV: [DMG]<RE> ReportsInFlight = 0 with readHandler 0, RE has no more messages
+uart:~$ [00:02:28.318,000] <dbg> chip.LogV: [DMG]IM RH moving to [AwaitingDestruction]
+uart:~$ [00:02:28.327,000] <dbg> chip.LogV: [DMG]All ReadHandler-s are clean, clear GlobalDirtySet
+uart:~$ [00:02:28.410,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512789 (Ack:225355688)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:28.418,000] <dbg> chip.LogV: [EM]Found matching exchange: 21211r, Delegate: 0
+uart:~$ [00:02:28.447,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355688 from Retrans Table on exchange 21211r
+uart:~$ uart:~$ uart:~$ [00:02:28.517,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512788 on exchange 21212r
+uart:~$ [00:02:28.533,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
+uart:~$ [00:02:28.534,000] <dbg> chip.LogV: [EM]Found matching exchange: 21212r, Delegate: 0
+uart:~$ [00:02:28.534,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512788 on exchange 21212r
+uart:~$ [00:02:28.539,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355694 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:28.552,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512790 (Ack:225355688)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:28.558,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512788 on exchange 21212r
+uart:~$ [00:02:28.559,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
+uart:~$ [00:02:28.560,000] <dbg> chip.LogV: [EM]Found matching exchange: 21212r, Delegate: 0
+uart:~$ [00:02:28.561,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512788 on exchange 21212r
+uart:~$ [00:02:28.654,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355695 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:28.738,000] <inf> chip: [EM]<<1 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:28.788,000] <inf> chip: [EM]??2 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 376ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:28.809,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
+uart:~$ [00:02:28.810,000] <dbg> chip.LogV: [EM]Handling via exchange: 21213r, Delegate: 0x70185ec4
+uart:~$ [00:02:28.818,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0000
+uart:~$ [00:02:28.819,000] <inf> chip: [FS]GeneralCommissioning: Received ArmFailSafe (60s)
+uart:~$ [00:02:28.821,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:28.821,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:28.822,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:28.823,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:28.900,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:28.913,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:28.929,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ uart:~$ uart:~$ [00:02:29.008,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355696 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)
+uart:~$ [00:02:29.040,000] <inf> chip: [EM]??1 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 383ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:29.041,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:29.048,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512792 (Ack:225355693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:29.049,000] <dbg> chip.LogV: [EM]Found matching exchange: 21212r, Delegate: 0
+uart:~$ [00:02:29.050,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355693 from Retrans Table on exchange 21212r
+uart:~$ [00:02:29.057,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512791 on exchange 21213r
+uart:~$ [00:02:29.058,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
+uart:~$ [00:02:29.059,000] <dbg> chip.LogV: [EM]Found matching exchange: 21213r, Delegate: 0
+uart:~$ [00:02:29.059,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512791 on exchange 21213r
+uart:~$ [00:02:29.149,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355697 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:29.277,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512793 (Ack:225355693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:29.297,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512791 on exchange 21213r
+uart:~$ [00:02:29.298,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
+uart:~$ [00:02:29.299,000] <dbg> chip.LogV: [EM]Found matching exchange: 21213r, Delegate: 0
+uart:~$ [00:02:29.300,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512791 on exchange 21213r
+uart:~$ [00:02:29.304,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355698 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:29.318,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
+uart:~$ [00:02:29.319,000] <dbg> chip.LogV: [EM]Handling via exchange: 21214r, Delegate: 0x70185ec4
+uart:~$ [00:02:29.327,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0002
+uart:~$ [00:02:29.621,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:29.645,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:29.661,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:29.678,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:29.716,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:29.731,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:29.738,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ uart:~$ uart:~$ [00:02:29.852,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355699 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)
+uart:~$ [00:02:29.909,000] <inf> chip: [EM]??1 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 368ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:29.911,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:29.913,000] <inf> chip: [EM]<<1 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:29.924,000] <inf> chip: [EM]??2 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 382ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:29.930,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512795 (Ack:225355696)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:29.931,000] <dbg> chip.LogV: [EM]Found matching exchange: 21213r, Delegate: 0
+uart:~$ [00:02:29.932,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355696 from Retrans Table on exchange 21213r
+uart:~$ [00:02:29.939,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512794 on exchange 21214r
+uart:~$ [00:02:29.940,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
+uart:~$ [00:02:29.961,000] <dbg> chip.LogV: [EM]Found matching exchange: 21214r, Delegate: 0
+uart:~$ [00:02:29.968,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512794 on exchange 21214r
+uart:~$ [00:02:30.045,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355700 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:30.181,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512794 on exchange 21214r
+uart:~$ [00:02:30.201,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
+uart:~$ [00:02:30.211,000] <dbg> chip.LogV: [EM]Found matching exchange: 21214r, Delegate: 0
+uart:~$ [00:02:30.213,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512794 on exchange 21214r
+uart:~$ [00:02:30.217,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355701 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:30.231,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512796] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
+uart:~$ [00:02:30.232,000] <dbg> chip.LogV: [EM]Handling via exchange: 21215r, Delegate: 0x70185ec4
+uart:~$ [00:02:30.239,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_0002
+uart:~$ [00:02:30.240,000] <inf> chip: [ZCL]OpCreds: Certificate Chain request received for PAI
+uart:~$ [00:02:30.242,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:30.274,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:30.288,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:30.307,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:30.335,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:30.341,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:30.367,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ uart:~$ uart:~$ [00:02:30.516,000] <inf> chip: [EM]<<< [E:21215r S:13232 M:225355702 (Ack:60512796)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:531)
+uart:~$ [00:02:30.535,000] <inf> chip: [EM]??1 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 382ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:30.536,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:30.539,000] <inf> chip: [EM]<<1 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:30.550,000] <inf> chip: [EM]??2 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 351ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:30.556,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512797 (Ack:225355699)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:30.556,000] <dbg> chip.LogV: [EM]Found matching exchange: 21214r, Delegate: 0
+uart:~$ [00:02:30.558,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355699 from Retrans Table on exchange 21214r
+uart:~$ [00:02:30.565,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512798 (Ack:225355696)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:30.571,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512796 on exchange 21215r
+uart:~$ [00:02:30.616,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512796] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
+uart:~$ [00:02:30.624,000] <dbg> chip.LogV: [EM]Found matching exchange: 21215r, Delegate: 0
+uart:~$ [00:02:30.639,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512796 on exchange 21215r
+uart:~$ [00:02:30.716,000] <inf> chip: [EM]<<< [E:21215r S:13232 M:225355703 (Ack:60512796)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:30.851,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512799] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
+uart:~$ [00:02:30.860,000] <dbg> chip.LogV: [EM]Handling via exchange: 21216r, Delegate: 0x70185ec4
+uart:~$ [00:02:30.879,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_0002
+uart:~$ [00:02:30.880,000] <inf> chip: [ZCL]OpCreds: Certificate Chain request received for DAC
+uart:~$ [00:02:30.881,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:30.881,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:30.882,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:30.883,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:30.885,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:30.886,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:30.946,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ uart:~$ uart:~$ [00:02:31.067,000] <inf> chip: [EM]<<< [E:21216r S:13232 M:225355704 (Ack:60512799)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:559)
+uart:~$ [00:02:31.085,000] <inf> chip: [EM]??1 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 340ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:31.086,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:31.089,000] <inf> chip: [EM]<<1 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:31.105,000] <inf> chip: [EM]??2 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:31.110,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512800 (Ack:225355702)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:31.111,000] <dbg> chip.LogV: [EM]Found matching exchange: 21215r, Delegate: 0
+uart:~$ [00:02:31.112,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355702 from Retrans Table on exchange 21215r
+uart:~$ [00:02:31.124,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512801 (Ack:225355699)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:31.136,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512799 on exchange 21216r
+uart:~$ [00:02:31.182,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512799] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
+uart:~$ [00:02:31.189,000] <dbg> chip.LogV: [EM]Found matching exchange: 21216r, Delegate: 0
+uart:~$ [00:02:31.203,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512799 on exchange 21216r
+uart:~$ [00:02:31.281,000] <inf> chip: [EM]<<< [E:21216r S:13232 M:225355705 (Ack:60512799)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:31.426,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:31.434,000] <dbg> chip.LogV: [EM]Handling via exchange: 21217r, Delegate: 0x70185ec4
+uart:~$ [00:02:31.441,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_0000
+uart:~$ [00:02:31.443,000] <inf> chip: [ZCL]OpCreds: Received an AttestationRequest command
+uart:~$ uart:~$ uart:~$ [00:02:32.525,000] <inf> chip: [ZCL]OpCreds: AttestationRequest successful.
+uart:~$ [00:02:32.526,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:32.527,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:32.528,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:32.529,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:32.531,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:32.532,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:32.533,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ [00:02:32.552,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355706 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:718)
+uart:~$ [00:02:32.566,000] <inf> chip: [EM]??1 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 402ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:32.631,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:32.663,000] <inf> chip: [EM]<<1 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ uart:~$ uart:~$ [00:02:32.736,000] <inf> chip: [EM]??2 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 410ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:32.776,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512803 (Ack:225355704)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:32.777,000] <dbg> chip.LogV: [EM]Found matching exchange: 21216r, Delegate: 0
+uart:~$ [00:02:32.778,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355704 from Retrans Table on exchange 21216r
+uart:~$ [00:02:32.785,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512804 (Ack:225355702)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:32.792,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:32.794,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:32.794,000] <dbg> chip.LogV: [EM]Found matching exchange: 21217r, Delegate: 0
+uart:~$ [00:02:32.795,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:32.799,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355707 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:32.970,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:32.990,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:32.997,000] <dbg> chip.LogV: [EM]Found matching exchange: 21217r, Delegate: 0
+uart:~$ [00:02:33.005,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:33.020,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355708 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:33.029,000] <inf> chip: [EM]<<1 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:33.046,000] <inf> chip: [EM]??2 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:33.052,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:33.054,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:33.055,000] <dbg> chip.LogV: [EM]Found matching exchange: 21217r, Delegate: 0
+uart:~$ [00:02:33.082,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512802 on exchange 21217r
+uart:~$ [00:02:33.154,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355709 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:33.308,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:33.309,000] <dbg> chip.LogV: [EM]Handling via exchange: 21218r, Delegate: 0x70185ec4
+uart:~$ [00:02:33.317,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_0004
+uart:~$ [00:02:33.318,000] <inf> chip: [ZCL]OpCreds: Received a CSRRequest command
+uart:~$ uart:~$ uart:~$ [00:02:35.197,000] <inf> chip: [ZCL]OpCreds: AllocatePendingOperationalKey succeeded
+uart:~$ uart:~$ [00:02:36.226,000] <inf> chip: [ZCL]OpCreds: CSRRequest successful.
+uart:~$ [00:02:36.228,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:36.228,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:36.229,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:36.230,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:36.232,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:36.233,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:36.234,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ [00:02:36.246,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355710 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:396)
+uart:~$ [00:02:36.258,000] <inf> chip: [EM]??1 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 404ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:36.324,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:36.350,000] <inf> chip: [EM]<<2 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ uart:~$ uart:~$ [00:02:36.432,000] <inf> chip: [EM]??3 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 576ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:36.470,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512806 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:36.471,000] <dbg> chip.LogV: [EM]Found matching exchange: 21217r, Delegate: 0
+uart:~$ [00:02:36.472,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355706 from Retrans Table on exchange 21217r
+uart:~$ [00:02:36.479,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512807 (Ack:225355704)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:36.485,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.487,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:36.488,000] <dbg> chip.LogV: [EM]Found matching exchange: 21218r, Delegate: 0
+uart:~$ [00:02:36.489,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.493,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355711 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:36.663,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512808 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:36.688,000] <inf> chip: [EM]<<1 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ [00:02:36.728,000] <inf> chip: [EM]??2 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 345ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:36.734,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.736,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:36.736,000] <dbg> chip.LogV: [EM]Found matching exchange: 21218r, Delegate: 0
+uart:~$ [00:02:36.737,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.741,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355712 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:36.755,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.756,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:36.782,000] <dbg> chip.LogV: [EM]Found matching exchange: 21218r, Delegate: 0
+uart:~$ [00:02:36.797,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:36.859,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355713 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:37.010,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:37.030,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
+uart:~$ [00:02:37.036,000] <dbg> chip.LogV: [EM]Found matching exchange: 21218r, Delegate: 0
+uart:~$ [00:02:37.037,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512805 on exchange 21218r
+uart:~$ [00:02:37.042,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355714 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:37.061,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
+uart:~$ [00:02:37.062,000] <dbg> chip.LogV: [EM]Handling via exchange: 21219r, Delegate: 0x70185ec4
+uart:~$ [00:02:37.069,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_000B
+uart:~$ [00:02:37.070,000] <inf> chip: [ZCL]OpCreds: Received an AddTrustedRootCertificate command
+uart:~$ uart:~$ uart:~$ [00:02:41.628,000] <inf> chip: [ZCL]OpCreds: AddTrustedRootCertificate successful.
+uart:~$ [00:02:41.629,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:41.630,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:41.631,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:41.631,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:41.633,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:41.634,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:41.635,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ [00:02:41.641,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355715 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:67)
+uart:~$ [00:02:41.657,000] <inf> chip: [EM]??1 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 633ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:02:41.723,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:41.756,000] <inf> chip: [EM]<<2 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ uart:~$ uart:~$ [00:02:41.826,000] <inf> chip: [EM]??3 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 886ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:02:41.868,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512810 (Ack:225355710)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:41.868,000] <dbg> chip.LogV: [EM]Found matching exchange: 21218r, Delegate: 0
+uart:~$ [00:02:41.870,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355710 from Retrans Table on exchange 21218r
+uart:~$ [00:02:41.876,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512811 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:41.888,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:41.889,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
+uart:~$ [00:02:41.890,000] <dbg> chip.LogV: [EM]Found matching exchange: 21219r, Delegate: 0
+uart:~$ [00:02:41.891,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:41.895,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355716 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:02:42.055,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512812 (Ack:225355710)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:42.120,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.121,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
+uart:~$ [00:02:42.122,000] <dbg> chip.LogV: [EM]Found matching exchange: 21219r, Delegate: 0
+uart:~$ [00:02:42.123,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.127,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355717 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:42.145,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.147,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
+uart:~$ [00:02:42.147,000] <dbg> chip.LogV: [EM]Found matching exchange: 21219r, Delegate: 0
+uart:~$ [00:02:42.148,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.238,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355718 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:42.315,000] <inf> chip: [EM]<<1 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000
+uart:~$ uart:~$ uart:~$ [00:02:42.381,000] <inf> chip: [EM]??2 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 403ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ [00:02:42.423,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.425,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
+uart:~$ [00:02:42.425,000] <dbg> chip.LogV: [EM]Found matching exchange: 21219r, Delegate: 0
+uart:~$ [00:02:42.426,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512809 on exchange 21219r
+uart:~$ [00:02:42.431,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355719 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:02:42.461,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
+uart:~$ [00:02:42.461,000] <dbg> chip.LogV: [EM]Handling via exchange: 21220r, Delegate: 0x70185ec4
+uart:~$ [00:02:42.470,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_003E Command=0x0000_0006
+uart:~$ [00:02:42.472,000] <inf> chip: [ZCL]OpCreds: Received an AddNOC command
+uart:~$ uart:~$ uart:~$ [00:02:45.986,000] <inf> chip: [FP]Validating NOC chain
+uart:~$ uart:~$ [00:02:52.578,000] <inf> chip: [FP]NOC chain validation successful
+uart:~$ [00:02:52.579,000] <inf> chip: [FP]Added new fabric at index: 0x2
+uart:~$ [00:02:52.580,000] <inf> chip: [FP]Assigned compressed fabric ID: 0xECB6E600AAB8719B, node ID: 0x0000000000000002
+uart:~$ [00:02:52.581,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+uart:~$ [00:02:52.582,000] <inf> chip: [TS]New proposed Last Known Good Time: 2021-01-01T00:00:00
+uart:~$ [00:02:52.582,000] <inf> chip: [TS]Retaining current Last Known Good Time
+uart:~$ uart:~$ uart:~$ [00:02:59.530,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000002F0002 priority: 1, endpoint id:  0x0 cluster id: 0x0000_001F event id: 0x0 Sys timestamp: 0x000000000002A4AA
+uart:~$ [00:02:59.531,000] <inf> chip: [ZCL]OpCreds: ACL entry created for Fabric index 0x2 CASE Admin Subject 0x000000000001B669
+uart:~$ [00:02:59.531,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+uart:~$ [00:02:59.532,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
+uart:~$ [00:02:59.535,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
+uart:~$ [00:02:59.536,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:02:59.537,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:02:59.538,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+uart:~$ [00:02:59.539,000] <dbg> chip.LogV: [DIS]Responding with _IED33A4AE816D49D8._sub._matter._tcp.local
+uart:~$ [00:02:59.540,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
+uart:~$ uart:~$ uart:~$ [00:02:59.714,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
+uart:~$ [00:02:59.715,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+uart:~$ [00:02:59.715,000] <inf> chip: [DIS]Advertise operational node ECB6E600AAB8719B-0000000000000002
+uart:~$ [00:02:59.718,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
+uart:~$ [00:02:59.718,000] <dbg> chip.LogV: [DIS]Responding with ECB6E600AAB8719B-0000000000000002._matter._tcp.local
+uart:~$ [00:02:59.719,000] <dbg> chip.LogV: [DIS]Responding with ECB6E600AAB8719B-0000000000000002._matter._tcp.local
+uart:~$ [00:02:59.720,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+uart:~$ [00:02:59.721,000] <dbg> chip.LogV: [DIS]Responding with _IECB6E600AAB8719B._sub._matter._tcp.local
+uart:~$ [00:02:59.722,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ECB6E600AAB8719B-0000000000000002.
+uart:~$ [00:02:59.763,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
+uart:~$ [00:02:59.821,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:02:59.826,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:02:59.842,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:02:59.870,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:02:59.883,000] <inf> chip: [ZCL]OpCreds: successfully created fabric index 0x2 via AddNOC
+uart:~$ uart:~$ uart:~$ [00:02:59.928,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:02:59.934,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:02:59.943,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ [00:02:59.971,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355720 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)
+uart:~$ [00:02:59.980,000] <inf> chip: [EM]??1 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 647ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:02:59.984,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:02:59.987,000] <inf> chip: [EM]<<2 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 2:FFFFFFFB00000000
+uart:~$ [00:02:59.998,000] <inf> chip: [EM]??3 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 901ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:03:00.003,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512814 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.004,000] <dbg> chip.LogV: [EM]Found matching exchange: 21219r, Delegate: 0
+uart:~$ [00:03:00.046,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355715 from Retrans Table on exchange 21219r
+uart:~$ [00:03:00.145,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512815 (Ack:225355710)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:03:00.253,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.255,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
+uart:~$ [00:03:00.256,000] <dbg> chip.LogV: [EM]Found matching exchange: 21220r, Delegate: 0
+uart:~$ [00:03:00.257,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.261,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355721 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.274,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512816 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.292,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.293,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
+uart:~$ [00:03:00.294,000] <dbg> chip.LogV: [EM]Found matching exchange: 21220r, Delegate: 0
+uart:~$ [00:03:00.295,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.386,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355722 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ uart:~$ uart:~$ [00:03:00.541,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.543,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
+uart:~$ [00:03:00.544,000] <dbg> chip.LogV: [EM]Found matching exchange: 21220r, Delegate: 0
+uart:~$ [00:03:00.544,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.550,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355723 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.574,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.575,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
+uart:~$ [00:03:00.576,000] <dbg> chip.LogV: [EM]Found matching exchange: 21220r, Delegate: 0
+uart:~$ [00:03:00.577,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:60512813 on exchange 21220r
+uart:~$ [00:03:00.581,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355724 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.678,000] <inf> chip: [EM]<<1 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000
+uart:~$ [00:03:00.760,000] <inf> chip: [EM]??2 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 377ms from now [State:Active II:500 AI:300 AT:4000]
+uart:~$ uart:~$ uart:~$ [00:03:00.826,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512817 (Ack:225355720)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.833,000] <dbg> chip.LogV: [EM]Found matching exchange: 21220r, Delegate: 0
+uart:~$ [00:03:00.842,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:225355720 from Retrans Table on exchange 21220r
+uart:~$ [00:03:00.849,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512818 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:00.853,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242550] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:30 (SecureChannel:CASE_Sigma1) (B:196)
+uart:~$ [00:03:00.854,000] <dbg> chip.LogV: [EM]Handling via exchange: 21221r, Delegate: 0x70002420
+uart:~$ [00:03:00.855,000] <inf> chip: [IN]CASE Server received Sigma1 message . Starting handshake. EC 0x70002fd0
+uart:~$ [00:03:00.858,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642451 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:03:00.866,000] <dbg> chip.LogV: [EM]Flushed pending ack for MessageCounter:147242550 on exchange 21221r
+uart:~$ [00:03:00.867,000] <inf> chip: [SC]Received Sigma1 msg
+uart:~$ [00:03:00.918,000] <dbg> chip.LogV: [SC]Found MRP parameters in the message
+uart:~$ [00:03:00.945,000] <dbg> chip.LogV: [SC]Peer (Initiator) assigned session ID 12326
+uart:~$ uart:~$ uart:~$ [00:03:05.767,000] <inf> chip: [SC]CASE matched destination ID: fabricIndex 2, NodeID 0x0000000000000002
+uart:~$ uart:~$ [00:03:09.725,000] <dbg> chip.LogV: [CR]AES_CCM_encrypt: Using aad == null path
+uart:~$ [00:03:09.750,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642452 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0000:31 (SecureChannel:CASE_Sigma2) (B:751)
+uart:~$ [00:03:09.765,000] <inf> chip: [EM]??1 [E:21221r S:0 M:135642452] (U) Msg Retransmission to 0:0000000000000000 scheduled for 559ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:03:09.766,000] <inf> chip: [SC]Sent Sigma2 msg
+uart:~$ [00:03:09.773,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512819 (Ack:225355720)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+uart:~$ [00:03:09.776,000] <dbg> chip.LogV: [IN]Received a duplicate message with MessageCounter:147242550 on exchange 21221r
+uart:~$ [00:03:09.777,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242550] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:30 (SecureChannel:CASE_Sigma1) (B:196)
+uart:~$ [00:03:09.778,000] <dbg> chip.LogV: [EM]Found matching exchange: 21221r, Delegate: 0x7000243c
+uart:~$ [00:03:09.779,000] <dbg> chip.LogV: [EM]Forcing tx of solitary ack for duplicate MessageCounter:147242550 on exchange 21221r
+uart:~$ [00:03:09.781,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642453 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:03:09.926,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242551 (Ack:135642452)] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:32 (SecureChannel:CASE_Sigma3) (B:598)
+uart:~$ [00:03:09.941,000] <dbg> chip.LogV: [EM]Found matching exchange: 21221r, Delegate: 0x7000243c
+uart:~$ [00:03:09.955,000] <dbg> chip.LogV: [EM]Rxd Ack; Removing MessageCounter:135642452 from Retrans Table on exchange 21221r
+uart:~$ uart:~$ uart:~$ [00:03:10.008,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642454 (Ack:147242551)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)
+uart:~$ [00:03:10.045,000] <dbg> chip.LogV: [EM]Flushed pending ack for MessageCounter:147242551 on exchange 21221r
+uart:~$ [00:03:10.051,000] <inf> chip: [SC]Received Sigma3 msg
+uart:~$ [00:03:10.073,000] <dbg> chip.LogV: [CR]AES_CCM_decrypt: Using aad == null path
+uart:~$ [00:03:10.089,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time
+uart:~$ uart:~$ uart:~$ [00:03:20.063,000] <err> chip: [DL]Long dispatch time: 9972 ms, for event type 2
+uart:~$ uart:~$ [00:03:22.496,000] <dbg> chip.LogV: [SC]Sending status report. Protocol code 0, exchange 21221
+uart:~$ [00:03:22.499,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642455 (Ack:147242551)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0000:40 (SecureChannel:StatusReport) (B:34)
+uart:~$ [00:03:22.507,000] <inf> chip: [EM]??1 [E:21221r S:0 M:135642455] (U) Msg Retransmission to 0:0000000000000000 scheduled for 669ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:03:22.521,000] <inf> chip: [SC]SecureSession[0x70001588, LSID:13231]: State change 'kEstablishing' --> 'kActive'
+uart:~$ [00:03:22.522,000] <dbg> chip.LogV: [IN]SecureSession[0x70001588]: Activated - Type:2 LSID:13231
+uart:~$ [00:03:22.523,000] <dbg> chip.LogV: [IN]New secure session activated for device <000000000001B669, 2>, LSID:13231 PSID:12326!
+uart:~$ [00:03:22.524,000] <inf> chip: [IN]CASE Session established to peer: <000000000001B669, 2>
+uart:~$ [00:03:22.526,000] <dbg> chip.LogV: [IN]SecureSession[0x70001738]: Allocated Type:2 LSID:13233
+uart:~$ [00:03:22.527,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x70001738) - waiting for Sigma1 msg
+uart:~$ [00:03:22.528,000] <err> chip: [DL]Long dispatch time: 2465 ms, for event type 2
+uart:~$ uart:~$ uart:~$ [00:03:22.687,000] <inf> chip: [EM]>>> [E:21222r S:13231 M:154513462] (S) Msg RX from 2:000000000001B669 [719B] to 0000000000000002 --- Type 0001:08 (IM:InvokeCommandRequest) (B:59)
+uart:~$ [00:03:22.698,000] <dbg> chip.LogV: [EM]Handling via exchange: 21222r, Delegate: 0x70185ec4
+uart:~$ [00:03:22.717,000] <dbg> chip.LogV: [DMG]Received command for Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0004
+uart:~$ [00:03:22.718,000] <inf> chip: [FS]GeneralCommissioning: Received CommissioningComplete
+uart:~$ [00:03:23.600,000] <inf> chip: [FP]Metadata for Fabric 0x2 persisted to storage.
+uart:~$ uart:~$ uart:~$ [00:03:25.427,000] <inf> chip: [TS]Committing Last Known Good Time to storage: 2023-10-14T01:16:48
+uart:~$ [00:03:25.920,000] <inf> chip: [ZCL]OpCreds: Fabric index 0x2 was committed to storage. Compressed Fabric Id 0xECB6E600AAB8719B, FabricId 0000000000000002, NodeId 0000000000000002, VendorId 0xFFF1
+uart:~$ uart:~$ uart:~$ [00:03:28.791,000] <inf> chip: [FS]GeneralCommissioning: Successfully committed pending fabric data
+uart:~$ [00:03:28.792,000] <inf> chip: [FS]Fail-safe cleanly disarmed
+uart:~$ [00:03:28.793,000] <dbg> chip.LogV: [DMG]Command handler moving to [NewRespons]
+uart:~$ [00:03:28.794,000] <dbg> chip.LogV: [DMG]Command handler moving to [ Preparing]
+uart:~$ [00:03:28.794,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddingComm]
+uart:~$ [00:03:28.795,000] <dbg> chip.LogV: [DMG]Command handler moving to [AddedComma]
+uart:~$ [00:03:28.797,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 1
+uart:~$ [00:03:28.798,000] <dbg> chip.LogV: [DMG]Decreasing reference count for CommandHandlerImpl, remaining 0
+uart:~$ [00:03:28.799,000] <dbg> chip.LogV: [DMG]Command handler moving to [AwaitingDe]
+uart:~$ [00:03:28.804,000] <inf> chip: [EM]<<< [E:21222r S:13231 M:199485048 (Ack:154513462)] (S) Msg TX from 0000000000000002 to 2:000000000001B669 [719B] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)
+uart:~$ uart:~$ uart:~$ [00:03:28.909,000] <inf> chip: [EM]??1 [E:21222r S:13231 M:199485048] (S) Msg Retransmission to 2:000000000001B669 scheduled for 569ms from now [State:Idle II:500 AI:300 AT:4000]
+uart:~$ [00:03:28.922,000] <dbg> chip.LogV: [DMG]Command response sender moving to [AllInvokeR]
+uart:~$ [00:03:28.932,000] <inf> chip: [SVR]Commissioning completed successfully
+uart:~$ [00:03:28.943,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+uart:~$ [00:03:28.966,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+uart:~$ [00:03:29.049,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+uart:~$ [00:03:29.050,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
+uart:~$ [00:03:29.052,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
+uart:~$ [00:03:29.053,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:03:29.054,000] <dbg> chip.LogV: [DIS]Responding with ED33A4AE816D49D8-0000000000000001._matter._tcp.local
+uart:~$ [00:03:29.110,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+uart:~$ [00:03:29.127,000] <dbg> chip.LogV: [DIS]Responding with _IED33A4AE816D49D8._sub._matter._tcp.local
+uart:~$ [00:03:29.148,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
+uart:~$ uart:~$ uart:~$ [00:03:29.261,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
+uart:~$ [00:03:29.262,000] <dbg> chip.LogV: [DL]Using WiFi MAC for hostname
+uart:~$ [00:03:29.263,000] <inf> chip: [DIS]Advertise operational node ECB6E600AAB8719B-0000000000000002
+uart:~$ [00:03:29.265,000] <dbg> chip.LogV: [DIS]Responding with _matter._tcp.local
+uart:~$ [00:03:29.266,000] <dbg> chip.LogV: [DIS]Responding with ECB6E600AAB8719B-0000000000000002._matter._tcp.local
+uart:~$ [00:03:29.267,000] <dbg> chip.LogV: [DIS]Responding with ECB6E600AAB8719B-0000000000000002._matter._tcp.local
+uart:~$ [00:03:29.268,000] <dbg> chip.LogV: [DIS]Responding with 803428101273.local
+uart:~$ [00:03:29.269,000] <dbg> chip.LogV: [DIS]Responding with _IECB6E600AAB8719B._sub._matter._tcp.local
+uart:~$ [00:03:29.270,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ECB6E600AAB8719B-0000000000000002.
+uart:~$ [00:03:29.310,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
+uart:~$ uart:~$ uart:~$ 

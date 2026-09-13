@@ -1,0 +1,58 @@
+
+### matter fabric count
+
+Matter fabric count: 0
+~$ 
+### matter commissioning status
+
+Matter commissioning status scheduled
+~$ [07:40:13.731,000] <inf> matter_shell: Matter fabric count: 0
+~$ ~$ [07:40:13.731,000] <inf> matter_shell: Commissioning window is closed
+~$ ~$ 
+### kernel uptime
+
+Uptime: 27616419 ms
+~$ 
+### net ipv6
+
+IPv6 support                              : enabled
+IPv6 fragmentation support                : disabled
+Multicast Listener Discovery support      : enabled
+Neighbor cache support                    : enabled
+Neighbor discovery support                : enabled
+Duplicate address detection (DAD) support : enabled
+Router advertisement RDNSS option support : enabled
+6lo header compression support            : disabled
+Privacy extension support                 : disabled
+SLAAC IID generation method               : EUI-64 (RFC 4862)
+Path MTU Discovery (PMTU)                 : disabled
+IPv6 forwarding                           : disabled
+IPv6 routing                              : enabled
+Transmit IPv6 RA messages                 : disabled
+DHCPv6 client                             : enabled
+DHCPv6 requesting router (downstream RA)  : disabled
+DHCPv6 max downstream links               : 1
+DHCPv6 server                             : disabled
+Max number of IPv6 network interfaces in the system          : 4
+Max number of unicast IPv6 addresses per network interface   : 2
+Max number of multicast IPv6 addresses per network interface : 3
+Max number of IPv6 prefixes per network interface            : 2
+
+IPv6 addresses for interface 1 (0x20002cf8) (Ethernet)
+====================================================
+Unicast:
+
+Type      	State    	Lifetime (sec)	Ref	Address
+autoconf  	preferred	      infinite	1	fe80::8234:28ff:fe10:1273/128
+autoconf  	preferred	     134676444	1	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273/64
+
+Multicast:
+
+Joined	Ref	Address
+yes	1	ff02::1
+yes	1	ff02::1:ff10:1273
+
+IPv6 addresses for interface 2 (0x20002e30) (WiFi)
+================================================
+No IPv6 config found for this interface.
+~$ 

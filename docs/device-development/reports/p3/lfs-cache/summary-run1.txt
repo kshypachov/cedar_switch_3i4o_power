@@ -1,0 +1,26 @@
+v0-r256-c2048: stack start=5.1s acl loaded=39.1s ready=113.8s
+  
+v1-r4096-c4096: stack start=9.0s acl loaded=89.4s ready=132.5s
+  /lfs/settings: 519 bytes, 17 entries, 5 rounds (best / mean, us)
+  open+close          20100 /    20120
+  read 32 +seek        9700 /     9760
+  read 32              9000 /     9000
+  read 1024            8400 /     8420
+  scan (no match)     71200 /    71400
+  scan (all)          71200 /    71240
+v2-r256-c256: stack start=3.9s acl loaded=7.0s ready=14.4s
+  /lfs/settings: 596 bytes, 17 entries, 5 rounds (best / mean, us)
+  open+close          17700 /    17760
+  read 32 +seek        3800 /     3800
+  read 32              2900 /     2940
+  read 1024            2100 /     2220
+  scan (no match)    156600 /   156740
+  scan (all)         156600 /   156800
+v3-r16-c256: stack start=2.9s acl loaded=5.0s ready=10.3s
+  /lfs/settings: 673 bytes, 17 entries, 5 rounds (best / mean, us)
+  open+close           4700 /     4820
+  read 32 +seek        4000 /     4020
+  read 32              3000 /     3040
+  read 1024            2100 /     2120
+  scan (no match)    117800 /   118380
+  scan (all)         117700 /   118900

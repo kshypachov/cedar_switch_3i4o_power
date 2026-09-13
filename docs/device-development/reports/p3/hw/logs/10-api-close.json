@@ -1,0 +1,52 @@
+{
+  "phase": "close",
+  "when": "2026-09-13T11:54:03",
+  "login_s": 1.107,
+  "close": {
+    "status": 202,
+    "body": {
+      "job_id": "job_00000002",
+      "job_url": "/api/v1/jobs/job_00000002",
+      "resource_url": "/api/v1/matter/commissioning"
+    },
+    "ms": 82,
+    "job": {
+      "id": "job_00000002",
+      "boot_id": "boot_4c4cdfaf5d94de51",
+      "kind": "matter_close",
+      "state": "succeeded",
+      "phase": "closing",
+      "progress": null,
+      "cancellable": false,
+      "created_uptime_ms": "218018",
+      "updated_uptime_ms": "218149",
+      "resource_url": "/api/v1/matter/commissioning",
+      "error": null
+    },
+    "job_s": 0.64
+  },
+  "after_close": {
+    "/matter/commissioning": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "open": false,
+        "mode": null,
+        "source": null,
+        "remaining_seconds": 0,
+        "codes_available": false
+      }
+    },
+    "/matter/onboarding-codes": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "available": false,
+        "reason": "window_closed",
+        "qr_payload": null,
+        "manual_pairing_code": null,
+        "setup_passcode": null
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "phase": "fabrics",
+  "when": "2026-09-13T11:53:58",
+  "login_s": 4.303,
+  "reads": {
+    "/matter/status": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "state": "ready",
+        "commissioned": true,
+        "fabric_count": 2,
+        "error": null
+      },
+      "p50_ms": 70,
+      "max_ms": 70
+    },
+    "/matter/commissioning": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "open": true,
+        "mode": "basic",
+        "source": "web",
+        "remaining_seconds": 92,
+        "codes_available": true
+      },
+      "p50_ms": 70,
+      "max_ms": 70
+    },
+    "/matter/onboarding-codes": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "available": true,
+        "reason": null,
+        "qr_payload": "MT:-24J0AFN00KA0648G00",
+        "manual_pairing_code": "34970112332",
+        "setup_passcode": "20202021"
+      },
+      "p50_ms": 71,
+      "max_ms": 71
+    },
+    "/matter/fabrics": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "items": [
+          {
+            "id": "8157D82C668B4A1B:0000000000000001",
+            "fabric_index": 1,
+            "fabric_id": "0000000000000001",
+            "node_id": "0000000000000001",
+            "vendor_id": 65521,
+            "label": ""
+          },
+          {
+            "id": "DF9BB4D8777032F5:0000000000000002",
+            "fabric_index": 2,
+            "fabric_id": "0000000000000002",
+            "node_id": "0000000000000002",
+            "vendor_id": 65521,
+            "label": ""
+          }
+        ],
+        "count": 2
+      },
+      "p50_ms": 75,
+      "max_ms": 75
+    },
+    "/capabilities": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "api_version": "1",
+        "features": {
+          "matter": {
+            "available": true,
+            "reason": null
+          },
+          "esp32_logs": {
+            "available": false,
+            "reason": "not_implemented"
+          },
+          "esp32_ota": {
+            "available": false,
+            "reason": "not_implemented"
+          },
+          "esp32_uart": {
+            "available": false,
+            "reason": "not_implemented"
+          }
+        },
+        "limits": {
+          "json_body_bytes": 8192,
+          "upload_chunk_bytes": 16384,
+          "upload_max_bytes": 2097152,
+          "log_page_records": 100,
+          "scan_records": 64,
+          "commissioning_min_seconds": 180,
+          "commissioning_max_seconds": 900,
+          "network_confirm_min_seconds": 30,
+          "network_confirm_max_seconds": 900
+        },
+        "wifi_security_modes": [
+          "open",
+          "wpa2_psk",
+          "wpa3_sae"
+        ],
+        "firmware_formats": [
+          "raw_app"
+        ],
+        "update_requires_ethernet": true
+      },
+      "p50_ms": 79,
+      "max_ms": 79
+    }
+  }
+}

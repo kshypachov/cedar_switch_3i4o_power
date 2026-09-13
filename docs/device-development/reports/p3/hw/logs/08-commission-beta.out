@@ -1,0 +1,223 @@
+chip-tool rc=0 elapsed=76.3s
++   0.35s uart:~$ uart:~$ [00:02:12.884,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242546] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:20 (SecureChannel:PBKDFParamRequest) (B:98
++   0.40s uart:~$ [00:02:12.888,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642445 (Ack:147242546)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773
++   0.48s uart:~$ [00:02:12.915,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642446 (Ack:147242546)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773
++   0.50s uart:~$ [00:02:12.924,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642446] (U) Msg Retransmission to 0:0000000000000000 scheduled for 332ms from now [State:Active II:500 AI:300 AT:4000]
++   0.52s uart:~$ [00:02:12.950,000] <inf> chip: [SVR]Commissioning session establishment step started
++   0.56s uart:~$ [00:02:13.033,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242547 (Ack:135642446)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:22 (SecureChannel:PASE_Pake1) (B:9
++   0.62s uart:~$ [00:02:13.124,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642447 (Ack:147242547)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773
++  10.31s uart:~$ uart:~$ uart:~$ [00:02:22.815,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642448 (Ack:147242547)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%
++  10.33s uart:~$ [00:02:22.824,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642448] (U) Msg Retransmission to 0:0000000000000000 scheduled for 657ms from now [State:Idle II:500 AI:300 AT:4000]
++  10.36s uart:~$ [00:02:22.852,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242548 (Ack:135642448)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:24 (SecureChannel:PASE_Pake3) (B:6
++  10.43s uart:~$ [00:02:22.857,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642449 (Ack:147242548)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773
++  10.50s uart:~$ [00:02:22.941,000] <inf> chip: [EM]<<< [E:21210r S:0 M:135642450 (Ack:147242548)] (U) Msg TX from 0000000000000000 to 0:26D3E0F849C610A3 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58773
++  10.52s uart:~$ [00:02:23.012,000] <inf> chip: [EM]??1 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000 scheduled for 335ms from now [State:Active II:500 AI:300 AT:4000]
++  10.74s uart:~$ uart:~$ uart:~$ [00:02:23.131,000] <inf> chip: [SC]SecureSession[0x70001660, LSID:13232]: State change 'kEstablishing' --> 'kActive'
++  10.78s uart:~$ [00:02:23.134,000] <inf> chip: [SVR]Commissioning completed session establishment step
++  10.79s uart:~$ [00:02:23.137,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  10.81s uart:~$ [00:02:23.143,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
++  10.83s uart:~$ [00:02:23.310,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
++  10.92s uart:~$ [00:02:23.429,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
++  11.95s uart:~$ uart:~$ uart:~$ [00:02:23.537,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  13.23s uart:~$ uart:~$ [00:02:25.748,000] <inf> chip: [SVR]Device completed Rendezvous process
++  13.24s uart:~$ [00:02:25.752,000] <inf> chip: [EM]<<1 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000
++  13.27s uart:~$ [00:02:25.760,000] <inf> chip: [EM]??2 [E:21210r S:0 M:135642450] (U) Msg Retransmission to 0:0000000000000000 scheduled for 347ms from now [State:Active II:500 AI:300 AT:4000]
++  13.29s uart:~$ [00:02:25.770,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
++  14.45s uart:~$ [00:02:26.010,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586
++  14.89s uart:~$ [00:02:27.342,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355688 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  14.92s uart:~$ [00:02:27.357,000] <inf> chip: [EM]??1 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 398ms from now [State:Active II:500 AI:300 AT:4000]
++  14.99s uart:~$ [00:02:27.472,000] <inf> chip: [EM]>>> [E:21210r S:0 M:147242549 (Ack:135642450)] (U) Msg RX from 0:26D3E0F849C610A3 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (
++  15.10s uart:~$ [00:02:27.631,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
++  15.17s uart:~$ [00:02:27.637,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355689 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  15.21s uart:~$ [00:02:27.653,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
++  15.26s uart:~$ [00:02:27.659,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355690 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  15.34s uart:~$ [00:02:27.854,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
++  15.41s uart:~$ [00:02:27.876,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355691 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  15.43s uart:~$ [00:02:27.885,000] <inf> chip: [EM]<<1 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  15.46s uart:~$ [00:02:27.898,000] <inf> chip: [EM]??2 [E:21211r S:13232 M:225355688] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 338ms from now [State:Active II:500 AI:300 AT:4000]
++  15.50s uart:~$ [00:02:27.906,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512787] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:136)
++  15.56s uart:~$ [00:02:28.005,000] <inf> chip: [EM]<<< [E:21211r S:13232 M:225355692 (Ack:60512787)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  15.67s uart:~$ uart:~$ uart:~$ [00:02:28.150,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
++  15.79s uart:~$ [00:02:28.230,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355693 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  15.82s uart:~$ [00:02:28.243,000] <inf> chip: [EM]??1 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 359ms from now [State:Active II:500 AI:300 AT:4000]
++  15.90s uart:~$ [00:02:28.410,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512789 (Ack:225355688)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  16.00s uart:~$ [00:02:28.533,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
++  16.07s uart:~$ [00:02:28.539,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355694 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  16.10s uart:~$ [00:02:28.552,000] <inf> chip: [EM]>>> [E:21211r S:13232 M:60512790 (Ack:225355688)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  16.13s uart:~$ [00:02:28.559,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512788] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:02 (IM:ReadRequest) (B:57)
++  16.20s uart:~$ [00:02:28.654,000] <inf> chip: [EM]<<< [E:21212r S:13232 M:225355695 (Ack:60512788)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  16.24s uart:~$ uart:~$ uart:~$ [00:02:28.738,000] <inf> chip: [EM]<<1 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  16.26s uart:~$ [00:02:28.788,000] <inf> chip: [EM]??2 [E:21212r S:13232 M:225355693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 376ms from now [State:Active II:500 AI:300 AT:4000]
++  16.29s uart:~$ [00:02:28.809,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
++  16.33s uart:~$ [00:02:28.819,000] <inf> chip: [FS]GeneralCommissioning: Received ArmFailSafe (60s)
++  16.49s uart:~$ uart:~$ uart:~$ [00:02:29.008,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355696 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe
++  16.52s uart:~$ [00:02:29.040,000] <inf> chip: [EM]??1 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 383ms from now [State:Active II:500 AI:300 AT:4000]
++  16.56s uart:~$ [00:02:29.048,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512792 (Ack:225355693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  16.63s uart:~$ [00:02:29.058,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
++  16.69s uart:~$ [00:02:29.149,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355697 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  17.05s uart:~$ uart:~$ uart:~$ [00:02:29.277,000] <inf> chip: [EM]>>> [E:21212r S:13232 M:60512793 (Ack:225355693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChann
++  17.09s uart:~$ [00:02:29.298,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512791] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)
++  17.14s uart:~$ [00:02:29.304,000] <inf> chip: [EM]<<< [E:21213r S:13232 M:225355698 (Ack:60512791)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  17.17s uart:~$ [00:02:29.318,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
++  17.37s uart:~$ uart:~$ uart:~$ [00:02:29.852,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355699 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe
++  17.40s uart:~$ [00:02:29.909,000] <inf> chip: [EM]??1 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 368ms from now [State:Active II:500 AI:300 AT:4000]
++  17.43s uart:~$ [00:02:29.913,000] <inf> chip: [EM]<<1 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  17.45s uart:~$ [00:02:29.924,000] <inf> chip: [EM]??2 [E:21213r S:13232 M:225355696] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 382ms from now [State:Active II:500 AI:300 AT:4000]
++  17.47s uart:~$ [00:02:29.930,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512795 (Ack:225355696)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  17.55s uart:~$ [00:02:29.940,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
++  17.60s uart:~$ [00:02:30.045,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355700 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  17.68s uart:~$ [00:02:30.201,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512794] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)
++  17.74s uart:~$ [00:02:30.217,000] <inf> chip: [EM]<<< [E:21214r S:13232 M:225355701 (Ack:60512794)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  17.77s uart:~$ [00:02:30.231,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512796] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
++  17.81s uart:~$ [00:02:30.240,000] <inf> chip: [ZCL]OpCreds: Certificate Chain request received for PAI
++  18.01s uart:~$ uart:~$ uart:~$ [00:02:30.516,000] <inf> chip: [EM]<<< [E:21215r S:13232 M:225355702 (Ack:60512796)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe
++  18.03s uart:~$ [00:02:30.535,000] <inf> chip: [EM]??1 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 382ms from now [State:Active II:500 AI:300 AT:4000]
++  18.06s uart:~$ [00:02:30.539,000] <inf> chip: [EM]<<1 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  18.08s uart:~$ [00:02:30.550,000] <inf> chip: [EM]??2 [E:21214r S:13232 M:225355699] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 351ms from now [State:Active II:500 AI:300 AT:4000]
++  18.11s uart:~$ [00:02:30.556,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512797 (Ack:225355699)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  18.17s uart:~$ [00:02:30.565,000] <inf> chip: [EM]>>> [E:21213r S:13232 M:60512798 (Ack:225355696)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  18.21s uart:~$ [00:02:30.616,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512796] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
++  18.26s uart:~$ [00:02:30.716,000] <inf> chip: [EM]<<< [E:21215r S:13232 M:225355703 (Ack:60512796)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  18.31s uart:~$ uart:~$ uart:~$ [00:02:30.851,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512799] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B
++  18.36s uart:~$ [00:02:30.880,000] <inf> chip: [ZCL]OpCreds: Certificate Chain request received for DAC
++  18.56s uart:~$ uart:~$ uart:~$ [00:02:31.067,000] <inf> chip: [EM]<<< [E:21216r S:13232 M:225355704 (Ack:60512799)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe
++  18.59s uart:~$ [00:02:31.085,000] <inf> chip: [EM]??1 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 340ms from now [State:Active II:500 AI:300 AT:4000]
++  18.62s uart:~$ [00:02:31.089,000] <inf> chip: [EM]<<1 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  18.64s uart:~$ [00:02:31.105,000] <inf> chip: [EM]??2 [E:21215r S:13232 M:225355702] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000]
++  18.67s uart:~$ [00:02:31.110,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512800 (Ack:225355702)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  18.72s uart:~$ [00:02:31.124,000] <inf> chip: [EM]>>> [E:21214r S:13232 M:60512801 (Ack:225355699)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  18.77s uart:~$ [00:02:31.182,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512799] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)
++  18.83s uart:~$ [00:02:31.281,000] <inf> chip: [EM]<<< [E:21216r S:13232 M:225355705 (Ack:60512799)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  19.85s uart:~$ uart:~$ uart:~$ [00:02:31.426,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B
++  19.89s uart:~$ [00:02:31.443,000] <inf> chip: [ZCL]OpCreds: Received an AttestationRequest command
++  19.98s uart:~$ uart:~$ uart:~$ [00:02:32.525,000] <inf> chip: [ZCL]OpCreds: AttestationRequest successful.
++  20.12s uart:~$ [00:02:32.552,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355706 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  20.14s uart:~$ [00:02:32.566,000] <inf> chip: [EM]??1 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 402ms from now [State:Active II:500 AI:300 AT:4000]
++  20.17s uart:~$ [00:02:32.663,000] <inf> chip: [EM]<<1 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  20.23s uart:~$ uart:~$ uart:~$ [00:02:32.736,000] <inf> chip: [EM]??2 [E:21216r S:13232 M:225355704] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 410ms from now [State:Active II:500 AI:300 AT:4
++  20.26s uart:~$ [00:02:32.776,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512803 (Ack:225355704)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  20.31s uart:~$ [00:02:32.785,000] <inf> chip: [EM]>>> [E:21215r S:13232 M:60512804 (Ack:225355702)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  20.35s uart:~$ [00:02:32.794,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  20.41s uart:~$ [00:02:32.799,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355707 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  20.49s uart:~$ [00:02:32.990,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  20.55s uart:~$ [00:02:33.020,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355708 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  20.57s uart:~$ [00:02:33.029,000] <inf> chip: [EM]<<1 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  20.60s uart:~$ [00:02:33.046,000] <inf> chip: [EM]??2 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000]
++  20.64s uart:~$ [00:02:33.054,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512802] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  20.70s uart:~$ [00:02:33.154,000] <inf> chip: [EM]<<< [E:21217r S:13232 M:225355709 (Ack:60512802)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  21.73s uart:~$ uart:~$ uart:~$ [00:02:33.308,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B
++  21.77s uart:~$ [00:02:33.318,000] <inf> chip: [ZCL]OpCreds: Received a CSRRequest command
++  23.61s uart:~$ uart:~$ uart:~$ [00:02:35.197,000] <inf> chip: [ZCL]OpCreds: AllocatePendingOperationalKey succeeded
++  23.66s uart:~$ uart:~$ [00:02:36.226,000] <inf> chip: [ZCL]OpCreds: CSRRequest successful.
++  23.81s uart:~$ [00:02:36.246,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355710 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  23.83s uart:~$ [00:02:36.258,000] <inf> chip: [EM]??1 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 404ms from now [State:Active II:500 AI:300 AT:4000]
++  23.86s uart:~$ [00:02:36.350,000] <inf> chip: [EM]<<2 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  23.91s uart:~$ uart:~$ uart:~$ [00:02:36.432,000] <inf> chip: [EM]??3 [E:21217r S:13232 M:225355706] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 576ms from now [State:Active II:500 AI:300 AT:4
++  23.95s uart:~$ [00:02:36.470,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512806 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  24.01s uart:~$ [00:02:36.479,000] <inf> chip: [EM]>>> [E:21216r S:13232 M:60512807 (Ack:225355704)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  24.05s uart:~$ [00:02:36.487,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  24.11s uart:~$ [00:02:36.493,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355711 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  24.18s uart:~$ uart:~$ uart:~$ [00:02:36.663,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512808 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChann
++  24.20s uart:~$ [00:02:36.688,000] <inf> chip: [EM]<<1 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  24.22s uart:~$ [00:02:36.728,000] <inf> chip: [EM]??2 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 345ms from now [State:Active II:500 AI:300 AT:4000]
++  24.26s uart:~$ [00:02:36.736,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  24.32s uart:~$ [00:02:36.741,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355712 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  24.36s uart:~$ [00:02:36.756,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  24.42s uart:~$ [00:02:36.859,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355713 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  25.45s uart:~$ [00:02:37.030,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512805] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)
++  25.51s uart:~$ [00:02:37.042,000] <inf> chip: [EM]<<< [E:21218r S:13232 M:225355714 (Ack:60512805)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  25.54s uart:~$ [00:02:37.061,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
++  25.58s uart:~$ [00:02:37.070,000] <inf> chip: [ZCL]OpCreds: Received an AddTrustedRootCertificate command
++  29.08s uart:~$ uart:~$ uart:~$ [00:02:41.628,000] <inf> chip: [ZCL]OpCreds: AddTrustedRootCertificate successful.
++  29.21s uart:~$ [00:02:41.641,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355715 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  29.23s uart:~$ [00:02:41.657,000] <inf> chip: [EM]??1 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 633ms from now [State:Idle II:500 AI:300 AT:4000]
++  29.26s uart:~$ [00:02:41.756,000] <inf> chip: [EM]<<2 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  29.31s uart:~$ uart:~$ uart:~$ [00:02:41.826,000] <inf> chip: [EM]??3 [E:21218r S:13232 M:225355710] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 886ms from now [State:Idle II:500 AI:300 AT:400
++  29.34s uart:~$ [00:02:41.868,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512810 (Ack:225355710)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  29.40s uart:~$ [00:02:41.876,000] <inf> chip: [EM]>>> [E:21217r S:13232 M:60512811 (Ack:225355706)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  29.44s uart:~$ [00:02:41.889,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
++  29.51s uart:~$ [00:02:41.895,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355716 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  29.57s uart:~$ uart:~$ uart:~$ [00:02:42.055,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512812 (Ack:225355710)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChann
++  29.61s uart:~$ [00:02:42.121,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
++  29.67s uart:~$ [00:02:42.127,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355717 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  29.71s uart:~$ [00:02:42.147,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
++  29.78s uart:~$ [00:02:42.238,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355718 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  29.80s uart:~$ [00:02:42.315,000] <inf> chip: [EM]<<1 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000
++  29.89s uart:~$ uart:~$ uart:~$ [00:02:42.381,000] <inf> chip: [EM]??2 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 403ms from now [State:Active II:500 AI:300 AT:4
++  29.94s uart:~$ [00:02:42.425,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512809] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)
++  30.00s uart:~$ [00:02:42.431,000] <inf> chip: [EM]<<< [E:21219r S:13232 M:225355719 (Ack:60512809)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  30.02s uart:~$ [00:02:42.461,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
++  30.06s uart:~$ [00:02:42.472,000] <inf> chip: [ZCL]OpCreds: Received an AddNOC command
++  34.40s uart:~$ uart:~$ uart:~$ [00:02:45.986,000] <inf> chip: [FP]Validating NOC chain
++  40.99s uart:~$ uart:~$ [00:02:52.578,000] <inf> chip: [FP]NOC chain validation successful
++  41.00s uart:~$ [00:02:52.579,000] <inf> chip: [FP]Added new fabric at index: 0x2
++  41.01s uart:~$ [00:02:52.580,000] <inf> chip: [FP]Assigned compressed fabric ID: 0xECB6E600AAB8719B, node ID: 0x0000000000000002
++  41.02s uart:~$ [00:02:52.581,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
++  41.04s uart:~$ [00:02:52.582,000] <inf> chip: [TS]New proposed Last Known Good Time: 2021-01-01T00:00:00
++  41.05s uart:~$ [00:02:52.582,000] <inf> chip: [TS]Retaining current Last Known Good Time
++  46.98s uart:~$ [00:02:59.531,000] <inf> chip: [ZCL]OpCreds: ACL entry created for Fabric index 0x2 CASE Admin Subject 0x000000000001B669
++  47.01s uart:~$ [00:02:59.532,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
++  47.09s uart:~$ [00:02:59.540,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
++  47.17s uart:~$ uart:~$ uart:~$ [00:02:59.714,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  47.20s uart:~$ [00:02:59.715,000] <inf> chip: [DIS]Advertise operational node ECB6E600AAB8719B-0000000000000002
++  47.28s uart:~$ [00:02:59.722,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ECB6E600AAB8719B-0000000000000002.
++  47.30s uart:~$ [00:02:59.763,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  47.35s uart:~$ [00:02:59.883,000] <inf> chip: [ZCL]OpCreds: successfully created fabric index 0x2 via AddNOC
++  47.48s uart:~$ [00:02:59.971,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355720 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  47.50s uart:~$ [00:02:59.980,000] <inf> chip: [EM]??1 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 647ms from now [State:Idle II:500 AI:300 AT:4000]
++  47.53s uart:~$ [00:02:59.987,000] <inf> chip: [EM]<<2 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 2:FFFFFFFB00000000
++  47.55s uart:~$ [00:02:59.998,000] <inf> chip: [EM]??3 [E:21219r S:13232 M:225355715] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 901ms from now [State:Idle II:500 AI:300 AT:4000]
++  47.58s uart:~$ [00:03:00.003,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512814 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  47.63s uart:~$ [00:03:00.145,000] <inf> chip: [EM]>>> [E:21218r S:13232 M:60512815 (Ack:225355710)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  47.74s uart:~$ [00:03:00.255,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
++  47.80s uart:~$ [00:03:00.261,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355721 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  47.82s uart:~$ [00:03:00.274,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512816 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  47.86s uart:~$ [00:03:00.293,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
++  47.92s uart:~$ [00:03:00.386,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355722 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  48.02s uart:~$ [00:03:00.543,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
++  48.08s uart:~$ [00:03:00.550,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355723 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  48.12s uart:~$ [00:03:00.575,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512813] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)
++  48.19s uart:~$ [00:03:00.581,000] <inf> chip: [EM]<<< [E:21220r S:13232 M:225355724 (Ack:60512813)] (S) Msg TX from 0000000000000000 to 2:FFFFFFFB00000000 [719B] [UDP:[fe80::1081:6f60:1fb9:fe2d%ETH_W5500]:58
++  48.20s uart:~$ [00:03:00.678,000] <inf> chip: [EM]<<1 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000
++  48.22s uart:~$ [00:03:00.760,000] <inf> chip: [EM]??2 [E:21220r S:13232 M:225355720] (S) Msg Retransmission to 2:FFFFFFFB00000000 scheduled for 377ms from now [State:Active II:500 AI:300 AT:4000]
++  48.29s uart:~$ uart:~$ uart:~$ [00:03:00.826,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512817 (Ack:225355720)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChann
++  48.34s uart:~$ [00:03:00.849,000] <inf> chip: [EM]>>> [E:21219r S:13232 M:60512818 (Ack:225355715)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  48.37s uart:~$ [00:03:00.853,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242550] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:30 (SecureChannel:CASE_Sigma1) (B:196)
++  48.40s uart:~$ [00:03:00.855,000] <inf> chip: [IN]CASE Server received Sigma1 message . Starting handshake. EC 0x70002fd0
++  48.43s uart:~$ [00:03:00.858,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642451 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] 
++  48.46s uart:~$ [00:03:00.867,000] <inf> chip: [SC]Received Sigma1 msg
++  54.17s uart:~$ uart:~$ uart:~$ [00:03:05.767,000] <inf> chip: [SC]CASE matched destination ID: fabricIndex 2, NodeID 0x0000000000000002
++  57.22s uart:~$ [00:03:09.750,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642452 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] 
++  57.25s uart:~$ [00:03:09.765,000] <inf> chip: [EM]??1 [E:21221r S:0 M:135642452] (U) Msg Retransmission to 0:0000000000000000 scheduled for 559ms from now [State:Idle II:500 AI:300 AT:4000]
++  57.26s uart:~$ [00:03:09.766,000] <inf> chip: [SC]Sent Sigma2 msg
++  57.28s uart:~$ [00:03:09.773,000] <inf> chip: [EM]>>> [E:21220r S:13232 M:60512819 (Ack:225355720)] (S) Msg RX from 2:FFFFFFFB00000000 [719B] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck
++  57.32s uart:~$ [00:03:09.777,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242550] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:30 (SecureChannel:CASE_Sigma1) (B:196)
++  57.38s uart:~$ [00:03:09.781,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642453 (Ack:147242550)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] 
++  57.41s uart:~$ [00:03:09.926,000] <inf> chip: [EM]>>> [E:21221r S:0 M:147242551 (Ack:135642452)] (U) Msg RX from 0:F02B2B52C83EA310 [0000] to 0000000000000000 --- Type 0000:32 (SecureChannel:CASE_Sigma3) (B:
++  58.43s uart:~$ uart:~$ uart:~$ [00:03:10.008,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642454 (Ack:147242551)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ET
++  58.46s uart:~$ [00:03:10.051,000] <inf> chip: [SC]Received Sigma3 msg
++  58.49s uart:~$ [00:03:10.089,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time
++  68.46s uart:~$ uart:~$ uart:~$ [00:03:20.063,000] <err> chip: [DL]Long dispatch time: 9972 ms, for event type 2
++  69.97s uart:~$ [00:03:22.499,000] <inf> chip: [EM]<<< [E:21221r S:0 M:135642455 (Ack:147242551)] (U) Msg TX from 0000000000000000 to 0:F02B2B52C83EA310 [0000] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:58773] 
++  69.99s uart:~$ [00:03:22.507,000] <inf> chip: [EM]??1 [E:21221r S:0 M:135642455] (U) Msg Retransmission to 0:0000000000000000 scheduled for 669ms from now [State:Idle II:500 AI:300 AT:4000]
++  70.01s uart:~$ [00:03:22.521,000] <inf> chip: [SC]SecureSession[0x70001588, LSID:13231]: State change 'kEstablishing' --> 'kActive'
++  70.05s uart:~$ [00:03:22.524,000] <inf> chip: [IN]CASE Session established to peer: <000000000001B669, 2>
++  70.09s uart:~$ [00:03:22.528,000] <err> chip: [DL]Long dispatch time: 2465 ms, for event type 2
++  71.10s uart:~$ uart:~$ uart:~$ [00:03:22.687,000] <inf> chip: [EM]>>> [E:21222r S:13231 M:154513462] (S) Msg RX from 2:000000000001B669 [719B] to 0000000000000002 --- Type 0001:08 (IM:InvokeCommandRequest) (
++  71.14s uart:~$ [00:03:22.718,000] <inf> chip: [FS]GeneralCommissioning: Received CommissioningComplete
++  71.16s uart:~$ [00:03:23.600,000] <inf> chip: [FP]Metadata for Fabric 0x2 persisted to storage.
++  73.83s uart:~$ uart:~$ uart:~$ [00:03:25.427,000] <inf> chip: [TS]Committing Last Known Good Time to storage: 2023-10-14T01:16:48
++  73.85s uart:~$ [00:03:25.920,000] <inf> chip: [ZCL]OpCreds: Fabric index 0x2 was committed to storage. Compressed Fabric Id 0xECB6E600AAB8719B, FabricId 0000000000000002, NodeId 0000000000000002, VendorId 0x
++  76.21s uart:~$ uart:~$ uart:~$ [00:03:28.791,000] <inf> chip: [FS]GeneralCommissioning: Successfully committed pending fabric data
++  76.22s uart:~$ [00:03:28.792,000] <inf> chip: [FS]Fail-safe cleanly disarmed
++  76.34s uart:~$ [00:03:28.804,000] <inf> chip: [EM]<<< [E:21222r S:13231 M:199485048 (Ack:154513462)] (S) Msg TX from 0000000000000002 to 2:000000000001B669 [719B] [UDP:[fe80::c9:e0d5:3630:6125%ETH_W5500]:587
++  76.46s uart:~$ uart:~$ uart:~$ [00:03:28.909,000] <inf> chip: [EM]??1 [E:21222r S:13231 M:199485048] (S) Msg Retransmission to 2:000000000001B669 scheduled for 569ms from now [State:Idle II:500 AI:300 AT:400
++  76.50s uart:~$ [00:03:28.932,000] <inf> chip: [SVR]Commissioning completed successfully
++  76.51s uart:~$ [00:03:28.943,000] <inf> chip: [DIS]Updating services using commissioning mode 0
++  76.52s uart:~$ [00:03:28.966,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
++  76.55s uart:~$ [00:03:29.050,000] <inf> chip: [DIS]Advertise operational node ED33A4AE816D49D8-0000000000000001
++  76.63s uart:~$ [00:03:29.148,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ED33A4AE816D49D8-0000000000000001.
++  76.71s uart:~$ uart:~$ uart:~$ [00:03:29.261,000] <inf> chip: [DIS]mDNS service published: _matter._tcp
++  76.74s uart:~$ [00:03:29.263,000] <inf> chip: [DIS]Advertise operational node ECB6E600AAB8719B-0000000000000002
++  76.83s uart:~$ [00:03:29.270,000] <inf> chip: [DIS]CHIP minimal mDNS configured as 'Operational device'; instance name: ECB6E600AAB8719B-0000000000000002.
++  76.84s uart:~$ [00:03:29.310,000] <inf> chip: [DIS]mDNS service published: _matter._tcp

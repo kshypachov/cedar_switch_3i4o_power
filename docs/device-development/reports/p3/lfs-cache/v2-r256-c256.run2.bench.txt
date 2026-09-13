@@ -1,0 +1,8 @@
+uart:~$ uart:~$ uart:~$ storage_bench 5
+/lfs/settings: 827 bytes, 17 entries, 5 rounds (best / mean, us)
+  open+close          12000 /    12040
+  read 32 +seek        5000 /     5040
+  read 32              3800 /     3880
+  read 1024            2700 /     2780
+  scan (no match)    236800 /   237820
+  scan (all)         236900 /   239180

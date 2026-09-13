@@ -1,0 +1,4 @@
+&lfs0 {
+	read-size = <256>;
+	cache-size = <256>;
+};

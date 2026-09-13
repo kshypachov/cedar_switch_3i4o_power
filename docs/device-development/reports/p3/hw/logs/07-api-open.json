@@ -1,0 +1,63 @@
+{
+  "phase": "open",
+  "when": "2026-09-13T11:52:25",
+  "login_s": 1.083,
+  "open": {
+    "status": 202,
+    "body": {
+      "job_id": "job_00000001",
+      "job_url": "/api/v1/jobs/job_00000001",
+      "resource_url": "/api/v1/matter/commissioning"
+    },
+    "ms": 92,
+    "location": "/api/v1/jobs/job_00000001",
+    "job": {
+      "id": "job_00000001",
+      "boot_id": "boot_4c4cdfaf5d94de51",
+      "kind": "matter_open",
+      "state": "succeeded",
+      "phase": "opening",
+      "progress": null,
+      "cancellable": false,
+      "created_uptime_ms": "119810",
+      "updated_uptime_ms": "130770",
+      "resource_url": "/api/v1/matter/commissioning",
+      "error": null
+    },
+    "job_s": 11.37,
+    "retry_same_key": {
+      "status": 202,
+      "job_id": "job_00000001"
+    },
+    "second_open": {
+      "status": 409,
+      "code": "invalid_state"
+    }
+  },
+  "after_open": {
+    "/matter/commissioning": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "open": true,
+        "mode": "basic",
+        "source": "web",
+        "remaining_seconds": 177,
+        "codes_available": true
+      },
+      "ms": 71
+    },
+    "/matter/onboarding-codes": {
+      "status": 200,
+      "schema_errors": [],
+      "body": {
+        "available": true,
+        "reason": null,
+        "qr_payload": "MT:-24J0AFN00KA0648G00",
+        "manual_pairing_code": "34970112332",
+        "setup_passcode": "20202021"
+      },
+      "ms": 71
+    }
+  }
+}
