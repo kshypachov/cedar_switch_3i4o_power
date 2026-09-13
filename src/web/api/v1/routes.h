@@ -34,4 +34,13 @@ WEB_API_V1_ROUTE(openCommissioningWindow, POST, "/matter/commissioning", WEB_API
 WEB_API_V1_ROUTE(closeCommissioningWindow, DELETE, "/matter/commissioning", WEB_API_CSRF | WEB_API_IDEMPOTENT, V1_NO_BODY, NULL, NULL, v1_close_commissioning_window)
 WEB_API_V1_ROUTE(getOnboardingCodes, GET, "/matter/onboarding-codes", 0, V1_NO_BODY, NULL, NULL, v1_get_onboarding_codes)
 WEB_API_V1_ROUTE(listFabrics, GET, "/matter/fabrics", 0, V1_NO_BODY, NULL, NULL, v1_list_fabrics)
+WEB_API_V1_ROUTE(getNetworkStatus, GET, "/network/status", 0, V1_NO_BODY, NULL, NULL, v1_get_network_status)
+WEB_API_V1_ROUTE(getNetworkConfig, GET, "/network/config", 0, V1_NO_BODY, NULL, NULL, v1_get_network_config)
+WEB_API_V1_ROUTE(stageNetworkConfig, POST, "/network/transactions", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_network_transaction_body), &v1_network_transaction_schema, NULL, v1_stage_network_config)
+WEB_API_V1_ROUTE(getNetworkTransaction, GET, "/network/transactions/{transaction_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_network_transaction)
+WEB_API_V1_ROUTE(rollbackNetworkTransaction, DELETE, "/network/transactions/{transaction_id}", WEB_API_CSRF | WEB_API_IDEMPOTENT, V1_NO_BODY, NULL, NULL, v1_rollback_network_transaction)
+WEB_API_V1_ROUTE(applyNetworkTransaction, POST, "/network/transactions/{transaction_id}/apply", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_apply_body), &v1_apply_schema, NULL, v1_apply_network_transaction)
+WEB_API_V1_ROUTE(confirmNetworkTransaction, POST, "/network/transactions/{transaction_id}/confirm", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_confirm_network_transaction)
+WEB_API_V1_ROUTE(scanWiFi, POST, "/network/wifi/scans", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_scan_wifi)
+WEB_API_V1_ROUTE(getWiFiScan, GET, "/network/wifi/scans/{job_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_wifi_scan)
 /* clang-format on */

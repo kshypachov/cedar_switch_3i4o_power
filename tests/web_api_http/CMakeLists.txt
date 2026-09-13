@@ -8,6 +8,8 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${APP_ROOT}/modules/web-api
     ${APP_ROOT}/modules/matter-service
     ${APP_ROOT}/modules/web-assets
+    ${APP_ROOT}/modules/device-config-store
+    ${APP_ROOT}/modules/network-manager
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -36,6 +38,7 @@ target_sources(app PRIVATE
     ${V1_DIR}/auth.c
     ${V1_DIR}/system.c
     ${V1_DIR}/matter.c
+    ${V1_DIR}/network.c
 )
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)

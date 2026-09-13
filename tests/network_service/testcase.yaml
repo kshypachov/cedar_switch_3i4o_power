@@ -1,0 +1,14 @@
+tests:
+  cedar.network_service:
+    # The network service's pure parts: the slot format device-config-store is
+    # stored in, the five-power-cycle count, and the adapter's translations.
+    # The adapter over net_if and the ESP-Hosted driver is the hardware tier's
+    # (docs/device-development/reports/p4).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - network_service
+      - sim

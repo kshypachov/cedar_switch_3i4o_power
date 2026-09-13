@@ -29,7 +29,6 @@ LOG_MODULE_REGISTER(net_init, LOG_LEVEL_INF);
 #define EEPROM_MAC_OFFSET    0xFA
 #define MAC_ADDR_LEN         6
 
-static struct net_mgmt_event_callback cb;
 static struct net_mgmt_event_callback cb6;
 
 static bool mac_is_all_value(const uint8_t *mac, uint8_t value)
@@ -132,8 +131,13 @@ int ethernet_interfaces_init(void)
     net_mgmt_init_event_callback(&cb6, start_matter, NET_EVENT_IPV6_ADDR_ADD);
     net_mgmt_add_event_callback(&cb6);
 
-    net_if_up(iface); /* DHCP starts automatically if CONFIG_NET_DHCPV4=y */
-    (void)net_dhcpv4_start(iface); /* Explicit DHCP start */
+    /*
+     * IPv4 is not configured here any more (P4): the network service starts
+     * DHCP or assigns the static address the stored configuration names, once
+     * it has read it. Bringing the interface up gives IPv6 its link-local
+     * address, which is what starts Matter.
+     */
+    net_if_up(iface);
 
     return 0;
 }

@@ -12,8 +12,12 @@
 #include <zephyr/ztest.h>
 
 #include <job_manager/job_manager.h>
+#include <device_config_store/device_config_store.h>
 #include <matter_service/matter_service.h>
+#include <network_manager/network_manager.h>
 
+#include "fake_iface.h"
+#include "fake_storage.h"
 #include "harness.h"
 #include "web_api_v1.h"
 
@@ -266,6 +270,43 @@ static void get_job(const char *job_id)
 	zassert_equal(ctx.rsp.status, 200, "%s", body);
 }
 
+/* -- network-manager over fake interfaces for the network bindings --------- */
+
+static struct fake_storage net_storage;
+static struct device_config_backend net_backend;
+static struct fake_net net;
+static struct network_iface_ops net_ops;
+static int kicks;
+/* Its own clock: moving the session clock past a confirmation deadline would
+ * end the session the test is using. */
+static int64_t net_now;
+
+static int64_t net_clock(void)
+{
+	return net_now;
+}
+
+static void kick(void)
+{
+	kicks++;
+}
+
+static const struct web_api_v1_network net_hooks = {.kick = kick};
+
+static void network_reset(void)
+{
+	net_now = 1000;
+	fake_storage_init(&net_storage);
+	fake_storage_bind(&net_storage, &net_backend);
+	zassert_ok(device_config_init(&net_backend, NULL));
+	fake_net_init(&net);
+	fake_net_bind(&net, &net_ops);
+	network_manager_set_clock(net_clock);
+	zassert_ok(network_manager_init(&net_ops));
+	web_api_v1_set_network(&net_hooks);
+	kicks = 0;
+}
+
 static void *suite_setup(void)
 {
 	zassert_ok(web_api_v1_init(&identity));
@@ -277,6 +318,7 @@ static void before(void *f)
 	ARG_UNUSED(f);
 	harness_reset();
 	matter_reset();
+	network_reset();
 	cookie[0] = '\0';
 	csrf[0] = '\0';
 }
@@ -624,7 +666,7 @@ ZTEST(v1, test_capabilities)
 		"\"limits\":{\"json_body_bytes\":8192,\"upload_chunk_bytes\":16384,"
 		"\"upload_max_bytes\":2097152,\"log_page_records\":100,\"scan_records\":64,"
 		"\"commissioning_min_seconds\":180,\"commissioning_max_seconds\":900,"
-		"\"network_confirm_min_seconds\":30,\"network_confirm_max_seconds\":900},"
+		"\"network_confirm_min_seconds\":60,\"network_confirm_max_seconds\":300},"
 		"\"wifi_security_modes\":[\"open\",\"wpa2_psk\",\"wpa3_sae\"],"
 		"\"firmware_formats\":[\"raw_app\"],\"update_requires_ethernet\":true}");
 }
@@ -671,6 +713,786 @@ ZTEST(v1, test_jobs)
 	zassert_true(body_has(expected), "%s", body);
 	zassert_true(body_has("\"resource_url\":null"));
 	zassert_true(body_has("\"kind\":\"upload_chunk\""));
+}
+
+/* -- network ---------------------------------------------------------------- */
+
+#define NET_IPV4_DHCP "{\"mode\":\"dhcp\",\"address\":null,\"prefix_length\":null,\"gateway\":null}"
+#define NET_ETH_STATIC                                                                             \
+	"{\"enabled\":true,\"ipv4\":{\"mode\":\"static\",\"address\":\"192.168.88.50\","            \
+	"\"prefix_length\":24,\"gateway\":\"192.168.88.1\"}}"
+#define NET_ETH_DHCP  "{\"enabled\":true,\"ipv4\":" NET_IPV4_DHCP "}"
+#define NET_WIFI_OFF                                                                               \
+	"{\"enabled\":false,\"ssid_base64\":\"\",\"security\":\"open\",\"hidden\":false,"           \
+	"\"ipv4\":" NET_IPV4_DHCP ",\"credential\":{\"action\":\"keep\"}}"
+#define NET_DNS_AUTO "{\"mode\":\"automatic\",\"servers\":[]}"
+
+static char net_json[1024];
+
+static const char *net_candidate(int revision, const char *dns, const char *eth, const char *wifi)
+{
+	snprintf(net_json, sizeof(net_json),
+		 "{\"base_revision\":%d,\"config\":{\"preferred_interface\":\"ethernet\","
+		 "\"dns\":%s,\"interfaces\":{\"ethernet\":%s,\"wifi\":%s}}}",
+		 revision, dns, eth, wifi);
+	return net_json;
+}
+
+static void mutate(enum web_api_method method, const char *path, const char *json, const char *key)
+{
+	request(method, path);
+	ctx.req.headers.cookie = cookie;
+	ctx.req.headers.csrf_token = csrf;
+	ctx.req.headers.idempotency_key = key;
+	if (json != NULL) {
+		request_body(json);
+	}
+	send_v1();
+}
+
+static void stage_body(const char *json, const char *key)
+{
+	mutate(WEB_API_POST, "/api/v1/network/transactions", json, key);
+}
+
+/* Stage the static Ethernet candidate and apply it; returns with the transaction id. */
+static void stage_and_apply(char *id, size_t cap, int timeout, const char *stage_key,
+			    const char *apply_key)
+{
+	char path[160];
+	char json[64];
+
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF), stage_key);
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+	zassert_true(body_string("id", id, cap));
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/apply", id);
+	snprintf(json, sizeof(json), "{\"confirmation_timeout_seconds\":%d}", timeout);
+	mutate(WEB_API_POST, path, json, apply_key);
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+}
+
+ZTEST(v1, test_network_status_and_config_are_different_resources)
+{
+	setup_device();
+	net.eth.extra_count = 1;
+	net.eth.extra[0] = (struct network_addr){
+		.family = DEVICE_CONFIG_AF_INET6,
+		.prefix_length = 64,
+		.source = NETWORK_ADDR_LINK_LOCAL,
+		.bytes = {0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0x82, 0x34, 0x28, 0xff, 0xfe, 0x10, 0x6a, 0x1d},
+	};
+	network_manager_boot(NULL);
+	zassert_true(network_manager_process() > 0);
+
+	get("/api/v1/network/status");
+	zassert_equal(ctx.rsp.status, 200, "%s", body);
+	zassert_str_equal(
+		body,
+		"{\"interfaces\":[{\"id\":\"ethernet\",\"enabled\":true,\"link_up\":true,"
+		"\"state\":\"ready\",\"mac_address\":\"80:34:28:10:6a:1d\",\"addresses\":["
+		"{\"family\":\"ipv4\",\"address\":\"192.168.88.14\",\"prefix_length\":24,"
+		"\"source\":\"dhcp\"},"
+		"{\"family\":\"ipv6\",\"address\":\"fe80::8234:28ff:fe10:6a1d\",\"prefix_length\":64,"
+		"\"source\":\"link_local\"}],\"ssid\":null,\"rssi_dbm\":null,\"error\":null},"
+		"{\"id\":\"wifi\",\"enabled\":false,\"link_up\":false,\"state\":\"disabled\","
+		"\"mac_address\":\"00:00:00:00:00:00\",\"addresses\":[],\"ssid\":null,"
+		"\"rssi_dbm\":null,\"error\":null}],"
+		"\"default_interface\":\"ethernet\",\"dns_servers\":[]}");
+
+	get("/api/v1/network/config");
+	zassert_equal(ctx.rsp.status, 200, "%s", body);
+	zassert_str_equal(
+		body,
+		"{\"revision\":0,\"config\":{\"preferred_interface\":\"ethernet\","
+		"\"dns\":{\"mode\":\"automatic\",\"servers\":[]},\"interfaces\":{"
+		"\"ethernet\":{\"enabled\":true,\"ipv4\":" NET_IPV4_DHCP "},"
+		"\"wifi\":{\"enabled\":false,\"ssid_base64\":\"\",\"security\":\"open\","
+		"\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP ",\"password_set\":false}}},"
+		"\"pending_transaction_id\":null}");
+}
+
+ZTEST(v1, test_network_status_explains_an_absent_coprocessor)
+{
+	setup_device();
+	net.wifi.present = false;
+
+	get("/api/v1/network/status");
+	zassert_equal(ctx.rsp.status, 200, "%s", body);
+	zassert_true(body_has("{\"id\":\"wifi\",\"enabled\":false,\"link_up\":false,"
+			      "\"state\":\"disabled\""),
+		     "%s", body);
+	zassert_true(body_has("\"error\":{\"code\":\"capability_unavailable\","
+			      "\"message\":\"The Wi-Fi coprocessor does not respond\""),
+		     "disabled, and still told why it cannot be enabled: %s", body);
+
+	mutate(WEB_API_POST, "/api/v1/network/wifi/scans", "{}", "scan-key-000000000001");
+	zassert_equal(ctx.rsp.status, 503, "%s", body);
+	zassert_true(body_has("\"code\":\"capability_unavailable\""));
+	zassert_equal(kicks, 0, "a refusal wakes nobody");
+}
+
+ZTEST(v1, test_network_staging_redacts_the_password_and_says_where_it_is)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char expected[128];
+
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC,
+				 "{\"enabled\":true,\"ssid_base64\":\"Q2VkYXItTGFi\","
+				 "\"security\":\"wpa2_psk\",\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP
+				 ",\"credential\":{\"action\":\"replace\","
+				 "\"value\":\"sup3r-s3cret-pw\"}}"),
+		   "stage-key-0000000001");
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+	zassert_false(body_has("sup3r-s3cret-pw"), "the password never comes back");
+	zassert_true(body_has("\"ssid_base64\":\"Q2VkYXItTGFi\",\"security\":\"wpa2_psk\","
+			      "\"hidden\":false"),
+		     "%s", body);
+	zassert_true(body_has("\"password_set\":true"), "%s", body);
+	zassert_true(body_has("\"state\":\"staged\""));
+	zassert_true(body_has("\"remaining_seconds\":300,\"reconnect_urls\":[],\"job_id\":null,"
+			      "\"error\":null}"),
+		     "%s", body);
+	zassert_true(body_string("id", id, sizeof(id)));
+	snprintf(expected, sizeof(expected), "/api/v1/network/transactions/%s", id);
+	zassert_str_equal(response_header("Location"), expected);
+	zassert_equal(kicks, 0, "staging leaves the worker alone");
+
+	get("/api/v1/network/config");
+	snprintf(expected, sizeof(expected), "\"pending_transaction_id\":\"%s\"", id);
+	zassert_true(body_has(expected), "%s", body);
+}
+
+ZTEST(v1, test_network_staging_refusals_name_their_fields)
+{
+	setup_device();
+
+	stage_body(net_candidate(0, NET_DNS_AUTO,
+				 "{\"enabled\":true,\"ipv4\":{\"mode\":\"static\","
+				 "\"address\":\"192.168.88.50\",\"prefix_length\":24,"
+				 "\"gateway\":\"10.0.0.1\"}}",
+				 NET_WIFI_OFF),
+		   "stage-key-0000000002");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/config/interfaces/ethernet/ipv4/gateway\","
+			      "\"code\":\"out_of_range\"}]"),
+		     "%s", body);
+
+	/* keep with a value: no branch of the oneOf, one entry on the object */
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC,
+				 "{\"enabled\":false,\"ssid_base64\":\"\",\"security\":\"open\","
+				 "\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP ",\"credential\":"
+				 "{\"action\":\"keep\",\"value\":\"stray\"}}"),
+		   "stage-key-0000000003");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/config/interfaces/wifi/credential\","
+			      "\"code\":\"conflicting\"}]"),
+		     "%s", body);
+
+	stage_body(net_candidate(0, "{\"mode\":\"manual\",\"servers\":[\"resolver\"]}",
+				 NET_ETH_STATIC, NET_WIFI_OFF),
+		   "stage-key-0000000004");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/config/dns/servers/0\","
+			      "\"code\":\"conflicting\"}]"),
+		     "%s", body);
+
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC,
+				 "{\"enabled\":true,\"ssid_base64\":\"not base64!\","
+				 "\"security\":\"open\",\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP
+				 ",\"credential\":{\"action\":\"clear\"}}"),
+		   "stage-key-0000000005");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/config/interfaces/wifi/ssid_base64\","
+			      "\"code\":\"invalid_format\"}]"),
+		     "%s", body);
+
+	stage_body(net_candidate(7, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "stage-key-0000000006");
+	zassert_equal(ctx.rsp.status, 409, "%s", body);
+	zassert_true(body_has("\"code\":\"stale_revision\""));
+	zassert_equal(kicks, 0);
+}
+
+ZTEST(v1, test_network_staging_is_replayed_by_its_key)
+{
+	char first[NETWORK_TXN_ID_MAX_LEN + 1];
+	char again[NETWORK_TXN_ID_MAX_LEN + 1];
+
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "stage-key-0000000007");
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+	zassert_true(body_string("id", first, sizeof(first)));
+
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "stage-key-0000000007");
+	zassert_equal(ctx.rsp.status, 201, "a lost response is not answered with busy: %s", body);
+	zassert_true(body_string("id", again, sizeof(again)));
+	zassert_str_equal(first, again);
+
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_DHCP, NET_WIFI_OFF),
+		   "stage-key-0000000007");
+	zassert_equal(ctx.rsp.status, 409, "%s", body);
+	zassert_true(body_has("\"code\":\"idempotency_conflict\""));
+
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_DHCP, NET_WIFI_OFF),
+		   "stage-key-0000000008");
+	zassert_equal(ctx.rsp.status, 409, "%s", body);
+	zassert_true(body_has("\"code\":\"busy\""), "a second candidate is still refused");
+}
+
+ZTEST(v1, test_network_apply_confirm_and_commit)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char path[160];
+	char job_member[64];
+
+	setup_device();
+	stage_and_apply(id, sizeof(id), 120, "flow-key-00000000001", "flow-key-00000000002");
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	zassert_true(body_has("\"resource_url\":\"/api/v1/network/config\""), "%s", body);
+	zassert_equal(kicks, 1, "the worker is woken to change the interfaces");
+	zassert_equal(net.eth.configure_calls, 0, "and nothing changed before the response");
+	snprintf(job_member, sizeof(job_member), "\"job_id\":\"%s\"", job_id);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	get(path);
+	zassert_true(body_has("\"state\":\"applying\""), "%s", body);
+	zassert_true(body_has("\"remaining_seconds\":120,"
+			      "\"reconnect_urls\":[\"http://192.168.88.50/\"]"),
+		     "%s", body);
+	zassert_true(body_has(job_member), "%s", body);
+
+	zassert_true(network_manager_process() > 0);
+	get(path);
+	zassert_true(body_has("\"state\":\"awaiting_confirmation\""), "%s", body);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/confirm", id);
+	mutate(WEB_API_POST, path, "{}", "flow-key-00000000003");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_has(job_member), "confirm answers with the apply job: %s", body);
+	zassert_equal(kicks, 2);
+
+	zassert_true(network_manager_process() > 0);
+	/* The confirm's response was lost: the retry gets the job, not invalid_state. */
+	mutate(WEB_API_POST, path, "{}", "flow-key-00000000003");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_has(job_member), "%s", body);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	get(path);
+	zassert_true(body_has("\"state\":\"committed\""), "%s", body);
+	zassert_true(body_has("\"remaining_seconds\":null,\"reconnect_urls\":[]"), "%s", body);
+
+	get("/api/v1/network/config");
+	zassert_true(body_has("{\"revision\":1,"), "%s", body);
+	zassert_true(body_has("\"address\":\"192.168.88.50\",\"prefix_length\":24,"
+			      "\"gateway\":\"192.168.88.1\""),
+		     "%s", body);
+	zassert_true(body_has("\"pending_transaction_id\":null"), "%s", body);
+
+	snprintf(path, sizeof(path), "/api/v1/jobs/%s", job_id);
+	get(path);
+	zassert_true(body_has("\"kind\":\"network_apply\""), "%s", body);
+	zassert_true(body_has("\"state\":\"succeeded\""), "%s", body);
+	zassert_true(body_has("\"resource_url\":\"/api/v1/network/config\""), "%s", body);
+}
+
+ZTEST(v1, test_network_confirm_waits_for_the_interfaces)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	net.eth.dhcp_answers = false;
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_DHCP, NET_WIFI_OFF),
+		   "wait-key-00000000001");
+	zassert_true(body_string("id", id, sizeof(id)));
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/apply", id);
+	mutate(WEB_API_POST, path, "{\"confirmation_timeout_seconds\":60}", "wait-key-00000000002");
+	zassert_true(network_manager_process() > 0);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/confirm", id);
+	mutate(WEB_API_POST, path, "{}", "wait-key-00000000003");
+	zassert_equal(ctx.rsp.status, 409, "no lease yet: %s", body);
+	zassert_true(body_has("\"code\":\"invalid_state\""));
+
+	net.eth.dhcp_answers = true;
+	mutate(WEB_API_POST, path, "{}", "wait-key-00000000003");
+	zassert_equal(ctx.rsp.status, 202, "the corrected retry under the same key: %s", body);
+}
+
+ZTEST(v1, test_network_rollback_discards_or_restores)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char apply_job[JOB_ID_MAX_LEN + 1];
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+
+	/* A staged candidate: its own short job. */
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "back-key-00000000001");
+	zassert_true(body_string("id", id, sizeof(id)));
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	mutate(WEB_API_DELETE, path, NULL, "back-key-00000000002");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	get(path);
+	zassert_true(body_has("\"state\":\"rolled_back\""), "%s", body);
+	snprintf(path, sizeof(path), "/api/v1/jobs/%s", job_id);
+	get(path);
+	zassert_true(body_has("\"kind\":\"network_discard\""), "%s", body);
+	zassert_true(body_has("\"state\":\"succeeded\""), "%s", body);
+
+	/* An applied one: the apply job, restored by the worker. */
+	stage_and_apply(id, sizeof(id), 120, "back-key-00000000003", "back-key-00000000004");
+	zassert_true(body_string("job_id", apply_job, sizeof(apply_job)));
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(net.eth.applied.mode, DEVICE_CONFIG_IPV4_STATIC);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	mutate(WEB_API_DELETE, path, NULL, "back-key-00000000005");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	zassert_str_equal(job_id, apply_job);
+	mutate(WEB_API_DELETE, path, NULL, "back-key-00000000005");
+	zassert_equal(ctx.rsp.status, 202, "a replay, not invalid_state: %s", body);
+
+	zassert_true(network_manager_process() > 0);
+	get(path);
+	zassert_true(body_has("\"state\":\"rolled_back\""), "%s", body);
+	zassert_true(body_has("\"error\":null"), "%s", body);
+	zassert_equal(net.eth.applied.mode, DEVICE_CONFIG_IPV4_DHCP);
+}
+
+ZTEST(v1, test_network_confirmation_timeout_is_resource_expired)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	stage_and_apply(id, sizeof(id), 60, "late-key-00000000001", "late-key-00000000002");
+	zassert_true(network_manager_process() > 0);
+	net_now += 61 * 1000;
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	get(path);
+	zassert_true(body_has("\"state\":\"rolling_back\""), "%s", body);
+	zassert_true(body_has("\"error\":{\"code\":\"resource_expired\",\"message\":"
+			      "\"Confirmation timed out; the previous configuration was restored\""),
+		     "%s", body);
+
+	zassert_true(network_manager_process() > 0);
+	get(path);
+	zassert_true(body_has("\"state\":\"rolled_back\""), "%s", body);
+}
+
+ZTEST(v1, test_network_unknown_and_lost_transactions)
+{
+	struct device_config_recovery_report report = {
+		.result = DEVICE_CONFIG_RECOVERY_ROLLED_BACK,
+		.transaction_id = "txn_00000009",
+	};
+
+	setup_device();
+	get("/api/v1/network/transactions/txn_ffffffff");
+	zassert_equal(ctx.rsp.status, 404, "%s", body);
+
+	network_manager_boot(&report);
+	get("/api/v1/network/transactions/txn_00000009");
+	zassert_equal(ctx.rsp.status, 410, "%s", body);
+	zassert_true(body_has("\"code\":\"boot_changed\""));
+}
+
+ZTEST(v1, test_network_apply_timeout_bounds_are_the_schemas)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "bound-key-0000000001");
+	zassert_true(body_string("id", id, sizeof(id)));
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/apply", id);
+
+	mutate(WEB_API_POST, path, "{\"confirmation_timeout_seconds\":59}", "bound-key-0000000002");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("{\"path\":\"/confirmation_timeout_seconds\","
+			      "\"code\":\"out_of_range\"}"),
+		     "%s", body);
+	mutate(WEB_API_POST, path, "{\"confirmation_timeout_seconds\":301}", "bound-key-0000000003");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_equal(kicks, 0);
+}
+
+ZTEST(v1, test_wifi_scan_results)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char first[JOB_ID_MAX_LEN + 1];
+	char path[160];
+	char expected[768];
+	struct job_snapshot other;
+	const struct job_create_params upload = {.kind = JOB_KIND_UPLOAD_CHUNK};
+	struct network_access_point *a = &net.scan_results.items[0];
+	struct network_access_point *b = &net.scan_results.items[1];
+
+	setup_device();
+	net.scan_results.count = 2;
+	a->ssid_len = 8;
+	memcpy(a->ssid, "\xd0\x9a\xd0\xb5\xd0\xb4\xd1\x80", 8);
+	memcpy(a->bssid, "\xa4\x2b\xb0\x11\x22\x33", 6);
+	a->channel = 6;
+	a->rssi = -41;
+	a->security = NETWORK_AP_WPA3_SAE;
+	b->ssid_len = 3;
+	memcpy(b->ssid, "f\xff" "o", 3);
+	memcpy(b->bssid, "\xde\xad\xbe\xef\x00\x03", 6);
+	b->channel = 9;
+	b->rssi = -63;
+	b->security = NETWORK_AP_ENTERPRISE;
+	b->connect_supported = true;
+
+	mutate(WEB_API_POST, "/api/v1/network/wifi/scans", "{}", "scan-key-000000000002");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	snprintf(expected, sizeof(expected), "\"resource_url\":\"/api/v1/network/wifi/scans/%s\"",
+		 job_id);
+	zassert_true(body_has(expected), "%s", body);
+	zassert_equal(kicks, 1);
+
+	snprintf(path, sizeof(path), "/api/v1/network/wifi/scans/%s", job_id);
+	get(path);
+	snprintf(expected, sizeof(expected),
+		 "{\"job_id\":\"%s\",\"state\":\"queued\",\"items\":[],\"truncated\":false,"
+		 "\"error\":null}",
+		 job_id);
+	zassert_str_equal(body, expected);
+
+	zassert_true(network_manager_process() > 0);
+	get(path);
+	snprintf(expected, sizeof(expected),
+		 "{\"job_id\":\"%s\",\"state\":\"succeeded\",\"items\":["
+		 "{\"ssid\":\"Кедр\",\"ssid_base64\":\"0JrQtdC00YA=\","
+		 "\"bssid\":\"a4:2b:b0:11:22:33\",\"channel\":6,\"rssi_dbm\":-41,"
+		 "\"security\":\"wpa3_sae\",\"connect_supported\":true},"
+		 "{\"ssid\":\"f\xef\xbf\xbd" "o\",\"ssid_base64\":\"Zv9v\","
+		 "\"bssid\":\"de:ad:be:ef:00:03\",\"channel\":9,\"rssi_dbm\":-63,"
+		 "\"security\":\"enterprise\",\"connect_supported\":false}"
+		 "],\"truncated\":false,\"error\":null}",
+		 job_id);
+	zassert_str_equal(body, expected);
+
+	snprintf(path, sizeof(path), "/api/v1/jobs/%s", job_id);
+	get(path);
+	snprintf(expected, sizeof(expected), "\"resource_url\":\"/api/v1/network/wifi/scans/%s\"",
+		 job_id);
+	zassert_true(body_has(expected), "%s", body);
+
+	/* Only the latest scan keeps its results. */
+	memcpy(first, job_id, sizeof(first));
+	mutate(WEB_API_POST, "/api/v1/network/wifi/scans", "{}", "scan-key-000000000003");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(network_manager_process() > 0);
+	snprintf(path, sizeof(path), "/api/v1/network/wifi/scans/%s", first);
+	get(path);
+	zassert_equal(ctx.rsp.status, 410, "%s", body);
+	zassert_true(body_has("\"code\":\"resource_expired\""));
+
+	/* A job of another kind is not a scan. */
+	zassert_equal(job_create(&upload, &other), JOB_CREATE_NEW);
+	snprintf(path, sizeof(path), "/api/v1/network/wifi/scans/%s", other.id);
+	get(path);
+	zassert_equal(ctx.rsp.status, 404, "%s", body);
+}
+
+/*
+ * ssid_base64 is decoded as strictly as the mock's b64decode(validate=True).
+ * Zephyr's decoder is more lenient — it skips trailing spaces and does not
+ * insist on padding — so the binding checks the alphabet and the length itself.
+ * Found by mutation: "not base64!" fails on its length alone, so dropping
+ * either check broke nothing.
+ */
+ZTEST(v1, test_network_ssid_base64_is_as_strict_as_the_mocks)
+{
+	static const char *const bad[] = {"Zm9v    ", "Zm9vYg"};
+	char wifi[256];
+	char key[32];
+
+	setup_device();
+	for (size_t i = 0; i < ARRAY_SIZE(bad); i++) {
+		snprintf(wifi, sizeof(wifi),
+			 "{\"enabled\":true,\"ssid_base64\":\"%s\",\"security\":\"open\","
+			 "\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP ",\"credential\":{\"action\":\"clear\"}}",
+			 bad[i]);
+		snprintf(key, sizeof(key), "b64-key-00000000000%zu", i);
+		stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, wifi), key);
+		zassert_equal(ctx.rsp.status, 422, "'%s': %s", bad[i], body);
+		zassert_true(body_has("\"fields\":[{\"path\":\"/config/interfaces/wifi/ssid_base64\","
+				      "\"code\":\"invalid_format\"}]"),
+			     "'%s': %s", bad[i], body);
+	}
+}
+
+/*
+ * CredentialChange's branches both ways: a replace without a value is refused
+ * on the object, like keep with one. With Wi-Fi disabled the manager's own rules
+ * never look at the credential, so only the binding can refuse it. Found by
+ * mutation: only the keep-with-a-value direction was tested.
+ */
+ZTEST(v1, test_network_a_replace_without_a_value_is_refused_as_the_object)
+{
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC,
+				 "{\"enabled\":false,\"ssid_base64\":\"\",\"security\":\"open\","
+				 "\"hidden\":false,\"ipv4\":" NET_IPV4_DHCP ",\"credential\":"
+				 "{\"action\":\"replace\"}}"),
+		   "stage-key-0000000021");
+	zassert_equal(ctx.rsp.status, 422, "%s", body);
+	zassert_true(body_has("\"fields\":[{\"path\":\"/config/interfaces/wifi/credential\","
+			      "\"code\":\"conflicting\"}]"),
+		     "%s", body);
+}
+
+/*
+ * An SSID for display: each maximal invalid subpart becomes one U+FFFD, as
+ * Python's decode(..., "replace") gives the mock — a truncated sequence is one,
+ * an overlong or surrogate sequence is one per byte — and a NUL byte is replaced
+ * too, the device's decision. Found by mutation: the only invalid SSID tested was
+ * a lone 0xFF, which every variant of these rules renders the same.
+ */
+ZTEST(v1, test_wifi_scan_ssid_text_replaces_each_invalid_subpart)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char path[160];
+	static const struct {
+		const char *bytes;
+		uint8_t len;
+		const char *fragment;
+	} cases[] = {
+		{"\xe2\x82x", 3, "\"ssid\":\"\xef\xbf\xbdx\",\"ssid_base64\":\"4oJ4\""},
+		{"\xe0\x80\x80", 3,
+		 "\"ssid\":\"\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\",\"ssid_base64\":\"4ICA\""},
+		{"\xed\xa0\x80", 3,
+		 "\"ssid\":\"\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\",\"ssid_base64\":\"7aCA\""},
+		{"a\0b", 3, "\"ssid\":\"a\xef\xbf\xbd" "b\",\"ssid_base64\":\"YQBi\""},
+	};
+
+	setup_device();
+	net.scan_results.count = ARRAY_SIZE(cases);
+	for (size_t i = 0; i < ARRAY_SIZE(cases); i++) {
+		net.scan_results.items[i].ssid_len = cases[i].len;
+		memcpy(net.scan_results.items[i].ssid, cases[i].bytes, cases[i].len);
+		net.scan_results.items[i].channel = 6;
+		net.scan_results.items[i].security = NETWORK_AP_OPEN;
+	}
+	mutate(WEB_API_POST, "/api/v1/network/wifi/scans", "{}", "scan-key-000000000011");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)));
+	zassert_true(network_manager_process() > 0);
+	snprintf(path, sizeof(path), "/api/v1/network/wifi/scans/%s", job_id);
+	get(path);
+	for (size_t i = 0; i < ARRAY_SIZE(cases); i++) {
+		zassert_true(body_has(cases[i].fragment), "case %zu: %s", i, body);
+	}
+}
+
+/*
+ * An adapter's channel and RSSI are brought into the schema's ranges rather than
+ * passed through: a response outside its own schema is one a strict client
+ * rejects whole. Found by mutation: every reading tested was already in range.
+ */
+ZTEST(v1, test_wifi_scan_channel_and_rssi_stay_in_the_schemas_ranges)
+{
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	net.scan_results.count = 2;
+	net.scan_results.items[0].ssid_len = 1;
+	net.scan_results.items[0].ssid[0] = 'a';
+	net.scan_results.items[0].channel = 250;
+	net.scan_results.items[0].rssi = 20;
+	net.scan_results.items[1].ssid_len = 1;
+	net.scan_results.items[1].ssid[0] = 'b';
+	net.scan_results.items[1].channel = 0;
+	net.scan_results.items[1].rssi = -128;
+	mutate(WEB_API_POST, "/api/v1/network/wifi/scans", "{}", "scan-key-000000000012");
+	zassert_true(body_string("job_id", job_id, sizeof(job_id)), "%s", body);
+	zassert_true(network_manager_process() > 0);
+	snprintf(path, sizeof(path), "/api/v1/network/wifi/scans/%s", job_id);
+	get(path);
+	zassert_true(body_has("\"ssid\":\"a\",\"ssid_base64\":\"YQ==\","
+			      "\"bssid\":\"00:00:00:00:00:00\",\"channel\":233,\"rssi_dbm\":0"),
+		     "%s", body);
+	zassert_true(body_has("\"ssid\":\"b\",\"ssid_base64\":\"Yg==\","
+			      "\"bssid\":\"00:00:00:00:00:00\",\"channel\":1,\"rssi_dbm\":-127"),
+		     "%s", body);
+}
+
+/*
+ * RFC 5952: a single zero group is written out, and of two equally long runs
+ * the first becomes "::". Found by mutation: the one address tested had a
+ * single run of three, which either variant compresses the same way.
+ */
+ZTEST(v1, test_network_status_writes_ipv6_as_rfc5952)
+{
+	setup_device();
+	net.eth.extra_count = 1;
+	net.eth.extra[0] = (struct network_addr){
+		.family = DEVICE_CONFIG_AF_INET6,
+		.prefix_length = 64,
+		.source = NETWORK_ADDR_SLAAC,
+		.bytes = {0x20, 0x01, 0x0d, 0xb8, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+	};
+	network_manager_boot(NULL);
+	zassert_true(network_manager_process() > 0);
+
+	get("/api/v1/network/status");
+	zassert_true(body_has("\"address\":\"2001:db8:0:1:1:1:1:1\""), "one zero group stays: %s",
+		     body);
+
+	memcpy(net.eth.extra[0].bytes,
+	       (uint8_t[16]){0x20, 0x01, 0x0d, 0xb8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1}, 16);
+	get("/api/v1/network/status");
+	zassert_true(body_has("\"address\":\"2001:db8::1:0:0:1\""),
+		     "the first of two equal runs is compressed: %s", body);
+}
+
+/*
+ * The associated network's RSSI is brought into the schema's range like a scan
+ * result's: a driver's reading above 0 or below -127 is clamped, not passed on.
+ * Found by mutation: the fake only ever reported -55.
+ */
+ZTEST(v1, test_network_status_rssi_stays_in_the_schemas_range)
+{
+	setup_device();
+	net.associated = true;
+
+	net.rssi = 20;
+	get("/api/v1/network/status");
+	zassert_equal(ctx.rsp.status, 200, "%s", body);
+	zassert_true(body_has("\"ssid\":\"\",\"rssi_dbm\":0,"), "%s", body);
+
+	net.rssi = -128;
+	get("/api/v1/network/status");
+	zassert_true(body_has("\"ssid\":\"\",\"rssi_dbm\":-127,"), "%s", body);
+}
+
+/*
+ * reconnect_urls name where the device will answer while a change awaits its
+ * confirmation: the static address of an enabled interface, not one kept on a
+ * disabled interface as a stored profile. Found by mutation: the URLs were only
+ * read while applying, and the disabled interface in every case was on DHCP.
+ */
+ZTEST(v1, test_network_reconnect_urls_while_awaiting_name_only_enabled_interfaces)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC,
+				 "{\"enabled\":false,\"ssid_base64\":\"\",\"security\":\"open\","
+				 "\"hidden\":false,\"ipv4\":{\"mode\":\"static\","
+				 "\"address\":\"192.168.88.60\",\"prefix_length\":24,\"gateway\":null},"
+				 "\"credential\":{\"action\":\"keep\"}}"),
+		   "urls-key-00000000001");
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+	zassert_true(body_string("id", id, sizeof(id)));
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/apply", id);
+	mutate(WEB_API_POST, path, "{\"confirmation_timeout_seconds\":120}", "urls-key-00000000002");
+	zassert_equal(ctx.rsp.status, 202, "%s", body);
+	zassert_true(network_manager_process() > 0);
+
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+	get(path);
+	zassert_true(body_has("\"state\":\"awaiting_confirmation\""), "%s", body);
+	zassert_true(body_has("\"reconnect_urls\":[\"http://192.168.88.50/\"]"), "%s", body);
+}
+
+/*
+ * The replay table is full at eight records, and the one that gives way is the
+ * oldest: the request a client made most recently is the one whose response it
+ * is most likely still waiting for. Found by mutation: evicting the newest broke
+ * nothing, because no test filled the table.
+ */
+ZTEST(v1, test_network_the_oldest_replay_record_gives_way)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char again[NETWORK_TXN_ID_MAX_LEN + 1];
+	char key[32];
+	char path[160];
+	char json[sizeof(net_json)];
+
+	setup_device();
+	strcpy(json, net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF));
+	/* Ten records, each later than the last: the table is full well before the end. */
+	for (int i = 0; i < 5; i++) {
+		snprintf(key, sizeof(key), "evict-stage-00000%03d", i);
+		stage_body(json, key);
+		zassert_equal(ctx.rsp.status, 201, "%s", body);
+		zassert_true(body_string("id", id, sizeof(id)));
+		k_sleep(K_MSEC(2));
+		snprintf(key, sizeof(key), "evict-discard-000%03d", i);
+		snprintf(path, sizeof(path), "/api/v1/network/transactions/%s", id);
+		mutate(WEB_API_DELETE, path, NULL, key);
+		zassert_equal(ctx.rsp.status, 202, "%s", body);
+		k_sleep(K_MSEC(2));
+	}
+
+	/* The last stage is the second newest record, so it is still there. */
+	stage_body(json, "evict-stage-00000004");
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+	zassert_true(body_string("id", again, sizeof(again)));
+	zassert_str_equal(again, id, "the retry of the latest stage gets its transaction back");
+}
+
+/*
+ * A replay record lasts fifteen minutes. Past that the same key and body are a
+ * new request, which here meets the candidate the first one staged. Found by
+ * mutation: records that never expired broke nothing, because no test waited.
+ */
+ZTEST(v1, test_network_a_replay_record_expires)
+{
+	setup_device();
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "expire-key-000000001");
+	zassert_equal(ctx.rsp.status, 201, "%s", body);
+
+	k_sleep(K_MINUTES(16));
+	stage_body(net_candidate(0, NET_DNS_AUTO, NET_ETH_STATIC, NET_WIFI_OFF),
+		   "expire-key-000000001");
+	zassert_equal(ctx.rsp.status, 409, "past fifteen minutes it is not a replay: %s", body);
+	zassert_true(body_has("\"code\":\"busy\""), "%s", body);
+}
+
+/*
+ * The worker is woken for what was accepted and for nothing else: a refused
+ * apply or confirm changed nothing it would have to act on. Found by mutation:
+ * kicking on a refusal broke nothing, because only a refused scan counted kicks.
+ */
+ZTEST(v1, test_network_a_refused_apply_or_confirm_wakes_nobody)
+{
+	char id[NETWORK_TXN_ID_MAX_LEN + 1];
+	char path[160];
+
+	setup_device();
+	mutate(WEB_API_POST, "/api/v1/network/transactions/txn_ffffffff/apply",
+	       "{\"confirmation_timeout_seconds\":60}", "kick-key-00000000001");
+	zassert_equal(ctx.rsp.status, 404, "%s", body);
+	zassert_equal(kicks, 0, "a refused apply wakes nobody");
+
+	stage_and_apply(id, sizeof(id), 60, "kick-key-00000000002", "kick-key-00000000003");
+	zassert_equal(kicks, 1);
+
+	/* Not applied yet: confirm is refused. */
+	snprintf(path, sizeof(path), "/api/v1/network/transactions/%s/confirm", id);
+	mutate(WEB_API_POST, path, "{}", "kick-key-00000000004");
+	zassert_equal(ctx.rsp.status, 409, "%s", body);
+	zassert_equal(kicks, 1, "a refused confirm wakes nobody");
 }
 
 /* -- Matter ---------------------------------------------------------------- */

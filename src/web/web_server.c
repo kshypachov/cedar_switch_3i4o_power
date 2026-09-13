@@ -173,7 +173,7 @@ int app_web_init(void)
 
 	make_identity();
 	api_request_id_seed(k_cycle_get_32());
-	job_manager_init();
+	/* job_manager_init() runs in main(), before the network service creates jobs. */
 
 	rc = web_auth_init(&auth_platform);
 	if (rc != 0) {
