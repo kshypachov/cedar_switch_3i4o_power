@@ -1,0 +1,4 @@
+# Zephyr module declaration for web-assets.
+build:
+  cmake: .
+  kconfig: lib/Kconfig

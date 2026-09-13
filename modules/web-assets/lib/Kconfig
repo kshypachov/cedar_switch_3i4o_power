@@ -1,0 +1,8 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+config WEB_ASSETS
+	bool "Serve the browser application from flash"
+	help
+	  Lookup, MIME, ETag, gzip and cache policy for the files of the
+	  frontend's dist directory, embedded at build time. See
+	  include/web_assets/web_assets.h.

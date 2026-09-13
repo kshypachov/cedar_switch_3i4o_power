@@ -1,0 +1,13 @@
+tests:
+  cedar.web_assets:
+    # The response policy for the browser application: lookup, gzip
+    # negotiation, revalidation, SPA fallback. The generated table and the
+    # server path are covered by cedar.web_api_http.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - web_assets
+      - sim
