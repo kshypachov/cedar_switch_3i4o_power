@@ -508,3 +508,31 @@ ZTEST(api_validation, test_usable_host_addresses)
 	zassert_false(api_ipv4_is_usable_host(ok, 31), "the schema does not allow /31");
 	zassert_false(api_ipv4_is_usable_host(NULL, 24));
 }
+
+/* -- the escaper web-api shares with the error body ---------------------- */
+
+ZTEST(api_validation, test_json_append_escaped)
+{
+	char buf[32];
+	int pos;
+
+	memset(buf, 0x55, sizeof(buf));
+	pos = api_json_append_escaped(buf, sizeof(buf), 0, "a\"b\\c\n\x01д");
+	zassert_equal(pos, (int)strlen("a\\\"b\\\\c\\n\\u0001д"));
+	zassert_str_equal(buf, "a\\\"b\\\\c\\n\\u0001д", "and NUL-terminated at the end");
+
+	/* Appending continues from pos. */
+	pos = api_json_append_escaped(buf, sizeof(buf), (size_t)pos, "!");
+	zassert_str_equal(buf, "a\\\"b\\\\c\\n\\u0001д!");
+
+	/* Exactly fitting, including the NUL. */
+	zassert_equal(api_json_append_escaped(buf, 4, 0, "abc"), 3);
+	zassert_equal(api_json_append_escaped(buf, 3, 0, "abc"), -ENOMEM, "no room for the NUL");
+	zassert_equal(api_json_append_escaped(buf, 4, 0, "a\n"), 3, "a, backslash, n, NUL: fits");
+	zassert_equal(api_json_append_escaped(buf, 3, 0, "a\n"), -ENOMEM, "an escape is two bytes");
+	zassert_equal(api_json_append_escaped(buf, 4, 4, ""), -ENOMEM, "pos at the end");
+	zassert_equal(api_json_append_escaped(NULL, 4, 0, "a"), -ENOMEM);
+	zassert_equal(api_json_append_escaped(buf, 4, 0, NULL), -ENOMEM);
+	zassert_equal(api_json_append_escaped(buf, sizeof(buf), 0, ""), 0);
+	zassert_equal(buf[0], '\0');
+}

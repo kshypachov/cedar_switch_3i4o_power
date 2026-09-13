@@ -46,10 +46,23 @@ Retention runs on the monotonic clock and does not survive a reboot, which is
 correct: job ids are unique only within a boot, and the API pairs every id with
 a boot id for exactly that reason.
 
+## Added for the web API in P2
+
+- `job_active_ids()` copies the ids of the jobs still in flight, for
+  `SystemStatus.active_job_ids`, so a browser that reloads mid-operation finds
+  its job instead of starting another.
+- `job_find_by_key()` looks a key up without creating anything. The password
+  change needs it: it must verify the current password before a job may exist,
+  and creating the job first would record a refusal under the client's key.
+- `JOB_IDEMPOTENCY_KEY_MAX_LEN` is 96, not the contract's 64: web-api stores the
+  client's key scoped to its operation (16 hex digits of digest, a colon, the
+  key), so the same client key on two operations names two actions.
+
 ## Testing
 
-`tests/job_manager` covers the state machine, idempotency, retention, eviction
-and the wire names, entirely in the sim tier. The clock is injectable, so
+`tests/job_manager` covers the state machine, idempotency, retention, eviction,
+the wire names, the active listing and lookup by key — 21 tests, entirely in the
+sim tier. The clock is injectable, so
 expiry is tested without sleeping.
 
 Run it:

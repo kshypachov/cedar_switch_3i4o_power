@@ -334,3 +334,86 @@ ZTEST(job_manager, test_wire_names_match_the_contract)
 		zassert_not_null(job_state_str(s), "state %d has no wire name", s);
 	}
 }
+
+/* -- listing and lookup, for web-api ------------------------------------- */
+
+ZTEST(job_manager, test_active_ids)
+{
+	struct job_snapshot a, b, c;
+	char ids[2][JOB_ID_MAX_LEN + 1];
+
+	zassert_equal(job_active_ids(ids, ARRAY_SIZE(ids)), 0);
+	zassert_equal(create(NULL, 0, false, &a), JOB_CREATE_NEW);
+	zassert_equal(create(NULL, 0, false, &b), JOB_CREATE_NEW);
+	zassert_equal(create(NULL, 0, false, &c), JOB_CREATE_NEW);
+	zassert_ok(job_set_state(b.id, JOB_STATE_SUCCEEDED));
+
+	memset(ids, 0, sizeof(ids));
+	zassert_equal(job_active_ids(ids, ARRAY_SIZE(ids)), 2, "terminal jobs are not active");
+	zassert_true((strcmp(ids[0], a.id) == 0 && strcmp(ids[1], c.id) == 0) ||
+		     (strcmp(ids[0], c.id) == 0 && strcmp(ids[1], a.id) == 0));
+
+	memset(ids, 0, sizeof(ids));
+	zassert_equal(job_active_ids(ids, 1), 2, "the total, even when fewer fit");
+	zassert_true(ids[0][0] != '\0');
+	zassert_equal(ids[1][0], '\0', "only max are copied");
+	zassert_equal(job_active_ids(NULL, 0), 2);
+}
+
+ZTEST(job_manager, test_find_by_key)
+{
+	struct job_snapshot s, found;
+
+	zassert_equal(job_find_by_key("key-a", 1, &found), JOB_LOOKUP_NONE);
+	zassert_equal(job_active_count(), 0, "looking does not create");
+	zassert_equal(job_find_by_key(NULL, 1, &found), JOB_LOOKUP_NONE);
+	zassert_equal(job_find_by_key("", 1, &found), JOB_LOOKUP_NONE);
+
+	zassert_equal(create("key-a", 7, false, &s), JOB_CREATE_NEW);
+	zassert_equal(job_find_by_key("key-a", 7, &found), JOB_LOOKUP_EXISTING);
+	zassert_str_equal(found.id, s.id);
+	zassert_equal(job_find_by_key("key-a", 8, &found), JOB_LOOKUP_CONFLICT);
+	zassert_equal(job_find_by_key("key-b", 7, NULL), JOB_LOOKUP_NONE);
+	zassert_equal(job_find_by_key("key-a", 7, NULL), JOB_LOOKUP_EXISTING, "out may be NULL");
+}
+
+ZTEST(job_manager, test_find_by_key_in_compact_tier_and_after_retention)
+{
+	struct job_snapshot first, found;
+
+	zassert_equal(create("key-old", 3, false, &first), JOB_CREATE_NEW);
+	zassert_ok(job_set_state(first.id, JOB_STATE_SUCCEEDED));
+	/* Push it out of the full records. */
+	for (int i = 0; i < CONFIG_JOB_MANAGER_MAX_JOBS; i++) {
+		struct job_snapshot s;
+
+		zassert_equal(create(NULL, 0, false, &s), JOB_CREATE_NEW);
+		zassert_ok(job_set_state(s.id, JOB_STATE_SUCCEEDED));
+		advance_ms(1);
+	}
+	zassert_equal(job_find_by_key("key-old", 3, &found), JOB_LOOKUP_EXISTING);
+	zassert_true(found.compact);
+	zassert_str_equal(found.id, first.id);
+	zassert_equal(job_find_by_key("key-old", 4, &found), JOB_LOOKUP_CONFLICT);
+
+	advance_ms((int64_t)CONFIG_JOB_MANAGER_RETENTION_SECONDS * 1000 + 1000);
+	zassert_equal(job_find_by_key("key-old", 3, &found), JOB_LOOKUP_NONE,
+		      "past retention the key is free again");
+}
+
+ZTEST(job_manager, test_scoped_key_length)
+{
+	char key[JOB_IDEMPOTENCY_KEY_MAX_LEN + 2];
+	struct job_snapshot s;
+
+	/* web-api's scoped key: 16 hex digits, a colon, a 64-character key. */
+	zassert_true(JOB_IDEMPOTENCY_KEY_MAX_LEN >= 16 + 1 + 64);
+	memset(key, 'k', JOB_IDEMPOTENCY_KEY_MAX_LEN);
+	key[JOB_IDEMPOTENCY_KEY_MAX_LEN] = '\0';
+	zassert_equal(create(key, 1, false, &s), JOB_CREATE_NEW);
+	zassert_equal(job_find_by_key(key, 1, NULL), JOB_LOOKUP_EXISTING,
+		      "the full length is stored, not a prefix");
+	key[JOB_IDEMPOTENCY_KEY_MAX_LEN] = 'k';
+	key[JOB_IDEMPOTENCY_KEY_MAX_LEN + 1] = '\0';
+	zassert_equal(create(key, 1, false, &s), JOB_CREATE_INVALID);
+}

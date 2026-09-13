@@ -283,6 +283,58 @@ static void snapshot_from_compact(const struct job_compact *c, struct job_snapsh
 	out->compact = true;
 }
 
+/* Find a key in either tier. A live record wins over a retired one: it is more
+ * complete. Lock held.
+ */
+static enum job_lookup_result lookup_locked(const char *key, uint32_t request_hash,
+					    struct job_snapshot *out)
+{
+	for (size_t i = 0; i < ARRAY_SIZE(records); i++) {
+		if (!records[i].used || records[i].key[0] == '\0' ||
+		    strcmp(records[i].key, key) != 0) {
+			continue;
+		}
+		if (records[i].request_hash != request_hash) {
+			return JOB_LOOKUP_CONFLICT;
+		}
+		if (out != NULL) {
+			snapshot_from_record(&records[i], out);
+		}
+		return JOB_LOOKUP_EXISTING;
+	}
+	for (size_t i = 0; i < ARRAY_SIZE(compacts); i++) {
+		if (!compacts[i].used || compacts[i].key[0] == '\0' ||
+		    strcmp(compacts[i].key, key) != 0) {
+			continue;
+		}
+		if (compacts[i].request_hash != request_hash) {
+			return JOB_LOOKUP_CONFLICT;
+		}
+		if (out != NULL) {
+			snapshot_from_compact(&compacts[i], out);
+		}
+		return JOB_LOOKUP_EXISTING;
+	}
+
+	return JOB_LOOKUP_NONE;
+}
+
+enum job_lookup_result job_find_by_key(const char *key, uint32_t request_hash,
+				       struct job_snapshot *out)
+{
+	enum job_lookup_result res;
+
+	if (key == NULL || key[0] == '\0') {
+		return JOB_LOOKUP_NONE;
+	}
+	k_mutex_lock(&lock, K_FOREVER);
+	expire_compacts();
+	res = lookup_locked(key, request_hash, out);
+	k_mutex_unlock(&lock);
+
+	return res;
+}
+
 void job_manager_init(void)
 {
 	k_mutex_lock(&lock, K_FOREVER);
@@ -310,36 +362,15 @@ enum job_create_result job_create(const struct job_create_params *params,
 	expire_compacts();
 
 	if (params->idempotency_key != NULL) {
-		/* A live record wins over a retired one: it is more complete. */
-		for (size_t i = 0; i < ARRAY_SIZE(records); i++) {
-			if (!records[i].used || records[i].key[0] == '\0' ||
-			    strcmp(records[i].key, params->idempotency_key) != 0) {
-				continue;
-			}
-			if (records[i].request_hash != params->request_hash) {
-				res = JOB_CREATE_CONFLICT;
-				goto done;
-			}
-			if (out != NULL) {
-				snapshot_from_record(&records[i], out);
-			}
+		switch (lookup_locked(params->idempotency_key, params->request_hash, out)) {
+		case JOB_LOOKUP_EXISTING:
 			res = JOB_CREATE_EXISTING;
 			goto done;
-		}
-		for (size_t i = 0; i < ARRAY_SIZE(compacts); i++) {
-			if (!compacts[i].used || compacts[i].key[0] == '\0' ||
-			    strcmp(compacts[i].key, params->idempotency_key) != 0) {
-				continue;
-			}
-			if (compacts[i].request_hash != params->request_hash) {
-				res = JOB_CREATE_CONFLICT;
-				goto done;
-			}
-			if (out != NULL) {
-				snapshot_from_compact(&compacts[i], out);
-			}
-			res = JOB_CREATE_EXISTING;
+		case JOB_LOOKUP_CONFLICT:
+			res = JOB_CREATE_CONFLICT;
 			goto done;
+		default:
+			break;
 		}
 	}
 
@@ -546,6 +577,24 @@ size_t job_active_count(void)
 		if (records[i].used && !job_state_is_terminal(records[i].state)) {
 			n++;
 		}
+	}
+	k_mutex_unlock(&lock);
+	return n;
+}
+
+size_t job_active_ids(char ids[][JOB_ID_MAX_LEN + 1], size_t max)
+{
+	size_t n = 0;
+
+	k_mutex_lock(&lock, K_FOREVER);
+	for (size_t i = 0; i < ARRAY_SIZE(records); i++) {
+		if (!records[i].used || job_state_is_terminal(records[i].state)) {
+			continue;
+		}
+		if (ids != NULL && n < max) {
+			memcpy(ids[n], records[i].id, sizeof(records[i].id));
+		}
+		n++;
 	}
 	k_mutex_unlock(&lock);
 	return n;

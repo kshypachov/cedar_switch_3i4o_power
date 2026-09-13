@@ -240,6 +240,31 @@ int api_error_set_retry_after(struct api_error *err, uint16_t seconds);
 int api_error_to_json(const struct api_error *err, char *buf, size_t cap);
 
 /**
+ * @brief Append @p src to @p buf as the inside of a JSON string.
+ *
+ * The escaper api_error_to_json() uses, published so that every JSON body the
+ * device writes escapes text the same way. `web-api` builds its success
+ * responses with it; if it had its own, an SSID or a log line could come out
+ * spelled differently in a success body than in a rejection, and the mock —
+ * which transcribes this function — would match only one of them.
+ *
+ * Escapes `"` and `\`, spells `\n`, `\r` and `\t` short, writes other
+ * control characters as `\u00xx`, and passes every other byte through,
+ * UTF-8 included. It does not validate UTF-8; a caller that accepts bytes from
+ * outside must do that first.
+ *
+ * @param buf  Destination. Always left NUL-terminated at the returned
+ *             position on success.
+ * @param cap  Size of @p buf in bytes.
+ * @param pos  Where to start writing; must be below @p cap.
+ * @param src  NUL-terminated text.
+ * @return the new position (index of the terminating NUL), or -ENOMEM if the
+ *         text does not fit — in which case the contents past @p pos are
+ *         unspecified and the caller must discard the buffer.
+ */
+int api_json_append_escaped(char *buf, size_t cap, size_t pos, const char *src);
+
+/**
  * @brief Seed the request id generator.
  *
  * Ids are unique within a boot, and two boots start from different points so

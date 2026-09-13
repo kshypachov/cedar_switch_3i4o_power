@@ -275,8 +275,12 @@ int api_error_set_retry_after(struct api_error *err, uint16_t seconds)
  * included, passes through — the contract says bodies are UTF-8, and escaping
  * non-ASCII would only make them harder to read.
  */
-static int append_escaped(char *buf, size_t cap, size_t pos, const char *src)
+int api_json_append_escaped(char *buf, size_t cap, size_t pos, const char *src)
 {
+	if (buf == NULL || src == NULL || pos >= cap) {
+		return -ENOMEM;
+	}
+
 	for (size_t i = 0; src[i] != '\0'; i++) {
 		char c = src[i];
 		const char *esc = NULL;
@@ -323,6 +327,9 @@ static int append_escaped(char *buf, size_t cap, size_t pos, const char *src)
 		}
 	}
 
+	/* Every append above left room for one more byte. */
+	buf[pos] = '\0';
+
 	return (int)pos;
 }
 
@@ -362,7 +369,7 @@ int api_error_to_json(const struct api_error *err, char *buf, size_t cap)
 	APPEND(append_literal, "{\"error\":{\"code\":\"");
 	APPEND(append_literal, error_table[err->code].name);
 	APPEND(append_literal, "\",\"message\":\"");
-	APPEND(append_escaped, err->message);
+	APPEND(api_json_append_escaped, err->message);
 	if (err->fields_truncated) {
 		/*
 		 * The only place this fits. ErrorDetail is additionalProperties
@@ -374,7 +381,7 @@ int api_error_to_json(const struct api_error *err, char *buf, size_t cap)
 		APPEND(append_literal, " (further problems were not reported)");
 	}
 	APPEND(append_literal, "\",\"request_id\":\"");
-	APPEND(append_escaped, err->request_id);
+	APPEND(api_json_append_escaped, err->request_id);
 	APPEND(append_literal, "\",\"retryable\":");
 	APPEND(append_literal, error_table[err->code].retryable ? "true" : "false");
 
@@ -390,7 +397,7 @@ int api_error_to_json(const struct api_error *err, char *buf, size_t cap)
 				APPEND(append_literal, ",");
 			}
 			APPEND(append_literal, "{\"path\":\"");
-			APPEND(append_escaped, err->fields[i].path);
+			APPEND(api_json_append_escaped, err->fields[i].path);
 			APPEND(append_literal, "\",\"code\":\"");
 			APPEND(append_literal, field_code_names[err->fields[i].code]);
 			APPEND(append_literal, "\"}");

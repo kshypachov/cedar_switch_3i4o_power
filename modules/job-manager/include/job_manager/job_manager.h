@@ -52,8 +52,16 @@ extern "C" {
 
 /** Maximum length of a job id string, excluding the terminator. */
 #define JOB_ID_MAX_LEN 31
-/** Maximum length of an idempotency key, per the API contract (16-64 ASCII). */
-#define JOB_IDEMPOTENCY_KEY_MAX_LEN 64
+/**
+ * Maximum length of an idempotency key.
+ *
+ * Not the contract's 64: the key a caller stores here is the client's key
+ * scoped to the operation it was sent to (web-api prefixes a 16-digit digest of
+ * principal, method and URL and a colon, so the same client key on two
+ * operations names two actions, as the contract's scope rule says). 96 holds
+ * that with room to spare.
+ */
+#define JOB_IDEMPOTENCY_KEY_MAX_LEN 96
 /** Maximum length of a phase name, e.g. "writing", "health_check". */
 #define JOB_PHASE_MAX_LEN 23
 /** Maximum length of a machine-readable error code, e.g. "storage_full". */
@@ -159,6 +167,16 @@ struct job_snapshot {
 };
 
 /** Result of asking for a job by idempotency key. */
+/** What job_find_by_key() found. */
+enum job_lookup_result {
+	/** No job carries this key. */
+	JOB_LOOKUP_NONE = 0,
+	/** A job carries this key with the same request hash; it is in @p out. */
+	JOB_LOOKUP_EXISTING,
+	/** A job carries this key for a different request. */
+	JOB_LOOKUP_CONFLICT,
+};
+
 enum job_create_result {
 	/** A new job was created. */
 	JOB_CREATE_NEW = 0,
@@ -218,6 +236,27 @@ enum job_create_result job_create(const struct job_create_params *params,
 				  struct job_snapshot *out);
 
 /**
+ * @brief Look a key up without creating anything.
+ *
+ * job_create() already answers a retry with the original job. This exists for
+ * the handler that has to check something expensive or refusable before it may
+ * create a job at all - a password change verifies the current password first.
+ * Creating the job before that check would record a refusal under the client's
+ * key, and the client's corrected retry would be answered with the refusal;
+ * the contract wants a rejected request to leave nothing behind. So the handler
+ * looks first, checks, and only then creates.
+ *
+ * Searches full records before compact ones, and expires compact records past
+ * retention first, exactly as job_create() does.
+ *
+ * @param key           The (scoped) idempotency key; NULL or empty finds nothing.
+ * @param request_hash  Hash of the request body.
+ * @param out           The job on JOB_LOOKUP_EXISTING; may be NULL.
+ */
+enum job_lookup_result job_find_by_key(const char *key, uint32_t request_hash,
+				       struct job_snapshot *out);
+
+/**
  * @brief Advance a job's state.
  *
  * @retval 0        transition applied
@@ -266,6 +305,24 @@ int job_cancel(const char *id);
 
 /** @brief Number of jobs currently in a non-terminal state. */
 size_t job_active_count(void);
+
+/**
+ * @brief Copy out the ids of the jobs currently in a non-terminal state.
+ *
+ * `GET /system/status` publishes these as `active_job_ids`, so that a browser
+ * which reloads in the middle of an operation can find the job it lost track
+ * of instead of starting a second one. The ids come from one pass under the
+ * lock, so the list is a consistent snapshot even while workers move jobs on.
+ *
+ * Order is the order of the internal pool, which is not creation order.
+ *
+ * @param ids  Destination array of @p max id buffers.
+ * @param max  Capacity of @p ids.
+ * @return the number of active jobs, which may exceed @p max; only the first
+ *         @p max are copied. A caller that wants to know whether it saw all of
+ *         them compares the two.
+ */
+size_t job_active_ids(char ids[][JOB_ID_MAX_LEN + 1], size_t max);
 
 /** @brief True when the job is in a terminal state. */
 bool job_state_is_terminal(enum job_state state);

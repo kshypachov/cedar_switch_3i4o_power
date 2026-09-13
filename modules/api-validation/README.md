@@ -70,8 +70,15 @@ here (`api_ipv4_same_subnet`, `api_ipv4_is_usable_host`,
 `api_ipv4_prefix_is_valid`) with its own rules, and section 12 of the plan puts
 those invariants in its test table, not this one.
 
-It also does not parse JSON. That belongs to `web-api`, which will use this
-module to reject what it finds.
+It also does not parse JSON. That belongs to `web-api`, which uses this module
+to reject what it finds.
+
+## The shared escaper
+
+`api_json_append_escaped()` is the escaper `api_error_to_json()` uses, published
+in P2 so that `web-api`'s success bodies spell text exactly as rejections do — an
+SSID or a log line cannot come out one way in a 200 and another way in a 422, and
+the mock, which transcribes this function, matches both.
 
 ## Lifecycle and threads
 
@@ -88,10 +95,12 @@ rather than on a deep stack.
 
 `tests/api_validation` covers the whole error table against a transcription of
 the contract's own, the serialiser including escaping and truncation, the
-request id generator, and every parser and predicate — 23 tests in the sim tier.
+request id generator, the escaper, and every parser and predicate — 24 tests in
+the sim tier.
 `CONFIG_API_VALIDATION_MAX_FIELDS` is set to 2 in the test configuration so the
 truncation path is reached rather than assumed. The suite was checked against
-eleven mutations of the implementation, each of which it caught.
+eleven mutations of the implementation in P1 and one of the escaper in P2, each
+of which it caught.
 
 Run it:
 
