@@ -1,0 +1,8 @@
+{"t": 1.48, "step": "login", "host": "192.168.88.13", "ms": 1154}
+{"t": 1.71, "step": "stage", "status": 201, "ms": 137, "body": {"id": "txn_00000003", "boot_id": "boot_f8a67808b1a8382c", "base_revision": 6, "state": "staged", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "manual", "servers": ["9.9.9.9"]}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}}, "wifi": {"
+{"t": 1.8, "step": "uptime before reset", "uptime_ms": "171060"}
+{"t": 2.68, "step": "J-Link reset", "rc": 0}
+{"t": 31.56, "step": "board answers after reset", "after_s": 28.88}
+{"t": 33.37, "step": "transaction", "host": "192.168.88.13", "status": 404, "ms": 85, "body": {"error": {"code": "not_found", "message": "No such network transaction", "request_id": "req_79637bd0", "retryable": false}}, "schema_errors": null}
+{"t": 33.47, "step": "config after", "body": {"revision": 6, "config": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}}, "wifi": {"enabled": false, "ssid_base64": "", "security": "open", "hidden": false, "ipv4": {"mode": "dhcp", "address": 
+-> logs/19-reboot-staged.json, console logs/19-reboot-staged-console.log

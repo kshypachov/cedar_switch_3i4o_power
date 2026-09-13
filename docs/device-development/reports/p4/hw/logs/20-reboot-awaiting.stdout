@@ -1,0 +1,14 @@
+{"t": 2.54, "step": "login", "host": "192.168.88.13", "ms": 2228}
+{"t": 6.67, "step": "free-address check", "ip": "192.168.88.213", "ping_rc": 2, "arp": "? (192.168.88.213) at 80:34:28:10:6a:1d on en7 ifscope [ethernet]", "arp_mac": "80:34:28:10:6a:1d"}
+{"t": 6.89, "step": "stage", "status": 201, "ms": 132, "body": {"id": "txn_00000001", "boot_id": "boot_15587eb6f32fd480", "base_revision": 6, "state": "staged", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "static", "address": "192.168.88.213", "prefix_length": 24, "gateway": "192.168.88.
+{"t": 16.92, "step": "apply", "status": 202, "ms": 10031, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/network/config"}, "schema_errors": []}
+{"t": 39.2, "step": "new address answers", "ip": "192.168.88.213", "after_apply_s": 32.31}
+{"t": 41.7, "step": "old address after apply", "ip": "192.168.88.13", "answers": false}
+{"t": 43.03, "step": "transaction", "host": "192.168.88.213", "status": 200, "ms": 102, "body": {"id": "txn_00000001", "boot_id": "boot_15587eb6f32fd480", "base_revision": 6, "state": "awaiting_confirmation", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "static", "address": "192.168.88.21
+{"t": 43.12, "step": "uptime before reset", "uptime_ms": "66276"}
+{"t": 45.3, "step": "J-Link reset", "rc": 0}
+{"t": 80.6, "step": "DHCP address answers after reset", "after_s": 35.31}
+{"t": 85.64, "step": "static address after reset", "answers": false}
+{"t": 86.93, "step": "transaction", "host": "192.168.88.13", "status": 410, "ms": 89, "body": {"error": {"code": "boot_changed", "message": "The device restarted; the previous configuration is in force", "request_id": "req_853578ad", "retryable": false}}, "schema_errors": null}
+{"t": 87.03, "step": "config after", "body": {"revision": 6, "config": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}}, "wifi": {"enabled": false, "ssid_base64": "", "security": "open", "hidden": false, "ipv4": {"mode": "dhcp", "address": 
+-> logs/20-reboot-awaiting.json, console logs/20-reboot-awaiting-console.log

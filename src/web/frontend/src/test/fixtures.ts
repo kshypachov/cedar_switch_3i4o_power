@@ -11,8 +11,12 @@ import type {
   Job,
   JobAccepted,
   MatterStatus,
+  NetworkConfigOutput,
+  NetworkConfigResponse,
   NetworkStatus,
+  NetworkTransaction,
   OnboardingCodes,
+  ScanResults,
   Session,
   SystemStatus,
 } from '../api/types';
@@ -134,8 +138,8 @@ export const capabilities: Capabilities = {
     scan_records: 64,
     commissioning_min_seconds: 180,
     commissioning_max_seconds: 900,
-    network_confirm_min_seconds: 30,
-    network_confirm_max_seconds: 900,
+    network_confirm_min_seconds: 60,
+    network_confirm_max_seconds: 300,
   },
   wifi_security_modes: ['open', 'wpa2_psk', 'wpa3_sae'],
   firmware_formats: ['raw_app'],
@@ -217,6 +221,218 @@ export const matterOpenSucceeded: Job = {
   error: null,
 };
 
+/** Both families and every address source the network screen labels. */
+export const networkRuntime: NetworkStatus = {
+  interfaces: [
+    {
+      id: 'ethernet',
+      enabled: true,
+      link_up: true,
+      state: 'ready',
+      mac_address: '80:34:28:10:12:73',
+      addresses: [
+        { family: 'ipv4', address: '192.168.88.14', prefix_length: 24, source: 'dhcp' },
+        { family: 'ipv6', address: 'fe80::8234:28ff:fe10:1273', prefix_length: 64, source: 'link_local' },
+        { family: 'ipv6', address: '2001:db8::14', prefix_length: 64, source: 'slaac' },
+      ],
+      ssid: null,
+      rssi_dbm: null,
+      error: null,
+    },
+    {
+      id: 'wifi',
+      enabled: true,
+      link_up: true,
+      state: 'ready',
+      mac_address: '80:34:28:10:12:74',
+      addresses: [{ family: 'ipv4', address: '192.168.88.10', prefix_length: 24, source: 'dhcp' }],
+      ssid: '<b>k2</b>',
+      rssi_dbm: -57,
+      error: null,
+    },
+  ],
+  default_interface: 'ethernet',
+  dns_servers: ['192.168.88.1', '2001:db8::1'],
+};
+
+/** The coprocessor is not ready: Wi-Fi carries the reason even while it is disabled. */
+export const networkRuntimeRadioAbsent: NetworkStatus = {
+  ...networkRuntime,
+  interfaces: [
+    networkRuntime.interfaces[0]!,
+    {
+      id: 'wifi',
+      enabled: false,
+      link_up: false,
+      state: 'disabled',
+      mac_address: '80:34:28:10:12:74',
+      addresses: [],
+      ssid: null,
+      rssi_dbm: null,
+      error: {
+        code: 'capability_unavailable',
+        message: 'The Wi-Fi coprocessor is offline',
+        request_id: 'req_00000009',
+        retryable: false,
+      },
+    },
+  ],
+  dns_servers: ['192.168.88.1'],
+};
+
+const dhcp = { mode: 'dhcp', address: null, prefix_length: null, gateway: null } as const;
+
+export const networkConfig: NetworkConfigResponse = {
+  revision: 3,
+  config: {
+    preferred_interface: 'ethernet',
+    dns: { mode: 'automatic', servers: [] },
+    interfaces: {
+      ethernet: { enabled: true, ipv4: dhcp },
+      wifi: {
+        enabled: true,
+        ssid_base64: 'Q2VkYXItTGFi',
+        security: 'wpa2_psk',
+        hidden: false,
+        ipv4: dhcp,
+        password_set: true,
+      },
+    },
+  },
+  pending_transaction_id: null,
+};
+
+const staticCandidate: NetworkConfigOutput = {
+  ...networkConfig.config,
+  interfaces: {
+    ...networkConfig.config.interfaces,
+    ethernet: {
+      enabled: true,
+      ipv4: { mode: 'static', address: '192.168.88.50', prefix_length: 24, gateway: '192.168.88.1' },
+    },
+  },
+};
+
+export const txStaged: NetworkTransaction = {
+  id: 'nettx_0001',
+  boot_id: 'boot_0123456789abcdef',
+  base_revision: 3,
+  state: 'staged',
+  candidate: staticCandidate,
+  remaining_seconds: 287,
+  reconnect_urls: [],
+  job_id: null,
+  error: null,
+};
+
+export const txAwaiting: NetworkTransaction = {
+  ...txStaged,
+  state: 'awaiting_confirmation',
+  remaining_seconds: 37,
+  reconnect_urls: ['http://192.168.88.50/'],
+  job_id: 'job_00000010',
+};
+
+/** A DHCP change: the device cannot know the address, so it names none. */
+export const txAwaitingDhcp: NetworkTransaction = {
+  ...txAwaiting,
+  candidate: networkConfig.config,
+  reconnect_urls: [],
+};
+
+export const txCommitted: NetworkTransaction = {
+  ...txAwaiting,
+  state: 'committed',
+  remaining_seconds: null,
+  reconnect_urls: [],
+};
+
+export const txRolledBack: NetworkTransaction = { ...txCommitted, state: 'rolled_back' };
+
+export const txTimedOut: NetworkTransaction = {
+  ...txRolledBack,
+  error: {
+    code: 'resource_expired',
+    message: 'Confirmation timed out; the previous configuration was restored',
+    request_id: 'req_0000000a',
+    retryable: false,
+  },
+};
+
+export const networkApplyAccepted: JobAccepted = {
+  job_id: 'job_00000010',
+  job_url: '/api/v1/jobs/job_00000010',
+  resource_url: '/api/v1/network/config',
+};
+
+const networkJob: Job = {
+  id: 'job_00000010',
+  boot_id: 'boot_0123456789abcdef',
+  kind: 'network_apply',
+  state: 'succeeded',
+  phase: 'committing',
+  progress: { completed: 2, total: 2, unit: 'steps' },
+  cancellable: false,
+  created_uptime_ms: '100000',
+  updated_uptime_ms: '140000',
+  resource_url: '/api/v1/network/config',
+  error: null,
+};
+
+export const networkCommitSucceeded: Job = networkJob;
+export const networkRollbackSucceeded: Job = { ...networkJob, phase: 'rolling_back' };
+
+export const networkDiscardAccepted: JobAccepted = {
+  job_id: 'job_00000011',
+  job_url: '/api/v1/jobs/job_00000011',
+  resource_url: '/api/v1/network/config',
+};
+
+export const networkDiscardSucceeded: Job = {
+  ...networkJob,
+  id: 'job_00000011',
+  kind: 'network_discard',
+  phase: 'discarding',
+  progress: null,
+};
+
+export const scanAccepted: JobAccepted = {
+  job_id: 'job_00000020',
+  job_url: '/api/v1/jobs/job_00000020',
+  resource_url: '/api/v1/network/wifi/scans/job_00000020',
+};
+
+export const scanSucceeded: Job = {
+  ...networkJob,
+  id: 'job_00000020',
+  kind: 'wifi_scan',
+  phase: 'scanning',
+  progress: { completed: 11, total: 11, unit: 'steps' },
+  resource_url: '/api/v1/network/wifi/scans/job_00000020',
+};
+
+/** Every awkward case at once: one SSID on two BSSIDs, hidden, enterprise, unknown, markup, bytes that are not UTF-8. */
+export const scanResults: ScanResults = {
+  job_id: 'job_00000020',
+  state: 'succeeded',
+  items: [
+    { ssid: 'Cedar-Lab', ssid_base64: 'Q2VkYXItTGFi', bssid: 'a4:2b:b0:11:22:33', channel: 6, rssi_dbm: -41, security: 'wpa2_psk', connect_supported: true },
+    { ssid: 'Cedar-Lab', ssid_base64: 'Q2VkYXItTGFi', bssid: 'a4:2b:b0:99:88:77', channel: 11, rssi_dbm: -72, security: 'wpa2_psk', connect_supported: true },
+    { ssid: 'guest', ssid_base64: 'Z3Vlc3Q=', bssid: 'de:ad:be:ef:00:01', channel: 1, rssi_dbm: -67, security: 'open', connect_supported: true },
+    { ssid: 'office-wpa23', ssid_base64: 'b2ZmaWNlLXdwYTIz', bssid: 'de:ad:be:ef:00:02', channel: 3, rssi_dbm: -70, security: 'wpa2_wpa3_transition', connect_supported: true },
+    { ssid: 'corp-eap', ssid_base64: 'Y29ycC1lYXA=', bssid: 'de:ad:be:ef:00:03', channel: 9, rssi_dbm: -63, security: 'enterprise', connect_supported: false },
+    { ssid: '', ssid_base64: '', bssid: 'de:ad:be:ef:00:04', channel: 13, rssi_dbm: -78, security: 'wpa2_psk', connect_supported: true },
+    { ssid: 'Кедр', ssid_base64: '0JrQtdC00YA=', bssid: 'de:ad:be:ef:00:05', channel: 7, rssi_dbm: -59, security: 'wpa3_sae', connect_supported: true },
+    { ssid: 'legacy-wep', ssid_base64: 'bGVnYWN5LXdlcA==', bssid: 'de:ad:be:ef:00:06', channel: 2, rssi_dbm: -81, security: 'unknown', connect_supported: false },
+    { ssid: 'Ce\uFFFDd', ssid_base64: 'Q2X/ZA==', bssid: 'de:ad:be:ef:00:07', channel: 4, rssi_dbm: -66, security: 'wpa2_psk', connect_supported: true },
+    { ssid: '<i>x</i>', ssid_base64: 'PGk+eDwvaT4=', bssid: 'de:ad:be:ef:00:08', channel: 5, rssi_dbm: -75, security: 'open', connect_supported: true },
+  ],
+  truncated: false,
+  error: null,
+};
+
+export const scanResultsTruncated: ScanResults = { ...scanResults, truncated: true };
+
 export const all: Record<string, [string, unknown]> = {
   authStateFresh: ['AuthState', authStateFresh],
   authStateConfigured: ['AuthState', authStateConfigured],
@@ -235,4 +451,22 @@ export const all: Record<string, [string, unknown]> = {
   fabrics: ['Fabrics', fabrics],
   matterOpenAccepted: ['JobAccepted', matterOpenAccepted],
   matterOpenSucceeded: ['Job', matterOpenSucceeded],
+  networkRuntime: ['NetworkStatus', networkRuntime],
+  networkRuntimeRadioAbsent: ['NetworkStatus', networkRuntimeRadioAbsent],
+  networkConfig: ['NetworkConfigResponse', networkConfig],
+  txStaged: ['NetworkTransaction', txStaged],
+  txAwaiting: ['NetworkTransaction', txAwaiting],
+  txAwaitingDhcp: ['NetworkTransaction', txAwaitingDhcp],
+  txCommitted: ['NetworkTransaction', txCommitted],
+  txRolledBack: ['NetworkTransaction', txRolledBack],
+  txTimedOut: ['NetworkTransaction', txTimedOut],
+  networkApplyAccepted: ['JobAccepted', networkApplyAccepted],
+  networkCommitSucceeded: ['Job', networkCommitSucceeded],
+  networkRollbackSucceeded: ['Job', networkRollbackSucceeded],
+  networkDiscardAccepted: ['JobAccepted', networkDiscardAccepted],
+  networkDiscardSucceeded: ['Job', networkDiscardSucceeded],
+  scanAccepted: ['JobAccepted', scanAccepted],
+  scanSucceeded: ['Job', scanSucceeded],
+  scanResults: ['ScanResults', scanResults],
+  scanResultsTruncated: ['ScanResults', scanResultsTruncated],
 };

@@ -1,0 +1,139 @@
+{
+  "when": "2026-09-14T00:02:12+0300",
+  "steps": [
+    {
+      "step": "network status",
+      "status": 200,
+      "body": {
+        "interfaces": [
+          {
+            "id": "ethernet",
+            "enabled": true,
+            "link_up": true,
+            "state": "ready",
+            "mac_address": "80:34:28:10:6a:1d",
+            "addresses": [
+              {
+                "family": "ipv4",
+                "address": "192.168.88.13",
+                "prefix_length": 24,
+                "source": "dhcp"
+              },
+              {
+                "family": "ipv6",
+                "address": "fe80::8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "link_local"
+              },
+              {
+                "family": "ipv6",
+                "address": "fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "slaac"
+              }
+            ],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": null
+          },
+          {
+            "id": "wifi",
+            "enabled": false,
+            "link_up": false,
+            "state": "disabled",
+            "mac_address": "00:00:00:00:00:00",
+            "addresses": [],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": {
+              "code": "capability_unavailable",
+              "message": "The Wi-Fi coprocessor does not respond",
+              "request_id": "req_85357908",
+              "retryable": false
+            }
+          }
+        ],
+        "default_interface": "ethernet",
+        "dns_servers": [
+          "1.1.1.1",
+          "192.168.88.1"
+        ]
+      }
+    },
+    {
+      "step": "open window",
+      "status": 202,
+      "body": {
+        "job_id": "job_00000005",
+        "job_url": "/api/v1/jobs/job_00000005",
+        "resource_url": "/api/v1/matter/commissioning"
+      }
+    },
+    {
+      "step": "open job",
+      "job": {
+        "id": "job_00000005",
+        "boot_id": "boot_1c326e25224db62b",
+        "kind": "matter_open",
+        "state": "succeeded",
+        "phase": "opening",
+        "progress": null,
+        "cancellable": false,
+        "created_uptime_ms": "358806",
+        "updated_uptime_ms": "386619",
+        "resource_url": "/api/v1/matter/commissioning",
+        "error": null
+      },
+      "waited_s": 28.85
+    },
+    {
+      "step": "browse _matterc._udp",
+      "instances": [
+        "133A2A31DE11D5CF"
+      ]
+    },
+    {
+      "step": "board B record",
+      "records": [
+        {
+          "instance": "133A2A31DE11D5CF",
+          "host": "803428106A1D.local",
+          "port": 5540,
+          "addresses": [
+            "FD27:E0CB:E5E8:8374:8234:28FF:FE10:6A1D%<0>",
+            "FE80:0000:0000:0000:8234:28FF:FE10:6A1D%en0",
+            "FE80:0000:0000:0000:8234:28FF:FE10:6A1D%en7"
+          ],
+          "resolve_raw": "^D\b\bLookup 133A2A31DE11D5CF._matterc._udp.local.\nDATE: ---Mon 14 Sep 2026---\n 0:02:51.652  ...STARTING...\n 0:02:51.653  133A2A31DE11D5CF._matterc._udp.local. can be reached at 803428106A1D.local.:5540 (interface 14) Flags: 1\n VP=65521+32769 D=3840 CM=1 PH=33\n 0:02:51.653  133A2A31DE11D5CF._matterc._udp.local. can be reached at 803428106A1D.local.:5540 (interface 14)\n VP=65521+32769 D=3840 CM=1 PH=33",
+          "address_raw": "^D\b\bDATE: ---Mon 14 Sep 2026---\n 0:02:54.665  ...STARTING...\nTimestamp     A/R  Flags         IF  Hostname                               Address                                      TTL\n 0:02:54.666  Add  40000003      23  803428106A1D.local.                    FE80:0000:0000:0000:8234:28FF:FE10:6A1D%en7  120\n 0:02:54.666  Add  40000003      23  803428106A1D.local.                    FD27:E0CB:E5E8:8374:8234:28FF:FE10:6A1D%<0>  120\n 0:02:54.666  Add  40000003      14  803428106A1D.local.                    FE80:0000:0000:0000:8234:28FF:FE10:6A1D%en0  120\n 0:02:54.666  Add  40000002      14  803428106A1D.local.                    FD27:E0CB:E5E8:8374:8234:28FF:FE10:6A1D%<0>  120"
+        }
+      ]
+    },
+    {
+      "step": "close window",
+      "status": 202,
+      "body": {
+        "job_id": "job_00000006",
+        "job_url": "/api/v1/jobs/job_00000006",
+        "resource_url": "/api/v1/matter/commissioning"
+      }
+    },
+    {
+      "step": "close job",
+      "job": {
+        "id": "job_00000006",
+        "boot_id": "boot_1c326e25224db62b",
+        "kind": "matter_close",
+        "state": "succeeded",
+        "phase": "closing",
+        "progress": null,
+        "cancellable": false,
+        "created_uptime_ms": "403781",
+        "updated_uptime_ms": "404051",
+        "resource_url": "/api/v1/matter/commissioning",
+        "error": null
+      },
+      "waited_s": 0.67
+    }
+  ]
+}

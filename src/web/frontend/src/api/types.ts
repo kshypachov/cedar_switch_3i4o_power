@@ -16,6 +16,17 @@ export type OnboardingCodes = S['OnboardingCodes'];
 export type Fabric = S['Fabric'];
 export type Fabrics = S['Fabrics'];
 export type CoprocessorStatus = S['CoprocessorStatus'];
+export type Address = S['Address'];
+export type IPv4Config = S['IPv4Config'];
+export type CredentialChange = S['CredentialChange'];
+export type WiFiConfigOutput = S['WiFiConfigOutput'];
+export type NetworkConfigInput = S['NetworkConfigInput'];
+export type NetworkConfigOutput = S['NetworkConfigOutput'];
+export type NetworkConfigResponse = S['NetworkConfigResponse'];
+export type NetworkTransactionRequest = S['NetworkTransactionRequest'];
+export type NetworkTransaction = S['NetworkTransaction'];
+export type ScanResults = S['ScanResults'];
+export type AccessPoint = S['AccessPoint'];
 
 export const TERMINAL_JOB_STATES: ReadonlySet<Job['state']> = new Set([
   'succeeded',

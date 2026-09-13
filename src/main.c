@@ -22,9 +22,12 @@
 #include <zephyr/sys/reboot.h>
 #include <zephyr/cache.h>
 
+#include <job_manager/job_manager.h>
 #include <settings_registry/settings_registry.h>
 
 #include "helpers/memory.h"
+#include "services/network/network_service.h"
+#include "web/api/v1/web_api_v1.h"
 #include "web/web_server.h"
 #include "mqtt/ha_mqtt.h"
 #include "io/io.h"
@@ -217,7 +220,16 @@ int main(void)
 	io_init();
 	/* Before the network: the first IPv6 address starts the Matter stack. */
 	matter_service_chip_init();
+	/* Before the network too: network-manager tracks its work as jobs. */
+	job_manager_init();
+	/* The W5500 with its EEPROM MAC; addressing is the network service's. */
 	ethernet_interfaces_init();
+	network_service_start();
+	static const struct web_api_v1_network network_hooks = {
+		.kick = network_service_kick,
+		.wifi_security_modes = network_service_wifi_security_modes,
+	};
+	web_api_v1_set_network(&network_hooks);
 	app_web_init();
 
 	while (1)

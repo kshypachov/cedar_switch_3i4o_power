@@ -1,0 +1,18 @@
+[+    1.72] ==== host: login
+[+    1.97] ==== host: stage
+[+    2.58] [8D[J[00:02:02.155,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    2.58] [1;32muart:~$ [m[8D[J[00:02:02.356,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    5.89] ==== host: apply
+[+    6.11] [1;32muart:~$ [m[8D[J[00:02:02.557,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    6.11] [1;32muart:~$ [m[8D[J[00:02:04.002,000] [0m<inf> network_manager: transaction txn_00000001 staged against revision 4[0m
+[+    6.58] ==== host: awaiting
+[+    6.69] ==== host: confirm
+[+    7.16] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:07.920,000] [0m<inf> network_manager: transaction txn_00000001 journalled, job job_00000001, 120 s to confirm[0m
+[+    7.16] [1;32muart:~$ [m[8D[J[00:02:08.145,000] [0m<inf> network_manager: transaction txn_00000001 applied, awaiting confirmation[0m
+[+    7.16] [1;32muart:~$ [m[8D[J[00:02:08.745,000] [0m<inf> network_manager: transaction txn_00000001 confirmed[0m
+[+   10.42] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:10.759,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.42] [1;32muart:~$ [m[8D[J[00:02:10.960,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.42] [1;32muart:~$ [m[8D[J[00:02:11.161,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.42] [1;32muart:~$ [m[8D[J[00:02:11.361,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.89] ==== host: confirm job
+[+   10.99] ==== host: status after

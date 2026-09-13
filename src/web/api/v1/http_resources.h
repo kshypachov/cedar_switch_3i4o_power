@@ -12,7 +12,8 @@
  * patterns in section order, which is name order (measured in P2), and the
  * first match wins; FNM_LEADING_DIR makes the jobs pattern also match
  * .../jobs/x/cancel. A more specific wildcard must therefore get a smaller
- * number than the general one it overlaps.
+ * number than the general one it overlaps: the apply and confirm paths of a
+ * transaction come before the transaction itself.
  *
  * WEB_API_V1_RESOURCE(name, "pattern")
  */
@@ -29,4 +30,12 @@ WEB_API_V1_RESOURCE(web_api_07_matter_status, "/api/v1/matter/status")
 WEB_API_V1_RESOURCE(web_api_08_matter_commissioning, "/api/v1/matter/commissioning")
 WEB_API_V1_RESOURCE(web_api_09_matter_onboarding_codes, "/api/v1/matter/onboarding-codes")
 WEB_API_V1_RESOURCE(web_api_10_matter_fabrics, "/api/v1/matter/fabrics")
+WEB_API_V1_RESOURCE(web_api_11_network_status, "/api/v1/network/status")
+WEB_API_V1_RESOURCE(web_api_12_network_config, "/api/v1/network/config")
+WEB_API_V1_RESOURCE(web_api_13_network_transactions, "/api/v1/network/transactions")
+WEB_API_V1_RESOURCE(web_api_14_network_transaction_apply, "/api/v1/network/transactions/*/apply")
+WEB_API_V1_RESOURCE(web_api_15_network_transaction_confirm, "/api/v1/network/transactions/*/confirm")
+WEB_API_V1_RESOURCE(web_api_16_network_transaction, "/api/v1/network/transactions/*")
+WEB_API_V1_RESOURCE(web_api_17_network_wifi_scans, "/api/v1/network/wifi/scans")
+WEB_API_V1_RESOURCE(web_api_18_network_wifi_scan, "/api/v1/network/wifi/scans/*")
 /* clang-format on */

@@ -1,0 +1,56 @@
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 362 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 59d8c404cd7ee9ba8df3fc0f7ff9ed8ccb3a077d1c430c0fb5075184dc887f5e
+Split status: N/A (0)
+
+h_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:07.230,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:07.430,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:10.149,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:10.350,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:10.718,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:13.270,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:13.801,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0[0m
+[1;32muart:~$ [m[8D[J[00:01:13.806,000] [0m<dbg> chip.LogV: [DL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[00:01:13.809,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[00:01:13.810,000] [0m<inf> chip: [ZCL]Endpoint 1 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[00:01:13.812,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[00:01:13.813,000] [0m<inf> chip: [ZCL]Endpoint 2 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[00:01:13.815,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[00:01:13.816,000] [0m<inf> chip: [ZCL]Endpoint 3 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[00:01:13.818,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:13.865,000] [0m<inf> chip: [ZCL]Endpoint 4 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[00:01:13.946,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000070000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x000000000000CDF8[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:18.470,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:18.671,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:18.872,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:19.072,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:20.759,000] [0m<inf> chip: [DMG]AccessControlCluster: initializing[0m
+[1;32muart:~$ [m[8D[J[00:01:20.761,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+[1;32muart:~$ [m[8D[J[00:01:20.766,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+[1;32muart:~$ [m[8D[J[00:01:20.771,000] [0m<inf> chip: [IN]CASE Server enabling CASE session setups[0m
+[1;32muart:~$ [m[8D[J[00:01:20.772,000] [0m<dbg> chip.LogV: [IN]SecureSession[0x700016b0]: Allocated Type:2 LSID:32585[0m
+[1;32muart:~$ [m[8D[J[00:01:20.773,000] [0m<dbg> chip.LogV: [SC]Allocated SecureSession (0x700016b0) - waiting for Sigma1 msg[0m
+[1;32muart:~$ [m[8D[J[00:01:20.774,000] [0m<inf> chip: [SVR]Joining Multicast groups[0m
+[1;32muart:~$ [m[8D[J[00:01:20.775,000] [0m<dbg> chip.LogV: [ZCL]Emitting StartUp event[0m
+[1;32muart:~$ [m[8D[J[00:01:20.778,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000070001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x000000000000E8A8[0m
+[1;32muart:~$ [m[8D[J[00:01:20.778,000] [0m<inf> chip: [SVR]Server initialization complete[0m
+[1;32muart:~$ [m[8D[J[00:01:20.821,000] [0m<inf> chip: [SVR]Server Listening...[0m
+[1;32muart:~$ [m[8D[J[00:01:20.822,000] [0m<inf> matter: Matter stack initialized[0m
+[1;32muart:~$ [m[8D[J[00:01:20.835,000] [0m<inf> matter: Matter event loop started[0m
+[1;32muart:~$ [m[8D[J[00:01:20.838,000] [0m<inf> matter_event_loop: Init io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[00:01:20.846,000] [0m<inf> matter_event_loop: Start io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[00:01:20.852,000] [0m<inf> chip: [DL]CHIP task running[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:20.892,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+[1;32muart:~$ [m[8D[J[00:01:20.941,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+[1;32muart:~$ [m[8D[J[00:01:21.591,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:21.791,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:24.711,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:27.826,000] [1;33m<wrn> matter_service_chip: generating the onboarding codes took 6852 ms on the Matter thread[0m
+[1;32muart:~$ [m[8D[J[00:01:27.828,000] [1;31m<err> chip: [DL]Long dispatch time: 6853 ms, for event type 2[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

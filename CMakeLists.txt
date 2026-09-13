@@ -90,6 +90,7 @@ target_sources(app PRIVATE
         src/web/api/v1/auth.c
         src/web/api/v1/system.c
         src/web/api/v1/matter.c
+        src/web/api/v1/network.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c
@@ -119,6 +120,9 @@ target_sources(app PRIVATE
         ${app_sources}
 #        /Users/kiro/zephyrproject/modules/hal/stm32/stm32cube/stm32u5xx/drivers/src/stm32u5xx_hal_icache.c
 )
+
+# Network service (P4): adapter, store, recovery rule and worker.
+add_subdirectory(src/services/network)
 
 #chip_configure_data_model(app
 #        ZAP_FILE ${CHIP_ROOT}/examples/chef/devices/rootnode_onoffpluginunit_Wtf8ss5EBY.zap

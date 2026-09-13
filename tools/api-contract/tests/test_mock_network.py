@@ -27,7 +27,9 @@ from cedar_contract.mock.constants import (
     QUEUE_MS,
 )
 
-from .conftest import VALID_CANDIDATE, Harness, candidate
+from cedar_contract.openapi import Document
+
+from .conftest import VALID_CANDIDATE, Harness, build, candidate
 
 SECOND = 1 / 1000
 APPLIED = (QUEUE_MS + NETWORK_APPLY_MS) * SECOND + 0.1
@@ -112,8 +114,8 @@ def test_the_full_transaction_reaches_committed_and_bumps_the_revision(harness: 
     harness.advance(APPLIED)
     applying = harness.client.get(f"/network/transactions/{transaction}").json
     assert applying["state"] == "awaiting_confirmation"
-    assert applying["remaining_seconds"] == 120
-    assert applying["reconnect_urls"] == ["http://192.168.88.50/", "http://cedar-switch.local/"]
+    assert applying["remaining_seconds"] == 116, "the deadline started at apply"
+    assert applying["reconnect_urls"] == ["http://192.168.88.50/"]
     assert harness.client.get("/network/config").json["revision"] == before, (
         "nothing is committed until it is confirmed"
     )
@@ -287,6 +289,33 @@ def test_deleting_an_applied_transaction_rolls_back_on_the_same_job(harness: Har
     )
 
 
+def test_a_rollback_asked_for_while_applying_is_not_undone_by_the_apply_finishing(
+    harness: Harness,
+) -> None:
+    """DELETE during `applying` starts the rollback on the apply job. The apply
+    finishing afterwards must not move the transaction on to
+    `awaiting_confirmation`: a client could then confirm a change the
+    administrator has already withdrawn."""
+    transaction = stage(harness).json["id"]
+    accepted = harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    assert harness.client.get(f"/network/transactions/{transaction}").json["state"] == "applying"
+    rolled = harness.client.delete(f"/network/transactions/{transaction}")
+    assert rolled.status == 202 and rolled.json["job_id"] == accepted.json["job_id"]
+
+    harness.advance(APPLIED)
+    assert (
+        harness.client.get(f"/network/transactions/{transaction}").json["state"] == "rolling_back"
+    ), "the apply step finished, and the rollback is still what is happening"
+    assert harness.client.post(f"/network/transactions/{transaction}/confirm", {}).status == 409
+
+    harness.advance(NETWORK_ROLLBACK_MS * SECOND + 0.1)
+    assert (
+        harness.client.get(f"/network/transactions/{transaction}").json["state"] == "rolled_back"
+    )
+
+
 def test_a_rolled_back_transaction_frees_the_slot(harness: Harness) -> None:
     transaction = stage(harness).json["id"]
     harness.client.delete(f"/network/transactions/{transaction}")
@@ -296,6 +325,72 @@ def test_a_rolled_back_transaction_frees_the_slot(harness: Harness) -> None:
 
 def test_an_unknown_transaction_is_not_found(harness: Harness) -> None:
     assert harness.client.get("/network/transactions/nettx_ffff").status == 404
+
+
+def test_the_confirmation_deadline_starts_at_apply(harness: Harness) -> None:
+    """The device arms it when the change is journalled, so a worker that never
+    finishes still ends in a rollback — and the countdown is there while the
+    change is being applied, not only after."""
+    transaction = stage(harness).json["id"]
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 60}
+    )
+    applying = harness.client.get(f"/network/transactions/{transaction}").json
+    assert applying["state"] == "applying"
+    assert applying["remaining_seconds"] == 60
+    harness.advance(APPLIED)
+    awaiting = harness.client.get(f"/network/transactions/{transaction}").json
+    assert awaiting["remaining_seconds"] == 56
+
+
+def test_a_disabled_interface_offers_no_reconnect_url(harness: Harness) -> None:
+    """A static address kept on a disabled interface is a stored profile, not a
+    place the device answers. Offering it would send the operator to an address
+    nothing is listening on."""
+    static = {"mode": "static", "address": "192.168.88.60", "prefix_length": 24, "gateway": None}
+    staged = stage(harness, candidate(**{"interfaces/wifi/ipv4": static}))
+    assert staged.status == 201, staged.body
+    transaction = staged.json["id"]
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    assert harness.client.get(f"/network/transactions/{transaction}").json["reconnect_urls"] == [
+        "http://192.168.88.50/"
+    ], "only the enabled Ethernet's address"
+
+
+def test_a_dhcp_address_offers_no_reconnect_url(harness: Harness) -> None:
+    """A lease that has not been granted has no address to link to, and the device
+    has no name it can promise."""
+    dhcp = {"mode": "dhcp", "address": None, "prefix_length": None, "gateway": None}
+    transaction = stage(harness, candidate(**{"interfaces/ethernet/ipv4": dhcp})).json["id"]
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    assert harness.client.get(f"/network/transactions/{transaction}").json["reconnect_urls"] == []
+
+
+def test_a_confirm_is_refused_while_the_interfaces_are_not_working(document: Document) -> None:
+    """The request reaching the device proves only the client's own path. Until
+    every changed interface has its link and address the transaction stays open,
+    and the same confirm succeeds once they do."""
+    harness = build(document, setup_required=False, network_health="unhealthy")
+    harness.client.login()
+    transaction = stage(harness).json["id"]
+    job = harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    ).json["job_id"]
+    harness.advance(APPLIED)
+
+    refused = harness.client.post(f"/network/transactions/{transaction}/confirm", {})
+    assert refused.status == 409
+    assert refused.json["error"]["code"] == "invalid_state"
+    still = harness.client.get(f"/network/transactions/{transaction}").json
+    assert still["state"] == "awaiting_confirmation" and still["error"] is None
+
+    harness.app.state.scenario.network_health = "healthy"
+    accepted = harness.client.post(f"/network/transactions/{transaction}/confirm", {})
+    assert accepted.status == 202 and accepted.json["job_id"] == job
 
 
 # -- business rules -------------------------------------------------------
@@ -362,6 +457,194 @@ def test_the_network_and_broadcast_addresses_are_not_hosts(harness: Harness) -> 
         assert _fields(response) == [
             {"path": "/config/interfaces/ethernet/ipv4/address", "code": "out_of_range"}
         ], address
+
+
+def test_addresses_no_lan_host_can_hold_are_out_of_range(harness: Harness) -> None:
+    """The host rule of `api_ipv4_is_usable_host()` in C: an IP stack accepts each of
+    these and then the device simply does not work."""
+    for address, prefix in (
+        ("0.1.2.3", 8),
+        ("127.0.0.5", 8),
+        ("169.254.3.4", 16),
+        ("224.0.0.5", 24),
+        ("240.1.2.3", 8),
+    ):
+        harness.app.state.network.transaction = None
+        response = stage(
+            harness,
+            candidate(
+                **{
+                    "interfaces/ethernet/ipv4/address": address,
+                    "interfaces/ethernet/ipv4/prefix_length": prefix,
+                    "interfaces/ethernet/ipv4/gateway": None,
+                }
+            ),
+        )
+        assert _fields(response) == [
+            {"path": "/config/interfaces/ethernet/ipv4/address", "code": "out_of_range"}
+        ], address
+
+
+def test_a_gateway_that_is_the_network_address_is_out_of_range(harness: Harness) -> None:
+    response = stage(harness, candidate(**{"interfaces/ethernet/ipv4/gateway": "192.168.88.0"}))
+    assert _fields(response) == [
+        {"path": "/config/interfaces/ethernet/ipv4/gateway", "code": "out_of_range"}
+    ]
+
+
+def test_a_gateway_is_not_judged_against_an_address_that_is_already_wrong(
+    harness: Harness,
+) -> None:
+    response = stage(
+        harness,
+        candidate(
+            **{
+                "interfaces/ethernet/ipv4/address": "192.168.88.255",
+                "interfaces/ethernet/ipv4/gateway": "10.0.0.1",
+            }
+        ),
+    )
+    assert _fields(response) == [
+        {"path": "/config/interfaces/ethernet/ipv4/address", "code": "out_of_range"}
+    ]
+
+
+def test_an_unspecified_resolver_is_refused_by_index(harness: Harness) -> None:
+    """0.0.0.0 and :: pass the schema's formats and are never a resolver."""
+    response = stage(harness, candidate(**{"dns": {"mode": "manual", "servers": ["0.0.0.0", "::"]}}))
+    assert _fields(response) == [
+        {"path": "/config/dns/servers/0", "code": "invalid_format"},
+        {"path": "/config/dns/servers/1", "code": "invalid_format"},
+    ]
+
+
+def test_a_malformed_credential_is_one_conflicting_field(harness: Harness) -> None:
+    """CredentialChange is a oneOf. A body no branch accepts is one entry on the
+    object, whatever is wrong inside it — which the device's decoder repeats
+    with WEB_JSON_ONEOF rather than naming the member."""
+    for credential in (
+        {"action": "keep", "value": "stray"},
+        {"action": "replace"},
+        {"action": "sometimes"},
+        {},
+        "keep",
+        None,
+    ):
+        harness.app.state.network.transaction = None
+        response = stage(harness, candidate(**{"interfaces/wifi/credential": credential}))
+        assert _fields(response) == [
+            {"path": "/config/interfaces/wifi/credential", "code": "conflicting"}
+        ], credential
+
+
+def test_a_resolver_that_is_not_an_address_is_conflicting(harness: Harness) -> None:
+    """A server is a oneOf of an IPv4 and an IPv6 address: neither branch takes
+    a name or a number."""
+    response = stage(
+        harness, candidate(**{"dns": {"mode": "manual", "servers": ["resolver", 53]}})
+    )
+    assert _fields(response) == [
+        {"path": "/config/dns/servers/0", "code": "conflicting"},
+        {"path": "/config/dns/servers/1", "code": "conflicting"},
+    ]
+
+
+def test_wifi_is_refused_while_the_coprocessor_is_not_ready(document: Document) -> None:
+    """Confirm waits for every enabled interface, so a Wi-Fi that cannot come up
+    would make every change unconfirmable; it is refused at the field instead, and
+    the status says why even while Wi-Fi is off."""
+    harness = build(document, setup_required=False, coprocessor_state="offline")
+    harness.client.login()
+    wifi = harness.client.get("/network/status").json["interfaces"][1]
+    assert wifi["state"] == "disabled"
+    assert wifi["link_up"] is False
+    assert wifi["error"]["code"] == "capability_unavailable"
+
+    response = stage(
+        harness,
+        candidate(
+            **{
+                "interfaces/wifi/enabled": True,
+                "interfaces/wifi/ssid_base64": "Q2VkYXItTGFi",
+                "interfaces/wifi/security": "wpa2_psk",
+                "interfaces/wifi/credential": {"action": "replace", "value": "correct-horse"},
+            }
+        ),
+    )
+    assert _fields(response) == [{"path": "/config/interfaces/wifi/enabled", "code": "not_allowed"}]
+
+
+WIFI_PROFILE = {
+    "interfaces/wifi/enabled": True,
+    "interfaces/wifi/ssid_base64": "Q2VkYXItTGFi",
+    "interfaces/wifi/security": "wpa2_psk",
+    "interfaces/wifi/credential": {"action": "replace", "value": "correct-horse"},
+}
+
+
+def _commit(harness: Harness, config: dict[str, Any]) -> None:
+    staged = stage(harness, config)
+    assert staged.status == 201, staged.body
+    transaction = staged.json["id"]
+    harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    harness.advance(APPLIED)
+    assert harness.client.post(f"/network/transactions/{transaction}/confirm", {}).status == 202
+    harness.advance(NETWORK_COMMIT_MS * SECOND + 0.1)
+    assert harness.client.get(f"/network/transactions/{transaction}").json["state"] == "committed"
+
+
+def test_an_enabled_wifi_whose_coprocessor_stops_is_failed_and_carries_nothing(
+    harness: Harness,
+) -> None:
+    """The radio is the coprocessor. When it stops answering, an enabled Wi-Fi is
+    `failed` with no link, and with Ethernet off nothing is the default interface —
+    as the device reports it. A status that kept showing `ready` would hide the
+    very fault the operator has to find."""
+    _commit(
+        harness,
+        candidate(
+            **WIFI_PROFILE,
+            **{"preferred_interface": "wifi", "interfaces/ethernet/enabled": False},
+        ),
+    )
+    before = harness.client.get("/network/status").json
+    assert before["interfaces"][1]["state"] == "ready"
+    assert before["default_interface"] == "wifi"
+
+    harness.app.state.scenario.coprocessor_state = "offline"
+    after = harness.client.get("/network/status").json
+    wifi = after["interfaces"][1]
+    assert wifi["enabled"] is True
+    assert wifi["state"] == "failed", "enabled and unable to work is failed, not ready"
+    assert wifi["link_up"] is False, "a radio that does not answer has no link"
+    assert wifi["addresses"] == [] and wifi["ssid"] is None
+    assert wifi["error"]["code"] == "capability_unavailable"
+    assert after["default_interface"] is None, "no interface with a link carries traffic"
+
+
+def test_keep_after_a_committed_password_is_accepted(harness: Harness) -> None:
+    """`keep` is judged against what the last commit stored. Once a password is
+    committed, a later change to the same network must be able to keep it without
+    the operator typing it again."""
+    _commit(harness, candidate(**WIFI_PROFILE))
+    kept = stage(
+        harness,
+        candidate(**{**WIFI_PROFILE, "interfaces/wifi/credential": {"action": "keep"}}),
+    )
+    assert kept.status == 201, kept.body
+    assert kept.json["candidate"]["interfaces"]["wifi"]["password_set"] is True
+
+
+def test_a_password_replaced_on_a_disabled_wifi_is_stored(harness: Harness) -> None:
+    """A profile can be prepared with Wi-Fi off and switched on later. The device's
+    store keeps a replaced secret either way, so the candidate says it is set."""
+    staged = stage(
+        harness, candidate(**{**WIFI_PROFILE, "interfaces/wifi/enabled": False})
+    )
+    assert staged.status == 201, staged.body
+    assert staged.json["candidate"]["interfaces"]["wifi"]["password_set"] is True
 
 
 def test_both_interfaces_disabled_is_refused(harness: Harness) -> None:

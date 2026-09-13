@@ -7,7 +7,7 @@ import { useAuth } from '../state/auth';
 import { hrefOf, navigate, type Route } from '../state/router';
 import { HttpWarning } from './ui';
 
-function NavLink({ route, current, label }: { route: Route; current: Route; label: 'nav.overview' | 'nav.matter' | 'nav.access' }) {
+function NavLink({ route, current, label }: { route: Route; current: Route; label: 'nav.overview' | 'nav.matter' | 'nav.network' | 'nav.access' }) {
   return (
     <a
       href={hrefOf(route)}
@@ -31,6 +31,7 @@ export function Layout({ session, route, children }: { session: Session; route: 
         <nav>
           <NavLink route="overview" current={route} label="nav.overview" />
           <NavLink route="matter" current={route} label="nav.matter" />
+          <NavLink route="network" current={route} label="nav.network" />
           <NavLink route="access" current={route} label="nav.access" />
         </nav>
         <button

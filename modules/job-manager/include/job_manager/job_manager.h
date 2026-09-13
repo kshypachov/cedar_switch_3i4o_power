@@ -95,12 +95,15 @@ enum job_kind {
  *
  *   QUEUED  -> RUNNING | CANCELLED | FAILED | INTERRUPTED
  *   RUNNING -> WAITING_CONFIRMATION | SUCCEEDED | FAILED | CANCELLED | INTERRUPTED
- *   WAITING_CONFIRMATION -> SUCCEEDED | FAILED | CANCELLED | INTERRUPTED
+ *   WAITING_CONFIRMATION -> RUNNING | SUCCEEDED | FAILED | CANCELLED | INTERRUPTED
  *   terminal states -> nothing
  *
  * Not every kind uses WAITING_CONFIRMATION; only those with a confirm step
  * (network apply, and a coprocessor update that must be confirmed after
- * reboot) ever enter it.
+ * reboot) ever enter it. Leaving it for RUNNING is the job working again once
+ * the wait is over — a network apply writing its commit, or restoring the
+ * previous configuration — which a client polls as `running`, as the mock
+ * shows it.
  */
 enum job_state {
 	JOB_STATE_QUEUED = 0,

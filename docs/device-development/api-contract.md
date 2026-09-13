@@ -185,6 +185,21 @@ Transaction states: `staged → applying → awaiting_confirmation → committed
 
 Смена IP меняет browser origin: автоматически переносить cookie/CSRF на новый IP нельзя. UI предлагает reconnect links/имя устройства, при необходимости пользователь логинится заново и подтверждает известный transaction ID; таймер 120 секунд учитывает это. Reconnect hints не содержат пароль/token. Endpoint confirm не подтверждает доступность всех интерфейсов лишь по факту получения HTTP запроса.
 
+**Реализовано в P4** (`modules/network-manager/README.md`, `src/services/network/README.md`). Решения там, где контракт молчал; mock повторяет каждое (`tools/api-contract/README.md`):
+
+- Поля ошибок кандидата — указатели в тело запроса (`/config/interfaces/ethernet/ipv4/gateway`), коды и порядок — как у mock: ошибка хранит первые шесть полей, поэтому порядок решает, какие дойдут до клиента. Любая ошибка внутри `CredentialChange` или адреса DNS-сервера (оба — `oneOf`) — одно поле `conflicting` на самом значении.
+- Адрес и шлюз проверяются правилом `api_ipv4_is_usable_host()`: кроме адреса подсети и широковещательного — 0/8, 127/8, 169.254/16, 224/4 и выше; шлюз не оценивается, если сам адрес уже неверен. `0.0.0.0` и `::` среди DNS-серверов — `invalid_format` по индексу.
+- Таймер подтверждения взводится при apply, а не после изменения интерфейсов; `remaining_seconds` считает его и во время `applying`, с округлением вниз. Пределы `confirmation_timeout_seconds` — 60–300, как в схеме; capabilities публикует те же.
+- Confirm проверяет link, адрес и маршрут каждого включённого интерфейса; пока они не готовы — `409 invalid_state`, транзакция остаётся `awaiting_confirmation` без ошибки. Commit пишет рабочий поток после `202`; повтор confirm до записи — та же задача, после принятого confirm откат — `409 invalid_state`.
+- Таймаут подтверждения: транзакция `rolling_back` → `rolled_back` с ошибкой `resource_expired`, задача `failed` с тем же кодом. Откат по запросу: `rolled_back` без ошибки, задача `succeeded`. Отказ интерфейсов или записи commit: `failed` с `internal_error`, прежняя конфигурация восстановлена. Задача сети из `waiting_confirmation` снова становится `running`, пока пишет commit или откатывает.
+- Повтор с тем же `Idempotency-Key`: apply, discard и scan дедуплицирует job-manager; staging (201) и confirm/rollback применённой транзакции помнит привязка — ответ тот же ресурс, другое тело — `409 idempotency_conflict`.
+- Транзакция, которую откатила перезагрузка, — `410 boot_changed`; неизвестный id — 404.
+- `reconnect_urls` — только `http://<статический IPv4>/` включённых интерфейсов в состояниях `applying` и `awaiting_confirmation`. Для DHCP адрес заранее неизвестен, а имени, которое устройство могло бы гарантировать, нет (mDNS устройства — только Matter), поэтому список пуст.
+- Wi-Fi недоступен, когда копроцессор не прошёл инициализацию (плата B: флеш C6 пуста). Статус Wi-Fi несёт ошибку `capability_unavailable` и при выключенном Wi-Fi; кандидат с `wifi.enabled=true` — `422` на `/config/interfaces/wifi/enabled` (`not_allowed`); scan — `503 capability_unavailable`. `wifi_security_modes` в capabilities — режимы драйвера сборки (open, wpa2_psk, wpa3_sae): установленная прошивка C6 их не сообщает, а контракт требует хотя бы один.
+- Scan запрещён (`409 busy`) во время `applying`, `awaiting_confirmation`, `rolling_back` и пока идёт другой scan; staged-кандидат его не блокирует. Результаты хранит только последний scan, запрос более старого — `410 resource_expired`.
+- Статус интерфейса: `state` из `disabled`, `down`, `connecting`, `addressing`, `ready`, `failed` (`connected` не выдаётся: подключённый Wi-Fi без адреса — `addressing`); SSID для показа — UTF-8 с заменой каждой недопустимой последовательности на U+FFFD, как делает mock.
+- Внутреннее ограничение, не контрактное: при хотя бы одном включённом интерфейсе staging требует link хотя бы на одном из них (путь восстановления, раздел 5 плана); mock этого не воспроизводит, у него link всегда есть.
+
 ## Логи
 
 | Method / path | Query / ответ |

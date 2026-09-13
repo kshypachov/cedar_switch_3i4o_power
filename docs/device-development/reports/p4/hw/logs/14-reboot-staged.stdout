@@ -1,0 +1,42 @@
+{"t": 1.57, "step": "login", "host": "192.168.88.13", "ms": 1269}
+{"t": 1.77, "step": "stage", "status": 201, "ms": 113, "body": {"id": "txn_00000009", "boot_id": "boot_2963194137a47884", "base_revision": 4, "state": "staged", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "manual", "servers": ["9.9.9.9"]}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}}, "wifi": {"
+{"t": 1.84, "step": "uptime before reset", "uptime_ms": "870689"}
+{"t": 2.04, "step": "J-Link reset", "rc": 0}
+{"t": 93.33, "step": "board answers after reset", "after_s": null}
+-> logs/14-reboot-staged.json, console logs/14-reboot-staged-console.log
+Traceback (most recent call last):
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p4/docs/device-development/reports/p4/hw/net_api_b.py", line 427, in <module>
+    dev.login()
+    ~~~~~~~~~^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p4/docs/device-development/reports/p4/hw/net_api_b.py", line 136, in login
+    s, h, b, ms = self.call("POST", "/auth/session", {"password": PASSWORD})
+                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p4/docs/device-development/reports/p4/hw/net_api_b.py", line 125, in call
+    c.request(method, "/api/v1" + path, body=data, headers=h)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1386, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1432, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1381, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1141, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1085, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1051, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 874, in create_connection
+    raise exceptions[0]
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 859, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+TimeoutError: timed out

@@ -1,0 +1,93 @@
+{
+  "scenario": "wifi",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:26:12+0300",
+  "steps": [
+    {
+      "t": 1.58,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1276
+    },
+    {
+      "t": 1.76,
+      "step": "stage",
+      "status": 422,
+      "ms": 102,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f2020f",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/wifi/enabled",
+              "code": "not_allowed"
+            }
+          ]
+        }
+      },
+      "schema_errors": null
+    },
+    {
+      "t": 1.85,
+      "step": "status",
+      "body": {
+        "interfaces": [
+          {
+            "id": "ethernet",
+            "enabled": true,
+            "link_up": true,
+            "state": "ready",
+            "mac_address": "80:34:28:10:6a:1d",
+            "addresses": [
+              {
+                "family": "ipv4",
+                "address": "192.168.88.13",
+                "prefix_length": 24,
+                "source": "dhcp"
+              },
+              {
+                "family": "ipv6",
+                "address": "fe80::8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "link_local"
+              },
+              {
+                "family": "ipv6",
+                "address": "fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "slaac"
+              }
+            ],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": null
+          },
+          {
+            "id": "wifi",
+            "enabled": false,
+            "link_up": false,
+            "state": "disabled",
+            "mac_address": "00:00:00:00:00:00",
+            "addresses": [],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": {
+              "code": "capability_unavailable",
+              "message": "The Wi-Fi coprocessor does not respond",
+              "request_id": "req_14f20211",
+              "retryable": false
+            }
+          }
+        ],
+        "default_interface": "ethernet",
+        "dns_servers": [
+          "1.1.1.1",
+          "192.168.88.1"
+        ]
+      }
+    }
+  ]
+}

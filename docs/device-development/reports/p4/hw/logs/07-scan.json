@@ -1,0 +1,27 @@
+{
+  "scenario": "scan",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:26:09+0300",
+  "steps": [
+    {
+      "t": 1.93,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1628
+    },
+    {
+      "t": 2.02,
+      "step": "scan",
+      "status": 503,
+      "ms": 87,
+      "body": {
+        "error": {
+          "code": "capability_unavailable",
+          "message": "The Wi-Fi coprocessor is not available; scanning is unavailable",
+          "request_id": "req_14f2020b",
+          "retryable": false
+        }
+      }
+    }
+  ]
+}

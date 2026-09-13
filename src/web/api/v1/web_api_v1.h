@@ -42,6 +42,32 @@ extern const struct web_api_router web_api_v1_router;
  */
 int web_api_v1_init(const struct web_api_v1_identity *identity);
 
+/** What the network bindings need from the service that runs network-manager. */
+struct web_api_v1_network {
+	/**
+	 * Wake the worker that runs network_manager_process(): a request was
+	 * accepted and has interface work waiting. Called after the decision is
+	 * recorded and before the response is written, so the worker must not
+	 * pre-empt the HTTP thread before the response is sent (it cannot: the
+	 * server's thread is cooperative).
+	 */
+	void (*kick)(void);
+	/**
+	 * Wi-Fi security modes this build can join, as a bitmask of
+	 * BIT(enum device_config_wifi_security); NULL or 0 publishes all of them.
+	 */
+	uint32_t (*wifi_security_modes)(void);
+};
+
+/**
+ * @brief Connect the network bindings to their service.
+ *
+ * Without it the handlers still answer — from network-manager's state — but
+ * nothing wakes the worker; the sim tier drives network_manager_process()
+ * itself. @p network must outlive the program.
+ */
+void web_api_v1_set_network(const struct web_api_v1_network *network);
+
 #ifdef __cplusplus
 }
 #endif

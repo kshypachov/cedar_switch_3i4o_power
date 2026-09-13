@@ -1,0 +1,352 @@
+[+    0.00] ==== watching board B for 900 s
+[+    1.02] [00:08:14.153,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    1.02] [00:08:14.354,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    1.02] [00:08:14.555,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    2.30] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+    2.42] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+    4.07] [00:08:17.127,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    4.07] [00:08:17.328,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    4.07] [00:08:17.529,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    4.41] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+    6.41] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+    6.71] [00:08:19.896,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.71] [00:08:20.097,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.71] [00:08:20.297,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    8.41] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+   10.93] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+   11.18] [00:08:23.194,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   11.18] [00:08:25.145,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   12.42] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+   12.61] [00:08:25.657,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   12.61] [00:08:25.858,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   12.61] [00:08:26.059,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   12.61] [00:08:26.260,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   18.74] ==== poll ping=lost http=(TimeoutError)
+[+   21.02] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+   21.15] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+   21.37] [00:08:28.591,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.37] [00:08:28.918,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.37] [00:08:29.119,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.37] [00:08:29.348,000] <inf> network_manager: transaction txn_00000001 staged against revision 6
+[+   21.37] [00:08:35.063,000] <inf> network_manager: transaction txn_00000001 journalled, job job_00000001, 300 s to confirm
+[+   21.37] [00:08:35.457,000] <inf> net_adapter: ethernet: static /24 with gateway
+[+   21.37] [00:08:35.457,000] <inf> network_manager: transaction txn_00000001 applied, awaiting confirmation
+[+   24.21] [00:08:37.305,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   24.21] [00:08:37.506,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   24.21] [00:08:37.707,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   27.04] ==== poll ping=lost http=(TimeoutError)
+[+   30.10] [00:08:43.326,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   31.06] ==== poll ping=lost http=(TimeoutError)
+[+   32.75] [00:08:45.976,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   32.75] [00:08:46.339,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   32.95] [00:08:46.540,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   35.07] ==== poll ping=lost http=(TimeoutError)
+[+   35.80] [00:08:48.879,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   35.80] [00:08:49.080,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   35.80] [00:08:49.281,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   35.80] [00:08:49.482,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   39.08] ==== poll ping=lost http=(TimeoutError)
+[+   41.49] [00:08:54.686,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   41.49] [00:08:54.887,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   41.49] [00:08:55.088,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   41.49] [00:08:55.288,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   43.10] ==== poll ping=lost http=(TimeoutError)
+[+   44.75] [00:08:57.885,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   44.75] [00:08:58.887,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   47.11] ==== poll ping=lost http=(TimeoutError)
+[+   47.80] [00:09:00.890,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   47.80] [00:09:01.090,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   50.24] [00:09:03.394,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   50.24] [00:09:03.595,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   50.24] [00:09:03.796,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   50.24] [00:09:03.997,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   51.12] ==== poll ping=lost http=(TimeoutError)
+[+   53.29] [00:09:06.402,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   53.29] [00:09:06.603,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   53.29] [00:09:06.803,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   55.13] ==== poll ping=lost http=(TimeoutError)
+[+   56.34] [00:09:09.405,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   56.34] [00:09:09.605,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   56.34] [00:09:09.806,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   59.14] ==== poll ping=lost http=(TimeoutError)
+[+   59.19] [00:09:12.413,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   62.23] [00:09:15.428,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   63.15] ==== poll ping=lost http=(TimeoutError)
+[+   64.87] [00:09:17.941,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   64.87] [00:09:18.438,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   65.89] [00:09:19.029,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   67.16] ==== poll ping=lost http=(TimeoutError)
+[+   67.72] [00:09:20.947,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   68.73] [00:09:21.956,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   70.56] [00:09:23.733,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   70.56] [00:09:23.934,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   70.56] [00:09:24.135,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   71.18] ==== poll ping=lost http=(TimeoutError)
+[+   73.82] [00:09:26.967,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   73.82] [00:09:27.969,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   75.19] ==== poll ping=lost http=(TimeoutError)
+[+   76.87] [00:09:29.974,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   79.19] ==== poll ping=lost http=(TimeoutError)
+[+   79.31] [00:09:32.385,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   79.31] [00:09:32.472,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   79.31] [00:09:32.672,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   79.31] [00:09:32.873,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   82.34] [00:09:35.478,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   83.20] ==== poll ping=lost http=(TimeoutError)
+[+   85.40] [00:09:38.486,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   85.40] [00:09:38.687,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   87.21] ==== poll ping=lost http=(TimeoutError)
+[+   88.04] [00:09:41.244,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   88.04] [00:09:41.445,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   88.04] [00:09:41.646,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   91.22] ==== poll ping=lost http=(TimeoutError)
+[+   91.29] [00:09:44.419,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   91.29] [00:09:44.499,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   91.29] [00:09:45.167,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   93.72] [00:09:46.944,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   93.72] [00:09:47.145,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   93.72] [00:09:47.346,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   93.92] [00:09:47.547,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   95.23] ==== poll ping=lost http=(TimeoutError)
+[+   96.96] [00:09:50.025,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   96.96] [00:09:50.082,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   96.96] [00:09:50.283,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   96.96] [00:09:51.030,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+   99.25] ==== poll ping=lost http=(TimeoutError)
+[+   99.81] [00:09:53.032,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   99.81] [00:09:53.532,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  102.46] [00:09:55.674,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  102.46] [00:09:55.928,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  102.46] [00:09:56.129,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  103.26] ==== poll ping=lost http=(TimeoutError)
+[+  105.30] [00:09:58.556,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  105.50] [00:09:58.757,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  105.50] [00:09:58.958,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  105.50] [00:09:59.159,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  107.27] ==== poll ping=lost http=(TimeoutError)
+[+  108.35] [00:10:01.550,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  108.35] [00:10:01.751,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  108.35] [00:10:01.952,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  111.29] ==== poll ping=lost http=(TimeoutError)
+[+  111.40] [00:10:04.569,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  111.40] [00:10:04.770,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  111.40] [00:10:04.971,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  114.45] [00:10:07.582,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  115.30] ==== poll ping=lost http=(TimeoutError)
+[+  117.29] [00:10:10.558,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.50] [00:10:10.759,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  119.32] ==== poll ping=lost http=(TimeoutError)
+[+  120.13] [00:10:13.193,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  120.13] [00:10:13.601,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  120.13] [00:10:14.188,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  122.98] [00:10:16.116,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  122.98] [00:10:17.109,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  123.33] ==== poll ping=lost http=(TimeoutError)
+[+  126.03] [00:10:19.124,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  126.03] [00:10:20.125,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  127.34] ==== poll ping=lost http=(TimeoutError)
+[+  128.35] ==== poll ping=lost http=(OSError)
+[+  128.87] [00:10:22.128,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  129.07] [00:10:22.628,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  130.36] ==== poll ping=lost http=(OSError)
+[+  131.91] [00:10:25.130,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  131.91] [00:10:25.631,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  132.37] ==== poll ping=lost http=(OSError)
+[+  134.37] ==== poll ping=lost http=(OSError)
+[+  134.56] [00:10:27.631,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  134.56] [00:10:27.858,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  134.56] [00:10:28.058,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  135.57] [00:10:28.704,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  136.37] ==== poll ping=lost http=(OSError)
+[+  137.61] [00:10:30.872,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  137.82] [00:10:31.373,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  138.37] ==== poll ping=lost http=(OSError)
+[+  140.26] [00:10:33.434,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  140.26] [00:10:34.435,000] <inf> eth_w5500: ETH_W5500: Link speed 10 Mb, half duplex
+[+  140.37] ==== poll ping=lost http=(OSError)
+[+  142.38] ==== poll ping=lost http=(OSError)
+[+  143.30] [00:10:36.436,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  143.30] [00:10:36.576,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  143.30] [00:10:36.777,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.38] ==== poll ping=lost http=(OSError)
+[+  149.39] ==== poll ping=lost http=(TimeoutError)
+[+  153.41] ==== poll ping=lost http=(TimeoutError)
+[+  154.42] ==== poll ping=lost http=(OSError)
+[+  156.42] ==== poll ping=lost http=(OSError)
+[+  158.42] ==== poll ping=lost http=(OSError)
+[+  160.43] ==== poll ping=lost http=(OSError)
+[+  162.43] ==== poll ping=lost http=(OSError)
+[+  163.41] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+  163.41] I: PSRAM initialised in QPI mode, 8192 KB
+[+  163.41] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+  163.41] I: Starting bootloader
+[+  163.41] 
+[+  163.41] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+  163.41] I: 0x90000000..0x9000001F:
+[+  163.41] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+  163.41] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+  163.41] I: Alias[0x02000000..0x0200001F]:
+[+  163.41] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+  163.41] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+  163.41] I: PSRAM 0x70000000..0x7000001F:
+[+  163.41] I: 45 55 55 51 54 55 55 55 55 45 55 55 45 55 55 55
+[+  163.41] I: 55 55 55 55 55 55 55 55 55 55 55 54 55 55 55 55
+[+  163.41] I: PSRAM write/read: PASS
+[+  163.41] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+  163.41] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+  163.41] I: Boot source: primary slot
+[+  163.61] I: Image index: 0, Swap type: none
+[+  164.44] ==== poll ping=lost http=(OSError)
+[+  166.44] ==== poll ping=lost http=(OSError)
+[+  168.44] ==== poll ping=lost http=(OSError)
+[+  170.45] ==== poll ping=lost http=(OSError)
+[+  171.96] I: Bootloader chainload address offset: 0x0
+[+  171.96] I: Image version: v0.0.0
+[+  171.96] I: Jumping to the first image slot
+[+  173.79] 
+[+  173.79] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+  173.79] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+  175.45] ==== poll ping=lost http=(TimeoutError)
+[+  176.23] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+  176.23] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+  176.23] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+  176.43] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+  176.43] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+  176.43] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+  176.43] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+  176.43] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+  176.43] [00:00:01.785,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+  176.43] [00:00:01.785,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+  176.43] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+  176.44] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+  176.44] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+  176.46] ==== poll ping=lost http=(OSError)
+[+  178.47] ==== poll ping=lost http=(OSError)
+[+  180.47] ==== poll ping=lost http=(OSError)
+[+  182.48] ==== poll ping=lost http=(OSError)
+[+  184.48] ==== poll ping=lost http=(OSError)
+[+  184.98] [00:00:01.870,000] <inf> shell_telnet: Telnet shell backend initialized
+[+  184.98] [00:00:01.871,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+  184.98] [00:00:01.871,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+  184.98] [00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  184.98] [00:00:04.259,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+  184.98] [00:00:04.259,000] <inf> io: Start io init
+[+  184.98] [00:00:04.264,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+  184.98] [00:00:04.265,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+  184.98] [00:00:04.265,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+  184.98] [00:00:04.285,000] <inf> matter: IPv6 address added, starting Matter
+[+  184.98] [00:00:04.294,000] <inf> io: Start io outputs task
+[+  184.98] [00:00:05.682,000] <inf> matter: IPv6 address added, starting Matter
+[+  185.19] [00:00:05.682,000] <inf> matter: Matter start work already submitted
+[+  185.19] [00:00:09.183,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  185.19] [00:00:09.384,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  185.59] [00:00:11.908,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  185.59] [00:00:12.109,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  185.59] [00:00:13.244,000] <wrn> device_config_store: transaction txn_00000001 was not confirmed before reboot; rolled back to revision 6
+[+  185.59] [00:00:13.244,000] <inf> network_service: network configuration revision 6: an unconfirmed change was rolled back (8947 ms)
+[+  185.59] [00:00:13.244,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+  186.49] ==== poll ping=lost http=(OSError)
+[+  188.44] [00:00:13.541,000] <inf> matter: Init CHIP stack
+[+  188.44] [00:00:13.821,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+[+  188.44] [00:00:13.822,000] <inf> network_service: worker stack: 4800 of 8192 bytes never used
+[+  188.44] [00:00:16.366,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_0730b5d7a1c469e5
+[+  188.44] [00:00:16.371,000] <inf> net_adapter: ethernet: DHCP
+[+  188.49] ==== poll ping=lost http=(OSError)
+[+  190.50] ==== poll ping=lost http=(OSError)
+[+  192.50] ==== poll ping=lost http=(OSError)
+[+  192.50] [00:00:19.417,000] <inf> net_dhcpv4: Received: 192.168.88.13
+[+  192.50] [00:00:19.421,000] <inf> network_manager: default route via ethernet
+[+  194.50] ==== poll ping=lost http=(OSError)
+[+  196.73] ==== poll ping=lost http=401
+[+  196.76] [00:00:23.604,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  196.97] [00:00:23.804,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  199.02] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  199.61] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  199.81] [00:00:26.817,000] <wrn> net_if: iface 1 pkt 0x7017a924 send failure status -5
+[+  202.45] [00:00:29.407,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  202.45] [00:00:29.608,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  202.60] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  203.62] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  205.62] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  207.62] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  207.94] [00:00:34.891,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  207.94] [00:00:35.092,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  207.94] [00:00:35.293,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  207.94] [00:00:35.494,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  209.37] [00:00:36.375,000] <inf> chip: [SVR]Initializing session resumption storage...
+[+  209.37] [00:00:36.376,000] <inf> chip: [SVR]Server initializing...
+[+  209.37] [00:00:36.377,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+[+  209.63] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  211.64] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  213.64] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  214.85] [00:00:41.886,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+[+  216.22] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  217.66] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  219.65] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  220.96] [00:00:43.646,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:43.847,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:44.048,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:46.501,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:46.702,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:46.903,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  220.96] [00:00:47.103,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  222.02] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  222.58] [00:00:49.654,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  222.79] [00:00:49.855,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  223.66] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  225.43] [00:00:52.373,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  225.43] [00:00:52.574,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  225.43] [00:00:52.774,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  225.65] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  227.84] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  228.26] [00:00:55.261,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  228.26] [00:00:55.462,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  228.26] [00:00:55.663,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  229.67] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  229.88] [00:00:56.660,000] <inf> chip: [DMG]AccessControl: initializing
+[+  229.88] [00:00:56.661,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+[+  229.88] [00:00:56.661,000] <inf> chip: [DMG]AccessControl: setting
+[+  229.88] [00:00:56.662,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+[+  229.88] [00:00:56.662,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+[+  229.88] [00:00:56.663,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+[+  229.88] [00:00:56.663,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+[+  229.88] [00:00:56.666,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+[+  229.88] [00:00:56.667,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+[+  231.67] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  233.67] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  235.68] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  237.19] [00:01:04.243,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  237.19] [00:01:04.443,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  237.68] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  239.69] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  241.69] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  243.70] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  245.71] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  248.70] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  248.77] [00:01:15.706,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  248.77] [00:01:15.907,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  248.77] [00:01:16.108,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  249.70] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  251.42] [00:01:18.504,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  251.63] [00:01:18.705,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  251.63] [00:01:18.906,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  251.71] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  253.05] [00:01:20.083,000] <inf> chip: [ZCL]Using ZAP configuration...
+[+  254.71] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  254.89] [00:01:21.714,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  254.89] [00:01:21.915,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  255.71] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  257.72] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  258.95] [00:01:25.850,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+[+  260.72] ==== poll ping=lost http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  260.79] [00:01:27.721,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  261.73] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  263.02] [00:01:30.056,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  263.02] [00:01:30.257,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  263.02] [00:01:30.458,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  263.73] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  265.05] [00:01:32.062,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+[+  265.73] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  267.73] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  269.73] ==== poll ping=ok http=200 eth=ready link=True v4=192.168.88.13 default=ethernet dns=['1.1.1.1', '192.168.88.1']
+[+  270.53] [00:01:37.492,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0

@@ -1,0 +1,157 @@
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 64 4e 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 64 4e 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: 14 5c 11 2 0 0 0 0 74 44 11 2 0 0 0 0
+I: d8 43 11 2 5c 44 11 2 0 0 0 0 2c 67 13 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+[00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[00:00:01.665,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[00:00:01.665,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[00:00:01.674,000] <inf> eth_w5500: W5500 Initialized
+[00:00:01.675,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[00:00:01.675,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[00:00:01.675,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[00:00:01.777,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[00:00:01.781,000] <err> net_if: Iface 0x20002e98 device not ready
+[00:00:01.782,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[00:00:01.782,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[00:00:01.784,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[00:00:01.784,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[00:00:01.837,000] <inf> shell_telnet: Telnet shell backend initialized
+[00:00:01.838,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[00:00:01.839,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[00:00:01.881,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[00:00:01.881,000] <inf> io: Start io init
+[00:00:01.886,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[00:00:01.887,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[00:00:01.887,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[00:00:01.889,000] <inf> io: Start io outputs task
+[00:00:02.130,000] <inf> device_config_store: no stored configuration, factory defaults in force
+[00:00:02.131,000] <inf> network_service: network configuration revision 0: no stored configuration, factory defaults (239 ms)
+[00:00:02.131,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[00:00:02.195,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+[00:00:02.195,000] <inf> network_service: worker stack: 4952 of 8192 bytes never used
+[00:00:02.256,000] <wrn> web_server: no administrator yet: setup is open on the web page
+[00:00:02.256,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_2963194137a47884
+[00:00:02.261,000] <inf> net_adapter: ethernet: DHCP
+[00:00:03.282,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[00:00:03.497,000] <inf> matter: IPv6 address added, starting Matter
+[00:00:03.500,000] <inf> matter: Init CHIP stack
+[00:00:04.215,000] <inf> net_dhcpv4: Received: 192.168.88.13
+[00:00:04.219,000] <inf> network_manager: default route via ethernet
+[00:00:04.440,000] <inf> matter: IPv6 address added, starting Matter
+[00:00:04.441,000] <inf> matter: Matter start work already submitted
+[00:00:04.738,000] <inf> chip: [SVR]Initializing session resumption storage...
+[00:00:04.740,000] <inf> chip: [SVR]Server initializing...
+[00:00:04.741,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+[00:00:04.923,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+[00:00:05.282,000] <inf> chip: [DMG]AccessControl: initializing
+[00:00:05.282,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+[00:00:05.283,000] <inf> chip: [DMG]AccessControl: setting
+[00:00:05.284,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+[00:00:05.325,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+[00:00:05.331,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+[00:00:05.337,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+[00:00:05.365,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+[00:00:05.368,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+[00:00:05.890,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:05.991,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:06.091,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:06.192,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:06.293,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:06.393,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:06.494,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:07.728,000] <inf> chip: [ZCL]Using ZAP configuration...
+[00:00:07.915,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+[00:00:08.099,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+[00:00:08.284,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+[00:00:08.474,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
+[00:00:08.662,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+[00:00:08.947,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
+[00:00:09.132,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
+[00:00:09.316,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+[00:00:09.321,000] <dbg> chip.LogV: [DL]Boot reason: 1
+[00:00:09.323,000] <inf> chip: [ZCL]Boot reason: 1
+[00:00:09.324,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
+[00:00:09.326,000] <inf> chip: [ZCL]Boot reason: 1
+[00:00:09.327,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
+[00:00:09.329,000] <inf> chip: [ZCL]Boot reason: 1
+[00:00:09.330,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
+[00:00:09.388,000] <inf> chip: [ZCL]Boot reason: 1
+[00:00:09.396,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
+[00:00:09.459,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000050000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x000000000000126C
+[00:00:09.856,000] <inf> chip: [DMG]AccessControlCluster: initializing
+[00:00:09.858,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+[00:00:09.863,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+[00:00:09.867,000] <inf> chip: [IN]CASE Server enabling CASE session setups
+[00:00:09.869,000] <dbg> chip.LogV: [IN]SecureSession[0x700016b0]: Allocated Type:2 LSID:37519
+[00:00:09.870,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x700016b0) - waiting for Sigma1 msg
+[00:00:09.870,000] <inf> chip: [SVR]Joining Multicast groups
+[00:00:09.905,000] <dbg> chip.LogV: [ZCL]Emitting StartUp event
+[00:00:09.948,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000050001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x000000000000142D
+[00:00:09.954,000] <inf> chip: [SVR]Server initialization complete
+[00:00:09.960,000] <inf> chip: [SVR]Server Listening...
+[00:00:09.961,000] <inf> matter: Matter stack initialized
+[00:00:09.968,000] <inf> matter: Matter event loop started
+[00:00:09.970,000] <inf> matter_event_loop: Init io_to_matter_stream
+[00:00:09.973,000] <inf> matter_event_loop: Start io_to_matter_stream
+[00:00:09.979,000] <inf> chip: [DL]CHIP task running
+[00:00:09.993,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+[00:00:10.017,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+[00:00:10.514,000] <err> chip: [DL]Long dispatch time: 433 ms, for event type 2
+[00:00:17.551,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:17.929,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:18.030,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:23.412,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:23.513,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:23.614,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:23.714,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:23.815,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:29.654,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:32.373,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:32.474,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:32.575,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:41.257,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:43.735,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:43.835,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:43.936,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:44.037,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:44.137,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:49.896,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:00:49.997,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.013,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.113,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.214,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.315,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.415,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.516,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:01.617,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:07.083,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:07.184,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:07.285,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:07.385,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:18.591,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:18.692,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:18.792,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:18.893,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped
+[00:01:18.994,000] <err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped

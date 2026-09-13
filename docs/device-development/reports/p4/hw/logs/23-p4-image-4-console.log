@@ -1,0 +1,106 @@
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: ec 5c 11 2 0 bb 1 70 4c 45 11 2 6c e 0 70
+I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+[00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[00:00:01.785,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[00:00:01.785,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[00:00:01.940,000] <inf> shell_telnet: Telnet shell backend initialized
+[00:00:01.941,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[00:00:01.941,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[00:00:04.310,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[00:00:04.310,000] <inf> io: Start io init
+[00:00:04.315,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[00:00:04.316,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[00:00:04.316,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[00:00:04.336,000] <inf> matter: IPv6 address added, starting Matter
+[00:00:04.345,000] <inf> io: Start io outputs task
+[00:00:05.611,000] <inf> matter: IPv6 address added, starting Matter
+[00:00:05.611,000] <inf> matter: Matter start work already submitted
+[00:00:08.905,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:09.106,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:09.307,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:11.676,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:11.877,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:12.078,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:12.278,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:12.969,000] <inf> device_config_store: configuration loaded, revision 6
+[00:00:12.969,000] <inf> network_service: network configuration revision 6: clean (8621 ms)
+[00:00:12.969,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[00:00:13.657,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+[00:00:13.658,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[00:00:16.025,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_1308c659b08e4cd4
+[00:00:16.030,000] <inf> net_adapter: ethernet: DHCP
+[00:00:16.090,000] <inf> matter: Init CHIP stack
+[00:00:21.139,000] <inf> net_dhcpv4: Received: 192.168.88.13
+[00:00:21.144,000] <inf> network_manager: default route via ethernet
+[00:00:29.241,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:29.442,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:29.643,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:32.105,000] <inf> chip: [SVR]Initializing session resumption storage...
+[00:00:32.107,000] <inf> chip: [SVR]Server initializing...
+[00:00:32.109,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+[00:00:35.308,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:37.142,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+[00:00:41.155,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:46.551,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:46.752,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:46.953,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:47.856,000] <inf> chip: [DMG]AccessControl: initializing
+[00:00:47.862,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+[00:00:47.866,000] <inf> chip: [DMG]AccessControl: setting
+[00:00:47.873,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+[00:00:47.878,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+[00:00:47.883,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+[00:00:47.971,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+[00:00:48.027,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+[00:00:48.028,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+[00:00:49.465,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:49.666,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:49.866,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:55.514,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:00:55.715,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:07.371,000] <inf> chip: [ZCL]Using ZAP configuration...
+[00:01:09.700,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:09.901,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:10.102,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:10.302,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:12.867,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+[00:01:15.756,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:15.957,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[00:01:18.000,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+[00:01:22.746,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+[00:01:27.543,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0

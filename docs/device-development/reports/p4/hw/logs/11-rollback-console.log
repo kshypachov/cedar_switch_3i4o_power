@@ -1,0 +1,26 @@
+[+    1.78] ==== host: login
+[+    5.80] ==== host: free-address check
+[+    5.98] ==== host: stage
+[+    7.72] ==== host: apply
+[+    7.76] [8D[J[00:11:16.484,000] [0m<inf> network_manager: transaction txn_00000005 staged against revision 2[0m
+[+    7.86] [1;32muart:~$ [m[8D[J[00:11:18.234,000] [0m<inf> network_manager: transaction txn_00000005 journalled, job job_00000005, 120 s to confirm[0m
+[+    7.86] [1;32muart:~$ [m[8D[J[00:11:18.300,000] [0m<inf> net_adapter: ethernet: static /24 with gateway[0m
+[+    7.86] [1;32muart:~$ [m[8D[J[00:11:18.301,000] [0m<inf> network_manager: transaction txn_00000005 applied, awaiting confirmation[0m
+[+    8.78] ==== host: new address answers
+[+   10.75] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:11:20.253,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.75] [1;32muart:~$ [m[8D[J[00:11:20.353,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.75] [1;32muart:~$ [m[8D[J[00:11:20.454,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.85] [1;32muart:~$ [m[8D[J[00:11:20.555,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.85] [1;32muart:~$ [m[8D[J[00:11:20.655,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.85] [1;32muart:~$ [m[8D[J[00:11:20.756,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   10.85] [1;32muart:~$ [m[8D[J[00:11:20.857,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+   11.29] ==== host: old address after apply
+[+   12.54] ==== host: login on the new address
+[+   12.62] ==== host: rollback request
+[+   13.62] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:11:23.139,000] [0m<inf> network_manager: transaction txn_00000005 rolling back on request[0m
+[+   13.62] [1;32muart:~$ [m[8D[J[00:11:23.207,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[+   13.62] [1;32muart:~$ [m[8D[J[00:11:23.245,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[+   13.68] ==== host: DHCP address answers after rollback
+[+   13.73] [1;32muart:~$ [m[8D[J[00:11:23.468,000] [0m<inf> network_manager: transaction txn_00000005 rolled_back[0m
+[+   15.04] ==== host: transaction
+[+   15.12] ==== host: rollback job

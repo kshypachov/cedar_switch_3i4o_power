@@ -1,0 +1,272 @@
+{
+  "scenario": "timeout",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:28:23+0300",
+  "steps": [
+    {
+      "t": 1.82,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1521
+    },
+    {
+      "t": 5.84,
+      "step": "free-address check",
+      "ip": "192.168.88.213",
+      "ping_rc": 2,
+      "arp": "? (192.168.88.213) at 80:34:28:10:6a:1d on en7 ifscope [ethernet]",
+      "arp_mac": "80:34:28:10:6a:1d"
+    },
+    {
+      "t": 6.88,
+      "step": "stage",
+      "status": 201,
+      "ms": 114,
+      "body": {
+        "id": "txn_00000004",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 2,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 300,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 8.53,
+      "step": "apply",
+      "status": 202,
+      "ms": 1654,
+      "body": {
+        "job_id": "job_00000004",
+        "job_url": "/api/v1/jobs/job_00000004",
+        "resource_url": "/api/v1/network/config"
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 9.59,
+      "step": "new address answers",
+      "ip": "192.168.88.213",
+      "after_apply_s": 2.71
+    },
+    {
+      "t": 12.1,
+      "step": "old address after apply",
+      "ip": "192.168.88.13",
+      "answers": false
+    },
+    {
+      "t": 13.62,
+      "step": "transaction",
+      "host": "192.168.88.213",
+      "status": 200,
+      "ms": 86,
+      "body": {
+        "id": "txn_00000004",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 2,
+        "state": "awaiting_confirmation",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 54,
+        "reconnect_urls": [
+          "http://192.168.88.213/"
+        ],
+        "job_id": "job_00000004",
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 88.6,
+      "step": "rolled back by the deadline, read on the DHCP address",
+      "status": 200,
+      "waited_s": 74.98,
+      "body": {
+        "id": "txn_00000004",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 2,
+        "state": "rolled_back",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": null,
+        "reconnect_urls": [],
+        "job_id": "job_00000004",
+        "error": {
+          "code": "resource_expired",
+          "message": "Confirmation timed out; the previous configuration was restored",
+          "request_id": "req_14f20242",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "t": 90.04,
+      "step": "job",
+      "body": {
+        "id": "job_00000004",
+        "boot_id": "boot_2963194137a47884",
+        "kind": "network_apply",
+        "state": "failed",
+        "phase": "rolling_back",
+        "progress": null,
+        "cancellable": false,
+        "created_uptime_ms": "559231",
+        "updated_uptime_ms": "621271",
+        "resource_url": "/api/v1/network/config",
+        "error": {
+          "code": "resource_expired",
+          "message": "The operation failed",
+          "request_id": "req_14f20245",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "t": 90.13,
+      "step": "transaction",
+      "host": "192.168.88.13",
+      "status": 200,
+      "ms": 88,
+      "body": {
+        "id": "txn_00000004",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 2,
+        "state": "rolled_back",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": null,
+        "reconnect_urls": [],
+        "job_id": "job_00000004",
+        "error": {
+          "code": "resource_expired",
+          "message": "Confirmation timed out; the previous configuration was restored",
+          "request_id": "req_14f20246",
+          "retryable": false
+        }
+      },
+      "schema_errors": []
+    }
+  ]
+}

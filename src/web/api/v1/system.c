@@ -6,8 +6,11 @@
 
 #include <string.h>
 
+#include <stdio.h>
+
 #include <zephyr/kernel.h>
 
+#include <device_config_store/device_config_store.h>
 #include <matter_service/matter_service.h>
 
 #include "v1_internal.h"
@@ -68,8 +71,8 @@ void v1_get_system_status(struct web_api_call *call)
 #define CONFIRM_MAX_SECONDS  CONFIG_NETWORK_MANAGER_CONFIRM_TIMEOUT_MAX_SECONDS
 #else
 #define SCAN_RECORDS         64
-#define CONFIRM_MIN_SECONDS  30
-#define CONFIRM_MAX_SECONDS  900
+#define CONFIRM_MIN_SECONDS  60
+#define CONFIRM_MAX_SECONDS  300
 #endif
 
 static void feature(struct web_json_writer *w, const char *name, bool available,
@@ -132,11 +135,16 @@ void v1_get_capabilities(struct web_api_call *call)
 	web_json_int(w, CONFIRM_MAX_SECONDS);
 	web_json_object_end(w);
 
+	/* From the network service: what this build's Wi-Fi driver can join. */
+	const uint32_t modes = v1_wifi_security_modes();
+
 	web_json_key(w, "wifi_security_modes");
 	web_json_array_begin(w);
-	web_json_string(w, "open");
-	web_json_string(w, "wpa2_psk");
-	web_json_string(w, "wpa3_sae");
+	for (int s = 0; s < DEVICE_CONFIG_WIFI_SECURITY_COUNT; s++) {
+		if (modes & BIT(s)) {
+			web_json_string(w, device_config_wifi_security_str(s));
+		}
+	}
 	web_json_array_end(w);
 
 	web_json_key(w, "firmware_formats");
@@ -152,14 +160,20 @@ void v1_get_capabilities(struct web_api_call *call)
 
 /* -- jobs ----------------------------------------------------------------- */
 
-const char *v1_job_resource_url(enum job_kind kind)
+const char *v1_job_resource_url(const struct job_snapshot *job, char *buf, size_t cap)
 {
-	switch (kind) {
+	switch (job->kind) {
 	case JOB_KIND_PASSWORD_CHANGE:
 		return WEB_API_BASE_PATH "/auth/session";
 	case JOB_KIND_MATTER_OPEN:
 	case JOB_KIND_MATTER_CLOSE:
 		return WEB_API_BASE_PATH "/matter/commissioning";
+	case JOB_KIND_NETWORK_APPLY:
+	case JOB_KIND_NETWORK_DISCARD:
+		return WEB_API_BASE_PATH "/network/config";
+	case JOB_KIND_WIFI_SCAN:
+		(void)snprintf(buf, cap, WEB_API_BASE_PATH "/network/wifi/scans/%s", job->id);
+		return buf;
 	default:
 		return NULL;
 	}
@@ -175,6 +189,7 @@ void v1_get_job(struct web_api_call *call)
 	const struct web_api_v1_identity *id = v1_identity();
 	struct job_snapshot job;
 	struct web_json_writer *w;
+	char url[96];
 
 	if (job_get(call->params[0], &job) != 0) {
 		web_api_reject(call, API_ERR_NOT_FOUND, "No such job");
@@ -217,7 +232,7 @@ void v1_get_job(struct web_api_call *call)
 	web_json_key(w, "updated_uptime_ms");
 	web_json_decimal(w, (uint64_t)job.updated_uptime_ms);
 	web_json_key(w, "resource_url");
-	web_json_string_or_null(w, v1_job_resource_url(job.kind));
+	web_json_string_or_null(w, v1_job_resource_url(&job, url, sizeof(url)));
 	web_json_key(w, "error");
 	if (job.has_error) {
 		web_json_object_begin(w);

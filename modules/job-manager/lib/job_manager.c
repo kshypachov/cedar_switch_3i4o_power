@@ -149,6 +149,9 @@ static bool transition_allowed(enum job_state from, enum job_state to)
 		return to == JOB_STATE_RUNNING;
 	case JOB_STATE_RUNNING:
 		return to == JOB_STATE_WAITING_CONFIRMATION;
+	case JOB_STATE_WAITING_CONFIRMATION:
+		/* The confirmation arrived, or the rollback began: work again. */
+		return to == JOB_STATE_RUNNING;
 	default:
 		return false;
 	}

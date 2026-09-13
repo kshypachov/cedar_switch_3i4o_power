@@ -1,0 +1,20 @@
+[+    1.57] ==== host: login
+[+    1.77] ==== host: stage
+[+    2.91] ==== host: apply
+[+    2.99] [8D[J[00:08:29.462,000] [0m<inf> network_manager: transaction txn_00000003 staged against revision 1[0m
+[+    2.99] [1;32muart:~$ [m[8D[J[00:08:30.610,000] [0m<inf> network_manager: transaction txn_00000003 journalled, job job_00000003, 120 s to confirm[0m
+[+    3.09] [1;32muart:~$ [m[8D[J[00:08:30.679,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[+    3.09] [1;32muart:~$ [m[8D[J[00:08:30.679,000] [0m<inf> network_manager: transaction txn_00000003 applied, awaiting confirmation[0m
+[+    3.09] [1;32muart:~$ [m[8D[J[00:08:30.701,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[+    4.47] ==== host: DHCP address answers
+[+    5.73] ==== host: login on the DHCP address
+[+    5.82] ==== host: transaction
+[+    5.91] ==== host: confirm
+[+    6.10] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:31.656,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.10] [1;32muart:~$ [m[8D[J[00:08:31.757,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.10] [1;32muart:~$ [m[8D[J[00:08:31.857,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.20] [1;32muart:~$ [m[8D[J[00:08:31.958,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.20] [1;32muart:~$ [m[8D[J[00:08:32.059,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.20] [1;32muart:~$ [m[8D[J[00:08:33.614,000] [0m<inf> network_manager: transaction txn_00000003 confirmed[0m
+[+    7.09] ==== host: confirm job
+[+    7.18] ==== host: status after

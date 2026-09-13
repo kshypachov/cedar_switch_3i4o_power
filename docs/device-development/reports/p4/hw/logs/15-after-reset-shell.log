@@ -1,0 +1,26 @@
+# Board B UART shell after `net_api_b.py reboot-staged` (J-Link reset at +2.0 s, board not
+# reachable 90 s later). Commands typed on board B's console only.
+uart:~$ kernel uptime
+Uptime: 142957 ms
+uart:~$ net iface
+Default interface: 1
+Interface eth0 (Ethernet) [1]
+Link addr : 80:34:28:10:6A:1D
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet link speed: 100 Mbits full-duplex
+IPv6 unicast addresses (max 2):
+	fe80::8234:28ff:fe10:6a1d autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d autoconf preferred
+IPv4 unicast addresses (max 1):
+	<none>
+IPv4 gateway : 0.0.0.0
+DHCPv4 state      : selecting
+DHCPv4 attempts   : 6
+Interface eth1 (Ethernet) [2]
+Interface is down.
+uart:~$ net stats 1
+Set CONFIG_NET_STATISTICS to enable statistics support.
+
+# Host at the same time: ping 192.168.88.13 -> 100 % loss; ping6 fe80::8234:28ff:fe10:6a1d%en7
+# -> 100 % loss; HTTP to both -> timeout. Console: 53 x "Invalid W5500 header size 0" after
+# 7 x "W5500 frame length 65533 exceeds 65535 buffered bytes, dropped" at 00:00:08.8-09.4.

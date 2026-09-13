@@ -37,21 +37,23 @@ config NETWORK_MANAGER_CONFIRM_TIMEOUT_SECONDS
 
 config NETWORK_MANAGER_CONFIRM_TIMEOUT_MIN_SECONDS
 	int "Smallest confirmation timeout a request may ask for"
-	default 30
+	default 60
 	range 10 300
 	help
 	  Below this a client that merely has to reconnect would run out of time
 	  through no fault of the configuration, and the device would roll back
-	  a change that was working.
+	  a change that was working. The default is NetworkApplyRequest's
+	  minimum in openapi.json: capabilities publishes this value, and a
+	  smaller one would advertise what the request schema refuses.
 
 config NETWORK_MANAGER_CONFIRM_TIMEOUT_MAX_SECONDS
 	int "Largest confirmation timeout a request may ask for"
-	default 900
+	default 300
 	range 60 3600
 	help
 	  Above this an unreachable device stays unreachable for longer than
 	  anyone will wait before power-cycling it, which defeats the point of
-	  the deadline.
+	  the deadline. The default is NetworkApplyRequest's maximum.
 
 config NETWORK_MANAGER_SCAN_MAX_RESULTS
 	int "Access points kept from one scan"
