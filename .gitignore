@@ -33,3 +33,13 @@ __pycache__/
 # Editor scratch files.
 *.swp
 *~
+
+# Frontend (src/web/frontend). node_modules and dist are reproduced by
+# `npm ci && npm run build` from package-lock.json; the API types are generated
+# from docs/device-development/openapi.json on every typecheck, test and build,
+# so a copy in the repository could only ever be stale.
+/src/web/frontend/node_modules/
+/src/web/frontend/dist/
+/src/web/frontend/src/api/schema.gen.ts
+/src/web/frontend/test-results/
+/src/web/frontend/playwright-report/

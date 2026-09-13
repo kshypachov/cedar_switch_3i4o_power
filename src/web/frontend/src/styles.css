@@ -1,0 +1,75 @@
+/* System fonts only: the device works without the internet (plan section 4). */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --text: #1c211d;
+  --muted: #5d665f;
+  --border: #d9ddd8;
+  --accent: #1f5f3f;
+  --accent-text: #ffffff;
+  --warning-bg: #fff4d6;
+  --warning-border: #e3b341;
+  --error-bg: #fde8e6;
+  --error-border: #d0584b;
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.45;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141715;
+    --surface: #1d211e;
+    --text: #e7ebe8;
+    --muted: #9aa39c;
+    --border: #333a35;
+    --accent: #5fb88a;
+    --accent-text: #0e1410;
+    --warning-bg: #3a3014;
+    --warning-border: #8a6d1f;
+    --error-bg: #3b1d1a;
+    --error-border: #a4473d;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+main { max-width: 64rem; margin: 0 auto; padding: 1rem; }
+main.narrow { max-width: 28rem; }
+h1 { font-size: 1.5rem; margin: 0.5rem 0 1rem; }
+h2 { font-size: 1.1rem; margin: 0 0 0.75rem; }
+h3 { font-size: 1rem; margin: 0.5rem 0; }
+code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+
+.topbar { display: flex; gap: 1rem; align-items: center; padding: 0.5rem 1rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.topbar .brand { font-weight: 600; }
+.topbar nav { display: flex; gap: 0.75rem; flex: 1; }
+.topbar nav a { color: var(--text); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 0.375rem; }
+.topbar nav a[aria-current='page'] { background: var(--bg); font-weight: 600; }
+footer { max-width: 64rem; margin: 0 auto; padding: 0 1rem 1rem; }
+
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; }
+.subcard + .subcard { border-top: 1px solid var(--border); margin-top: 0.5rem; }
+.facts { margin: 0; }
+.fact { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; }
+.fact dt { color: var(--muted); }
+.fact dd { margin: 0; text-align: right; }
+.plain { list-style: none; margin: 0; padding: 0; }
+.muted { color: var(--muted); }
+
+.field { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; }
+.field input { font: inherit; padding: 0.5rem; border: 1px solid var(--border); border-radius: 0.375rem; background: var(--surface); color: var(--text); }
+.field input[aria-invalid='true'] { border-color: var(--error-border); }
+.field-error { color: var(--error-border); margin: 0; font-size: 0.9rem; }
+
+button { font: inherit; padding: 0.5rem 1rem; border-radius: 0.375rem; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-text); cursor: pointer; }
+button:disabled { opacity: 0.6; cursor: default; }
+button.button-secondary { background: transparent; color: var(--text); border-color: var(--border); }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.notice { padding: 0.75rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--surface); }
+.notice-warning { background: var(--warning-bg); border-color: var(--warning-border); }
+.notice-error { background: var(--error-bg); border-color: var(--error-border); }
+.token { background: var(--surface); border: 1px solid var(--border); border-radius: 0.375rem; padding: 0.75rem; margin-bottom: 1rem; }
+.token code { display: block; font-size: 1.1rem; margin: 0.25rem 0; }

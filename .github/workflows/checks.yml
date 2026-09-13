@@ -67,6 +67,44 @@ jobs:
       - name: Run the contract checks and the mock suite
         run: tests/ci/run-contract-tests.sh
 
+  frontend:
+    name: frontend (types, unit, build, e2e)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          # The floor vitest 5 and Vite 8 set; package.json's engines says the same.
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: src/web/frontend/package-lock.json
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/workflows/checks.yml
+
+      - name: Install the mock's two dependencies
+        # The e2e suite runs against tools/api-contract's mock, which serves the
+        # built application with the device's static policy.
+        run: python -m pip install --upgrade pip jsonschema pytest
+
+      - name: Install Playwright's Chromium
+        # The one download outside the npm registry, and only for the e2e step;
+        # the build itself needs nothing beyond `npm ci`.
+        working-directory: src/web/frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Types, unit and component tests, build, end-to-end
+        env:
+          PW_CHANNEL: ''
+          PYTHON: python
+        run: tests/ci/run-frontend-tests.sh
+
   sim:
     name: sim tier (twister)
     runs-on: ubuntu-latest

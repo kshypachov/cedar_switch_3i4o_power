@@ -1,8 +1,9 @@
 # Test runners
 
-Two runners live here: `run-sim-tests.sh` for the simulated tier, which needs a
-Linux container, and `run-contract-tests.sh` for the API contract, which does
-not.
+Three runners live here: `run-sim-tests.sh` for the simulated tier, which needs
+a Linux container; `run-contract-tests.sh` for the API contract and the
+web-assets generator; and `run-frontend-tests.sh` for the browser application.
+The last two need no container.
 
 ## Why the sim tier needs a container
 
@@ -55,9 +56,36 @@ The tooling and the decisions behind it are in
 the workspace venv and falls back to `python3`, so it also works on a CI runner
 with no west workspace.
 
+## The frontend runner
+
+```sh
+tests/ci/run-frontend-tests.sh             # npm ci, vitest, build, e2e
+SKIP_E2E=1 tests/ci/run-frontend-tests.sh  # stop after the build
+```
+
+It installs exactly the lockfile, generates the API types from `openapi.json`,
+runs the unit and component tests, builds the application (which checks the
+512 KiB gzip budget), and runs the Playwright suite against the mock server with
+`--ui` serving the build. The e2e step uses the installed Chrome by default; CI
+sets `PW_CHANNEL=` and installs Playwright's Chromium. Details in
+[`src/web/frontend/README.md`](../../src/web/frontend/README.md).
+
+## Suites added in P2
+
+| Suite | What it drives |
+|---|---|
+| `cedar.web_auth` | web-auth's state machine with every platform function faked |
+| `cedar.web_api` | the strict JSON reader and writer, the middleware on a test router, the real v1 bindings over web-auth |
+| `cedar.web_api_http` | web-api's adapter through Zephyr's own HTTP server over loopback, with the firmware's resource list and a generated asset table |
+| `cedar.web_assets` | the static response policy on a hand-built table |
+
+`cedar.web_api_http` runs a real server inside native_sim and talks to it over
+the loopback interface, so it needs nothing from the host network; it is also
+the slowest of the set (about 20 s of tests).
+
 ## GitHub Actions
 
-`.github/workflows/checks.yml` runs both of the above on every push and pull
+`.github/workflows/checks.yml` runs all three on every push and pull
 request — the owner's decision of 2026-09-12, recorded in section 12 of the
 development plan.
 
