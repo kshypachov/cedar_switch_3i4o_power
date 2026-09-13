@@ -29,7 +29,7 @@ from cedar_contract.openapi import Document
 @pytest.fixture
 def server(document: Document) -> Iterator[str]:
     app = MockApp(document=document, scenario=Scenario(setup_required=False))
-    handler = type("_BoundHandler", (_Handler,), {"app": app})
+    handler = type("_BoundHandler", (_Handler,), {"app": app, "lock": threading.Lock()})
     httpd = HTTPServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
@@ -57,7 +57,11 @@ def test_a_get_is_served_with_a_correct_content_length(server: str) -> None:
     assert status == 200
     assert headers["Content-Type"] == "application/json"
     assert int(headers["Content-Length"]) == len(body)
-    assert json.loads(body) == {"setup_required": False, "setup_allowed": False}
+    assert json.loads(body) == {
+        "setup_required": False,
+        "setup_allowed": False,
+        "setup_token": None,
+    }
 
 
 def test_the_contract_headers_survive_the_transport(server: str) -> None:

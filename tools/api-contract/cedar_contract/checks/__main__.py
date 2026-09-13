@@ -11,7 +11,7 @@ import argparse
 import sys
 
 from ..openapi import Document
-from .document import CHECKS, DEFERRED
+from .document import CHECKS, DEFERRED, served_operation_ids
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -35,6 +35,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.quiet:
         for name, reason in DEFERRED.items():
             print(f"skip {name}: {reason}")
+        served = served_operation_ids()
+        pending = [op.operation_id for op in doc.operations if op.operation_id not in served]
+        print(
+            f"info the device serves {len(served)} of {len(doc.operations)} operations; "
+            f"not yet: {', '.join(pending) if pending else 'none'}"
+        )
         print(
             f"\n{len(doc.operations)} operations, {len(doc.schemas)} schemas, "
             f"{len(list(doc.iter_refs()))} references, "

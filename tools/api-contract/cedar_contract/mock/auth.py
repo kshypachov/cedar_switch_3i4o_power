@@ -43,7 +43,13 @@ class Auth:
     # -- state -----------------------------------------------------------
 
     def state_json(self) -> dict[str, object]:
-        return {"setup_required": self.setup_required, "setup_allowed": self.setup_allowed}
+        # The token is published while setup is open (owner's decision, plan
+        # section 13) and is null otherwise, exactly as the device answers.
+        return {
+            "setup_required": self.setup_required,
+            "setup_allowed": self.setup_allowed,
+            "setup_token": self._scenario.setup_token if self.setup_allowed else None,
+        }
 
     def session_json(self, session: Session) -> dict[str, object]:
         age = self._clock.now_ms() - session.created_ms

@@ -3,7 +3,7 @@
   "info": {
     "title": "Cedar Device Web API",
     "version": "1.0.0-draft",
-    "description": "Implementation draft, revised 2026-09-12. See api-contract.md for state transitions, authorization, package framing, retry rules and business validation. This API is not implemented yet. Transport is HTTP on a trusted local network; TLS is out of scope for this version. In the first version the coprocessor is updated over UART only: method \"ota\" is present in the schema for forward compatibility but is rejected with 503 capability_unavailable, and esp32_ota reports available=false."
+    "description": "Implementation draft, revised 2026-09-13. See api-contract.md for state transitions, authorization, package framing, retry rules and business validation. This API is not implemented yet. Transport is HTTP on a trusted local network; TLS is out of scope for this version. In the first version the coprocessor is updated over UART only: method \"ota\" is present in the schema for forward compatibility but is rejected with 503 capability_unavailable, and esp32_ota reports available=false."
   },
   "servers": [
     {
@@ -2676,11 +2676,26 @@
           },
           "setup_allowed": {
             "type": "boolean"
+          },
+          "setup_token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The token POST /auth/setup expects in X-Setup-Token, while setup_allowed is true; null otherwise. Shown in the web interface by owner's decision (plan section 13): it ties setup to a client that read this device's own state, and does not prove physical access."
           }
         },
         "required": [
           "setup_required",
-          "setup_allowed"
+          "setup_allowed",
+          "setup_token"
         ],
         "additionalProperties": false
       },

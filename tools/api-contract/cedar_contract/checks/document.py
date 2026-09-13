@@ -9,25 +9,23 @@ JSON Pointer to the offending node: a contract document is 4700 lines, and
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 
 from jsonschema.exceptions import ValidationError
 
 from ..openapi import HTTP_METHODS, Document
 
-#: The plan's fifth check, and why it is not here yet. Kept as data so the
-#: report prints it: a deferred check that leaves no trace becomes a forgotten
-#: one, and this is the reason it does not appear in the P1 results.
-DEFERRED: dict[str, str] = {
-    "undocumented_routes": (
-        "Nothing to compare against yet. Detecting a route the device serves "
-        "but the document does not declare needs the web-api route table, and "
-        "web-api does not exist before P2. The mock is built so the comparison "
-        "is cheap when it does: it routes off this document, so the device's "
-        "table can be diffed against the same index. Revisit in P2."
-    ),
-}
+#: Checks the plan lists that cannot run yet, with the reason. Empty since P2:
+#: the fifth check compares the device's route table with this document.
+DEFERRED: dict[str, str] = {}
+
+#: The device's route table and the server resources it is registered under.
+REPO = Path(__file__).resolve().parents[4]
+ROUTES_FILE = REPO / "src" / "web" / "api" / "v1" / "routes.h"
+RESOURCES_FILE = REPO / "src" / "web" / "api" / "v1" / "http_resources.h"
 
 
 @dataclass(frozen=True)
@@ -182,12 +180,217 @@ def _deepest(error: ValidationError) -> tuple[list[object], str]:
     return path, message
 
 
+# -- the fifth check: what the device serves ------------------------------------
+
+_ROUTE_LINE = re.compile(
+    r"^WEB_API_V1_ROUTE\(\s*(?P<op>\w+)\s*,\s*(?P<method>GET|POST|PUT|DELETE)\s*,"
+    r"\s*\"(?P<path>[^\"]+)\"\s*,\s*(?P<flags>[^,]+?)\s*,\s*(?P<size>[^,]+?)\s*,"
+    r"\s*(?P<schema>[^,]+?)\s*,\s*(?P<query>[^,]+?)\s*,\s*(?P<handler>\w+)\s*\)\s*$"
+)
+_RESOURCE_LINE = re.compile(r"^WEB_API_V1_RESOURCE\(\s*(\w+)\s*,\s*\"([^\"]+)\"\s*\)\s*$")
+
+#: web-api flag -> the header parameter the document declares for it.
+_HEADER_FLAGS = {
+    "WEB_API_CSRF": "x-csrf-token",
+    "WEB_API_IDEMPOTENT": "idempotency-key",
+    "WEB_API_SETUP_TOKEN": "x-setup-token",
+}
+
+
+@dataclass(frozen=True)
+class Route:
+    """One line of routes.h, as the check reads it."""
+
+    operation_id: str
+    method: str
+    path: str
+    flags: frozenset[str]
+    has_body: bool
+    has_query: bool
+    line: int
+
+
+def parse_routes(text: str, name: str = "routes.h") -> tuple[list[Route], list[Finding]]:
+    routes: list[Route] = []
+    findings: list[Finding] = []
+    for number, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        if not line.startswith("WEB_API_V1_ROUTE("):
+            continue
+        m = _ROUTE_LINE.match(line)
+        if not m:
+            findings.append(
+                Finding("undocumented_routes", f"{name}:{number}", "a route line this check cannot read")
+            )
+            continue
+        flags = frozenset(f.strip() for f in m["flags"].split("|") if f.strip() not in ("0", ""))
+        routes.append(
+            Route(
+                operation_id=m["op"],
+                method=m["method"].lower(),
+                path=m["path"],
+                flags=flags,
+                has_body=m["schema"] != "NULL",
+                has_query=m["query"] != "NULL",
+                line=number,
+            )
+        )
+    return routes, findings
+
+
+def served_operation_ids(routes_path: Path = ROUTES_FILE) -> set[str]:
+    routes, _ = parse_routes(routes_path.read_text(), routes_path.name)
+    return {r.operation_id for r in routes}
+
+
+def check_undocumented_routes(
+    doc: Document, routes_path: Path = ROUTES_FILE, resources_path: Path = RESOURCES_FILE
+) -> list[Finding]:
+    """The device serves nothing the document does not declare, the way it declares it.
+
+    Read from the route table itself (src/web/api/v1/routes.h), which is the
+    list web-api dispatches from, so what is checked is what runs. Every route
+    must be a declared operation with the same method and path, and the flags
+    that are facts of the document must agree with it: a public route is one
+    with `security: []`, a CSRF, idempotency or setup-token route is one that
+    declares that header, a route that decodes a body is one with a request
+    body, `required` included, and one that accepts query parameters declares
+    some. `WEB_API_ORIGIN` is not checked: which operations run before a CSRF
+    token exists is the contract's prose, not a field of the document.
+
+    Every distinct path must also have its server resource
+    (http_resources.h), and no resource may be left without a route - the
+    firmware's matching itself is exercised in tests/web_api_http.
+
+    Operations the document declares and the device does not serve are not
+    findings: each belongs to a later stage. The command prints them.
+    """
+    name = routes_path.name
+    routes, findings = parse_routes(routes_path.read_text(), name)
+    by_id = {op.operation_id: op for op in doc.operations}
+
+    seen_ids: set[str] = set()
+    seen_endpoints: set[tuple[str, str]] = set()
+    for route in routes:
+        where = f"{name}:{route.line}"
+        if route.operation_id in seen_ids:
+            findings.append(Finding("undocumented_routes", where, f"{route.operation_id} is routed twice"))
+        seen_ids.add(route.operation_id)
+        if (route.method, route.path) in seen_endpoints:
+            findings.append(
+                Finding("undocumented_routes", where, f"{route.method.upper()} {route.path} is routed twice")
+            )
+        seen_endpoints.add((route.method, route.path))
+
+        op = by_id.get(route.operation_id)
+        if op is None:
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"serves {route.method.upper()} {route.path} as {route.operation_id}, "
+                    "which the document does not declare",
+                )
+            )
+            continue
+        if (op.method.lower(), op.path) != (route.method, route.path):
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"{route.operation_id} is {op.method.upper()} {op.path} in the document, "
+                    f"routed as {route.method.upper()} {route.path}",
+                )
+            )
+
+        public = "WEB_API_PUBLIC" in route.flags
+        if public == op.requires_session:
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"{route.operation_id}: "
+                    + ("routed public, but the document requires a session"
+                       if public else "routed with a session, but the document declares security: []"),
+                )
+            )
+        headers = {p.name.lower() for p in op.header_parameters}
+        for flag, header in _HEADER_FLAGS.items():
+            if (flag in route.flags) != (header in headers):
+                findings.append(
+                    Finding(
+                        "undocumented_routes",
+                        where,
+                        f"{route.operation_id}: {flag} "
+                        + ("set" if flag in route.flags else "missing")
+                        + f", document {'declares' if header in headers else 'does not declare'} {header}",
+                    )
+                )
+        if route.has_body != (op.request_body is not None):
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"{route.operation_id}: "
+                    + ("decodes a body the document does not declare" if route.has_body
+                       else "declares no body schema, but the document has a request body"),
+                )
+            )
+        if ("WEB_API_BODY_REQUIRED" in route.flags) != (
+            op.request_body is not None and op.request_body_required
+        ):
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"{route.operation_id}: WEB_API_BODY_REQUIRED disagrees with requestBody.required",
+                )
+            )
+        if route.has_query != bool(op.query_parameters):
+            findings.append(
+                Finding(
+                    "undocumented_routes",
+                    where,
+                    f"{route.operation_id}: query parameters "
+                    + ("accepted but not declared" if route.has_query else "declared but not accepted"),
+                )
+            )
+
+    resources: dict[str, int] = {}
+    for number, raw in enumerate(resources_path.read_text().splitlines(), start=1):
+        line = raw.strip()
+        if not line.startswith("WEB_API_V1_RESOURCE("):
+            continue
+        m = _RESOURCE_LINE.match(line)
+        if not m:
+            findings.append(
+                Finding("undocumented_routes", f"{resources_path.name}:{number}", "a resource line this check cannot read")
+            )
+            continue
+        resources[m.group(2)] = number
+    wanted = {doc.base_path + re.sub(r"\{[^}]+\}", "*", r.path) for r in routes}
+    for pattern in sorted(wanted - set(resources)):
+        findings.append(
+            Finding("undocumented_routes", resources_path.name, f"no server resource for {pattern}")
+        )
+    for pattern in sorted(set(resources) - wanted):
+        findings.append(
+            Finding(
+                "undocumented_routes",
+                f"{resources_path.name}:{resources[pattern]}",
+                f"resource {pattern} has no route",
+            )
+        )
+    return findings
+
+
 #: Name -> check, in the order the plan lists them.
 CHECKS: dict[str, Callable[[Document], list[Finding]]] = {
     "refs_resolve": check_refs_resolve,
     "path_parameters": check_path_parameters,
     "operation_ids": check_operation_ids,
     "examples_valid": check_examples_valid,
+    "undocumented_routes": check_undocumented_routes,
 }
 
 

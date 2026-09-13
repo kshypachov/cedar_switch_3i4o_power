@@ -22,7 +22,11 @@ SECOND = 1 / 1000
 
 def test_a_fresh_device_asks_for_setup(fresh: Harness) -> None:
     state = fresh.client.get("/auth/state", authenticate=False).json
-    assert state == {"setup_required": True, "setup_allowed": True}
+    assert state == {
+        "setup_required": True,
+        "setup_allowed": True,
+        "setup_token": SETUP_TOKEN,
+    }
 
 
 def test_login_before_setup_is_refused_with_its_own_code(fresh: Harness) -> None:
@@ -53,6 +57,7 @@ def test_setup_issues_a_session_and_closes_itself(fresh: Harness) -> None:
     assert fresh.client.get("/auth/state", authenticate=False).json == {
         "setup_required": False,
         "setup_allowed": False,
+        "setup_token": None,
     }
     assert fresh.client.setup().status == 403
 
@@ -177,3 +182,11 @@ def test_a_short_new_password_is_a_field_error_the_frontend_can_place(harness: H
 
 def test_setup_token_is_the_scenario_value(fresh: Harness) -> None:
     assert fresh.state.scenario.setup_token == SETUP_TOKEN
+
+
+def test_the_setup_token_is_published_only_while_setup_is_open(fresh: Harness) -> None:
+    """Owner's decision: the token is shown in the web interface. It is what the
+    page reads to fill X-Setup-Token, and it disappears with setup."""
+    state = fresh.client.get("/auth/state", authenticate=False).json
+    assert fresh.client.setup(token=state["setup_token"]).status == 201
+    assert fresh.client.get("/auth/state", authenticate=False).json["setup_token"] is None

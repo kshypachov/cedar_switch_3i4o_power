@@ -28,8 +28,11 @@ port, a timeout or a race.
 
 from __future__ import annotations
 
+import decimal
 import hashlib
+import ipaddress
 import json
+from functools import cmp_to_key
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -72,6 +75,8 @@ class MockApp:
     ) -> None:
         self.doc = document or Document.load()
         self.clock = clock or Clock()
+        #: The browser application, when served (`--ui`); see static.py.
+        self.static: Any = None
         self.state = DeviceState(self.clock, scenario or Scenario())
         self._routes = [(path_to_regex(op.path), op) for op in self.doc.operations]
         unknown = set(HANDLERS) - set(self.doc.operation_ids())
@@ -109,6 +114,14 @@ class MockApp:
     # -- entry point -----------------------------------------------------
 
     def handle(self, request: Request) -> Response:
+        if (
+            self.static is not None
+            and not (request.path == "/api" or request.path.startswith("/api/"))
+            and not request.path.startswith("/__mock")
+        ):
+            # Not the API: no request id, no no-store - the device's static
+            # answers carry their own cache policy.
+            return self.static.respond(request)
         request_id = next_request_id()
         try:
             self.state.settle()
@@ -128,6 +141,12 @@ class MockApp:
 
     def _dispatch(self, request: Request, request_id: str) -> Response:
         base = self.doc.base_path
+        if request.path == "/api" or request.path.startswith("/api/"):
+            # Before anything else, as on the device: the setup token is
+            # published by GET /auth/state, and a DNS-rebinding page whose name
+            # resolves to the device would otherwise read it as same-origin.
+            if not host_allowed(request.headers.get("host"), self.state.scenario.extra_hosts):
+                raise error("origin_rejected", "Host is not this device")
         if not request.path.startswith(base + "/"):
             # An unknown API URL is a JSON 404 and never a redirect to the SPA,
             # which is the rule that keeps a mistyped endpoint from arriving at
@@ -289,10 +308,7 @@ class MockApp:
             raise error("unsupported_media_type", f"{declared_type!r} is not application/json")
         if len(request.body) > JSON_BODY_BYTES:
             raise error("payload_too_large", f"A JSON body may not exceed {JSON_BODY_BYTES} bytes")
-        try:
-            parsed = json.loads(request.body)
-        except (ValueError, UnicodeDecodeError) as exc:
-            raise error("invalid_json", f"The body is not valid JSON: {exc}") from None
+        parsed = parse_json_strictly(request.body)
         schema = op.request_json_schema()
         if schema is not None:
             _validate_request(self.doc, schema, parsed)
@@ -409,7 +425,122 @@ class MockApp:
         raise error("not_found", f"/__mock/{path} is not a control endpoint")
 
 
-# -- request validation ----------------------------------------------------
+# -- request parsing and validation ------------------------------------------
+#
+# What follows reproduces modules/web-api/lib/json_reader.c, whose header
+# documents the rules. The device cannot use a general JSON library, so it
+# decides every edge explicitly; the mock uses Python's, and closes each gap
+# where Python would answer differently: duplicate names, NaN, nesting, the
+# value of an integer, text a C string cannot hold, and the exact list of
+# field errors. A frontend must not be able to tell the two apart by how
+# either refuses a body.
+
+#: WEB_JSON_MAX_DEPTH and the per-object member bound in json_reader.c.
+MAX_DEPTH = 8
+MAX_MEMBERS = 64
+
+
+class _Refused(Exception):
+    """A body that is not one well-formed JSON document by the device's rules."""
+
+
+def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    if len(pairs) > MAX_MEMBERS:
+        raise _Refused("An object has too many members")
+    names = set()
+    for name, _ in pairs:
+        if name in names:
+            # I-JSON (RFC 7493): implementations disagree on which duplicate
+            # wins, which is how one component's validated request means
+            # something else to the next.
+            raise _Refused("A member name appears twice in one object")
+        names.add(name)
+    return dict(pairs)
+
+
+def _constant(name: str) -> Any:
+    raise _Refused(f"{name} is not JSON")
+
+
+def _number(text: str) -> Any:
+    """JSON Schema's integer is a value: 120.0 and 1.2e2 are 120.
+
+    An integral value comes back as an int, so the schema's bounds apply to it;
+    a fractional one as a float, which "integer" refuses. A magnitude past what
+    any bound here could allow is clamped rather than materialised - "1e99999999"
+    must not build a hundred-million-digit integer - and still fails its bound,
+    as it does on the device, where it does not fit int64_t.
+    """
+    value = decimal.Decimal(text)
+    if value != value.to_integral_value():
+        return float(text)
+    if value.adjusted() > 19:
+        return 10**20 if value > 0 else -(10**20)
+    return int(value)
+
+
+def _depth(value: Any) -> int:
+    if isinstance(value, dict):
+        return 1 + max((_depth(v) for v in value.values()), default=0)
+    if isinstance(value, list):
+        return 1 + max((_depth(v) for v in value), default=0)
+    return 0
+
+
+def parse_json_strictly(body: bytes) -> Any:
+    try:
+        text = body.decode("utf-8")
+        parsed = json.loads(
+            text, object_pairs_hook=_pairs, parse_constant=_constant, parse_float=_number
+        )
+    except _Refused as exc:
+        raise error("invalid_json", str(exc)) from None
+    except UnicodeDecodeError:
+        raise error("invalid_json", "The body is not valid UTF-8") from None
+    except ValueError as exc:
+        raise error("invalid_json", f"The body is not valid JSON: {exc}") from None
+    if _depth(parsed) > MAX_DEPTH:
+        raise error("invalid_json", "The body is nested too deeply")
+    return parsed
+
+
+def host_allowed(host: str | None, extra_hosts: str = "") -> bool:
+    """web_api_host_allowed(): an IP literal, localhost, or a configured name."""
+    if host is None:
+        return True
+    if not host or len(host) >= 64:
+        return False
+
+    def port_ok(port: str) -> bool:
+        return 1 <= len(port) <= 5 and port.isdigit() and port.isascii() and int(port) <= 65535
+
+    if host.startswith("["):
+        end = host.find("]")
+        if end < 0:
+            return False
+        rest = host[end + 1 :]
+        if rest and not (rest.startswith(":") and port_ok(rest[1:])):
+            return False
+        inner = host[1:end]
+        if "%" in inner:
+            return False  # a zone id is not an address the device parses
+        try:
+            ipaddress.IPv6Address(inner)
+        except ValueError:
+            return False
+        return True
+
+    name, colon, port = host.partition(":")
+    if colon and not port_ok(port):
+        return False
+    try:
+        ipaddress.IPv4Address(name)
+        return True
+    except ValueError:
+        pass
+    names = ["localhost"] + [n.strip() for n in extra_hosts.split(",") if n.strip()]
+    return name.isascii() and any(name.lower() == n.lower() for n in names)
+
 
 #: How a schema violation becomes one of `api-validation`'s closed field codes.
 #: The mapping is the whole reason the mock's rejections are useful to build
@@ -435,28 +566,125 @@ _FIELD_CODE_BY_KEYWORD = {
     "allOf": "invalid_format",
 }
 
+#: When two reports name one path, the first of these wins (json_reader.c).
+_PRECEDENCE = ("required", "unknown_field", "too_long", "out_of_range", "invalid_format",
+               "not_allowed", "conflicting")
+
+#: API_ERROR_PATH_MAX_LEN.
+_PATH_MAX_BYTES = 63
+
+
+def _pointer(parts: list[Any]) -> str:
+    """RFC 6901, clipped the way the device clips: a segment that holds a
+    control character, or would make the pointer longer than 63 bytes, is left
+    off, and the report names the enclosing value."""
+    pointer = ""
+    for part in parts:
+        segment = str(part)
+        if any(ord(c) < 0x20 for c in segment):
+            break
+        candidate = pointer + "/" + segment.replace("~", "~0").replace("/", "~1")
+        if len(candidate.encode()) > _PATH_MAX_BYTES:
+            break
+        pointer = candidate
+    return pointer or "/"
+
+
+def _segment_compare(a: str, b: str) -> int:
+    """path_compare() in json_reader.c: segment by segment, digits as numbers."""
+    sa = [] if a == "/" else a[1:].split("/")
+    sb = [] if b == "/" else b[1:].split("/")
+    for x, y in zip(sa, sb):
+        if x.isdigit() and y.isdigit() and x.isascii() and y.isascii() and len(x) != len(y):
+            return -1 if len(x) < len(y) else 1
+        bx, by = x.encode(), y.encode()
+        if bx != by:
+            common = min(len(bx), len(by))
+            if bx[:common] != by[:common]:
+                return -1 if bx[:common] < by[:common] else 1
+            return -1 if len(bx) < len(by) else 1
+    if len(sa) != len(sb):
+        return -1 if len(sa) < len(sb) else 1
+    return 0
+
+
+def _translate(problem: Any, found: list[tuple[list[Any], str]]) -> None:
+    parts = list(problem.absolute_path)
+    keyword = str(problem.validator)
+
+    if keyword in ("anyOf", "oneOf") and problem.context:
+        # A nullable value that is not null failed its one real branch; report
+        # that branch's problem, as the device does for a nullable field.
+        real = [
+            e for e in problem.context
+            if not (e.validator == "type" and e.validator_value == "null")
+        ]
+        branches = {e.relative_schema_path[0] for e in real}
+        if real and len(branches) == 1:
+            for sub in real:
+                _translate(sub, found)
+            return
+
+    if keyword == "required":
+        missing = str(problem.message).split("'")[1]
+        found.append((parts + [missing], "required"))
+        return
+    if keyword == "additionalProperties":
+        declared = set(problem.schema.get("properties", {}))
+        for extra in problem.instance:
+            if extra not in declared:
+                found.append((parts + [extra], "unknown_field"))
+        return
+    found.append((parts, _FIELD_CODE_BY_KEYWORD.get(keyword, "invalid_format")))
+
+
+def _unholdable_strings(value: Any, parts: list[Any]) -> list[list[Any]]:
+    """Strings a C buffer cannot hold: U+0000, or an unpaired surrogate."""
+    out: list[list[Any]] = []
+    if isinstance(value, str):
+        if "\x00" in value or any(0xD800 <= ord(c) <= 0xDFFF for c in value):
+            out.append(parts)
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            out.extend(_unholdable_strings(item, parts + [key]))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            out.extend(_unholdable_strings(item, parts + [index]))
+    return out
+
 
 def _validate_request(doc: Document, schema: dict[str, Any], body: Any) -> None:
     """Reject a malformed body the way the device will.
 
-    The point is not to be a schema validator — `jsonschema` is that. It is to
-    turn one into the contract's error body, with a JSON Pointer and a code per
-    bad field, so the frontend's error handling is exercised against the shape
-    it will meet rather than against a bare 400.
+    One entry per bad value, every undeclared member reported, entries sorted
+    by pointer segment by segment - the list json_reader.c produces for the same
+    body, so the same entries survive truncation on both.
     """
     validator = doc.validator(schema)
-    errors = sorted(validator.iter_errors(body), key=lambda e: list(e.absolute_path))
-    if not errors:
+    found: list[tuple[list[Any], str]] = []
+    for problem in validator.iter_errors(body):
+        _translate(problem, found)
+
+    # Text the device refuses and Python holds happily. A value that already
+    # has a report, or lies inside one, keeps it.
+    for parts in _unholdable_strings(body, []):
+        if not any(parts[: len(p)] == p for p, _ in found):
+            found.append((parts, "invalid_format"))
+
+    if not found:
         return
+
+    best: dict[str, str] = {}
+    order: list[str] = []
+    for parts, code in found:
+        pointer = _pointer(parts)
+        if pointer not in best:
+            best[pointer] = code
+            order.append(pointer)
+        elif _PRECEDENCE.index(code) < _PRECEDENCE.index(best[pointer]):
+            best[pointer] = code
+
     err = ApiError(code="validation_failed", message="The request body is not acceptable")
-    for problem in errors:
-        pointer = "/" + "/".join(str(part) for part in problem.absolute_path)
-        code = _FIELD_CODE_BY_KEYWORD.get(str(problem.validator), "invalid_format")
-        if problem.validator == "required":
-            missing = str(problem.message).split("'")[1]
-            pointer = f"{pointer.rstrip('/')}/{missing}"
-        elif problem.validator == "additionalProperties":
-            extra = str(problem.message).split("'")[1]
-            pointer = f"{pointer.rstrip('/')}/{extra}"
-        err.add_field(pointer if pointer != "/" else "/", code)
+    for pointer in sorted(order, key=cmp_to_key(_segment_compare)):
+        err.add_field(pointer, best[pointer])
     raise err

@@ -6,11 +6,13 @@ is that the frontend can talk to it over HTTP; nothing about that needs a
 framework, and adding one would put a dependency into a repository whose Python
 requirement is currently "whatever the toolchain already installs".
 
-Single-threaded on purpose. The state machines are not locked, and the contract
-tells the client to poll one request at a time and to finish a chunk before
-sending the next, so serialising requests matches the device's own behaviour
-better than a thread pool would. Static assets are not served: this is the API,
-and P2 will run its own dev server in front of it.
+Requests are handled one at a time, on purpose: the state machines are not
+locked, and the device's own server serialises its callbacks the same way.
+Connections are not: a browser keeps one open and opens another for the next
+file, and a server with one thread for both would sit on the first until it
+timed out. So each connection gets a thread, and a lock admits one request at a
+time into the app. With `--ui <dist>` it also serves a built
+frontend on the same origin, the way the device does (static.py).
 """
 
 from __future__ import annotations
@@ -18,12 +20,16 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
+
+from pathlib import Path
 
 from ..openapi import Document
 from .app import MockApp
 from .scenario import Scenario
+from .static import StaticSite
 from .wire import Request
 
 #: Requests larger than this are refused before being read into memory. The API
@@ -36,6 +42,7 @@ class _Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
     app: MockApp
+    lock: threading.Lock
 
     def do_GET(self) -> None:  # noqa: N802 - http.server's naming
         self._serve("GET")
@@ -66,14 +73,15 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             return
         body = self.rfile.read(length) if length else b""
-        response = self.app.handle(
-            Request(
-                method=method,
-                path=self.path,
-                headers={k: v for k, v in self.headers.items()},
-                body=body,
+        with self.lock:
+            response = self.app.handle(
+                Request(
+                    method=method,
+                    path=self.path,
+                    headers={k: v for k, v in self.headers.items()},
+                    body=body,
+                )
             )
-        )
         self.send_response(response.status)
         for name, value in response.headers.items():
             self.send_header(name, value)
@@ -91,15 +99,21 @@ def serve(
     port: int = 8080,
     document: Document | None = None,
     scenario: Scenario | None = None,
+    ui: Path | None = None,
 ) -> None:
     app = MockApp(document=document, scenario=scenario)
-    handler = type("_BoundHandler", (_Handler,), {"app": app})
-    httpd = HTTPServer((host, port), handler)
+    if ui is not None:
+        app.static = StaticSite(ui)
+    handler = type("_BoundHandler", (_Handler,), {"app": app, "lock": threading.Lock()})
+    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd.daemon_threads = True
     print(
         f"cedar mock API on http://{host}:{port}{app.doc.base_path} "
         f"({len(app.doc.operations)} operations); control plane at /__mock",
         file=sys.stderr,
     )
+    if app.static is not None:
+        print(f"  browser application from {ui} at http://{host}:{port}/", file=sys.stderr)
     if app.state.auth.setup_required:
         print(
             f"  fresh device: POST {app.doc.base_path}/auth/setup with "
@@ -141,11 +155,13 @@ def main(argv: list[str] | None = None) -> int:
         metavar="KEY=VALUE",
         help="scenario knob, repeatable (e.g. setup_required=false wifi_scan=truncated)",
     )
+    parser.add_argument("--ui", type=Path, default=None, help="built frontend (dist) to serve at /")
     args = parser.parse_args(argv)
     serve(
         host=args.host,
         port=args.port,
         document=Document.load(args.document) if args.document else None,
         scenario=_parse_scenario(args.scenario),
+        ui=args.ui,
     )
     return 0

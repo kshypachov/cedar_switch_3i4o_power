@@ -35,12 +35,17 @@ def test_the_document_has_the_surface_the_plan_describes(document: Document) -> 
     assert len(document.schemas) == 48
 
 
-def test_the_fifth_check_is_recorded_as_deferred_with_a_reason() -> None:
-    """Section 12 lists five checks. The one that cannot run yet is named, so a
-    reader of the P1 result knows why four are reported instead of five."""
-    assert set(checks.DEFERRED) == {"undocumented_routes"}
-    reason = checks.DEFERRED["undocumented_routes"]
-    assert "web-api" in reason and "P2" in reason
+def test_all_five_checks_run() -> None:
+    """Section 12 lists five. The fifth was deferred in P1 for want of a route
+    table; P2 gave the device one, so nothing is deferred any more."""
+    assert checks.DEFERRED == {}
+    assert list(checks.CHECKS) == [
+        "refs_resolve",
+        "path_parameters",
+        "operation_ids",
+        "examples_valid",
+        "undocumented_routes",
+    ]
 
 
 # -- each check fails on a broken copy ------------------------------------
@@ -190,7 +195,8 @@ def test_the_cli_exits_zero_on_the_real_document(capsys: Any) -> None:
     assert main([]) == 0
     printed = capsys.readouterr().out
     assert "ok   refs_resolve" in printed
-    assert "skip undocumented_routes" in printed
+    assert "ok   undocumented_routes" in printed
+    assert "info the device serves" in printed
 
 
 def test_the_cli_exits_nonzero_and_says_where(
@@ -204,3 +210,94 @@ def test_the_cli_exits_nonzero_and_says_where(
     path.write_text(json.dumps(raw))
     assert main([str(path)]) == 1
     assert "FAIL operation_ids" in capsys.readouterr().out
+
+
+# -- the fifth check on damaged route tables -------------------------------
+
+
+def _route_findings(document: Document, tmp_path: Any, edit: Any, edit_resources: Any = None) -> list[str]:
+    routes = checks.ROUTES_FILE.read_text()
+    resources = checks.RESOURCES_FILE.read_text()
+    routes_path = tmp_path / "routes.h"
+    resources_path = tmp_path / "http_resources.h"
+    routes_path.write_text(edit(routes))
+    resources_path.write_text(edit_resources(resources) if edit_resources else resources)
+    return [f.message for f in checks.check_undocumented_routes(document, routes_path, resources_path)]
+
+
+def _replace_once(old: str, new: str) -> Any:
+    def edit(text: str) -> str:
+        assert text.count(old) == 1, old
+        return text.replace(old, new)
+    return edit
+
+
+def test_the_route_table_is_read(document: Document) -> None:
+    routes, problems = checks.parse_routes(checks.ROUTES_FILE.read_text())
+    assert problems == []
+    assert {"getAuthState", "setupAdmin", "login", "logout", "changePassword"} <= {
+        r.operation_id for r in routes
+    }
+
+
+def test_an_undeclared_operation_is_found(document: Document, tmp_path: Any) -> None:
+    extra = 'WEB_API_V1_ROUTE(rebootDevice, POST, "/system/reboot", 0, V1_NO_BODY, NULL, NULL, h)\n'
+    messages = _route_findings(document, tmp_path, lambda t: t + extra,
+                               lambda r: r + 'WEB_API_V1_RESOURCE(x, "/api/v1/system/reboot")\n')
+    assert any("rebootDevice" in m and "does not declare" in m for m in messages), messages
+
+
+def test_a_wrong_method_or_path_is_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(
+        document, tmp_path, _replace_once("WEB_API_V1_ROUTE(logout, DELETE,", "WEB_API_V1_ROUTE(logout, POST,")
+    )
+    assert any("logout is DELETE /auth/session in the document" in m for m in messages), messages
+    messages = _route_findings(
+        document, tmp_path, _replace_once('getCapabilities, GET, "/capabilities"', 'getCapabilities, GET, "/caps"'),
+        lambda r: r.replace('"/api/v1/capabilities"', '"/api/v1/caps"'),
+    )
+    assert any("routed as GET /caps" in m for m in messages), messages
+
+
+def test_a_missing_csrf_requirement_is_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(
+        document, tmp_path, _replace_once("WEB_API_V1_ROUTE(logout, DELETE, \"/auth/session\", WEB_API_CSRF,",
+                                          "WEB_API_V1_ROUTE(logout, DELETE, \"/auth/session\", 0,")
+    )
+    assert any("logout: WEB_API_CSRF missing" in m for m in messages), messages
+
+
+def test_a_public_route_the_document_protects_is_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(
+        document, tmp_path, _replace_once('getSystemStatus, GET, "/system/status", 0,',
+                                          'getSystemStatus, GET, "/system/status", WEB_API_PUBLIC,')
+    )
+    assert any("getSystemStatus: routed public" in m for m in messages), messages
+
+
+def test_body_mismatches_are_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(
+        document, tmp_path,
+        _replace_once("WEB_API_PUBLIC | WEB_API_ORIGIN | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_login_body), &v1_login_schema,",
+                      "WEB_API_PUBLIC | WEB_API_ORIGIN, V1_BODY(struct v1_login_body), &v1_login_schema,"),
+    )
+    assert any("login: WEB_API_BODY_REQUIRED disagrees" in m for m in messages), messages
+    messages = _route_findings(
+        document, tmp_path,
+        _replace_once('getJob, GET, "/jobs/{job_id}", 0, V1_NO_BODY, NULL,', 'getJob, GET, "/jobs/{job_id}", 0, V1_NO_BODY, &x,'),
+    )
+    assert any("getJob: decodes a body" in m for m in messages), messages
+
+
+def test_unreadable_duplicate_and_resource_problems_are_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(document, tmp_path, lambda t: t + "WEB_API_V1_ROUTE(broken\n")
+    assert "a route line this check cannot read" in messages
+    line = next(l for l in checks.ROUTES_FILE.read_text().splitlines() if l.startswith("WEB_API_V1_ROUTE(getJob,"))
+    messages = _route_findings(document, tmp_path, lambda t: t + line + "\n")
+    assert "getJob is routed twice" in messages
+    messages = _route_findings(document, tmp_path, lambda t: t,
+                               lambda r: r.replace('WEB_API_V1_RESOURCE(web_api_06_jobs, "/api/v1/jobs/*")\n', ""))
+    assert "no server resource for /api/v1/jobs/*" in messages
+    messages = _route_findings(document, tmp_path, lambda t: t,
+                               lambda r: r + 'WEB_API_V1_RESOURCE(web_api_99, "/api/v1/logs/records")\n')
+    assert "resource /api/v1/logs/records has no route" in messages

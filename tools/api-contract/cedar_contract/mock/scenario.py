@@ -46,6 +46,9 @@ class Scenario:
     verify_result: str = "ok"
     #: "ok" | "recovery_required"
     install_result: str = "ok"
+    #: Host names accepted besides IP literals and localhost, comma-separated;
+    #: CONFIG_WEB_API_EXTRA_HOSTS on the device.
+    extra_hosts: str = ""
 
     def update(self, values: dict[str, Any]) -> None:
         for key, value in values.items():

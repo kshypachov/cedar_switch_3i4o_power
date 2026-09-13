@@ -4,12 +4,15 @@
 # Usage:  tests/ci/run-contract-tests.sh [extra pytest args...]
 #
 # One command for both halves of section 12's contract work, because CI runs
-# them as one step and a developer should not have to remember two:
+# them as one step and a developer should not have to remember three:
 #
 #   1. the checks on openapi.json itself — internal $ref, required path
-#      parameters, unique operationId, valid examples
+#      parameters, unique operationId, valid examples, and the device's route
+#      table against the document
 #   2. the mock server's suite, which is also the contract test: every response
 #      it produces is validated against the schema the document declares
+#   3. the web-assets generator's tests (tools/web-assets), whose output both the
+#      firmware and the mock's static serving use
 #
 # No container, unlike the sim tier: this is plain Python with no Zephyr in it.
 # The only dependencies are jsonschema and pytest, both of which the toolchain
@@ -42,4 +45,11 @@ echo "== contract checks on docs/device-development/openapi.json"
 
 echo
 echo "== mock server and contract test suite"
-exec "$PYTHON" -m pytest "$@"
+"$PYTHON" -m pytest "$@"
+
+# The generator that turns the frontend's dist into the firmware's asset table.
+# It shares the mock's reason to be here: the mock serves the same table.
+echo
+echo "== web-assets generator"
+cd "$APP_DIR/tools/web-assets"
+exec "$PYTHON" -m pytest -q tests
