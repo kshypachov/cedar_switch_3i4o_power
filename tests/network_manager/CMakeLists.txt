@@ -12,10 +12,11 @@ list(APPEND ZEPHYR_EXTRA_MODULES
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(network_manager_test)
 
-# The flash fake is shared; the interface fake is specific to this suite.
+# Both fakes are shared: the web API suite drives the network bindings over the
+# same interface fake.
 target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../fakes)
 target_sources(app PRIVATE
     src/main.c
-    src/fake_iface.c
+    ../fakes/fake_iface.c
     ../fakes/fake_storage.c
 )

@@ -3,8 +3,8 @@
  *
  * A network interface adapter that can be told what the world looks like.
  *
- * The transaction this module implements is entirely about what happens when
- * the network does *not* come up — a Wi-Fi password that does not work, a
+ * The transaction network-manager implements is entirely about what happens
+ * when the network does *not* come up — a Wi-Fi password that does not work, a
  * cable that is out, DHCP that never answers. None of that can be produced on
  * demand against real hardware, so the sim tier drives it here: each
  * interface's link, address and route are set by the test, and configure()
@@ -14,6 +14,9 @@
  * meaningful: applying a configuration does not by itself give an interface an
  * address. A DHCP interface gets one only if the test says the server answers,
  * which is how "applied but not working yet" is reached.
+ *
+ * Shared by the network-manager suite and the web API suite, which drives the
+ * v1 network bindings over the same fake.
  */
 
 #ifndef FAKE_IFACE_H_
@@ -39,6 +42,10 @@ struct fake_iface {
 	 * way off it.
 	 */
 	bool suppress_route;
+	uint8_t mac[6];
+	/** Reported after the IPv4 address, e.g. a link-local IPv6 one. */
+	struct network_addr extra[2];
+	uint8_t extra_count;
 
 	/* What the adapter has been told to do. */
 	bool configured;
@@ -59,23 +66,47 @@ struct fake_net {
 
 	/* Wi-Fi association. */
 	bool associated;
+	/** An association that has been asked for and has no answer yet. */
+	bool connecting;
+	bool connect_failed;
+	/** wifi_connect() leaves the attempt pending instead of settling it. */
+	bool connect_pending;
 	uint8_t ssid[DEVICE_CONFIG_SSID_MAX_LEN];
 	uint8_t ssid_len;
+	/** Reported while associated; -55 after fake_net_init(). */
+	int8_t rssi;
 	uint8_t password[DEVICE_CONFIG_SECRET_MAX_LEN];
 	size_t password_len;
 	unsigned int connect_calls;
 	unsigned int disconnect_calls;
 
-	/* DNS. */
+	/* DNS: what was installed, and what the resolver reports. */
 	struct device_config_addr dns[DEVICE_CONFIG_DNS_MAX_SERVERS];
 	uint8_t dns_count;
 	unsigned int set_dns_calls;
+	/** get_dns() reports @ref dns_seen, as if DHCP had replaced the list. */
+	bool dns_override;
+	struct device_config_addr dns_seen[DEVICE_CONFIG_DNS_MAX_SERVERS];
+	uint8_t dns_seen_count;
+
+	/* Default route. */
+	bool has_default;
+	enum device_config_interface default_iface;
+	unsigned int set_default_calls;
 
 	/* Injection. */
 	int fail_configure;  /**< errno returned by the next configure(), or 0. */
 	int fail_connect;    /**< errno returned by the next wifi_connect(), or 0. */
 	int fail_scan;       /**< errno returned by the next wifi_scan(), or 0. */
 	bool no_radio;       /**< Present the ops table without wifi_scan. */
+	bool no_get_dns;     /**< Present the ops table without get_dns. */
+	bool no_set_default; /**< Present the ops table without set_default. */
+	/**
+	 * Run once inside the next adapter call that changes something, while
+	 * network-manager has released its mutex: a request arriving mid-push.
+	 */
+	void (*during_io)(void *arg);
+	void *during_io_arg;
 
 	/* Scan. */
 	struct network_scan_results scan_results;
