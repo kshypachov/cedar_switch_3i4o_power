@@ -1,0 +1,12 @@
+tests:
+  cedar.web_auth:
+    # Pure logic with injected randomness, clock, key derivation and store:
+    # the sim tier from section 12 of the development plan.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - web_auth
+      - sim

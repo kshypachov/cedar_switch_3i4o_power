@@ -1,0 +1,5 @@
+zephyr_library_named(web_auth)
+
+zephyr_library_sources(web_auth.c)
+zephyr_library_sources_ifdef(CONFIG_WEB_AUTH_PSA_KDF web_auth_psa.c)
+zephyr_library_sources_ifdef(CONFIG_WEB_AUTH_REGISTRY_STORE web_auth_store.c)

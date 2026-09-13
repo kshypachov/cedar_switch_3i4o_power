@@ -1,0 +1,156 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig WEB_AUTH
+	bool "Local administrator authentication for the web interface"
+	help
+	  One administrator, a password stored as a PBKDF2 verifier, cookie
+	  sessions with a CSRF token, first-time setup guarded by a setup token,
+	  and a limit on password guessing. No HTTP in here: web-api turns the
+	  results into responses. See include/web_auth/web_auth.h.
+
+if WEB_AUTH
+
+config WEB_AUTH_MAX_SESSIONS
+	int "Concurrent administrator sessions"
+	default 4
+	range 1 16
+	help
+	  One per browser the administrator is signed in from. The HTTP server
+	  serves at most four clients, and the plan budgets for two browsers, so
+	  four leaves room for a phone and a laptop plus one stale tab. When all
+	  are taken a new login ends the least recently used one.
+
+config WEB_AUTH_TOMBSTONES
+	int "Remembered ended sessions"
+	default 8
+	range 0 32
+	help
+	  Tokens of sessions that were logged out, expired, evicted or revoked,
+	  kept so that their holder is told session_expired - which the error
+	  table marks retryable, because logging in again fixes it - rather than
+	  authentication_required, which reads as "you were never signed in".
+
+config WEB_AUTH_IDLE_TIMEOUT_SECONDS
+	int "Session idle lifetime, in seconds"
+	default 1800
+	range 60 86400
+	help
+	  The contract's starting value is 30 minutes.
+
+config WEB_AUTH_ABSOLUTE_TIMEOUT_SECONDS
+	int "Session absolute lifetime, in seconds"
+	default 28800
+	range 300 604800
+	help
+	  The contract's starting value is 8 hours. Over plain HTTP a captured
+	  cookie is good until this runs out, which is the reason it exists at
+	  all.
+
+config WEB_AUTH_PBKDF2_ITERATIONS
+	int "PBKDF2-HMAC-SHA256 iterations for newly stored passwords"
+	default 3000
+	range 1000 1000000
+	help
+	  Stored with each verifier, so changing it affects only passwords set
+	  afterwards. The value is a latency budget, not a security target: the
+	  HTTP server's one thread waits for every derivation of a setup, a
+	  login and a password check, and answers no other client meanwhile.
+	  Measured on the board in P2 (web_auth kdf, PSA Crypto, -Og, SRAM
+	  stack): about 0.31 ms per iteration, so 3000 is about 0.94 s and the
+	  10000 first chosen was 3.1 s. Online guessing is bounded by the rate
+	  limit instead; an offline attack needs the flash in hand.
+
+config WEB_AUTH_PBKDF2_MAX_ITERATIONS
+	int "Largest iteration count accepted from a stored verifier"
+	default 1000000
+	range 1000 10000000
+	help
+	  A stored verifier claiming more than this is treated as damaged rather
+	  than run: a corrupted count must not turn the next login into a
+	  minutes-long stall of the whole web server.
+
+config WEB_AUTH_PEER_SLOTS
+	int "Clients tracked for failed attempts"
+	default 16
+	range 1 64
+
+config WEB_AUTH_FREE_FAILURES
+	int "Failed attempts a client may make before it is slowed down"
+	default 5
+	range 1 100
+	help
+	  A person who mistypes a password a few times is not delayed. After
+	  this many consecutive failures from one address each further failure
+	  doubles the wait, up to WEB_AUTH_MAX_DELAY_SECONDS.
+
+config WEB_AUTH_MAX_DELAY_SECONDS
+	int "Longest wait imposed on one client, in seconds"
+	default 300
+	range 1 3600
+
+config WEB_AUTH_GLOBAL_FAILURES
+	int "Failed attempts from all clients together per window"
+	default 30
+	range 1 64
+	help
+	  The per-client limit is keyed by address, and a client on an IPv6
+	  network can use as many addresses as it likes. This bounds the total
+	  guessing rate regardless. The cost is that a flood of wrong passwords
+	  also delays the real administrator until the window passes - a denial
+	  of service on a trusted network, chosen over an unbounded guessing
+	  rate.
+
+config WEB_AUTH_GLOBAL_WINDOW_SECONDS
+	int "Window for the global failure limit, in seconds"
+	default 300
+	range 10 3600
+
+config WEB_AUTH_PSA_KDF
+	bool "PBKDF2 through PSA Crypto"
+	default y
+	depends on PSA_CRYPTO && PSA_WANT_ALG_PBKDF2_HMAC && PSA_WANT_ALG_SHA_256
+	help
+	  The production key derivation: psa_key_derivation with
+	  PSA_ALG_PBKDF2_HMAC(PSA_ALG_SHA_256). Off in the sim tier's core suite,
+	  which injects a fake so it needs no crypto library.
+
+config WEB_AUTH_KDF_STACK_SIZE
+	int "Stack of the key derivation thread"
+	default 4096
+	depends on WEB_AUTH_PSA_KDF
+	help
+	  PSA Crypto's PBKDF2 runs here. Measured high-water is recorded in
+	  the P2 report.
+
+config WEB_AUTH_KDF_THREAD_PRIORITY
+	int "Preemptive priority of the key derivation thread"
+	default 14
+	range 0 14
+	depends on WEB_AUTH_PSA_KDF
+	help
+	  Low on purpose: the derivation takes the CPU only when nothing more
+	  urgent is ready. The caller - the HTTP server's cooperative thread -
+	  waits for it without holding the CPU. See lib/web_auth_psa.c.
+
+config WEB_AUTH_SHELL
+	bool "Shell command to time the key derivation"
+	default y
+	depends on WEB_AUTH_PSA_KDF && SHELL
+	help
+	  `web_auth kdf [iterations]` runs one derivation on the production
+	  path and prints how long it took: the measurement behind
+	  WEB_AUTH_PBKDF2_ITERATIONS. It touches no stored credential.
+
+config WEB_AUTH_REGISTRY_STORE
+	bool "Keep the verifier in settings-registry"
+	default y
+	depends on SETTINGS_REGISTRY
+	help
+	  The production credential store: one persistent BYTES key,
+	  "auth/admin_verifier", read directly rather than mirrored in RAM.
+
+module = WEB_AUTH
+module-str = web_auth
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # WEB_AUTH
