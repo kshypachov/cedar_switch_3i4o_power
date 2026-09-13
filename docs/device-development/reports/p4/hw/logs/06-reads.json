@@ -1,0 +1,171 @@
+{
+  "scenario": "reads",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:25:50+0300",
+  "steps": [
+    {
+      "t": 1.55,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1248
+    },
+    {
+      "t": 2.01,
+      "step": "read",
+      "path": "/network/status",
+      "status": 200,
+      "p50_ms": 90,
+      "max_ms": 92,
+      "schema_errors": [],
+      "body": {
+        "interfaces": [
+          {
+            "id": "ethernet",
+            "enabled": true,
+            "link_up": true,
+            "state": "ready",
+            "mac_address": "80:34:28:10:6a:1d",
+            "addresses": [
+              {
+                "family": "ipv4",
+                "address": "192.168.88.13",
+                "prefix_length": 24,
+                "source": "dhcp"
+              },
+              {
+                "family": "ipv6",
+                "address": "fe80::8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "link_local"
+              },
+              {
+                "family": "ipv6",
+                "address": "fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "slaac"
+              }
+            ],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": null
+          },
+          {
+            "id": "wifi",
+            "enabled": false,
+            "link_up": false,
+            "state": "disabled",
+            "mac_address": "00:00:00:00:00:00",
+            "addresses": [],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": {
+              "code": "capability_unavailable",
+              "message": "The Wi-Fi coprocessor does not respond",
+              "request_id": "req_14f201e5",
+              "retryable": false
+            }
+          }
+        ],
+        "default_interface": "ethernet",
+        "dns_servers": [
+          "1.1.1.1",
+          "192.168.88.1"
+        ]
+      }
+    },
+    {
+      "t": 2.41,
+      "step": "read",
+      "path": "/network/config",
+      "status": 200,
+      "p50_ms": 81,
+      "max_ms": 81,
+      "schema_errors": [],
+      "body": {
+        "revision": 0,
+        "config": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "pending_transaction_id": null
+      }
+    },
+    {
+      "t": 2.84,
+      "step": "read",
+      "path": "/capabilities",
+      "status": 200,
+      "p50_ms": 85,
+      "max_ms": 85,
+      "schema_errors": [],
+      "body": {
+        "api_version": "1",
+        "features": {
+          "matter": {
+            "available": true,
+            "reason": null
+          },
+          "esp32_logs": {
+            "available": false,
+            "reason": "not_implemented"
+          },
+          "esp32_ota": {
+            "available": false,
+            "reason": "not_implemented"
+          },
+          "esp32_uart": {
+            "available": false,
+            "reason": "not_implemented"
+          }
+        },
+        "limits": {
+          "json_body_bytes": 8192,
+          "upload_chunk_bytes": 16384,
+          "upload_max_bytes": 2097152,
+          "log_page_records": 100,
+          "scan_records": 64,
+          "commissioning_min_seconds": 180,
+          "commissioning_max_seconds": 900,
+          "network_confirm_min_seconds": 60,
+          "network_confirm_max_seconds": 300
+        },
+        "wifi_security_modes": [
+          "open",
+          "wpa2_psk",
+          "wpa3_sae"
+        ],
+        "firmware_formats": [
+          "raw_app"
+        ],
+        "update_requires_ethernet": true
+      }
+    }
+  ]
+}

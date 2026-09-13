@@ -1,0 +1,378 @@
+[+    0.48] ==== host: J-Link reset rc=0
+[+    0.62] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+    0.72] I: PSRAM initialised in QPI mode, 8192 KB
+[+    0.72] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+    0.72] I: Starting bootloader
+[+    0.72] 
+[+    0.72] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+    0.72] I: 0x90000000..0x9000001F:
+[+    0.72] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+    0.72] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+    0.72] I: Alias[0x02000000..0x0200001F]:
+[+    0.72] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+    0.72] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+    0.72] I: PSRAM 0x70000000..0x7000001F:
+[+    0.72] I: ec 5c 11 2 0 bb 1 70 4c 45 11 2 6c e 0 70
+[+    0.72] I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+[+    0.72] I: PSRAM write/read: PASS
+[+    0.72] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+    0.72] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+    0.72] I: Boot source: primary slot
+[+    0.72] I: Image index: 0, Swap type: none
+[+    9.18] I: Bootloader chainload address offset: 0x0
+[+    9.18] I: Image version: v0.0.0
+[+    9.18] I: Jumping to the first image slot
+[+   11.14] 
+[+   11.14] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+   11.14] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+   14.14] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+   14.14] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+   14.24] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+   14.24] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+   14.24] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+   14.24] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+   14.24] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+   14.24] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+   14.24] [00:00:01.784,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+   14.24] [00:00:01.784,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+   14.24] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+   14.34] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+   14.34] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   25.70] [00:00:01.942,000] <inf> shell_telnet: Telnet shell backend initialized
+[+   25.70] [00:00:01.944,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+   25.70] [00:00:01.944,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+   25.70] [00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   25.70] [00:00:04.910,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+   25.70] [00:00:04.910,000] <inf> io: Start io init
+[+   25.70] [00:00:04.915,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+   25.80] [00:00:04.916,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+   25.80] [00:00:04.916,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+   25.80] [00:00:04.936,000] <inf> matter: IPv6 address added, starting Matter
+[+   25.80] [00:00:04.945,000] <inf> io: Start io outputs task
+[+   25.80] [00:00:05.381,000] <inf> matter: IPv6 address added, starting Matter
+[+   25.80] [00:00:05.381,000] <inf> matter: Matter start work already submitted
+[+   25.90] [00:00:06.148,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.89] [00:00:06.349,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.89] [00:00:08.806,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.89] [00:00:09.007,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.89] [00:00:09.207,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:09.408,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:11.749,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:11.950,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:12.150,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:15.073,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   28.99] [00:00:15.998,000] <inf> device_config_store: configuration loaded, revision 7
+[+   28.99] [00:00:15.998,000] <inf> network_service: network configuration revision 7: clean (11049 ms)
+[+   29.09] [00:00:15.998,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+   29.09] [00:00:16.677,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+[+   29.09] [00:00:16.678,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[+   29.09] [00:00:19.620,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_a0b1f8b9ef97f73f
+[+   29.09] [00:00:19.625,000] <inf> net_adapter: ethernet: DHCP
+[+   30.34] [00:00:19.701,000] <inf> matter: Init CHIP stack
+[+   30.34] [00:00:20.632,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.34] [00:00:20.832,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.34] [00:00:21.033,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.80] ==== host: boot 1 (S) up 30.3 s, count 1
+[+   30.99] ==== host: J-Link reset rc=0
+[+   31.16] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+   31.16] I: PSRAM initialised in QPI mode, 8192 KB
+[+   31.16] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   31.16] I: Starting bootloader
+[+   31.16] 
+[+   31.16] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+   31.16] I: 0x90000000..0x9000001F:
+[+   31.16] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   31.26] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   31.26] I: Alias[0x02000000..0x0200001F]:
+[+   31.26] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   31.26] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   31.26] I: PSRAM 0x70000000..0x7000001F:
+[+   31.26] I: ec 5c 11 2 0 0 0 0 4c 45 11 2 0 0 0 0
+[+   31.26] I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+[+   31.26] I: PSRAM write/read: PASS
+[+   31.26] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   31.26] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   31.26] I: Boot source: primary slot
+[+   31.26] I: Image index: 0, Swap type: none
+[+   39.70] I: Bootloader chainload address offset: 0x0
+[+   39.70] I: Image version: v0.0.0
+[+   39.70] I: Jumping to the first image slot
+[+   41.65] 
+[+   41.65] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+   41.65] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+   44.64] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+   44.64] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+   44.74] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+   44.74] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+   44.74] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+   44.74] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+   44.74] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+   44.74] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+   44.74] [00:00:01.785,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+   44.74] [00:00:01.785,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+   44.74] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+   44.85] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+   44.85] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   54.54] [00:00:01.946,000] <inf> shell_telnet: Telnet shell backend initialized
+[+   54.64] [00:00:01.947,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+   54.64] [00:00:01.947,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+   54.64] [00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   54.64] [00:00:04.881,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+   54.64] [00:00:04.881,000] <inf> io: Start io init
+[+   54.64] [00:00:04.886,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+   54.64] [00:00:04.887,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+   54.64] [00:00:04.887,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+   54.64] [00:00:04.907,000] <inf> matter: IPv6 address added, starting Matter
+[+   54.74] [00:00:04.916,000] <inf> io: Start io outputs task
+[+   54.74] [00:00:06.030,000] <wrn> net_if: iface 1 pkt 0x7017a6c4 send failure status -5
+[+   54.74] [00:00:07.060,000] <inf> matter: IPv6 address added, starting Matter
+[+   57.73] [00:00:07.060,000] <inf> matter: Matter start work already submitted
+[+   57.73] [00:00:12.226,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   57.73] [00:00:14.335,000] <inf> device_config_store: configuration loaded, revision 7
+[+   57.73] [00:00:14.335,000] <inf> network_service: network configuration revision 7: clean (9416 ms)
+[+   57.73] [00:00:14.335,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+   57.83] [00:00:15.005,000] <inf> network_service: boot 2 of 5 in a row shorter than 30 s
+[+   57.83] [00:00:15.006,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[+   57.83] [00:00:17.938,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_122c5f1d032f11d5
+[+   57.83] [00:00:17.943,000] <inf> net_adapter: ethernet: DHCP
+[+   58.76] [00:00:17.994,000] <inf> matter: Init CHIP stack
+[+   59.47] ==== host: boot 2 (S) up 28.5 s, count 2
+[+   59.63] ==== host: J-Link reset rc=0
+[+   59.79] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+   59.79] I: PSRAM initialised in QPI mode, 8192 KB
+[+   59.79] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   59.79] I: Starting bootloader
+[+   59.79] 
+[+   59.89] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+   59.89] I: 0x90000000..0x9000001F:
+[+   59.89] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   59.89] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   59.89] I: Alias[0x02000000..0x0200001F]:
+[+   59.89] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   59.89] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   59.89] I: PSRAM 0x70000000..0x7000001F:
+[+   59.89] I: ec 5c 11 2 0 0 0 0 4c 45 11 2 0 0 0 0
+[+   59.89] I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+[+   59.89] I: PSRAM write/read: PASS
+[+   59.89] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   59.89] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   59.89] I: Boot source: primary slot
+[+   59.89] I: Image index: 0, Swap type: none
+[+   68.35] I: Bootloader chainload address offset: 0x0
+[+   68.35] I: Image version: v0.0.0
+[+   68.35] I: Jumping to the first image slot
+[+   70.30] 
+[+   70.30] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+   70.40] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+   73.37] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+   73.37] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+   73.37] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+   73.37] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+   73.37] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+   73.37] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+   73.37] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+   73.37] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+   73.37] [00:00:01.785,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+   73.47] [00:00:01.785,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+   73.47] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+   73.47] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+   73.47] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   83.16] [00:00:01.949,000] <inf> shell_telnet: Telnet shell backend initialized
+[+   83.16] [00:00:01.950,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+   83.16] [00:00:01.950,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+   83.16] [00:00:04.785,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+   83.16] [00:00:04.879,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+   83.16] [00:00:04.879,000] <inf> io: Start io init
+[+   83.26] [00:00:04.884,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+   83.26] [00:00:04.885,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+   83.26] [00:00:04.885,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+   83.26] [00:00:04.905,000] <inf> matter: IPv6 address added, starting Matter
+[+   83.26] [00:00:04.914,000] <inf> io: Start io outputs task
+[+   83.26] [00:00:06.028,000] <wrn> net_if: iface 1 pkt 0x7017a6c4 send failure status -5
+[+   83.26] [00:00:07.240,000] <inf> matter: IPv6 address added, starting Matter
+[+   83.99] [00:00:07.240,000] <inf> matter: Matter start work already submitted
+[+   83.99] [00:00:12.310,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   83.99] [00:00:14.255,000] <inf> device_config_store: configuration loaded, revision 7
+[+   83.99] [00:00:14.255,000] <inf> network_service: network configuration revision 7: clean (9338 ms)
+[+   83.99] [00:00:14.255,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+   83.99] [00:00:14.916,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   83.99] [00:00:15.117,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   87.29] [00:00:15.544,000] <inf> matter: Init CHIP stack
+[+   87.29] [00:00:15.966,000] <inf> network_service: boot 3 of 5 in a row shorter than 30 s
+[+   87.29] [00:00:15.966,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[+   87.29] [00:00:18.864,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_3bbd853566fe1cb3
+[+   87.40] [00:00:18.868,000] <inf> net_adapter: ethernet: DHCP
+[+   89.01] ==== host: boot 3 (S) up 29.4 s, count 3
+[+   89.19] ==== host: J-Link reset rc=0
+[+   89.36] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+   89.36] I: PSRAM initialised in QPI mode, 8192 KB
+[+   89.36] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+   89.36] I: Starting bootloader
+[+   89.36] 
+[+   89.36] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+   89.46] I: 0x90000000..0x9000001F:
+[+   89.46] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   89.46] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   89.46] I: Alias[0x02000000..0x0200001F]:
+[+   89.46] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+   89.46] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+   89.46] I: PSRAM 0x70000000..0x7000001F:
+[+   89.46] I: ec 5c 11 2 0 0 0 0 4c 45 11 2 0 0 0 0
+[+   89.46] I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+[+   89.46] I: PSRAM write/read: PASS
+[+   89.46] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   89.46] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+   89.46] I: Boot source: primary slot
+[+   89.46] I: Image index: 0, Swap type: none
+[+   97.92] I: Bootloader chainload address offset: 0x0
+[+   97.92] I: Image version: v0.0.0
+[+   97.92] I: Jumping to the first image slot
+[+   99.78] 
+[+   99.78] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+   99.78] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+  102.77] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+  102.77] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+  102.77] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+  102.77] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+  102.77] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+  102.77] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+  102.77] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+  102.77] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+  102.87] [00:00:01.784,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+  102.87] [00:00:01.784,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+  102.87] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+  102.87] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+  102.87] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+  113.80] [00:00:01.854,000] <inf> shell_telnet: Telnet shell backend initialized
+[+  113.80] [00:00:01.856,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+  113.90] [00:00:01.856,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+  113.90] [00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  113.90] [00:00:04.773,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+  113.90] [00:00:04.773,000] <inf> io: Start io init
+[+  113.90] [00:00:04.778,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+  113.90] [00:00:04.778,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+  113.90] [00:00:04.778,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+  113.90] [00:00:04.798,000] <inf> matter: IPv6 address added, starting Matter
+[+  113.90] [00:00:04.807,000] <inf> io: Start io outputs task
+[+  114.01] [00:00:05.901,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  114.01] [00:00:06.101,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.01] [00:00:06.302,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.01] [00:00:06.503,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.01] [00:00:08.880,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.01] [00:00:10.607,000] <inf> matter: IPv6 address added, starting Matter
+[+  117.01] [00:00:10.607,000] <inf> matter: Matter start work already submitted
+[+  117.11] [00:00:11.715,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.11] [00:00:14.716,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.11] [00:00:14.917,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.11] [00:00:15.118,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  117.11] [00:00:15.552,000] <inf> device_config_store: configuration loaded, revision 7
+[+  117.11] [00:00:15.553,000] <inf> network_service: network configuration revision 7: clean (10742 ms)
+[+  117.11] [00:00:15.553,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+  117.21] [00:00:16.093,000] <inf> network_service: boot 4 of 5 in a row shorter than 30 s
+[+  117.21] [00:00:16.094,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[+  117.21] [00:00:19.032,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_8d29b6e611905430
+[+  117.21] [00:00:19.037,000] <inf> net_adapter: ethernet: DHCP
+[+  117.21] [00:00:19.113,000] <inf> matter: Init CHIP stack
+[+  118.93] ==== host: boot 4 (S) up 29.7 s, count 4
+[+  119.12] ==== host: J-Link reset rc=0
+[+  119.28] I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+[+  119.28] I: PSRAM initialised in QPI mode, 8192 KB
+[+  119.28] *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+  119.28] I: Starting bootloader
+[+  119.28] 
+[+  119.38] I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+[+  119.38] I: 0x90000000..0x9000001F:
+[+  119.38] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+  119.38] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+  119.38] I: Alias[0x02000000..0x0200001F]:
+[+  119.38] I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 4e 14 0
+[+  119.38] I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[+  119.38] I: PSRAM 0x70000000..0x7000001F:
+[+  119.38] I: ec 5c 11 2 0 0 0 0 4c 45 11 2 0 0 0 0
+[+  119.38] I: b0 44 11 2 34 45 11 2 0 0 0 0 4 68 13 2
+[+  119.38] I: PSRAM write/read: PASS
+[+  119.38] I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+  119.38] I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+[+  119.38] I: Boot source: primary slot
+[+  119.38] I: Image index: 0, Swap type: none
+[+  127.85] I: Bootloader chainload address offset: 0x0
+[+  127.85] I: Image version: v0.0.0
+[+  127.85] I: Jumping to the first image slot
+[+  129.70] 
+[+  129.70] [00:00:01.665,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+[+  129.70] [00:00:01.665,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+[+  132.69] [00:00:01.666,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+[+  132.69] [00:00:01.666,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+[+  132.69] [00:00:01.675,000] <inf> eth_w5500: W5500 Initialized
+[+  132.69] [00:00:01.676,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+[+  132.69] [00:00:01.676,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+[+  132.69] [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+[+  132.69] [00:00:01.779,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+[+  132.69] [00:00:01.783,000] <err> net_if: Iface 0x20002e98 device not ready
+[+  132.79] [00:00:01.784,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d60)
+[+  132.79] [00:00:01.784,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+[+  132.79] [00:00:01.786,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+[+  132.79] [00:00:01.786,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+[+  132.79] *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[+  143.93] [00:00:01.855,000] <inf> shell_telnet: Telnet shell backend initialized
+[+  143.93] [00:00:01.856,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+[+  143.93] [00:00:01.856,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+[+  143.93] [00:00:03.284,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+[+  143.93] [00:00:04.765,000] <inf> settings_registry: 10 keys registered, 0 rejected
+[+  143.93] [00:00:04.765,000] <inf> io: Start io init
+[+  143.93] [00:00:04.770,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+[+  143.93] [00:00:04.771,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+[+  143.93] [00:00:04.771,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+[+  144.03] [00:00:04.791,000] <inf> matter: IPv6 address added, starting Matter
+[+  144.03] [00:00:04.800,000] <inf> io: Start io outputs task
+[+  144.03] [00:00:05.902,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.03] [00:00:06.102,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:06.303,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:06.504,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:09.026,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:09.226,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:09.427,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.44] [00:00:12.086,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.54] [00:00:12.287,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.54] [00:00:14.826,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.54] [00:00:15.027,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.54] [00:00:15.228,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  144.54] [00:00:15.648,000] <inf> device_config_store: configuration loaded, revision 7
+[+  144.54] [00:00:15.648,000] <inf> network_service: network configuration revision 7: clean (10845 ms)
+[+  144.54] [00:00:15.648,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+[+  144.65] [00:00:15.945,000] <inf> matter: IPv6 address added, starting Matter
+[+  147.96] [00:00:15.945,000] <inf> matter: Matter start work already submitted
+[+  147.96] [00:00:16.222,000] <inf> network_service: boot 5 of 5 in a row shorter than 30 s
+[+  147.96] [00:00:16.222,000] <wrn> network_service: 5 short boots in a row: restoring the factory network configuration
+[+  149.00] ==== host: boot 5 (S) up 29.9 s, count 5
+[+  152.29] [00:00:20.112,000] <inf> matter: Init CHIP stack
+[+  152.29] [00:00:21.021,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  152.29] [00:00:23.352,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  152.29] [00:00:23.552,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  152.29] [00:00:23.753,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  152.29] [00:00:23.954,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  159.19] [00:00:24.650,000] <wrn> network_manager: network configuration restored to factory defaults, revision 8
+[+  159.19] [00:00:29.415,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  159.19] [00:00:29.616,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  168.78] [00:00:31.542,000] <inf> network_service: worker stack: 4888 of 8192 bytes never used
+[+  168.78] [00:00:40.885,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+0cb7f6047410-dirty, boot_1b77a9f7ef0de62d
+[+  168.78] [00:00:40.890,000] <inf> net_adapter: ethernet: DHCP
+[+  173.76] [00:00:44.936,000] <inf> net_dhcpv4: Received: 192.168.88.13
+[+  173.86] [00:00:44.940,000] <inf> network_manager: default route via ethernet
+[+  177.27] [00:00:48.380,000] <inf> chip: [SVR]Initializing session resumption storage...
+[+  177.27] [00:00:48.382,000] <inf> chip: [SVR]Server initializing...
+[+  177.27] [00:00:48.382,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+[+  178.40] [00:00:49.525,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  178.40] [00:00:49.726,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  178.40] [00:00:49.926,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  178.40] [00:00:50.127,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  181.57] [00:00:52.677,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  181.57] [00:00:52.878,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  184.45] [00:00:55.567,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  184.45] [00:00:55.768,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  184.45] [00:00:56.423,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+[+  191.48] [00:01:01.575,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  192.94] [00:01:04.068,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  192.94] [00:01:04.268,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  192.94] [00:01:04.469,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  193.04] [00:01:04.670,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened

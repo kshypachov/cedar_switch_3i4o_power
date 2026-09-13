@@ -1,0 +1,149 @@
+{
+  "scenario": "apply-only",
+  "host": "192.168.88.13",
+  "when": "2026-09-14T00:17:55+0300",
+  "steps": [
+    {
+      "t": 1.25,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1252
+    },
+    {
+      "t": 5.27,
+      "step": "free-address check",
+      "ip": "192.168.88.213",
+      "ping_rc": 2,
+      "arp": "? (192.168.88.213) at 80:34:28:10:6a:1d on en7 ifscope [ethernet]",
+      "arp_mac": "80:34:28:10:6a:1d"
+    },
+    {
+      "t": 5.49,
+      "step": "stage",
+      "status": 201,
+      "ms": 133,
+      "body": {
+        "id": "txn_00000001",
+        "boot_id": "boot_1308c659b08e4cd4",
+        "base_revision": 6,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 300,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 11.28,
+      "step": "apply",
+      "status": 202,
+      "ms": 5791,
+      "body": {
+        "job_id": "job_00000001",
+        "job_url": "/api/v1/jobs/job_00000001",
+        "resource_url": "/api/v1/network/config"
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 12.38,
+      "step": "new address answers",
+      "ip": "192.168.88.213",
+      "after_apply_s": 6.89
+    },
+    {
+      "t": 14.88,
+      "step": "old address after apply",
+      "ip": "192.168.88.13",
+      "answers": false
+    },
+    {
+      "t": 16.22,
+      "step": "transaction",
+      "host": "192.168.88.213",
+      "status": 200,
+      "ms": 100,
+      "body": {
+        "id": "txn_00000001",
+        "boot_id": "boot_1308c659b08e4cd4",
+        "base_revision": 6,
+        "state": "awaiting_confirmation",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "static",
+                "address": "192.168.88.213",
+                "prefix_length": 24,
+                "gateway": "192.168.88.1"
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 294,
+        "reconnect_urls": [
+          "http://192.168.88.213/"
+        ],
+        "job_id": "job_00000001",
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 16.22,
+      "step": "awaiting: the owner may cut power now",
+      "transaction": "txn_00000001"
+    }
+  ]
+}

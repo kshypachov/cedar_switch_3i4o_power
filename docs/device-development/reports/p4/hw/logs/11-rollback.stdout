@@ -1,0 +1,12 @@
+{"t": 1.78, "step": "login", "host": "192.168.88.13", "ms": 1473}
+{"t": 5.8, "step": "free-address check", "ip": "192.168.88.213", "ping_rc": 2, "arp": "? (192.168.88.213) at 80:34:28:10:6a:1d on en7 ifscope [ethernet]", "arp_mac": "80:34:28:10:6a:1d"}
+{"t": 5.98, "step": "stage", "status": 201, "ms": 114, "body": {"id": "txn_00000005", "boot_id": "boot_2963194137a47884", "base_revision": 2, "state": "staged", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "static", "address": "192.168.88.213", "prefix_length": 24, "gateway": "192.168.88.
+{"t": 7.72, "step": "apply", "status": 202, "ms": 1737, "body": {"job_id": "job_00000005", "job_url": "/api/v1/jobs/job_00000005", "resource_url": "/api/v1/network/config"}, "schema_errors": []}
+{"t": 8.78, "step": "new address answers", "ip": "192.168.88.213", "after_apply_s": 2.8}
+{"t": 11.29, "step": "old address after apply", "ip": "192.168.88.13", "answers": false}
+{"t": 12.54, "step": "login on the new address", "ms": 1248}
+{"t": 12.62, "step": "rollback request", "status": 202, "ms": 86, "body": {"job_id": "job_00000005", "job_url": "/api/v1/jobs/job_00000005", "resource_url": "/api/v1/network/config"}}
+{"t": 13.68, "step": "DHCP address answers after rollback", "after_s": 1.06}
+{"t": 15.04, "step": "transaction", "host": "192.168.88.13", "status": 200, "ms": 87, "body": {"id": "txn_00000005", "boot_id": "boot_2963194137a47884", "base_revision": 2, "state": "rolled_back", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "automatic", "servers": []}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "static", "address": "192.168.88.213", "prefix_
+{"t": 15.12, "step": "rollback job", "body": {"id": "job_00000005", "boot_id": "boot_2963194137a47884", "kind": "network_apply", "state": "succeeded", "phase": "rolling_back", "progress": null, "cancellable": false, "created_uptime_ms": "676586", "updated_uptime_ms": "683468", "resource_url": "/api/v1/network/config", "error": null}}
+-> logs/11-rollback.json, console logs/11-rollback-console.log

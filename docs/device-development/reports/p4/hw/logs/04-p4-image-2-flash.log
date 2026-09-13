@@ -1,0 +1,53 @@
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 347 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: beebcc7508af150522abcf357b94c18493289c9ee26b16b5a79b9562724b1826
+Split status: N/A (0)
+
+09.970,000] [0m<inf> matter_event_loop: Init io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[00:00:09.973,000] [0m<inf> matter_event_loop: Start io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[00:00:09.979,000] [0m<inf> chip: [DL]CHIP task running[0m
+[1;32muart:~$ [m[8D[J[00:00:09.993,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+[1;32muart:~$ [m[8D[J[00:00:10.017,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:10.514,000] [1;31m<err> chip: [DL]Long dispatch time: 433 ms, for event type 2[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.551,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:17.929,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:18.030,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.412,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:23.513,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:23.614,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:23.714,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:23.815,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.654,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:32.373,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:32.474,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:32.575,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:41.257,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:43.735,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:43.835,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:43.936,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:44.037,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:44.137,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:49.896,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:00:49.997,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:01.013,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.113,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.214,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.315,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.415,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.516,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:01.617,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:07.083,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:07.184,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:07.285,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:07.385,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:18.591,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:18.692,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:18.792,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:18.893,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[00:01:18.994,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

@@ -1,0 +1,275 @@
+{
+  "scenario": "invalid",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:26:06+0300",
+  "steps": [
+    {
+      "t": 1.78,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1475
+    },
+    {
+      "t": 1.96,
+      "step": "stage",
+      "status": 422,
+      "ms": 100,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The request body is not acceptable",
+          "request_id": "req_14f201f2",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/prefix_length",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "prefix 31"
+    },
+    {
+      "t": 2.06,
+      "step": "stage",
+      "status": 422,
+      "ms": 101,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201f4",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/gateway",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "gateway off subnet"
+    },
+    {
+      "t": 2.16,
+      "step": "stage",
+      "status": 422,
+      "ms": 101,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201f6",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/gateway",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "gateway is the network address"
+    },
+    {
+      "t": 2.26,
+      "step": "stage",
+      "status": 422,
+      "ms": 101,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201f8",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/address",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "address is the broadcast"
+    },
+    {
+      "t": 2.37,
+      "step": "stage",
+      "status": 422,
+      "ms": 100,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201fa",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/address",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "address loopback"
+    },
+    {
+      "t": 2.47,
+      "step": "stage",
+      "status": 422,
+      "ms": 106,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201fc",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/prefix_length",
+              "code": "required"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "static without prefix"
+    },
+    {
+      "t": 2.58,
+      "step": "stage",
+      "status": 422,
+      "ms": 113,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f201fe",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/interfaces/ethernet/ipv4/address",
+              "code": "not_allowed"
+            },
+            {
+              "path": "/config/interfaces/ethernet/ipv4/prefix_length",
+              "code": "not_allowed"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "dhcp with an address"
+    },
+    {
+      "t": 2.69,
+      "step": "stage",
+      "status": 422,
+      "ms": 109,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f20200",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/dns/servers/0",
+              "code": "invalid_format"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "dns unspecified"
+    },
+    {
+      "t": 2.79,
+      "step": "stage",
+      "status": 422,
+      "ms": 99,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The request body is not acceptable",
+          "request_id": "req_14f20202",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/dns/servers",
+              "code": "out_of_range"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "dns three servers"
+    },
+    {
+      "t": 2.9,
+      "step": "stage",
+      "status": 422,
+      "ms": 104,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The configuration cannot be applied",
+          "request_id": "req_14f20204",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/dns/servers",
+              "code": "required"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "dns manual empty"
+    },
+    {
+      "t": 3.0,
+      "step": "stage",
+      "status": 422,
+      "ms": 98,
+      "body": {
+        "error": {
+          "code": "validation_failed",
+          "message": "The request body is not acceptable",
+          "request_id": "req_14f20206",
+          "retryable": false,
+          "fields": [
+            {
+              "path": "/config/dns/servers/0",
+              "code": "conflicting"
+            }
+          ]
+        }
+      },
+      "schema_errors": null,
+      "case": "dns not an address"
+    },
+    {
+      "t": 3.1,
+      "step": "stage",
+      "status": 409,
+      "ms": 99,
+      "body": {
+        "error": {
+          "code": "stale_revision",
+          "message": "The configuration is at revision 0; re-read it and stage again",
+          "request_id": "req_14f20208",
+          "retryable": false
+        }
+      },
+      "schema_errors": null,
+      "case": "stale base_revision"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+uart:~$ I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 60 4d 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 60 4d 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: d0 d3 10 2 d8 b9 1 70 30 bc 10 2 44 d 0 70
+I: 94 bb 10 2 18 bc 10 2 0 0 0 0 10 b7 12 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+uart:~$ [00:00:01.667,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+uart:~$ uart:~$ [00:00:01.667,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+uart:~$ uart:~$ [00:00:01.668,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+uart:~$ uart:~$ [00:00:01.668,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+uart:~$ uart:~$ [00:00:01.677,000] <inf> eth_w5500: W5500 Initialized
+uart:~$ uart:~$ [00:00:01.677,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+uart:~$ uart:~$ [00:00:01.677,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+uart:~$ uart:~$ [00:00:01.678,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+uart:~$ uart:~$ [00:00:01.783,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+uart:~$ uart:~$ [00:00:01.786,000] <err> net_if: Iface 0x20002e80 device not ready
+uart:~$ uart:~$ [00:00:01.788,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d48)
+uart:~$ uart:~$ [00:00:01.788,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+uart:~$ uart:~$ [00:00:01.789,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+uart:~$ uart:~$ [00:00:01.789,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+uart:~$ uart:~$ *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+uart:~$ uart:~$ [00:00:02.034,000] <inf> shell_telnet: Telnet shell backend initialized
+uart:~$ [00:00:02.035,000] <inf> main_app: Start main app (build: Sep 13 2026 22:40:42) version 8
+uart:~$ [00:00:02.036,000] <inf> main_app: PSRAM @0x701daf08: write/read 1024 words OK
+uart:~$ [00:00:02.074,000] <inf> settings_registry: 10 keys registered, 0 rejected
+uart:~$ [00:00:02.074,000] <inf> io: Start io init
+uart:~$ 

@@ -1,0 +1,11 @@
+{"t": 1.55, "step": "login", "host": "192.168.88.13", "ms": 1248}
+{"t": 1.75, "step": "stage", "status": 201, "ms": 113, "body": {"id": "txn_00000008", "boot_id": "boot_2963194137a47884", "base_revision": 4, "state": "staged", "candidate": {"preferred_interface": "ethernet", "dns": {"mode": "manual", "servers": ["9.9.9.9"]}, "interfaces": {"ethernet": {"enabled": true, "ipv4": {"mode": "dhcp", "address": null, "prefix_length": null, "gateway": null}}, "wifi": {"
+-> logs/14-reboot-staged.json, console logs/14-reboot-staged-console.log
+Traceback (most recent call last):
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p4/docs/device-development/reports/p4/hw/net_api_b.py", line 418, in <module>
+    jlink_reset(dev)
+    ~~~~~~~~~~~^^^^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p4/docs/device-development/reports/p4/hw/net_api_b.py", line 181, in jlink_reset
+    if b["uptime_ms"] >= 31000:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>=' not supported between instances of 'str' and 'int'

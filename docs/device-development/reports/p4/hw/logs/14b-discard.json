@@ -1,0 +1,75 @@
+{
+  "scenario": "discard",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:33:38+0300",
+  "steps": [
+    {
+      "t": 1.26,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1257
+    },
+    {
+      "t": 1.35,
+      "step": "discard",
+      "status": 202,
+      "ms": 89,
+      "body": {
+        "job_id": "job_00000008",
+        "job_url": "/api/v1/jobs/job_00000008",
+        "resource_url": "/api/v1/network/config"
+      }
+    },
+    {
+      "t": 1.43,
+      "step": "transaction",
+      "host": "192.168.88.13",
+      "status": 200,
+      "ms": 86,
+      "body": {
+        "id": "txn_00000008",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 4,
+        "state": "rolled_back",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "manual",
+            "servers": [
+              "9.9.9.9"
+            ]
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": null,
+        "reconnect_urls": [],
+        "job_id": "job_00000008",
+        "error": null
+      },
+      "schema_errors": []
+    }
+  ]
+}

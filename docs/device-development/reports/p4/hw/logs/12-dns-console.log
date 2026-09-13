@@ -1,0 +1,16 @@
+[+    1.77] ==== host: login
+[+    1.97] ==== host: stage
+[+    2.38] [8D[J[00:11:26.466,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    2.38] [1;32muart:~$ [m[8D[J[00:11:26.567,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    3.89] ==== host: apply
+[+    4.04] [1;32muart:~$ [m[8D[J[00:11:26.668,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    4.04] [1;32muart:~$ [m[8D[J[00:11:28.075,000] [0m<inf> network_manager: transaction txn_00000006 staged against revision 2[0m
+[+    4.56] ==== host: awaiting
+[+    4.65] ==== host: confirm
+[+    4.97] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:11:30.008,000] [0m<inf> network_manager: transaction txn_00000006 journalled, job job_00000006, 120 s to confirm[0m
+[+    4.97] [1;32muart:~$ [m[8D[J[00:11:30.182,000] [0m<inf> network_manager: transaction txn_00000006 applied, awaiting confirmation[0m
+[+    4.97] [1;32muart:~$ [m[8D[J[00:11:30.765,000] [0m<inf> network_manager: transaction txn_00000006 confirmed[0m
+[+    6.78] ==== host: confirm job
+[+    6.87] ==== host: status after
+[+    6.94] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:11:31.931,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    6.94] [1;32muart:~$ [m[8D[J[00:11:32.031,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m

@@ -1,0 +1,17 @@
+[+    1.47] ==== host: login
+[+    1.70] ==== host: stage
+[+    2.35] [8D[J[00:02:14.079,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    2.56] [1;32muart:~$ [m[8D[J[00:02:14.280,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    6.35] ==== host: apply
+[+    6.51] [1;32muart:~$ [m[8D[J[00:02:15.800,000] [0m<inf> network_manager: transaction txn_00000002 staged against revision 5[0m
+[+    7.04] ==== host: awaiting
+[+    7.15] ==== host: confirm
+[+    7.59] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:20.452,000] [0m<inf> network_manager: transaction txn_00000002 journalled, job job_00000002, 120 s to confirm[0m
+[+    7.70] [1;32muart:~$ [m[8D[J[00:02:20.637,000] [0m<inf> network_manager: transaction txn_00000002 applied, awaiting confirmation[0m
+[+    7.70] [1;32muart:~$ [m[8D[J[00:02:21.255,000] [0m<inf> network_manager: transaction txn_00000002 confirmed[0m
+[+   12.37] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:22.465,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   12.37] [1;32muart:~$ [m[8D[J[00:02:22.666,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   12.37] [1;32muart:~$ [m[8D[J[00:02:22.866,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   12.37] [1;32muart:~$ [m[8D[J[00:02:25.339,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   13.23] ==== host: confirm job
+[+   13.33] ==== host: status after

@@ -1,0 +1,5 @@
+[+    1.93] ==== host: login
+[+    2.02] ==== host: scan
+[+    2.08] [8D[J[00:06:58.759,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    2.08] [1;32muart:~$ [m[8D[J[00:06:58.859,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m
+[+    2.08] [1;32muart:~$ [m[8D[J[00:06:58.960,000] [1;31m<err> eth_w5500: W5500 frame length 65533 exceeds 65535 buffered bytes, dropped[0m

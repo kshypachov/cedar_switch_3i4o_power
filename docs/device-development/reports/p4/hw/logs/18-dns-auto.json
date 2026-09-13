@@ -1,0 +1,207 @@
+{
+  "scenario": "dns-auto",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:54:12+0300",
+  "steps": [
+    {
+      "t": 1.47,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1152
+    },
+    {
+      "t": 1.7,
+      "step": "stage",
+      "status": 201,
+      "ms": 131,
+      "body": {
+        "id": "txn_00000002",
+        "boot_id": "boot_f8a67808b1a8382c",
+        "base_revision": 5,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 300,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 6.35,
+      "step": "apply",
+      "status": 202,
+      "ms": 4648,
+      "body": {
+        "job_id": "job_00000002",
+        "job_url": "/api/v1/jobs/job_00000002",
+        "resource_url": "/api/v1/network/config"
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 7.04,
+      "step": "awaiting",
+      "waited_s": 0.69,
+      "body": {
+        "id": "txn_00000002",
+        "boot_id": "boot_f8a67808b1a8382c",
+        "base_revision": 5,
+        "state": "awaiting_confirmation",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "automatic",
+            "servers": []
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 119,
+        "reconnect_urls": [],
+        "job_id": "job_00000002",
+        "error": null
+      }
+    },
+    {
+      "t": 7.15,
+      "step": "confirm",
+      "host": "192.168.88.13",
+      "status": 202,
+      "ms": 107,
+      "body": {
+        "job_id": "job_00000002",
+        "job_url": "/api/v1/jobs/job_00000002",
+        "resource_url": "/api/v1/network/config"
+      }
+    },
+    {
+      "t": 13.23,
+      "step": "confirm job",
+      "host": "192.168.88.13",
+      "job": {
+        "id": "job_00000002",
+        "boot_id": "boot_f8a67808b1a8382c",
+        "kind": "network_apply",
+        "state": "succeeded",
+        "phase": "committing",
+        "progress": null,
+        "cancellable": false,
+        "created_uptime_ms": "135917",
+        "updated_uptime_ms": "147025",
+        "resource_url": "/api/v1/network/config",
+        "error": null
+      },
+      "waited_s": 6.08
+    },
+    {
+      "t": 13.33,
+      "step": "status after",
+      "dns_servers": [],
+      "body": {
+        "interfaces": [
+          {
+            "id": "ethernet",
+            "enabled": true,
+            "link_up": true,
+            "state": "ready",
+            "mac_address": "80:34:28:10:6a:1d",
+            "addresses": [
+              {
+                "family": "ipv4",
+                "address": "192.168.88.13",
+                "prefix_length": 24,
+                "source": "dhcp"
+              },
+              {
+                "family": "ipv6",
+                "address": "fe80::8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "link_local"
+              },
+              {
+                "family": "ipv6",
+                "address": "fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "slaac"
+              }
+            ],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": null
+          },
+          {
+            "id": "wifi",
+            "enabled": false,
+            "link_up": false,
+            "state": "disabled",
+            "mac_address": "00:00:00:00:00:00",
+            "addresses": [],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": {
+              "code": "capability_unavailable",
+              "message": "The Wi-Fi coprocessor does not respond",
+              "request_id": "req_51bf8a3a",
+              "retryable": false
+            }
+          }
+        ],
+        "default_interface": "ethernet",
+        "dns_servers": []
+      }
+    }
+  ]
+}

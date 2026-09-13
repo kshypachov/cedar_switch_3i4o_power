@@ -1,0 +1,164 @@
+{
+  "scenario": "idempotency",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:26:14+0300",
+  "steps": [
+    {
+      "t": 1.56,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1255
+    },
+    {
+      "t": 1.75,
+      "step": "stage",
+      "status": 201,
+      "ms": 113,
+      "body": {
+        "id": "txn_00000001",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 0,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "manual",
+            "servers": [
+              "9.9.9.9"
+            ]
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 300,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": [
+        "['candidate', 'dns', 'servers', 0]: '9.9.9.9' is valid under each of {'type': 'string', 'format': 'ipv6'}, {'type': 'string', 'format': 'ipv4'}"
+      ]
+    },
+    {
+      "t": 1.86,
+      "step": "stage",
+      "status": 201,
+      "ms": 110,
+      "body": {
+        "id": "txn_00000001",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 0,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "manual",
+            "servers": [
+              "9.9.9.9"
+            ]
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 299,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": [
+        "['candidate', 'dns', 'servers', 0]: '9.9.9.9' is valid under each of {'type': 'string', 'format': 'ipv6'}, {'type': 'string', 'format': 'ipv4'}"
+      ]
+    },
+    {
+      "t": 1.96,
+      "step": "stage",
+      "status": 409,
+      "ms": 98,
+      "body": {
+        "error": {
+          "code": "idempotency_conflict",
+          "message": "This Idempotency-Key was used with a different request",
+          "request_id": "req_14f20217",
+          "retryable": false
+        }
+      },
+      "schema_errors": null
+    },
+    {
+      "t": 2.06,
+      "step": "stage",
+      "status": 409,
+      "ms": 98,
+      "body": {
+        "error": {
+          "code": "busy",
+          "message": "Another network transaction is in progress; discard it first",
+          "request_id": "req_14f20218",
+          "retryable": true
+        }
+      },
+      "schema_errors": null
+    },
+    {
+      "t": 2.06,
+      "step": "summary",
+      "same_key_same_id": true,
+      "other_body": 409,
+      "second_transaction": 409
+    },
+    {
+      "t": 2.15,
+      "step": "discard",
+      "status": 202,
+      "body": {
+        "job_id": "job_00000001",
+        "job_url": "/api/v1/jobs/job_00000001",
+        "resource_url": "/api/v1/network/config"
+      }
+    }
+  ]
+}

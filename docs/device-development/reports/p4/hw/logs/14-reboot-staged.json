@@ -1,0 +1,78 @@
+{
+  "scenario": "reboot-staged",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:33:40+0300",
+  "steps": [
+    {
+      "t": 1.57,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1269
+    },
+    {
+      "t": 1.77,
+      "step": "stage",
+      "status": 201,
+      "ms": 113,
+      "body": {
+        "id": "txn_00000009",
+        "boot_id": "boot_2963194137a47884",
+        "base_revision": 4,
+        "state": "staged",
+        "candidate": {
+          "preferred_interface": "ethernet",
+          "dns": {
+            "mode": "manual",
+            "servers": [
+              "9.9.9.9"
+            ]
+          },
+          "interfaces": {
+            "ethernet": {
+              "enabled": true,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              }
+            },
+            "wifi": {
+              "enabled": false,
+              "ssid_base64": "",
+              "security": "open",
+              "hidden": false,
+              "ipv4": {
+                "mode": "dhcp",
+                "address": null,
+                "prefix_length": null,
+                "gateway": null
+              },
+              "password_set": false
+            }
+          }
+        },
+        "remaining_seconds": 300,
+        "reconnect_urls": [],
+        "job_id": null,
+        "error": null
+      },
+      "schema_errors": []
+    },
+    {
+      "t": 1.84,
+      "step": "uptime before reset",
+      "uptime_ms": "870689"
+    },
+    {
+      "t": 2.04,
+      "step": "J-Link reset",
+      "rc": 0
+    },
+    {
+      "t": 93.33,
+      "step": "board answers after reset",
+      "after_s": null
+    }
+  ]
+}

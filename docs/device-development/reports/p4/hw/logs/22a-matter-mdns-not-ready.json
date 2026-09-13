@@ -1,0 +1,96 @@
+{
+  "when": "2026-09-13T23:58:20+0300",
+  "steps": [
+    {
+      "step": "network status",
+      "status": 200,
+      "body": {
+        "interfaces": [
+          {
+            "id": "ethernet",
+            "enabled": true,
+            "link_up": true,
+            "state": "ready",
+            "mac_address": "80:34:28:10:6a:1d",
+            "addresses": [
+              {
+                "family": "ipv4",
+                "address": "192.168.88.13",
+                "prefix_length": 24,
+                "source": "dhcp"
+              },
+              {
+                "family": "ipv6",
+                "address": "fe80::8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "link_local"
+              },
+              {
+                "family": "ipv6",
+                "address": "fd27:e0cb:e5e8:8374:8234:28ff:fe10:6a1d",
+                "prefix_length": 64,
+                "source": "slaac"
+              }
+            ],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": null
+          },
+          {
+            "id": "wifi",
+            "enabled": false,
+            "link_up": false,
+            "state": "disabled",
+            "mac_address": "00:00:00:00:00:00",
+            "addresses": [],
+            "ssid": null,
+            "rssi_dbm": null,
+            "error": {
+              "code": "capability_unavailable",
+              "message": "The Wi-Fi coprocessor does not respond",
+              "request_id": "req_853578be",
+              "retryable": false
+            }
+          }
+        ],
+        "default_interface": "ethernet",
+        "dns_servers": [
+          "1.1.1.1",
+          "192.168.88.1"
+        ]
+      }
+    },
+    {
+      "step": "open window",
+      "status": 503,
+      "body": {
+        "error": {
+          "code": "service_not_ready",
+          "message": "Matter is not ready; commissioning is unavailable",
+          "request_id": "req_853578bf",
+          "retryable": true
+        }
+      }
+    },
+    {
+      "step": "browse _matterc._udp",
+      "instances": []
+    },
+    {
+      "step": "board B record",
+      "records": []
+    },
+    {
+      "step": "close window",
+      "status": 503,
+      "body": {
+        "error": {
+          "code": "service_not_ready",
+          "message": "Matter is not ready; commissioning is unavailable",
+          "request_id": "req_853578c0",
+          "retryable": true
+        }
+      }
+    }
+  ]
+}

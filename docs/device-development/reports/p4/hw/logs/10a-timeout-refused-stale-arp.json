@@ -1,0 +1,20 @@
+{
+  "scenario": "timeout",
+  "host": "192.168.88.13",
+  "when": "2026-09-13T23:27:56+0300",
+  "steps": [
+    {
+      "t": 2.11,
+      "step": "login",
+      "host": "192.168.88.13",
+      "ms": 1809
+    },
+    {
+      "t": 6.12,
+      "step": "free-address check",
+      "ip": "192.168.88.213",
+      "ping_rc": 2,
+      "arp": "? (192.168.88.213) at 80:34:28:10:6a:1d on en7 ifscope [ethernet]"
+    }
+  ]
+}

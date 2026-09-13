@@ -1,0 +1,52 @@
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 349 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 59d8c404cd7ee9ba8df3fc0f7ff9ed8ccb3a077d1c430c0fb5075184dc887f5e
+Split status: N/A (0)
+
+D[J[00:00:16.030,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:16.090,000] [0m<inf> matter: Init CHIP stack[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:21.139,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[1;32muart:~$ [m[8D[J[00:00:21.144,000] [0m<inf> network_manager: default route via ethernet[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.241,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:29.442,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:29.643,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:32.105,000] [0m<inf> chip: [SVR]Initializing session resumption storage...[0m
+[1;32muart:~$ [m[8D[J[00:00:32.107,000] [0m<inf> chip: [SVR]Server initializing...[0m
+[1;32muart:~$ [m[8D[J[00:00:32.109,000] [0m<dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:35.308,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:37.142,000] [0m<inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:41.155,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:46.551,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:46.752,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:46.953,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:47.856,000] [0m<inf> chip: [DMG]AccessControl: initializing[0m
+[1;32muart:~$ [m[8D[J[00:00:47.862,000] [0m<inf> chip: [DMG]Examples::AccessControlDelegate::Init[0m
+[1;32muart:~$ [m[8D[J[00:00:47.866,000] [0m<inf> chip: [DMG]AccessControl: setting[0m
+[1;32muart:~$ [m[8D[J[00:00:47.873,000] [0m<inf> chip: [DMG]DefaultAclStorage: initializing[0m
+[1;32muart:~$ [m[8D[J[00:00:47.878,000] [0m<inf> chip: [DMG]DefaultAclStorage: 0 entries loaded[0m
+[1;32muart:~$ [m[8D[J[00:00:47.883,000] [0m<inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null[0m
+[1;32muart:~$ [m[8D[J[00:00:47.971,000] [0m<dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540[0m
+[1;32muart:~$ [m[8D[J[00:00:48.027,000] [0m<dbg> chip.LogV: [IN]UDP::Init bound to port=5540[0m
+[1;32muart:~$ [m[8D[J[00:00:48.028,000] [0m<dbg> chip.LogV: [IN]TransportMgr initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:49.465,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:49.666,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:49.866,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:55.514,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:00:55.715,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:07.371,000] [0m<inf> chip: [ZCL]Using ZAP configuration...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:09.700,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:09.901,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:10.102,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:10.302,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:12.867,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:15.756,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[00:01:15.957,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:18.000,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:22.746,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:27.543,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m
