@@ -31,7 +31,8 @@ src/api/        typed client over the generated schema: refusals, retries, jobs
 src/state/      auth view, the one polling scheduler, the router, usePolling
 src/i18n/       ru.ts - every string - and t()
 src/components/ layout, cards, fields, error display, formatting
-src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics)
+src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics),
+                network (status, forms, Wi-Fi scan, the apply transaction)
 e2e/            Playwright, against the mock or the board
 ```
 
@@ -68,6 +69,34 @@ Decisions that are easy to undo by accident:
   by a controller shows no timer: the device does not know its timeout.
 - **A window request keeps its Idempotency-Key** for every retry until its job
   finishes, like the password change.
+- **The network screen keeps runtime and configuration apart**: what the
+  interfaces do now (`network/status`) is one card, the committed configuration
+  and its revision another, and the form is made once from the latter and then
+  belongs to the person editing it. A committed change re-reads it.
+- **An SSID is bytes.** The form sends back exactly the bytes it got from the
+  configuration or a scan; only a typed SSID is encoded, as UTF-8, and its 32
+  limit is counted in bytes. Bytes that are not UTF-8 are shown as U+FFFD.
+- **The password is write-only**: `keep` when nothing is typed and SSID and
+  security are unchanged, `replace` when typed, `clear` for an open network (and
+  for a disabled Wi-Fi with nothing to keep); a protected profile change without
+  a typed password is stopped at the password field before the device refuses
+  it.
+- **A transaction outlives the page.** It is reopened from `?txn=` or from
+  `network/config.pending_transaction_id`, polled every second while it is
+  pending and not at all once it has ended. After apply the transaction is
+  polled, not the job, which parks at `waiting_confirmation`; confirm and
+  rollback poll the job to its end. The countdown is the device's
+  `remaining_seconds`, re-anchored on every poll.
+- **Reconnect links carry the transaction** (`http://<address>/network?txn=<id>`):
+  cookies and CSRF do not move to a new origin, so the person signs in there and
+  confirms. Only http(s) URLs from `reconnect_urls` become links; an empty list
+  (a DHCP address) is explained instead.
+- **A refused confirm keeps the transaction open**: `409 invalid_state` means the
+  new settings are not working yet; the confirm is retried under the same key
+  until the deadline.
+- **Wi-Fi is unavailable** when its interface carries `capability_unavailable`
+  (the coprocessor is not ready) or a scan is refused with it: enabling and
+  scanning are disabled, switching an enabled Wi-Fi off is not.
 
 ## Commands
 
@@ -104,16 +133,28 @@ origin and console checks. It never touches the mock's control plane.
   interval, no-overlap, background slowdown and abort; job polling; formatting.
 - **Dictionary**: every error code of the device's table (read from the mock's
   transcription of `api_validation.c`), every field code, and every enum value
-  the overview shows has Russian text; and a TypeScript-AST scan fails on text
-  written into markup or readable attributes.
+  the overview and the network screen show has Russian text; and a
+  TypeScript-AST scan fails on text written into markup or readable attributes.
 - **Fixtures**: typed by the generated schema, and validated against
-  `openapi.json` with Ajv for what types cannot say.
+  `openapi.json` with Ajv for what types cannot say. Request bodies the network
+  screen builds are validated the same way (`src/test/schema.ts`).
 - **Components**: setup, login, 429 with Retry-After, overview with SSIDs as
   text and unavailable resources, the session ending while polling, the password
-  change with its job and key reuse.
+  change with its job and key reuse; the network screen's runtime and committed
+  cards, staging with the credential rules, 422 fields at their inputs,
+  stale_revision and busy, the scan list (duplicate SSID, hidden, enterprise,
+  truncated, markup and non-UTF-8 SSIDs, picking), Wi-Fi unavailable, apply →
+  countdown → confirm, a refused confirm and its retry, timeout and explicit
+  rollback, discard, `?txn=` and a missing transaction.
+- **Unit** (network): SSID bytes, the candidate built from the form, the
+  password action, JSON Pointer placement, reconnect links and `?txn=`.
 - **End-to-end** (Playwright, against the mock): setup from the page, the
   policy refusal, sign in / reload / sign out with the cookie's flags, the
-  password change, two browsers at once; each also checks no request left the
-  origin and the console stayed clean. One run against the board.
+  password change, two browsers at once; the network change applied and
+  confirmed, a refused gateway at its field, scan and pick, the timeout rollback
+  (`/__mock/advance`), a reconnect link opened in a second browser and rolled
+  back there, a confirm refused while `network_health=unhealthy`, and Wi-Fi with
+  the coprocessor offline. Each also checks no request left the origin and the
+  console stayed clean. One run against the board.
 
 The suites were checked with mutations; counts are in the P2 report.

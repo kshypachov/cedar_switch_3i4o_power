@@ -10,7 +10,7 @@ const password = process.env.E2E_DEVICE_PASSWORD ?? '';
 
 test.skip(!process.env.E2E_DEVICE_URL || !password, 'E2E_DEVICE_URL and E2E_DEVICE_PASSWORD are not set');
 
-test('the board serves the application, signs in, shows itself and Matter, and signs out', async ({ page, baseURL }) => {
+test('the board serves the application, signs in, shows itself, Matter and the network, and signs out', async ({ page, baseURL }) => {
   test.setTimeout(90_000);
   const watch = watchPage(page);
   await page.goto('/');
@@ -22,7 +22,7 @@ test('the board serves the application, signs in, shows itself and Matter, and s
   await page.getByRole('button', { name: t('login.submit') }).click();
   await expect(page.getByRole('heading', { name: t('overview.title') })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText('cedar_switch_3in4out_power')).toBeVisible();
-  // This firmware does not serve network or coprocessor status yet.
+  // This firmware does not serve coprocessor status yet.
   await expect(page.getByText(t('overview.unavailable')).first()).toBeVisible();
 
   // Matter is served since P3. Read-only here: opening a window on the board
@@ -31,6 +31,14 @@ test('the board serves the application, signs in, shows itself and Matter, and s
   await expect(page.getByRole('heading', { level: 1, name: t('matter.title'), exact: true })).toBeVisible();
   await expect(page.getByText(t('matter.ready')).first()).toBeVisible({ timeout: 30_000 });
   await expect(page.getByRole('button', { name: t('matter.open_submit') }).or(page.getByRole('button', { name: t('matter.close_submit') }))).toBeVisible();
+
+  // The network is served since P4. Read-only here: a change on the board
+  // moves its address, which reports/p4/hw drives outside the browser. The
+  // address this run reached the board by is one the screen shows.
+  await page.getByRole('link', { name: t('nav.network') }).click();
+  await expect(page.getByRole('heading', { level: 1, name: t('network.title'), exact: true })).toBeVisible();
+  await expect(page.getByText(t('network.dns_in_force')).first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(new URL(baseURL!).hostname).first()).toBeVisible();
 
   await page.goto('/access');
   await expect(page.getByRole('heading', { name: t('access.title') })).toBeVisible();

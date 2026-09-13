@@ -43,6 +43,11 @@ describe('the dictionary covers what the device can say', () => {
     ['InterfaceStatus', 'state', 'interface'],
     ['MatterStatus', 'state', 'matter'],
     ['CoprocessorStatus', 'state', 'coprocessor'],
+    ['Address', 'source', 'address.source'],
+    ['AccessPoint', 'security', 'wifi.security'],
+    ['NetworkTransaction', 'state', 'network.tx'],
+    ['IPv4Config', 'mode', 'network.ipv4_mode'],
+    ['DNSConfig', 'mode', 'network.dns_mode'],
   ])('%s.%s values all have text', (schema, property, prefix) => {
     for (const value of enumOf(schema, property)) {
       expect(ru, `${prefix}.${value}`).toHaveProperty(`${prefix}.${value}`);
