@@ -1,0 +1,13 @@
+tests:
+  cedar.matter_service:
+    # The core over a fake Matter platform: a hand-drained work queue, a clock
+    # the test moves, a fake window and fabric table. The sim tier from
+    # section 12 of the development plan.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - matter_service
+      - sim

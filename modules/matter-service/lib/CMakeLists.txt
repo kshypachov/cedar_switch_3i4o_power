@@ -1,0 +1,3 @@
+zephyr_library_named(matter_service)
+
+zephyr_library_sources(matter_service.c)

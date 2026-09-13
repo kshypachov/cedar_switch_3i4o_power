@@ -79,6 +79,15 @@ sets `PW_CHANNEL=` and installs Playwright's Chromium. Details in
 | `cedar.web_api_http` | web-api's adapter through Zephyr's own HTTP server over loopback, with the firmware's resource list and a generated asset table |
 | `cedar.web_assets` | the static response policy on a hand-built table |
 
+## Suites added in P3
+
+| Suite | What it drives |
+|---|---|
+| `cedar.matter_service` | matter-service's core over a fake Matter platform: a work queue the test drains by hand, a clock it moves, a fake window and fabric table |
+
+The Matter HTTP bindings are tested in `cedar.web_api` (the `test_matter_*` cases), through the
+real route table with the same kind of fake platform, and their resources in `cedar.web_api_http`.
+
 `cedar.web_api_http` runs a real server inside native_sim and talks to it over
 the loopback interface, so it needs nothing from the host network; it is also
 the slowest of the set (about 20 s of tests).

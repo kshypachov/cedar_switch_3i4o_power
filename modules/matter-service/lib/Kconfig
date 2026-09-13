@@ -1,0 +1,31 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig MATTER_SERVICE
+	bool "Matter state, commissioning window, codes and fabrics for the web interface"
+	help
+	  A snapshot of the Matter stack that any thread may read without waiting
+	  for it, and requests to open and close the commissioning window that
+	  finish on the Matter thread. No Matter types in here: the firmware's
+	  adapter reaches the SDK. See include/matter_service/matter_service.h.
+
+if MATTER_SERVICE
+
+config MATTER_SERVICE_MAX_FABRICS
+	int "Fabrics in the snapshot"
+	default 5
+	range 1 254
+	help
+	  Must not be smaller than the SDK's fabric table (CHIP_CONFIG_MAX_FABRICS,
+	  5 on Zephyr); the firmware's adapter checks that at build time, so a
+	  fabric can never be left out of the list without anyone noticing.
+
+config MATTER_SERVICE_REQUEST_SLOTS
+	int "Open and close requests waiting for the Matter thread"
+	default 4
+	range 1 16
+	help
+	  One per request accepted and not yet run. The Matter thread runs them
+	  within milliseconds, so this only bounds a burst; a request that finds
+	  every slot taken is answered "busy, retry".
+
+endif # MATTER_SERVICE
