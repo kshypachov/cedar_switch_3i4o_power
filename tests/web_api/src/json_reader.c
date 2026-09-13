@@ -365,6 +365,135 @@ ZTEST(json_reader, test_integers_are_values)
 	EXPECT_FIELDS("{\"name\":\"ab\",\"inner\":{\"level\":-6}}", {"/inner/level", "out_of_range"});
 }
 
+/*
+ * The two oneOf values of the network request, CredentialChange and a DNS
+ * server: the mock names the value, not what is wrong inside it
+ * (tools/api-contract/tests/test_mock_network.py, the malformed credential and
+ * the resolver that is not an address).
+ */
+struct credential {
+	char action[9];
+	char value[9];
+	bool value_present;
+};
+
+struct oneof_doc {
+	struct credential cred;
+	char servers[2][8];
+	size_t server_count;
+	int64_t other;
+};
+
+static const char *const actions[] = {"keep", "replace", "clear", NULL};
+
+static const struct web_json_field credential_fields[] = {
+	{.name = "action", .type = WEB_JSON_STRING, .flags = WEB_JSON_REQUIRED,
+	 .offset = offsetof(struct credential, action), .size = 9, .max_len = 8,
+	 .enum_values = actions},
+	{.name = "value", .type = WEB_JSON_STRING, .flags = WEB_JSON_PRESENT,
+	 .offset = offsetof(struct credential, value),
+	 .present_offset = offsetof(struct credential, value_present), .size = 9, .min_len = 1,
+	 .max_len = 8},
+};
+static const struct web_json_object credential_schema = {credential_fields,
+							  ARRAY_SIZE(credential_fields)};
+
+static const struct web_json_field server_field = {
+	.type = WEB_JSON_STRING, .flags = WEB_JSON_ONEOF, .offset = 0, .size = 8, .max_len = 7,
+	.format = is_dotted,
+};
+
+static const struct web_json_field oneof_fields[] = {
+	{.name = "cred", .type = WEB_JSON_OBJECT, .flags = WEB_JSON_ONEOF,
+	 .offset = offsetof(struct oneof_doc, cred), .object = &credential_schema},
+	{.name = "servers", .type = WEB_JSON_ARRAY, .offset = offsetof(struct oneof_doc, servers),
+	 .items = &server_field, .item_size = 8,
+	 .count_offset = offsetof(struct oneof_doc, server_count), .max_len = 2},
+	{.name = "other", .type = WEB_JSON_INT, .offset = offsetof(struct oneof_doc, other),
+	 .min = 0, .max = 9},
+};
+static const struct web_json_object oneof_schema = {oneof_fields, ARRAY_SIZE(oneof_fields)};
+
+static void expect_oneof(const char *json, size_t n, const char *const pairs[][2])
+{
+	struct oneof_doc o;
+
+	memset(&err, 0, sizeof(err));
+	zassert_equal(web_json_decode(json, strlen(json), &oneof_schema, &o, sizeof(o), &err),
+		      -EINVAL, "%s", json);
+	zassert_equal(err.field_count, n, "%s: %u fields", json, err.field_count);
+	for (size_t i = 0; i < n; i++) {
+		zassert_str_equal(err.fields[i].path, pairs[i][0], "%s: field %zu", json, i);
+		zassert_str_equal(api_field_code_str(err.fields[i].code), pairs[i][1],
+				  "%s: field %zu (%s)", json, i, pairs[i][0]);
+	}
+}
+
+#define EXPECT_ONEOF(json, ...)                                                                    \
+	expect_oneof(json, sizeof(FIELDS(__VA_ARGS__)) / sizeof(FIELDS(__VA_ARGS__)[0]),           \
+		     FIELDS(__VA_ARGS__))
+
+ZTEST(json_reader, test_oneof_values_are_one_conflicting_entry)
+{
+	struct oneof_doc o;
+	const char *ok = "{\"cred\":{\"action\":\"replace\",\"value\":\"secret\"},"
+			 "\"servers\":[\"1.2\",\"3.4\"]}";
+
+	memset(&err, 0, sizeof(err));
+	zassert_ok(web_json_decode(ok, strlen(ok), &oneof_schema, &o, sizeof(o), &err));
+	zassert_str_equal(o.cred.value, "secret");
+	zassert_true(o.cred.value_present);
+	zassert_equal(o.server_count, 2);
+
+	EXPECT_ONEOF("{\"cred\":{}}", {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"cred\":{\"action\":\"sometimes\"}}", {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"cred\":{\"action\":\"keep\",\"stray\":1}}", {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"cred\":{\"action\":\"replace\",\"value\":\"much too long\"}}",
+		     {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"cred\":\"keep\"}", {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"cred\":null}", {"/cred", "conflicting"});
+	EXPECT_ONEOF("{\"servers\":[\"name\",53]}", {"/servers/0", "conflicting"},
+		     {"/servers/1", "conflicting"});
+
+	/* Only the oneOf value collapses; its neighbours report as usual. */
+	EXPECT_ONEOF("{\"cred\":{\"x\":1},\"other\":10,\"extra\":1}", {"/cred", "conflicting"},
+		     {"/extra", "unknown_field"}, {"/other", "out_of_range"});
+
+	/* A syntax error inside is still a syntax error. */
+	memset(&err, 0, sizeof(err));
+	zassert_equal(web_json_decode("{\"cred\":{\"action\":}", 19, &oneof_schema, &o, sizeof(o),
+				      &err),
+		      -EBADMSG);
+}
+
+/*
+ * What a oneOf value would have reported goes entirely, including the fact that
+ * there was too much of it to collect: the value is one conflicting entry and
+ * the list is complete. Found by mutation: no oneOf value tested produced more
+ * reports than the reader collects, so keeping the truncation broke nothing.
+ */
+ZTEST(json_reader, test_a_oneof_value_does_not_leave_truncation_behind)
+{
+	struct oneof_doc o;
+	char json[512];
+	size_t pos = 0;
+
+	/* 40 unknown members inside the credential: more than the 32 collected. */
+	pos += snprintf(json + pos, sizeof(json) - pos, "{\"cred\":{");
+	for (int i = 0; i < 40; i++) {
+		pos += snprintf(json + pos, sizeof(json) - pos, "%s\"k%02d\":1", i ? "," : "", i);
+	}
+	pos += snprintf(json + pos, sizeof(json) - pos, "}}");
+	zassert_true(pos < sizeof(json));
+
+	memset(&err, 0, sizeof(err));
+	zassert_equal(web_json_decode(json, pos, &oneof_schema, &o, sizeof(o), &err), -EINVAL);
+	zassert_equal(err.field_count, 1);
+	zassert_str_equal(err.fields[0].path, "/cred");
+	zassert_equal(err.fields[0].code, API_FIELD_CONFLICTING);
+	zassert_false(err.fields_truncated, "one entry is the whole list");
+}
+
 ZTEST(json_reader, test_arrays)
 {
 	EXPECT_FIELDS("{\"name\":\"ab\",\"items\":[]}", {"/items", "out_of_range"});

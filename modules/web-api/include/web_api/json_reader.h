@@ -108,6 +108,17 @@ enum web_json_type {
 #define WEB_JSON_NULLABLE BIT(1)
 /** Presence is recorded in @ref web_json_field.present_offset. */
 #define WEB_JSON_PRESENT BIT(2)
+/**
+ * The schema's value is a `oneOf` whose branches this descriptor merges, as
+ * CredentialChange and a DNS server address are in openapi.json. Any problem
+ * inside the value — a wrong type, null, a missing or undeclared member, a bad
+ * format, a value outside an enum — is reported as one `conflicting` entry at
+ * the value itself, which is how the mock translates a oneOf no branch
+ * accepts. The caller's descriptor is deliberately wider than any one branch
+ * (an optional member only one branch has, an enum of every branch's values),
+ * and the handler checks which branch the decoded value belongs to.
+ */
+#define WEB_JSON_ONEOF BIT(3)
 
 struct web_json_object;
 

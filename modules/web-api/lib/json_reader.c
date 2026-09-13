@@ -807,7 +807,29 @@ static void read_array_field(struct reader *r, const struct web_json_field *f, v
 	}
 }
 
+static void read_value(struct reader *r, const struct web_json_field *f, void *base);
+
+/*
+ * WEB_JSON_ONEOF: whatever went wrong inside the value becomes one
+ * `conflicting` report on the value. The reports it would have made are
+ * dropped rather than kept beside it, because the mock names only the value
+ * for a oneOf no branch accepts.
+ */
 static void read_field_value(struct reader *r, const struct web_json_field *f, void *base)
+{
+	const size_t before = r->field_count;
+	const bool truncated = r->truncated;
+
+	read_value(r, f, base);
+	if ((f->flags & WEB_JSON_ONEOF) && !failed(r) &&
+	    (r->field_count != before || r->truncated != truncated)) {
+		r->field_count = before;
+		r->truncated = truncated;
+		report(r, API_FIELD_CONFLICTING);
+	}
+}
+
+static void read_value(struct reader *r, const struct web_json_field *f, void *base)
 {
 	skip_ws(r);
 	if (r->p >= r->end) {
