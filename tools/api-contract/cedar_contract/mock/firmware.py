@@ -272,9 +272,18 @@ class Coprocessor:
         self.last_update: dict[str, Any] | None = None
         self._installing_job: str | None = None
 
-    def status_json(self) -> dict[str, object]:
+    def updating(self) -> bool:
         job = self._jobs.get(self._installing_job or "")
-        updating = job is not None and not job.is_terminal
+        return job is not None and not job.is_terminal
+
+    def uart_mode(self) -> str:
+        """Who owns the UART. On the device this is coprocessor-manager's, and it
+        does not depend on whether the C6 answers over ESP-Hosted: board B's C6
+        has no firmware, and its UART still belongs to the log console."""
+        return "flashing" if self.updating() else self._scenario.uart_mode
+
+    def status_json(self) -> dict[str, object]:
+        updating = self.updating()
         ready = self._scenario.coprocessor_state == "ready"
         return {
             "state": "updating" if updating else self._scenario.coprocessor_state,
@@ -283,7 +292,7 @@ class Coprocessor:
             "host_protocol": "esp-hosted-mcu-2.0" if ready else None,
             "partition_layout_id": "cedar-c6-ota-2x1536k" if ready else None,
             "transport_ready": ready and not updating,
-            "uart_mode": "flashing" if updating else ("console" if ready else "unavailable"),
+            "uart_mode": self.uart_mode(),
             "generation": self.generation,
             "ota": {"available": False, "reason": self.OTA_REASON},
             "uart_update": {

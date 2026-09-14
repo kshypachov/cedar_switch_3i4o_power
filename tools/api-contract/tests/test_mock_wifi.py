@@ -120,6 +120,19 @@ def test_a_second_scan_while_one_runs_is_busy(harness: Harness) -> None:
     assert second.json["error"]["retryable"] is True
 
 
+def test_a_scan_is_busy_while_the_coprocessor_is_being_flashed(harness: Harness) -> None:
+    """P5 device rule: the flasher owns the chip; the USB bridge alone does not stop
+    a scan, which goes over SPI."""
+    harness.app.state.scenario.uart_mode = "flashing"
+    refused = harness.client.post("/network/wifi/scans", {})
+    assert refused.status == 409
+    assert refused.json["error"]["code"] == "busy"
+    assert "coprocessor" in refused.json["error"]["message"]
+
+    harness.app.state.scenario.uart_mode = "usb_bridge"
+    assert harness.client.post("/network/wifi/scans", {}).status == 202
+
+
 def test_a_scan_can_be_repeated_once_the_first_finished(harness: Harness) -> None:
     harness.client.post("/network/wifi/scans", {})
     harness.advance(SCANNED)

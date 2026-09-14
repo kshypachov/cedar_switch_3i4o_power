@@ -163,6 +163,25 @@ the mock had been looser than a device can be, the mock moved:
 One device rule has no mock counterpart: staging needs a link on at least one
 enabled interface, and the mock's links are always up.
 
+P5 did the same for logs and the coprocessor's UART (`mock/logs.py`,
+`Coprocessor.uart_mode()`; the device in `modules/log-store`,
+`modules/coprocessor-manager` and `src/web/api/v1`). The static ring that P1 left
+for `log-store`'s suite to test became two moving rings, because a log screen
+built against a mock with no gap and no boot change would show neither:
+
+| Rule | Why |
+|---|---|
+| `esp32_logs` is available exactly when `uart_mode` is `console`; otherwise its reason is `uart_usb_bridge`, `uart_flashing` or `uart_unavailable` (`scenario.uart_mode`) | the log follows who owns the UART, not ESP-Hosted: board B's C6 has no firmware and its ROM output is still logged |
+| `uart_mode` does not follow `coprocessor_state` (an install still reports `flashing`) | coprocessor-manager owns the UART whether or not the C6 answers |
+| The device answers `esp32_uart` and `uart_update` `available=false`, `reason="not_implemented"` until P6 | no updater yet; the mock keeps its P6 install model for the update screen |
+| Source generations: STM32 0, ESP32 the coprocessor's generation | only the C6 restarts under a running STM32 |
+| `dropped_count` counts records lost before a ring; overwrites are reported by `gap` | the device counts them separately (log core, UART overflow, ring) |
+| Two rings, one per source (`log_ring_records`), one `seq`; records arrive over clock time (`log_rate_per_s`) | a ring that never moves cannot produce a gap |
+| A cursor is bound to the boot and to the filters separately: another boot → the newest `limit` records, the current `boot_id`, `gap=true`; empty, corrupt, other filters or past the newest record → `400 invalid_cursor` | the contract's "cursor прежнего boot → текущий хвост"; the device can tell the two apart |
+| A page stops at `limit`, at 16384 bytes of JSON, or after `log_scan_budget` records looked at; a cut page has `has_more=true` and its cursor is the next record to look at, even with no items | the device builds a page in its response buffer and bounds each request's scan |
+| `contains` folds A–Z only | the device's comparison is ASCII |
+| An export marks a part the ring overwrote while it was sent with a `kind="gap"` record (`log_export_lost` stands in for that race); the text format has a header line and `# gap:` lines, and escapes CR/LF | the device streams the export from the ring |
+
 ## The control plane
 
 `/__mock/*` — outside `/api/v1`, which the device never serves, so nothing here
@@ -174,6 +193,7 @@ can be mistaken for the contract:
 | `POST /__mock/reset` | a fresh device, optionally `{"scenario": {...}}` |
 | `POST /__mock/advance` | `{"seconds": N}` skips time |
 | `POST /__mock/scenario` | change one knob without a reset |
+| `POST /__mock/reboot` | a new boot of the same device: new `boot_id`, uptime from zero, sessions, jobs, log rings and transactions gone; the password and the committed network configuration kept |
 
 It exists for two things a frontend has to handle that are otherwise unreachable
 in a test: a 120-second confirmation timeout, and the paths only a

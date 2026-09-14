@@ -56,7 +56,13 @@ class DeviceState:
         self.matter = Matter(self.clock, self.jobs, self.scenario)
         self.firmware = Firmware(self.clock, self.jobs, self.scenario)
         self.coprocessor = Coprocessor(self.clock, self.jobs, self.scenario, self.firmware)
-        self.logs = Logs(self.clock, self.boot_id)
+        self.logs = Logs(
+            self.clock,
+            self.boot_id,
+            self.scenario,
+            uart_mode=self.coprocessor.uart_mode,
+            generation=lambda: self.coprocessor.generation,
+        )
         self.idempotency: dict[str, tuple[str, dict[str, object]]] = {}
 
     def settle(self) -> None:
@@ -66,6 +72,7 @@ class DeviceState:
         self.jobs.settle_all()
         self.network.settle()
         self.matter.settle()
+        self.logs.settle()
         if self.firmware.upload is not None:
             self.firmware._settle(self.firmware.upload)
 
@@ -87,6 +94,7 @@ class DeviceState:
 
     def capabilities_json(self) -> dict[str, object]:
         ready = self.scenario.coprocessor_state == "ready"
+        logs_available, logs_reason = self.logs.esp32_availability()
         return {
             "api_version": "1",
             "features": {
@@ -96,7 +104,9 @@ class DeviceState:
                     if self.scenario.matter_state == "ready"
                     else f"the stack is {self.scenario.matter_state}",
                 },
-                "esp32_logs": {"available": ready, "reason": None if ready else "no transport"},
+                # Follows the UART's owner, as the device does: the C6's console
+                # is readable whether or not ESP-Hosted ever comes up.
+                "esp32_logs": {"available": logs_available, "reason": logs_reason},
                 # The owner's decision, and the reason the UI must display
                 # instead of a disabled placeholder control.
                 "esp32_ota": {"available": False, "reason": Coprocessor.OTA_REASON},

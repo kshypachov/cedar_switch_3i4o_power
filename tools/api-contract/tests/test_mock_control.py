@@ -114,4 +114,19 @@ def test_an_unknown_scenario_key_is_refused(harness: Harness) -> None:
 
 
 def test_an_unknown_control_endpoint_is_not_found(harness: Harness) -> None:
-    assert _control(harness, "POST", "reboot").status == 404  # type: ignore[attr-defined]
+    assert _control(harness, "POST", "shutdown").status == 404  # type: ignore[attr-defined]
+
+
+def test_reboot_is_a_new_boot_of_the_same_device(harness: Harness) -> None:
+    """For the log screen's boot change: a new boot_id and uptime from zero, RAM
+    state gone, the password and the committed network configuration kept."""
+    before = harness.client.get("/system/status").json
+    revision = harness.client.get("/network/config").json["revision"]
+    harness.advance(30)
+    _control(harness, "POST", "reboot")
+    assert harness.client.get("/system/status").status == 401, "sessions live in RAM"
+    assert harness.client.login().status == 200
+    after = harness.client.get("/system/status").json
+    assert after["boot_id"] != before["boot_id"]
+    assert int(after["uptime_ms"]) == 0
+    assert harness.client.get("/network/config").json["revision"] == revision

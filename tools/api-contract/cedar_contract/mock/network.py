@@ -216,6 +216,11 @@ class Network:
         """
         if tx.state != "staged":
             raise error("invalid_state", f"A transaction in state {tx.state!r} cannot be applied")
+        if self._scenario.uart_mode in ("usb_bridge", "flashing"):
+            # DEVICE RULE (P5, plan section 3): an apply and USB programming or a
+            # coprocessor update exclude each other. The device claims against
+            # coprocessor-manager after the state check and before the journal.
+            raise error("busy", COPROCESSOR_TAKEN)
 
         def applied() -> None:
             if tx.state == "applying":
@@ -478,6 +483,13 @@ class Network:
 
 
 _PENDING_STATES = frozenset({"staged", "applying", "awaiting_confirmation", "rolling_back"})
+
+#: The device's message when coprocessor-manager refuses an apply or a scan
+#: (modules/network-manager/lib/network_manager.c).
+COPROCESSOR_TAKEN = (
+    "The Wi-Fi coprocessor is taken by its USB bridge, a firmware update or a reset; "
+    "retry when it is back"
+)
 
 
 def _usable_host(address: ipaddress.IPv4Address, network: ipaddress.IPv4Network) -> bool:

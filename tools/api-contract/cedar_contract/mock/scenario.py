@@ -42,6 +42,20 @@ class Scenario:
     matter_state: str = "ready"
     #: "offline" | "starting" | "ready" | "updating" | "recovering" | "failed"
     coprocessor_state: str = "ready"
+    #: "console" | "usb_bridge" | "flashing" | "unavailable": who owns the C6's
+    #: UART. `esp32_logs` follows it, not the ESP-Hosted transport (board B's C6
+    #: has no firmware and its ROM output is still logged). An install job
+    #: reports "flashing" while it runs whatever this says.
+    uart_mode: str = "console"
+    #: Log records appended per second of clock time; 0 keeps the rings still.
+    log_rate_per_s: float = 0
+    #: Records each ring (STM32, ESP32) keeps before it overwrites the oldest.
+    log_ring_records: int = 10_000
+    #: Records a page may look at; the device bounds each request's scan.
+    log_scan_budget: int = 1_000_000
+    #: Records of an export's snapshot overwritten while it was being sent,
+    #: which the export marks with a `gap` record.
+    log_export_lost: int = 0
     #: "ethernet" | "wifi". "wifi" makes an install request fail the contract's
     #: `ethernet_required` precondition, which the mock cannot observe for real.
     install_transport: str = "ethernet"
