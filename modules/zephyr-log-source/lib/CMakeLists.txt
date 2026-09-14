@@ -1,0 +1,3 @@
+zephyr_library_named(zephyr_log_source)
+
+zephyr_library_sources(zephyr_log_source.c)

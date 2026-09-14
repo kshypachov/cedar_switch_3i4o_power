@@ -1,0 +1,14 @@
+tests:
+  cedar.esp32_log_source:
+    # The line assembler of the ESP32 log source: fragments, idle flush, ANSI,
+    # invalid UTF-8, long lines, ESP-IDF levels and the ROM stream captured from
+    # board B. The UART interrupt and a real C6 are the hardware tier's
+    # (docs/device-development/reports/p5).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - esp32_log_source
+      - sim

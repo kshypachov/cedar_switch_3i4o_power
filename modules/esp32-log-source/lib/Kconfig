@@ -1,0 +1,24 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig ESP32_LOG_SOURCE
+	bool "ESP32-C6 UART bytes to log lines"
+	help
+	  The pure line assembler behind the ESP32 log source: line ends,
+	  ANSI stripping, UTF-8 repair, the 512-byte cap, idle flush of a
+	  partial line and ESP-IDF level parsing. The UART interrupt and the
+	  store are the board's coprocessor service. See
+	  include/esp32_log_source/esp32_log_source.h.
+
+if ESP32_LOG_SOURCE
+
+config ESP32_LOG_SOURCE_IDLE_FLUSH_MS
+	int "Flush a partial line after this long without a byte, in ms"
+	default 250
+	range 10 10000
+	help
+	  At 115200 baud a byte takes under 0.1 ms, and the C6 ROM prints each
+	  line in one go, so a quarter of a second of silence means the line
+	  is not going to be finished: a prompt, or output cut by a reset. The
+	  value is passed to esp32_log_init() by the caller.
+
+endif # ESP32_LOG_SOURCE
