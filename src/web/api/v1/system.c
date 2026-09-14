@@ -63,7 +63,9 @@ void v1_get_system_status(struct web_api_call *call)
  */
 #define UPLOAD_CHUNK_BYTES       16384 /* firmware-store, P6 */
 #define UPLOAD_MAX_BYTES         (2 * 1024 * 1024) /* firmware-store, P6 */
-#define LOG_PAGE_RECORDS         100   /* log-store, P5 */
+/* The most a page returns (logs.c). A page may return fewer when the response
+ * buffer or the scan budget runs out first, and says so with has_more. */
+#define LOG_PAGE_RECORDS         100
 
 #if defined(CONFIG_NETWORK_MANAGER)
 #define SCAN_RECORDS         CONFIG_NETWORK_MANAGER_SCAN_MAX_RESULTS
@@ -101,14 +103,18 @@ void v1_get_capabilities(struct web_api_call *call)
 	web_json_string(w, "1");
 
 	/* Every feature answers from what this build serves, not from what the
-	 * hardware might do. Matter is available once its stack runs; the others
-	 * have no API yet (plan section 10). */
+	 * hardware might do. Matter is available once its stack runs. ESP32 logs
+	 * follow the UART's owner, not ESP-Hosted: a C6 with no firmware still
+	 * prints its ROM, and a working transport says nothing about who reads
+	 * the UART. The UART updater is P6, OTA outside the first version. */
 	web_json_key(w, "features");
 	web_json_object_begin(w);
 	matter_service_get_status(&matter);
 	feature(w, "matter", matter.state == MATTER_STATE_READY,
 		matter.state == MATTER_STATE_READY ? NULL : matter_state_str(matter.state));
-	feature(w, "esp32_logs", false, "not_implemented");
+	const char *esp32_logs_reason = v1_esp32_logs_unavailable_reason(NULL);
+
+	feature(w, "esp32_logs", esp32_logs_reason == NULL, esp32_logs_reason);
 	feature(w, "esp32_ota", false, "not_implemented");
 	feature(w, "esp32_uart", false, "not_implemented");
 	web_json_object_end(w);

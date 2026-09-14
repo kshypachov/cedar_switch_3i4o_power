@@ -43,4 +43,8 @@ WEB_API_V1_ROUTE(applyNetworkTransaction, POST, "/network/transactions/{transact
 WEB_API_V1_ROUTE(confirmNetworkTransaction, POST, "/network/transactions/{transaction_id}/confirm", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_confirm_network_transaction)
 WEB_API_V1_ROUTE(scanWiFi, POST, "/network/wifi/scans", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_scan_wifi)
 WEB_API_V1_ROUTE(getWiFiScan, GET, "/network/wifi/scans/{job_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_wifi_scan)
+WEB_API_V1_ROUTE(getLogSources, GET, "/logs/sources", 0, V1_NO_BODY, NULL, NULL, v1_get_log_sources)
+WEB_API_V1_ROUTE(getLogRecords, GET, "/logs/records", 0, V1_NO_BODY, NULL, v1_log_records_query, v1_get_log_records)
+WEB_API_V1_ROUTE(exportLogs, GET, "/logs/export", 0, V1_NO_BODY, NULL, v1_log_export_query, v1_export_logs)
+WEB_API_V1_ROUTE(getCoprocessorStatus, GET, "/coprocessor/status", 0, V1_NO_BODY, NULL, NULL, v1_get_coprocessor_status)
 /* clang-format on */

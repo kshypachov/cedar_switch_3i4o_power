@@ -10,6 +10,8 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/matter-service
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/device-config-store
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/network-manager
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/log-store
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/coprocessor-manager
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -24,6 +26,7 @@ target_sources(app PRIVATE
     src/main.c
     src/middleware.c
     src/v1.c
+    src/v1_logs.c
     src/json_reader.c
     src/json_writer.c
     ../fakes/fake_iface.c
@@ -33,4 +36,6 @@ target_sources(app PRIVATE
     ${V1_DIR}/system.c
     ${V1_DIR}/matter.c
     ${V1_DIR}/network.c
+    ${V1_DIR}/logs.c
+    ${V1_DIR}/coprocessor.c
 )
