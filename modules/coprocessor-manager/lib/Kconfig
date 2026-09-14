@@ -1,0 +1,57 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig COPROCESSOR_MANAGER
+	bool "Owner of the ESP32-C6's UART and its EN/BOOT lines"
+	help
+	  One owner of USART3 at a time (console, USB bridge, flasher), the
+	  stop-wait-hand-over switch between them, the C6's reset and the
+	  generation it starts, and the claims that keep a network apply or
+	  scan from colliding with them. The record kinds it writes come from
+	  log_store.h; the log-store module must be registered, but its library
+	  is not required. See include/coprocessor_manager/coprocessor_manager.h.
+
+if COPROCESSOR_MANAGER
+
+config COPROCESSOR_MANAGER_RX_STOP_TIMEOUT_MS
+	int "How long a receive interrupt may take to go quiet, ms"
+	default 100
+	range 10 5000
+	help
+	  After the owner's handler is removed, the interrupt counter must stop
+	  moving within this time or the switch fails with -ETIMEDOUT and the
+	  old owner keeps the UART.
+
+config COPROCESSOR_MANAGER_RX_QUIET_STEP_MS
+	int "Interval between two looks at the receive counter, ms"
+	default 5
+	range 1 100
+	help
+	  The counter has to be unchanged over two consecutive intervals, so a
+	  switch whose interrupt stops at once takes twice this long. That is
+	  the switching time the owner asked to keep small.
+
+config COPROCESSOR_MANAGER_RESET_WINDOW_MS
+	int "How long a ROM banner counts as the reset that was just made, ms"
+	default 3000
+	range 0 60000
+	help
+	  A banner later than this after the manager's own reset (or after
+	  init, when the ESP-Hosted driver has just reset the chip) means the
+	  C6 restarted by itself and starts a generation.
+
+config COPROCESSOR_MANAGER_EN_PULSE_MS
+	int "EN held low for a reset, ms"
+	default 100
+	help
+	  For the board adapter's c6_reset(). The sequence of
+	  src/plugin_wifi/wifi.c, which is the one known to work on this board.
+
+config COPROCESSOR_MANAGER_BOOT_HOLD_MS
+	int "BOOT strap held after EN is released for a download reset, ms"
+	default 200
+	help
+	  For the board adapter's c6_reset(download). The 200 ms of
+	  src/plugin_wifi/wifi.c; esp-serial-flasher's 50 ms default was never
+	  exercised on this board.
+
+endif # COPROCESSOR_MANAGER
