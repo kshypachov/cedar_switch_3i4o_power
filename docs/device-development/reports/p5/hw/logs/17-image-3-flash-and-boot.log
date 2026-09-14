@@ -1,0 +1,16 @@
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/p5/image-3.signed.bin sha256 cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d
+J-Link reset rc=0
+recovery did not answer; USB serials seen: [('/dev/cu.usbmodem0009410000241', '000941000024'), ('/dev/cu.usbmodem11201', '2037394C3543501200210047'), ('/dev/cu.usbmodem11201', '3543501200210047'), ('/dev/cu.usbmodem11203', '3543501200210047'), ('/dev/cu.usbmodem21103', '002F002B3233510739363634'), ('/dev/cu.usbmodem21301', '2037394C3543501200550045'), ('/dev/cu.usbmodem5AE60208891', '5AE6020889')]
+console:
+] [0m<inf> io: Start io outputs task[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.831,000] [0m<inf> device_config_store: configuration loaded, revision 8[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.831,000] [0m<inf> network_service: network configuration revision 8: clean (632 ms)[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.832,000] [0m<inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.108,000] [0m<inf> network_service: boot 1 of 5 in a row shorter than 30 s[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.109,000] [0m<inf> network_service: worker stack: 4928 of 8192 bytes never used[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.293,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.514,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.659,000] [0m<inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4582fe45da06-dirty, frontend 0.1.0+4582fe45da06-dirty, boot_5013a91913fdb061[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.668,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.084,000] [0m<inf> matter: Init CHIP stack[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

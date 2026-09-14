@@ -585,3 +585,56 @@ ZTEST(middleware, test_body_limit_lookup)
 	zassert_equal(web_api_body_limit(&test_router, WEB_API_DELETE, "/api/v1/things/x"), 0);
 	zassert_equal(web_api_body_limit(&test_router, WEB_API_PUT, "/api/v1/nowhere"), 0);
 }
+
+/* -- query values (web_api_query_get) ----------------------------------- */
+
+static int query_value(const char *query, const char *name, char *out, size_t cap)
+{
+	const struct web_api_request req = {.query = query};
+
+	return web_api_query_get(&req, name, out, cap);
+}
+
+ZTEST(middleware, test_query_get_decodes_form_encoding)
+{
+	char v[16];
+
+	zassert_equal(query_value("a=1&contains=x+y%2Az", "contains", v, sizeof(v)), 5);
+	zassert_str_equal(v, "x y*z");
+	zassert_equal(query_value("contains=%41%62", "contains", v, sizeof(v)), 2);
+	zassert_str_equal(v, "Ab", "two hex digits are one byte");
+	zassert_equal(query_value("contains=100%", "contains", v, sizeof(v)), 4);
+	zassert_str_equal(v, "100%", "a percent sign without two hex digits is itself");
+	zassert_equal(query_value("contains=%4", "contains", v, sizeof(v)), 2);
+	zassert_str_equal(v, "%4");
+	zassert_equal(query_value("contains=%zz", "contains", v, sizeof(v)), 3);
+	zassert_str_equal(v, "%zz");
+}
+
+ZTEST(middleware, test_query_get_finds_the_named_parameter)
+{
+	char v[16];
+
+	zassert_equal(query_value("limit=5", "lim", v, sizeof(v)), -ENOENT,
+		      "a name is not a prefix of another");
+	zassert_equal(query_value("lim=1&limit=5", "limit", v, sizeof(v)), 1);
+	zassert_str_equal(v, "5");
+	zassert_equal(query_value("a=1&b=2&c=3", "c", v, sizeof(v)), 1);
+	zassert_str_equal(v, "3", "the last parameter is found");
+	zassert_equal(query_value("a=1&b=2", "c", v, sizeof(v)), -ENOENT);
+	zassert_equal(query_value("", "a", v, sizeof(v)), -ENOENT);
+	zassert_equal(query_value("cursor=", "cursor", v, sizeof(v)), 0);
+	zassert_str_equal(v, "", "present and empty");
+	zassert_equal(query_value("cursor", "cursor", v, sizeof(v)), 0, "a name without '='");
+}
+
+ZTEST(middleware, test_query_get_bounds)
+{
+	char v[4];
+
+	zassert_equal(query_value("a=abc", "a", v, sizeof(v)), 3, "exactly fits with its NUL");
+	zassert_str_equal(v, "abc");
+	zassert_equal(query_value("a=abcd", "a", v, sizeof(v)), -ENOSPC);
+	zassert_equal(query_value("a=%00", "a", v, sizeof(v)), -EINVAL, "no NUL inside a C string");
+	zassert_equal(query_value("a=x", "a", v, 0), -ENOSPC);
+}

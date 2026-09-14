@@ -1,0 +1,260 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.41,
+   "step": "login",
+   "ms": 2973
+  },
+  {
+   "t": 3.52,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "269685",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.64,
+   "step": "status before",
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 317,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 9.27,
+   "step": "shell: console -> usb_bridge",
+   "answer": "coproc mode bridge: 0 in 100 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "usb_bridge",
+    "generation": 326,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   },
+   "sources": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": false,
+      "reason": "uart_usb_bridge",
+      "generation": 326,
+      "dropped_count": "11"
+     }
+    ]
+   }
+  },
+  {
+   "t": 14.31,
+   "step": "host reads the CDC for 5 s",
+   "port": "/dev/cu.usbmodem11201",
+   "bytes": 58284,
+   "sample": "fnvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xff"
+  },
+  {
+   "t": 116.2,
+   "step": "host not reading the CDC for 60 s",
+   "samples": [
+    {
+     "ping_ms": null,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": 17.226,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": null,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": 17.511,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": null,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": 17.286,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": null,
+     "http": 200,
+     "shell": false
+    },
+    {
+     "ping_ms": 17.392,
+     "http": 200,
+     "shell": false
+    },
+    {
+     "ping_ms": 16.957,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": 18.062,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": null,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "ping_ms": 27.672,
+     "http": 200,
+     "shell": true
+    }
+   ],
+   "coproc": "bridge dropped to host 113190, to chip 0; host bytes discarded 0"
+  },
+  {
+   "t": 116.59,
+   "step": "shell: usb_bridge -> console",
+   "answer": "coproc mode console: 0 in 11 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 327,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 118.85,
+   "step": "shell: console -> flashing (stand-in)",
+   "answer": "coproc mode flashing: 0 in 11 ms",
+   "status": {
+    "state": "updating",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "flashing",
+    "generation": 331,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   },
+   "capabilities": {
+    "available": false,
+    "reason": "uart_flashing"
+   }
+  },
+  {
+   "t": 122.01,
+   "step": "shell: flashing -> console",
+   "answer": "coproc mode console: 0 in 11 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 332,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 125.05,
+   "step": "markers",
+   "markers": [
+    [
+     "reset",
+     327,
+     "UART returned to the log"
+    ]
+   ]
+  },
+  {
+   "t": 127.27,
+   "step": "DTR high",
+   "mode": "usb_bridge",
+   "seconds": 2.11
+  },
+  {
+   "t": 128.74,
+   "step": "DTR low",
+   "mode": "console",
+   "seconds": 1.46
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

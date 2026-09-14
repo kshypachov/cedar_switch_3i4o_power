@@ -39,6 +39,8 @@ struct slot {
 	struct http_client_ctx *client;
 	bool active;
 	bool responded;
+	/** A streamed body has pieces left; the server's next call asks for one. */
+	bool streaming;
 	size_t limit;
 	char url[CONFIG_HTTP_SERVER_MAX_URL_LENGTH + 1];
 	char content_type[CONFIG_HTTP_SERVER_MAX_CONTENT_TYPE_LENGTH + 1];
@@ -93,6 +95,8 @@ static struct slot *slot_take(struct http_client_ctx *client)
 		s->active = true;
 		s->client = client;
 		s->responded = false;
+		s->streaming = false;
+		web_api_stream_end(&s->ctx);
 	}
 	k_mutex_unlock(&slots_lock);
 
@@ -105,6 +109,10 @@ static void slot_release(struct http_client_ctx *client)
 	struct slot *s = slot_find(client);
 
 	if (s != NULL) {
+		/* A client that went away mid-export: the stream's end runs here,
+		 * so nothing it pinned outlives the connection. */
+		web_api_stream_end(&s->ctx);
+		s->streaming = false;
 		s->active = false;
 		s->client = NULL;
 		/* The body may have carried a password. */
@@ -254,7 +262,31 @@ static void accumulate(struct slot *s, const struct http_request_ctx *rq)
 	req->body_received += rq->data_len;
 }
 
-static void answer(struct slot *s, struct http_response_ctx *rsp)
+/*
+ * The next piece of a streamed body. The server sends status and headers with
+ * the first piece only and ignores them afterwards, and it reads a piece with
+ * no status, no headers and no body as the end of the response - which is why
+ * web_api_stream_next_t never returns an empty piece that is not the last.
+ */
+static int pull(struct slot *s, struct http_response_ctx *rsp)
+{
+	bool final;
+	int rc = web_api_stream_pull(&s->ctx, &final);
+
+	s->streaming = rc == 0 && !final;
+	if (rc < 0) {
+		/* Closing the connection mid-body is how the client learns the
+		 * body is incomplete: the terminating chunk never comes. */
+		return rc;
+	}
+	rsp->body = (const uint8_t *)s->ctx.rsp.body;
+	rsp->body_len = s->ctx.rsp.body_len;
+	rsp->final_chunk = final;
+
+	return 0;
+}
+
+static int answer(struct slot *s, struct http_response_ctx *rsp)
 {
 	const struct web_api_response *r = &s->ctx.rsp;
 	size_t n = MIN(r->header_count, (size_t)WEB_API_MAX_RESPONSE_HEADERS);
@@ -268,10 +300,36 @@ static void answer(struct slot *s, struct http_response_ctx *rsp)
 	rsp->status = r->status;
 	rsp->headers = s->rsp_headers;
 	rsp->header_count = n;
+	s->responded = true;
+	if (web_api_stream_active(&s->ctx)) {
+		return pull(s, rsp);
+	}
 	rsp->body = (const uint8_t *)r->body;
 	rsp->body_len = r->body_len;
 	rsp->final_chunk = true;
-	s->responded = true;
+
+	return 0;
+}
+
+/*
+ * The server writes with blocking send() from its only thread; see
+ * CONFIG_WEB_API_HTTP_SEND_TIMEOUT_MS.
+ */
+static void limit_send_time(struct http_client_ctx *client)
+{
+#if defined(CONFIG_NET_CONTEXT_SNDTIMEO)
+	if (CONFIG_WEB_API_HTTP_SEND_TIMEOUT_MS > 0) {
+		const struct zsock_timeval tv = {
+			.tv_sec = CONFIG_WEB_API_HTTP_SEND_TIMEOUT_MS / 1000,
+			.tv_usec = (CONFIG_WEB_API_HTTP_SEND_TIMEOUT_MS % 1000) * 1000,
+		};
+
+		(void)zsock_setsockopt(client->fd, ZSOCK_SOL_SOCKET, ZSOCK_SO_SNDTIMEO, &tv,
+				       sizeof(tv));
+	}
+#else
+	ARG_UNUSED(client);
+#endif
 }
 
 int web_api_http_callback(const struct web_api_router *router, web_api_http_other_t other,
@@ -291,6 +349,11 @@ int web_api_http_callback(const struct web_api_router *router, web_api_http_othe
 	s = slot_find(client);
 	k_mutex_unlock(&slots_lock);
 
+	if (s != NULL && s->streaming) {
+		/* The server calls again for the next piece of the same response. */
+		return pull(s, response_ctx);
+	}
+
 	if (s == NULL || s->responded) {
 		s = slot_take(client);
 		if (s == NULL) {
@@ -298,6 +361,7 @@ int web_api_http_callback(const struct web_api_router *router, web_api_http_othe
 			return -ENOMEM;
 		}
 		begin_request(s, router, client, request_ctx);
+		limit_send_time(client);
 	}
 
 	if (client->method == HTTP_POST || client->method == HTTP_PUT ||
@@ -325,7 +389,6 @@ int web_api_http_callback(const struct web_api_router *router, web_api_http_othe
 		memset(&s->ctx.rsp, 0, sizeof(s->ctx.rsp));
 		s->ctx.rsp.status = 404;
 	}
-	answer(s, response_ctx);
 
-	return 0;
+	return answer(s, response_ctx);
 }

@@ -1,0 +1,93 @@
+# image sha256 9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+[m
+[1;32muart:~$ [mI: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 54 ad 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 54 ad 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: 0 ab 11 2 78 c9 1 70 60 93 11 2 ec e 0 70
+I: c4 92 11 2 48 93 11 2 0 0 0 0 88 c4 13 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+[m
+[1;32muart:~$ [m[8D[J[00:00:01.671,000] [1;33m<wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.671,000] [1;31m<err> mb85rsxx: invalid device ID: 00 00 00 00[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.671,000] [1;31m<err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)[0m
+[1;32muart:~$ [m[8D[J[00:00:01.671,000] [0m<inf> eth_w5500: ETH_W5500: interrupt mode[0m
+[1;32muart:~$ [m[8D[J[00:00:01.680,000] [0m<inf> eth_w5500: W5500 Initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.681,000] [0m<inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.681,000] [0m<inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.681,000] [0m<inf> spi_nor: SPI_FLASH: 16 MiBy flash[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.788,000] [1;31m<err> esp_hosted_mcu: coprocessor WifiInit failed[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.791,000] [1;31m<err> net_if: Iface 0x20002fe0 device not ready[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.792,000] [1;31m<err> net_ethernet: Invalid MAC address for iface 1 (0x20002ea8)[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.793,000] [0m<inf> littlefs: LittleFS version 2.11, disk version 2.1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.794,000] [0m<inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.794,000] [0m<inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.031,000] [0m<inf> shell_telnet: Telnet shell backend initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.033,000] [0m<inf> main_app: Start main app (build: Sep 14 2026 02:01:36) version 8[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.033,000] [0m<inf> main_app: PSRAM @0x7025d690: write/read 1024 words OK[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.923,000] [0m<inf> settings_registry: 10 keys registered, 0 rejected[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.923,000] [0m<inf> io: Start io init[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.929,000] [0m<inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.930,000] [0m<inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.930,000] [0m<inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.938,000] [0m<inf> io: Start io outputs task[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.292,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.514,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.621,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.643,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.644,000] [0m<inf> matter: Matter start work already submitted[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.975,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.177,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.378,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.546,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.547,000] [0m<inf> matter: Matter start work already submitted[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.943,000] [0m<inf> device_config_store: configuration loaded, revision 8[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.943,000] [0m<inf> network_service: network configuration revision 8: clean (6004 ms)[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.944,000] [0m<inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.173,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.374,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.558,000] [0m<inf> network_service: boot 1 of 5 in a row shorter than 30 s[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.559,000] [0m<inf> network_service: worker stack: 4872 of 8192 bytes never used[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.256,000] [0m<inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4582fe45da06-dirty, frontend 0.1.0+4582fe45da06-dirty, boot_de52a0fd9dcfe770[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.265,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.703,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.904,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.105,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.307,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.689,000] [0m<inf> matter: Init CHIP stack[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.308,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.315,000] [0m<inf> network_manager: default route via ethernet[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.732,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.933,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:21.004,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.421,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.622,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.823,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.313,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.515,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.716,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.312,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.513,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.714,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.975,000] [0m<inf> chip: [SVR]Initializing session resumption storage...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.978,000] [0m<inf> chip: [SVR]Server initializing...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.978,000] [0m<dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:35.264,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:35.465,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

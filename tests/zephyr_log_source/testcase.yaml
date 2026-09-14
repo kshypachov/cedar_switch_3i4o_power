@@ -1,0 +1,15 @@
+tests:
+  cedar.zephyr_log_source:
+    # The Zephyr log backend over the real deferred log core and the real
+    # log-store: formatting, levels and modules, the 512-byte cut, dropped
+    # accounting, no recursion, panic. That the shell and telnet backends keep
+    # working beside it is the hardware tier's (docs/device-development/reports/p5).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - zephyr_log_source
+      - log_store
+      - sim

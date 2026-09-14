@@ -1,0 +1,11 @@
+[+    0.44] ==== host: device up
+[+    2.48] ==== host: login
+[+    2.58] ==== host: system
+[+    2.69] coproc logs
+[+    2.69] stm32: records 183, used 19000 of 262144 B, appended 183, overwritten 0, lost backend 0, lost uart 0
+[+    2.69] esp32: records 4378, used 262140 of 262144 B, appended 60763, overwritten 56385, lost backend 0, lost uart 4
+[+    2.69] lock: append hold max 19098 us, append wait max 697406 us, read hold max 342 us
+[+    2.69] next seq 60947
+[+    2.79] [1;32muart:~$ [mcoproc burst 1000120
+[+  182.76] ==== host: burst sent
+[+  256.58] ==== host: burst accounted

@@ -262,6 +262,30 @@ static int fake_wifi_scan(void *ctx, struct network_scan_results *out)
 	return 0;
 }
 
+static int fake_exclusive_claim(void *ctx, enum network_exclusive what)
+{
+	struct fake_net *fn = ctx;
+
+	if (fn->refuse_claim[what] != 0) {
+		fn->refused[what]++;
+		return fn->refuse_claim[what];
+	}
+	fn->claims[what]++;
+
+	return 0;
+}
+
+static void fake_exclusive_release(void *ctx, enum network_exclusive what)
+{
+	struct fake_net *fn = ctx;
+
+	if (fn->releases[what] >= fn->claims[what]) {
+		fn->unbalanced_releases++;
+		return;
+	}
+	fn->releases[what]++;
+}
+
 void fake_net_init(struct fake_net *fn)
 {
 	memset(fn, 0, sizeof(*fn));
@@ -296,5 +320,7 @@ void fake_net_bind(struct fake_net *fn, struct network_iface_ops *ops)
 	ops->get_dns = fn->no_get_dns ? NULL : fake_get_dns;
 	ops->set_default = fn->no_set_default ? NULL : fake_set_default;
 	ops->wifi_scan = fn->no_radio ? NULL : fake_wifi_scan;
+	ops->exclusive_claim = fn->exclusive_hooks ? fake_exclusive_claim : NULL;
+	ops->exclusive_release = fn->exclusive_hooks ? fake_exclusive_release : NULL;
 	ops->ctx = fn;
 }

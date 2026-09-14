@@ -1,0 +1,23 @@
+[+    0.53] ==== host: device up
+[+    3.85] ==== host: login
+[+    3.96] ==== host: system
+[+    5.01] ==== host: export started, client stops reading
+[+   14.74] [8D[J[00:02:37.501,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   14.85] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:40.012,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   14.85] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:40.213,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   14.85] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:40.415,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   17.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:53.105,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0[0m
+[+   18.98] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:55.080,000] [1;33m<wrn> net_if: Skipped 2 messages[0m
+[+   18.98] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:55.080,000] [1;33m<wrn> net_if: iface 1 pkt 0x7017b718 send failure status -5[0m
+[+   21.75] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:57.869,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   22.90] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:58.940,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0[0m
+[+   26.32] ==== host: other client during the stall
+[+   26.32] ==== host: stalled client reads again
+[+   26.61] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+[+   26.61] Uptime: 183694 ms
+[+   26.61] ==== host: shell during
+[+   26.72] [1;32muart:~$ [mcoproc logs
+[+   26.72] stm32: records 115, used 11676 of 262144 B, appended 115, overwritten 0, lost backend 0, lost uart 0
+[+   26.72] esp32: records 4390, used 262100 of 262144 B, appended 42134, overwritten 37744, lost backend 0, lost uart 11
+[+   26.72] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 401 us
+[+   26.72] next seq 42255

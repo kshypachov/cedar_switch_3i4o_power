@@ -1,0 +1,192 @@
+{
+ "steps": [
+  {
+   "t": 0.44,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.47,
+   "step": "login",
+   "ms": 3021
+  },
+  {
+   "t": 3.58,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "80270",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.7,
+   "step": "/logs/sources",
+   "status": 200,
+   "ms": 114,
+   "schema": [],
+   "body": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 111,
+      "dropped_count": "3"
+     }
+    ]
+   }
+  },
+  {
+   "t": 3.84,
+   "step": "/capabilities",
+   "status": 200,
+   "ms": 141,
+   "schema": [],
+   "body": {
+    "api_version": "1",
+    "features": {
+     "matter": {
+      "available": false,
+      "reason": "starting"
+     },
+     "esp32_logs": {
+      "available": true,
+      "reason": null
+     },
+     "esp32_ota": {
+      "available": false,
+      "reason": "not_implemented"
+     },
+     "esp32_uart": {
+      "available": false,
+      "reason": "not_implemented"
+     }
+    },
+    "limits": {
+     "json_body_bytes": 8192,
+     "upload_chunk_bytes": 16384,
+     "upload_max_bytes": 2097152,
+     "log_page_records": 100,
+     "scan_records": 64,
+     "commissioning_min_seconds": 180,
+     "commissioning_max_seconds": 900,
+     "network_confirm_min_seconds": 60,
+     "network_confirm_max_seconds": 300
+    },
+    "wifi_security_modes": [
+     "open",
+     "wpa2_psk",
+     "wpa3_sae"
+    ],
+    "firmware_formats": [
+     "raw_app"
+    ],
+    "update_requires_ethernet": true
+   }
+  },
+  {
+   "t": 3.98,
+   "step": "/coprocessor/status",
+   "status": 200,
+   "ms": 144,
+   "schema": [],
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 111,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 4.95,
+   "step": "page",
+   "status": 200,
+   "ms": 954,
+   "schema": [],
+   "items": 69,
+   "sources": [
+    "esp32"
+   ],
+   "ordered": true,
+   "has_more": true,
+   "gap": false,
+   "bytes": 17816,
+   "first": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 111,
+     "seq": "26738",
+     "uptime_ms": "79892",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 111,
+     "seq": "26739",
+     "uptime_ms": "79892",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    }
+   ],
+   "last": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 111,
+     "seq": "26805",
+     "uptime_ms": "80065",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 111,
+     "seq": "26806",
+     "uptime_ms": "80065",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    }
+   ]
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

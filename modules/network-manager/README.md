@@ -155,6 +155,37 @@ not have finished — and the deadline decides when waiting has gone on too long
   connecting is asked to join again, five seconds after it dropped and then
   twice as late each time, up to a minute.
 
+## The coprocessor's other owners
+
+The ESP32-C6 that carries Wi-Fi also has a UART, which coprocessor-manager
+hands to a USB bridge or a flasher (P5). Plan section 3 makes an apply
+exclusive with those and with a manual reset of the chip, and a scan exclusive
+with flashing. Two optional hooks in `struct network_iface_ops` carry this
+module's half; the board adapter maps them to `coprocessor_manager_claim()` and
+`coprocessor_manager_release()`, and this module never includes that header.
+
+- **Claim-then-check.** An apply claims once it is otherwise acceptable (the
+  transaction exists, is staged, the timeout is in range) and before its job or
+  journal exists; a scan claims after the "change in progress" and "scan
+  running" checks. coprocessor-manager marks a switch or a reset first and then
+  reads the claims, so of two conflicting operations at most one proceeds.
+- **A refusal is `409 busy` and leaves nothing behind**: the candidate stays
+  `staged`, there is no job under the Idempotency-Key and no journal, so a retry
+  once the UART is back is a new request, not a replay of the refusal. A request
+  that is wrong for another reason gets that reason; the claim is not asked.
+- **Given back on every end.** An apply's claim is released in `finish()` —
+  committed, rolled back on request or by timeout, failed on the adapter, the
+  commit or the journal — and on the job-creation paths that create nothing. A
+  scan's is released when its results are in, when it fails, or when an apply
+  accepted before it ran overtakes it. A replay by key answers before the claim,
+  so it never claims twice. `network_manager_init()` releases whatever the
+  previous run held.
+- The hooks come as a pair or not at all (`-EINVAL`); without them everything
+  is granted, which is the sim tier's and P4's behaviour. They run with the
+  mutex held and must not block.
+- `network_manager_restore_defaults()` does not claim: it runs at boot, from the
+  five-short-boots rule, before a bridge or a flasher can exist.
+
 ## Status
 
 `network_get_status()` reports each interface as the adapter observes it —

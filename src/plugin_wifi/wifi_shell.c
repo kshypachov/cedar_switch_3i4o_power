@@ -30,8 +30,8 @@ static int cmd_wifi_ctrl_reset(const struct shell *sh, size_t argc, char **argv)
 }
 
 SHELL_STATIC_SUBCMD_SET_CREATE(wifi_ctrl_cmds,
-	SHELL_CMD(init, NULL, "Run wifi_init()", cmd_wifi_ctrl_init),
-	SHELL_CMD(reset, NULL, "Pulse ESP32 reset pin: low->delay->high.", cmd_wifi_ctrl_reset),
+	SHELL_CMD(init, NULL, "Run wifi_init(): reset the C6 into its ROM loader (via coprocessor-manager)", cmd_wifi_ctrl_init),
+	SHELL_CMD(reset, NULL, "Reset the C6 into its firmware (EN pulse via coprocessor-manager).", cmd_wifi_ctrl_reset),
 	SHELL_SUBCMD_SET_END
 );
 

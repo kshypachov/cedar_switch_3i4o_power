@@ -143,6 +143,20 @@ void v1_confirm_network_transaction(struct web_api_call *call);
 void v1_rollback_network_transaction(struct web_api_call *call);
 void v1_scan_wifi(struct web_api_call *call);
 void v1_get_wifi_scan(struct web_api_call *call);
+void v1_get_log_sources(struct web_api_call *call);
+void v1_get_log_records(struct web_api_call *call);
+void v1_export_logs(struct web_api_call *call);
+void v1_get_coprocessor_status(struct web_api_call *call);
+
+/* Query parameters of the log operations, for routes.h (logs.c). */
+extern const char *const v1_log_records_query[];
+extern const char *const v1_log_export_query[];
+
+/**
+ * Why ESP32 logs are unavailable - the UART's owner is not the console, or
+ * the store has not started - or NULL; @p generation gets the C6's (logs.c).
+ */
+const char *v1_esp32_logs_unavailable_reason(uint32_t *generation);
 
 /** The identity given to web_api_v1_init(). */
 const struct web_api_v1_identity *v1_identity(void);

@@ -1,0 +1,3 @@
+zephyr_library_named(esp32_log_source)
+
+zephyr_library_sources(esp32_log_source.c)

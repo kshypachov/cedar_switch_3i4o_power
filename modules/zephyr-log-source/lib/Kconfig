@@ -1,0 +1,42 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig ZEPHYR_LOG_SOURCE
+	bool "Zephyr log backend that feeds log-store"
+	depends on LOG && LOG_MODE_DEFERRED && LOG_STORE
+	select LOG_OUTPUT
+	help
+	  Every message the Zephyr log core processes becomes an STM32 record
+	  in log-store: level and module from the message, the text without
+	  timestamp, level or source prefix. Runs on the log processing thread;
+	  never logs. See include/zephyr_log_source/zephyr_log_source.h.
+
+	  The log core reports dropped messages to backends only once
+	  CONFIG_LOG_FAILURE_REPORT_PERIOD has passed since a moment it moves
+	  forward on every processed message (log_core.c), so with the default
+	  of 1000 the report stops arriving on a busy system. Set it to 0 for
+	  the dropped count to be delivered.
+
+if ZEPHYR_LOG_SOURCE
+
+config ZEPHYR_LOG_SOURCE_RAW_MAX
+	int "Formatted message bytes kept before sanitising"
+	default 1024
+	range 512 8192
+	help
+	  A message is formatted into this buffer, then made valid UTF-8 and
+	  cut to 512 bytes. Replacement characters are three bytes and runs of
+	  them collapse, so twice the record's text is enough for anything a
+	  record can hold; a longer message is marked truncated.
+
+config ZEPHYR_LOG_SOURCE_INIT_STORE
+	bool "Initialise log-store at POST_KERNEL"
+	default y
+	help
+	  The backend reports itself not ready until log-store is initialised,
+	  and the log core polls a backend that was not ready from its
+	  processing thread. Initialising the store before any thread runs
+	  means the thread finds it ready on its first pass and no message
+	  written during boot is processed without this backend. Does nothing
+	  if the store is already initialised.
+
+endif # ZEPHYR_LOG_SOURCE

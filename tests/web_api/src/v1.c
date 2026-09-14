@@ -319,6 +319,7 @@ static void before(void *f)
 	harness_reset();
 	matter_reset();
 	network_reset();
+	v1_coprocessor_fake_init();
 	cookie[0] = '\0';
 	csrf[0] = '\0';
 }
@@ -660,7 +661,7 @@ ZTEST(v1, test_capabilities)
 		body,
 		"{\"api_version\":\"1\",\"features\":{"
 		"\"matter\":{\"available\":false,\"reason\":\"not_ready\"},"
-		"\"esp32_logs\":{\"available\":false,\"reason\":\"not_implemented\"},"
+		"\"esp32_logs\":{\"available\":true,\"reason\":null},"
 		"\"esp32_ota\":{\"available\":false,\"reason\":\"not_implemented\"},"
 		"\"esp32_uart\":{\"available\":false,\"reason\":\"not_implemented\"}},"
 		"\"limits\":{\"json_body_bytes\":8192,\"upload_chunk_bytes\":16384,"

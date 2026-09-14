@@ -1,0 +1,63 @@
+{
+ "steps": [
+  {
+   "t": 1.44,
+   "step": "device up",
+   "seconds": 1.1
+  },
+  {
+   "t": 4.37,
+   "step": "login",
+   "ms": 2926
+  },
+  {
+   "t": 4.48,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "400349",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 4.96,
+   "step": "reset",
+   "i": 0,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 10.18,
+   "step": "reset",
+   "i": 1,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 15.42,
+   "step": "reset",
+   "i": 2,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 20.6,
+   "step": "reset",
+   "i": 3,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 25.73,
+   "step": "reset",
+   "i": 4,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 46.71,
+   "step": "after",
+   "generation_before": 347,
+   "generation_after": 382,
+   "reset_markers": 1,
+   "banners": 1,
+   "faults": [],
+   "ping_ms": 32.002,
+   "http": 200
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

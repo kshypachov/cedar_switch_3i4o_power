@@ -1,0 +1,48 @@
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/p5/image-4.signed.bin sha256 2e2f30b52e14d4f97610f128300914946ac4a1ef1d5d7c6f881ce553fbea4ec8
+J-Link reset rc=0
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 367 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 52602ab31e791d7c4d6a28935424afb6c6e676976368f8cd0704638ecb82c6f3
+Split status: N/A (0)
+
+32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:22.399,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.245,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.252,000] [0m<dbg> chip.LogV: [DL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.257,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.258,000] [0m<inf> chip: [ZCL]Endpoint 1 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.262,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.264,000] [0m<inf> chip: [ZCL]Endpoint 2 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.267,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.267,000] [0m<inf> chip: [ZCL]Endpoint 3 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.271,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.465,000] [0m<inf> chip: [ZCL]Endpoint 4 On/off already set to new value[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.489,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000130000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x0000000000003A61[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.247,000] [0m<inf> chip: [DMG]AccessControlCluster: initializing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.250,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.262,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.268,000] [0m<inf> chip: [IN]CASE Server enabling CASE session setups[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.270,000] [0m<dbg> chip.LogV: [IN]SecureSession[0x70001730]: Allocated Type:2 LSID:15804[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.271,000] [0m<dbg> chip.LogV: [SC]Allocated SecureSession (0x70001730) - waiting for Sigma1 msg[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.272,000] [0m<inf> chip: [SVR]Joining Multicast groups[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.274,000] [0m<dbg> chip.LogV: [ZCL]Emitting StartUp event[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.280,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000130001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x000000000000415F[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.281,000] [0m<inf> chip: [SVR]Server initialization complete[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.500,000] [0m<inf> chip: [SVR]Server Listening...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.500,000] [0m<inf> matter: Matter stack initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.503,000] [0m<inf> matter: Matter event loop started[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.504,000] [0m<inf> matter_event_loop: Init io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.505,000] [0m<inf> matter_event_loop: Start io_to_matter_stream[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.506,000] [0m<inf> chip: [DL]CHIP task running[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.509,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:25.517,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:27.389,000] [1;33m<wrn> matter_service_chip: generating the onboarding codes took 1865 ms on the Matter thread[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:27.392,000] [1;31m<err> chip: [DL]Long dispatch time: 1869 ms, for event type 2[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.479,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.680,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:32.621,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

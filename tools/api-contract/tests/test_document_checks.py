@@ -299,5 +299,5 @@ def test_unreadable_duplicate_and_resource_problems_are_found(document: Document
                                lambda r: r.replace('WEB_API_V1_RESOURCE(web_api_06_jobs, "/api/v1/jobs/*")\n', ""))
     assert "no server resource for /api/v1/jobs/*" in messages
     messages = _route_findings(document, tmp_path, lambda t: t,
-                               lambda r: r + 'WEB_API_V1_RESOURCE(web_api_99, "/api/v1/logs/records")\n')
-    assert "resource /api/v1/logs/records has no route" in messages
+                               lambda r: r + 'WEB_API_V1_RESOURCE(web_api_99, "/api/v1/firmware/uploads")\n')
+    assert "resource /api/v1/firmware/uploads has no route" in messages

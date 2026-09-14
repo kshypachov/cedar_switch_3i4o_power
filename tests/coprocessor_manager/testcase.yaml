@@ -1,0 +1,15 @@
+tests:
+  cedar.coprocessor_manager:
+    # The UART ownership automaton over a fake UART, EN line and clock: the sim
+    # tier of section 12 (ownership, a receive interrupt that will not stop,
+    # mutual exclusion with network operations). Real EN/BOOT, a real C6 reset
+    # and switching on the board are the hardware tier's
+    # (docs/device-development/reports/p5).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - coprocessor_manager
+      - sim

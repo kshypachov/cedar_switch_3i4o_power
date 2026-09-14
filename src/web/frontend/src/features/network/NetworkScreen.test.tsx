@@ -90,6 +90,7 @@ describe('network: state and form', () => {
       t('nav.overview'),
       t('nav.matter'),
       t('nav.network'),
+      t('nav.logs'),
       t('nav.access'),
     ]);
 

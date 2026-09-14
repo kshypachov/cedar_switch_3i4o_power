@@ -17,7 +17,7 @@ from ..errors import error
 from .clock import Clock
 from .constants import QUEUE_MS, SCAN_RECORDS, WIFI_SCAN_MS
 from .jobs import JobStore, Step
-from .network import Network
+from .network import COPROCESSOR_TAKEN, Network
 from .scenario import Scenario
 from .util import detail
 
@@ -129,6 +129,10 @@ class WiFiScans:
             job = self._jobs.get(job_id)
             if job is not None and not job.is_terminal:
                 raise error("busy", "A Wi-Fi scan is already running")
+        if self._scenario.uart_mode == "flashing":
+            # DEVICE RULE (P5, plan section 3): no scan while the coprocessor is
+            # being flashed; the USB bridge alone does not stop one.
+            raise error("busy", COPROCESSOR_TAKEN)
         failed = self._scenario.wifi_scan == "failed"
         job = self._jobs.create(
             "wifi_scan",

@@ -20,8 +20,9 @@ const python = process.env.PYTHON ?? (existsSync(workspacePython) ? workspacePyt
 const contractTool = resolve(here, '../../../tools/api-contract');
 const dist = resolve(here, 'dist');
 
-// E2E_DEVICE_URL=http://192.168.88.14 runs e2e/device.spec.ts against the board
-// instead of the mock suites against the mock.
+// E2E_DEVICE_URL=http://<board address> with E2E_DEVICE_PASSWORD runs e2e/device.spec.ts
+// against that board instead of the mock suites against the mock. Check the address
+// is the board you mean: two benches share one network (reports/p5/hw).
 const device = process.env.E2E_DEVICE_URL;
 
 export default defineConfig({

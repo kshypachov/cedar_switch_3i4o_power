@@ -18,6 +18,7 @@
 #include <zephyr/ztest.h>
 
 #include <job_manager/job_manager.h>
+#include <log_store/log_store.h>
 #include <web_api/web_api_http.h>
 #include <web_assets/web_assets.h>
 #include <web_auth/web_auth.h>
@@ -617,4 +618,217 @@ ZTEST(web_api_http, test_query_is_not_part_of_the_path)
 	exchange("GET /network/wifi?tab=scan HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
 	zassert_equal(status(), 200, "navigation with a query still gets the page");
 	zassert_true(has("<div id=\"root\">"));
+}
+
+/* -- the log export, streamed through the real server --------------------- */
+
+static char export_cookie[64];
+
+static void sign_in_for_logs(void)
+{
+	char token[64], req[512];
+
+	exchange("GET /api/v1/auth/state HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
+	zassert_true(json_value("setup_token", token, sizeof(token)), "%s", rsp);
+	snprintf(req, sizeof(req),
+		 "POST /api/v1/auth/setup HTTP/1.1\r\nHost: 127.0.0.1:8080\r\n"
+		 "Origin: http://127.0.0.1:8080\r\nX-Setup-Token: %s\r\n"
+		 "Content-Type: application/json\r\nContent-Length: 32\r\n\r\n"
+		 "{\"password\":\"a fine password\"}  ",
+		 token);
+	exchange(req);
+	zassert_equal(status(), 201, "%s", rsp);
+	zassert_true(header_value("Set-Cookie: cedar_session=", export_cookie,
+				  sizeof(export_cookie)));
+}
+
+/* @p n records of @p len bytes of text in the STM32 ring. */
+static void fill_logs(int n, size_t len)
+{
+	static char text[LOG_STORE_TEXT_MAX + 1];
+
+	zassert_ok(log_store_init());
+	memset(text, 'e', len);
+	text[len] = '\0';
+	for (int i = 0; i < n; i++) {
+		const struct log_store_entry e = {
+			.source = LOG_STORE_STM32,
+			.level = LOG_STORE_LEVEL_INFO,
+			.module = "burst",
+			.module_len = 5,
+			.text = text,
+			.text_len = len,
+		};
+
+		zassert_ok(log_store_append(&e));
+	}
+}
+
+static void send_export(int fd, const char *query)
+{
+	char req[256];
+
+	snprintf(req, sizeof(req),
+		 "GET /api/v1/logs/export%s HTTP/1.1\r\nHost: 127.0.0.1\r\nCookie: cedar_session=%s\r\n\r\n",
+		 query, export_cookie);
+	send_str(fd, req);
+}
+
+/* Read a whole streamed response, counting instead of keeping it. */
+struct streamed {
+	size_t bytes;
+	int records;
+	bool terminated;
+	char head[512];
+};
+
+static void read_stream(int fd, struct streamed *out, int64_t timeout_ms)
+{
+	char buf[1024];
+	char tail[16] = {0};
+	/* A record is counted by the part a chunk boundary cannot split twice. */
+	const char needle[] = "\"kind\":\"message\"";
+	char carry[sizeof(needle)] = {0};
+	int64_t start = k_uptime_get();
+
+	memset(out, 0, sizeof(*out));
+	while (k_uptime_get() - start < timeout_ms) {
+		int n = zsock_recv(fd, buf, sizeof(buf) - 1, 0);
+
+		if (n == 0) {
+			break;
+		}
+		if (n < 0) {
+			if (out->terminated) {
+				break;
+			}
+			continue;
+		}
+		buf[n] = '\0';
+		if (out->bytes < sizeof(out->head) - 1) {
+			size_t k = MIN((size_t)n, sizeof(out->head) - 1 - out->bytes);
+
+			memcpy(&out->head[out->bytes], buf, k);
+		}
+		/* Join the previous read's end to this one's start. */
+		char joined[sizeof(carry) + sizeof(buf)];
+
+		snprintf(joined, sizeof(joined), "%s%s", carry, buf);
+		for (const char *p = strstr(joined, needle); p != NULL; p = strstr(p + 1, needle)) {
+			if ((size_t)(p - joined) + sizeof(needle) - 1 > strlen(carry)) {
+				out->records++;
+			}
+		}
+		size_t jl = strlen(joined);
+		size_t keep = MIN(jl, sizeof(carry) - 1);
+
+		memcpy(carry, &joined[jl - keep], keep);
+		carry[keep] = '\0';
+		keep = MIN(jl, sizeof(tail) - 1);
+		memcpy(tail, &joined[jl - keep], keep);
+		tail[keep] = '\0';
+		out->bytes += (size_t)n;
+		out->terminated = strstr(tail, "0\r\n\r\n") != NULL;
+	}
+}
+
+ZTEST(web_api_http, test_log_export_is_streamed_in_chunks)
+{
+	struct streamed s;
+	struct timeval tv = {.tv_sec = 1};
+	int fd;
+
+	sign_in_for_logs();
+	fill_logs(300, 300);
+
+	fd = client();
+	zsock_setsockopt(fd, ZSOCK_SOL_SOCKET, ZSOCK_SO_RCVTIMEO, &tv, sizeof(tv));
+	send_export(fd, "?max_records=300");
+	read_stream(fd, &s, 10000);
+	zsock_close(fd);
+
+	zassert_true(strstr(s.head, "HTTP/1.1 200") == s.head, "%s", s.head);
+	zassert_not_null(strstr(s.head, "Transfer-Encoding: chunked"), "%s", s.head);
+	zassert_not_null(strstr(s.head, "Content-Type: application/x-ndjson"), "%s", s.head);
+	zassert_not_null(strstr(s.head, "Content-Disposition: attachment; filename=\"cedar-logs.ndjson\""));
+	zassert_not_null(strstr(s.head, "X-Request-ID: "));
+	zassert_equal(s.records, 300, "every record once: %d", s.records);
+	zassert_true(s.bytes > 3 * CONFIG_WEB_API_RESPONSE_BODY_MAX, "%zu", s.bytes);
+	zassert_true(s.terminated, "the terminating chunk came");
+	wait_contexts_released();
+	zassert_equal(web_api_http_contexts_in_use(), 0);
+}
+
+ZTEST(web_api_http, test_log_export_abandoned_by_its_client_releases_the_context)
+{
+	char buf[512];
+	int fd;
+
+	sign_in_for_logs();
+	fill_logs(400, 400);
+
+	fd = client();
+	send_export(fd, "");
+	zassert_true(zsock_recv(fd, buf, sizeof(buf), 0) > 0);
+	zsock_close(fd);
+
+	wait_contexts_released();
+	zassert_equal(web_api_http_contexts_in_use(), 0, "the stream ended with its connection");
+	exchange("GET /api/v1/auth/state HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
+	zassert_equal(status(), 200, "%s", rsp);
+}
+
+/*
+ * A browser tab frozen mid-export stops reading. The server writes from its
+ * one thread with blocking sends, so without a send timeout every other client
+ * would wait on that tab. Measures how long another client waits.
+ */
+ZTEST(web_api_http, test_stalled_export_client_does_not_hold_the_server)
+{
+	struct timeval tv = {.tv_sec = 5};
+	int64_t start;
+	int64_t waited;
+	int stalled;
+	int other;
+
+	sign_in_for_logs();
+	fill_logs(600, 400);
+
+	stalled = client();
+	send_export(stalled, "");
+	/* Long enough for the server to fill the stalled client's window. */
+	k_msleep(300);
+
+	other = client();
+	zsock_setsockopt(other, ZSOCK_SOL_SOCKET, ZSOCK_SO_RCVTIMEO, &tv, sizeof(tv));
+	start = k_uptime_get();
+	send_str(other, "GET /api/v1/auth/state HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
+	rsp_len = zsock_recv(other, rsp, sizeof(rsp) - 1, 0);
+	waited = k_uptime_get() - start;
+	rsp[MAX(rsp_len, 0)] = '\0';
+	zsock_close(other);
+
+	TC_PRINT("another client waited %lld ms behind the stalled export\n", waited);
+	zassert_equal(status(), 200, "served at all: %s", rsp);
+	zassert_true(waited < CONFIG_WEB_API_HTTP_SEND_TIMEOUT_MS + 1500,
+		     "within the send timeout: %lld ms", waited);
+
+	zsock_close(stalled);
+	wait_contexts_released();
+	zassert_equal(web_api_http_contexts_in_use(), 0);
+}
+
+ZTEST(web_api_http, test_log_page_fits_the_response_buffer)
+{
+	char req[256];
+
+	sign_in_for_logs();
+	fill_logs(100, 500);
+	snprintf(req, sizeof(req),
+		 "GET /api/v1/logs/records?limit=100 HTTP/1.1\r\nHost: 127.0.0.1\r\nCookie: cedar_session=%s\r\n\r\n",
+		 export_cookie);
+	exchange(req);
+	zassert_equal(status(), 200, "%s", rsp);
+	zassert_true(has("\"has_more\":true"), "cut by bytes, not by limit");
+	zassert_true(rsp_closed || rsp_len < (int)sizeof(rsp) - 1, "the page arrived whole");
 }

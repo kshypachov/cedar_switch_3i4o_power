@@ -298,6 +298,21 @@ struct network_scan_results {
 };
 
 /**
+ * Network operations another owner of the Wi-Fi coprocessor may have to
+ * exclude. On the board the ESP32-C6's UART can be handed to a USB bridge or a
+ * flasher, and plan section 3 makes those exclusive with an apply, and a
+ * flasher with a scan too.
+ */
+enum network_exclusive {
+	/** A transaction from its apply until it is committed, rolled back or failed. */
+	NETWORK_EXCLUSIVE_APPLY = 0,
+	/** A scan from its acceptance until its results are in. */
+	NETWORK_EXCLUSIVE_SCAN,
+
+	NETWORK_EXCLUSIVE_COUNT
+};
+
+/**
  * @brief The interface adapter, injected.
  *
  * Everything that touches hardware lives behind this. The sim tier supplies a
@@ -363,6 +378,23 @@ struct network_iface_ops {
 	 * unavailable.
 	 */
 	int (*wifi_scan)(void *ctx, struct network_scan_results *out);
+	/**
+	 * Optional, together with @ref exclusive_release. Claim the coprocessor
+	 * for @p what before it starts: asked once an apply or a scan is
+	 * otherwise acceptable, and before its job or journal exists. A negative
+	 * return refuses the request with 409 busy and leaves nothing behind.
+	 * Called with the module's mutex held, from the requesting thread: must
+	 * not block and must not call back. On the board it maps to
+	 * coprocessor-manager's claims.
+	 */
+	int (*exclusive_claim)(void *ctx, enum network_exclusive what);
+	/**
+	 * End a granted claim: an apply's when its transaction reaches committed,
+	 * rolled_back or failed, a scan's when its results are in or it failed.
+	 * Also for whatever is held when network_manager_init() starts over.
+	 * Same calling rules as @ref exclusive_claim.
+	 */
+	void (*exclusive_release)(void *ctx, enum network_exclusive what);
 	void *ctx;
 };
 

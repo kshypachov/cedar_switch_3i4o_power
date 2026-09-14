@@ -1,0 +1,234 @@
+{
+ "steps": [
+  {
+   "t": 0.44,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.14,
+   "step": "login",
+   "ms": 2697
+  },
+  {
+   "t": 3.24,
+   "step": "system",
+   "boot_id": "boot_82a8b65de6391875",
+   "uptime_ms": "61704",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 4.01,
+   "step": "telnet: coproc burst 3000 120"
+  },
+  {
+   "t": 4.56,
+   "step": "C6 reset through EN",
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 28.33,
+   "step": "read live",
+   "records": 1565,
+   "by_source": {
+    "stm32": 21,
+    "esp32": 1544
+   },
+   "kinds": [
+    "message",
+    "reset"
+   ],
+   "ordered": true,
+   "unique": true,
+   "burst": 19,
+   "burst_numbers_missing": 0,
+   "resets": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 98,
+     "seq": "24816",
+     "uptime_ms": "62209",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 restarted by itself",
+     "truncated": false,
+     "kind": "reset"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 99,
+     "seq": "24960",
+     "uptime_ms": "62967",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 reset through EN",
+     "truncated": false,
+     "kind": "reset"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 100,
+     "seq": "25310",
+     "uptime_ms": "70624",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 restarted by itself",
+     "truncated": false,
+     "kind": "reset"
+    }
+   ],
+   "banner": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 97,
+     "seq": "24814",
+     "uptime_ms": "62208",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "ESP-ROM:esp32c6-20220919",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 99,
+     "seq": "25229",
+     "uptime_ms": "70612",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "ESP-ROM:esp32c6-20220919",
+     "truncated": false,
+     "kind": "message"
+    }
+   ],
+   "sample_stm32": [
+    {
+     "source": "stm32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 0,
+     "seq": "24861",
+     "uptime_ms": "61334",
+     "wall_time": null,
+     "level": "error",
+     "module": "eth_w5500",
+     "message": "W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "stm32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 0,
+     "seq": "24892",
+     "uptime_ms": "61535",
+     "wall_time": null,
+     "level": "error",
+     "module": "eth_w5500",
+     "message": "W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "stm32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 0,
+     "seq": "24961",
+     "uptime_ms": "62902",
+     "wall_time": null,
+     "level": "info",
+     "module": "coprocessor_service",
+     "message": "burst 2599 of 3000 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "truncated": false,
+     "kind": "message"
+    }
+   ],
+   "sample_esp32": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 97,
+     "seq": "24580",
+     "uptime_ms": "62032",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 97,
+     "seq": "24581",
+     "uptime_ms": "62032",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_82a8b65de6391875",
+     "source_generation": 97,
+     "seq": "24582",
+     "uptime_ms": "62032",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    }
+   ]
+  },
+  {
+   "t": 28.99,
+   "step": "the STM32 burst, source=stm32",
+   "pages": 1,
+   "records": 36,
+   "burst": 34,
+   "burst_numbers_missing": 0,
+   "gap": false,
+   "first": "burst 2599 of 3000 bbbbbbbbbbbbbbbbbbbbb",
+   "last": "burst 2632 of 3000 bbbbbbbbbbbbbbbbbbbbb",
+   "seconds_since_burst": 25.4,
+   "shell_answer": "stm32: records 147, used 16952 of 262144 B, appended 147, overwritten 0, lost backend 2598, lost uart 0"
+  },
+  {
+   "t": 29.08,
+   "step": "sources",
+   "body": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "2598"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 107,
+      "dropped_count": "5"
+     }
+    ]
+   }
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

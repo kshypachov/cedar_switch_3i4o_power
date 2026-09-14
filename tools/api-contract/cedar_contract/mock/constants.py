@@ -44,6 +44,12 @@ JSON_BODY_BYTES = 8_192
 UPLOAD_CHUNK_BYTES = 16_384
 UPLOAD_MAX_BYTES = 2_097_152
 LOG_PAGE_RECORDS = 100
+#: The device builds a log page in its response buffer
+#: (CONFIG_WEB_API_RESPONSE_BODY_MAX); a page stops before the record that
+#: would not fit.
+LOG_PAGE_BYTES = 16_384
+#: Room the device keeps for the cursor while it fills that buffer.
+LOG_CURSOR_RESERVE = 64
 SCAN_RECORDS = 64
 
 

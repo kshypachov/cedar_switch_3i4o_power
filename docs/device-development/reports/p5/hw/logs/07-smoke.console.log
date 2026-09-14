@@ -1,0 +1,15 @@
+[+    0.44] ==== host: device up
+[+    3.47] ==== host: login
+[+    3.58] ==== host: system
+[+    3.70] ==== host: /logs/sources
+[+    3.84] ==== host: /capabilities
+[+    3.98] ==== host: /coprocessor/status
+[+    4.95] ==== host: page
+[+    5.02] coproc logs
+[+    5.02] stm32: records 94, used 9228 of 262144 B, appended 94, overwritten 0, lost backend 0, lost uart 0
+[+    5.02] esp32: records 4386, used 262144 of 262144 B, appended 26743, overwritten 22357, lost backend 0, lost uart 3
+[+    5.02] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 317 us
+[+    5.02] next seq 26838
+[+    5.12] [1;32muart:~$ [m[8D[J[00:01:16.603,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0[0m
+[+    5.12] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:18.880,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    5.22] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:19.082,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m

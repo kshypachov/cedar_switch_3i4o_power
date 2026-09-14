@@ -38,4 +38,8 @@ WEB_API_V1_RESOURCE(web_api_15_network_transaction_confirm, "/api/v1/network/tra
 WEB_API_V1_RESOURCE(web_api_16_network_transaction, "/api/v1/network/transactions/*")
 WEB_API_V1_RESOURCE(web_api_17_network_wifi_scans, "/api/v1/network/wifi/scans")
 WEB_API_V1_RESOURCE(web_api_18_network_wifi_scan, "/api/v1/network/wifi/scans/*")
+WEB_API_V1_RESOURCE(web_api_19_logs_sources, "/api/v1/logs/sources")
+WEB_API_V1_RESOURCE(web_api_20_logs_records, "/api/v1/logs/records")
+WEB_API_V1_RESOURCE(web_api_21_logs_export, "/api/v1/logs/export")
+WEB_API_V1_RESOURCE(web_api_22_coprocessor_status, "/api/v1/coprocessor/status")
 /* clang-format on */

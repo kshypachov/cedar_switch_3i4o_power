@@ -68,6 +68,26 @@ struct web_api_v1_network {
  */
 void web_api_v1_set_network(const struct web_api_v1_network *network);
 
+/** What the coprocessor bindings need from the board's coprocessor service. */
+struct web_api_v1_coprocessor {
+	/**
+	 * The firmware version ESP-Hosted reported, as text ("v1.4.1"), into
+	 * @p buf; false when unknown.
+	 */
+	bool (*firmware_version)(char *buf, size_t cap);
+	/** The C6 has sent at least one byte on its UART since boot. */
+	bool (*rx_seen)(void);
+};
+
+/**
+ * @brief Connect the coprocessor bindings to their service.
+ *
+ * Without it the status still answers from coprocessor-manager, with the
+ * version unknown and a chip that has never spoken. @p coprocessor must
+ * outlive the program.
+ */
+void web_api_v1_set_coprocessor(const struct web_api_v1_coprocessor *coprocessor);
+
 #ifdef __cplusplus
 }
 #endif

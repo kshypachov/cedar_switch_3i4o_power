@@ -1,0 +1,27 @@
+tests:
+  cedar.log_store:
+    # The rings, cursors and readers with 4 KiB rings, so a wrap costs a
+    # hundred appends: section 12's log-store row (wrap, gap, stale cursor,
+    # boot change, filters, global seq, bounded export, slow reader). Runs in
+    # the Linux container - see tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - log_store
+      - sim
+  cedar.log_store.production_sizes:
+    # The same suite at the firmware's ring sizes.
+    extra_configs:
+      - CONFIG_LOG_STORE_STM32_KIB=256
+      - CONFIG_LOG_STORE_ESP32_KIB=256
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - log_store
+      - sim

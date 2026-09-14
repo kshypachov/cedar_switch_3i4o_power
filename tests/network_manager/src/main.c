@@ -2291,6 +2291,313 @@ ZTEST(network_manager, test_scan_with_an_absent_coprocessor_is_unavailable)
 	zassert_equal(net.scan_calls, 0);
 }
 
+/* --- the coprocessor's other owners -------------------------------------- */
+
+/*
+ * On the board the ESP32-C6 that carries Wi-Fi also has a UART, which
+ * coprocessor-manager hands to a USB bridge or a flasher. Plan section 3 makes
+ * an apply exclusive with those and a scan with the flasher, and both sides
+ * claim before they start. These hold network-manager to its half: ask only
+ * for an otherwise acceptable request, refuse as busy without leaving a job
+ * or a journal, and give the claim back on every way the work can end.
+ */
+
+static void with_exclusive_hooks(void)
+{
+	net.exclusive_hooks = true;
+	bring_up();
+}
+
+static unsigned int held(enum network_exclusive what)
+{
+	zassert_true(net.claims[what] >= net.releases[what]);
+	return net.claims[what] - net.releases[what];
+}
+
+ZTEST(network_manager, test_an_apply_the_coprocessor_refuses_is_busy_and_changes_nothing)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+	struct device_config_pending_info pending;
+	char first[JOB_ID_MAX_LEN + 1];
+
+	with_exclusive_hooks();
+	zassert_ok(stage(&in, &err, &txn));
+	net.refuse_claim[NETWORK_EXCLUSIVE_APPLY] = -EBUSY;
+
+	zassert_equal(network_apply(txn.id, 0, "apply-key-0123456789", 3, &err, first), -EBUSY);
+	zassert_equal(err.code, API_ERR_BUSY);
+	zassert_equal(net.refused[NETWORK_EXCLUSIVE_APPLY], 1);
+	zassert_ok(network_transaction_get(txn.id, &txn));
+	zassert_equal(txn.state, NETWORK_TXN_STAGED, "the candidate can still be applied later");
+	zassert_false(txn.has_job);
+	zassert_ok(device_config_pending_info_get(&pending));
+	zassert_false(pending.present, "no journal was written");
+	(void)network_manager_process();
+	zassert_equal(net.eth.configure_calls, 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+
+	net.refuse_claim[NETWORK_EXCLUSIVE_APPLY] = 0;
+	zassert_ok(network_apply(txn.id, 0, "apply-key-0123456789", 3, &err, job),
+		   "the refusal left nothing under the key to be replayed");
+	zassert_equal(job_state_of(job), JOB_STATE_RUNNING);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1);
+}
+
+ZTEST(network_manager, test_a_bad_apply_is_refused_for_what_is_wrong_without_asking)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+
+	with_exclusive_hooks();
+	zassert_ok(stage(&in, &err, &txn));
+	net.refuse_claim[NETWORK_EXCLUSIVE_APPLY] = -EBUSY;
+
+	zassert_equal(apply(txn.id, 5, &err), -EINVAL);
+	zassert_equal(err.code, API_ERR_VALIDATION_FAILED, "busy would hide the real mistake");
+	zassert_equal(apply("txn_does_not_exist", 0, &err), -EINVAL);
+	zassert_equal(err.code, API_ERR_NOT_FOUND);
+	zassert_equal(net.refused[NETWORK_EXCLUSIVE_APPLY], 0, "nothing was asked");
+}
+
+ZTEST(network_manager, test_an_apply_holds_its_claim_until_it_is_committed)
+{
+	struct network_config_input in = valid_input();
+	struct network_transaction txn;
+
+	with_exclusive_hooks();
+	apply_to_awaiting(&in, &txn);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1, "applied and unconfirmed: still the change");
+
+	confirm_and_commit(&txn);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_APPLY], 1);
+	zassert_equal(net.unbalanced_releases, 0);
+}
+
+ZTEST(network_manager, test_every_other_end_of_an_apply_gives_its_claim_back)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+
+	with_exclusive_hooks();
+
+	/* Rolled back on request. */
+	apply_to_awaiting(&in, &txn);
+	zassert_ok(rollback(txn.id, &err));
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1,
+		      "the committed configuration is still being put back");
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_ROLLED_BACK);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+
+	/* Rolled back because nobody confirmed. */
+	apply_to_awaiting(&in, &txn);
+	advance_seconds(CONFIG_NETWORK_MANAGER_CONFIRM_TIMEOUT_SECONDS);
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_ROLLED_BACK);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+
+	/* The interfaces refused the candidate. */
+	zassert_ok(stage(&in, &err, &txn));
+	zassert_ok(apply(txn.id, 0, &err));
+	net.fail_configure = -EIO;
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_FAILED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+
+	/* The commit could not be written (the first commit lands in slot A). */
+	apply_to_awaiting(&in, &txn);
+	zassert_ok(confirm(txn.id, &err));
+	storage.fail_write_slot = DEVICE_CONFIG_SLOT_COMMITTED_A;
+	storage.fail_write_errno = -EIO;
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_FAILED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_APPLY], 4);
+	zassert_equal(net.unbalanced_releases, 0);
+}
+
+ZTEST(network_manager, test_a_journal_that_cannot_be_written_gives_its_claim_back)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+
+	with_exclusive_hooks();
+	zassert_ok(stage(&in, &err, &txn));
+	storage.fail_write_slot = DEVICE_CONFIG_SLOT_PENDING;
+
+	zassert_equal(apply(txn.id, 0, &err), -EINVAL);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_FAILED);
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_APPLY], 1);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+}
+
+ZTEST(network_manager, test_an_apply_repeated_with_its_key_claims_once)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+	char first[JOB_ID_MAX_LEN + 1];
+
+	with_exclusive_hooks();
+	zassert_ok(stage(&in, &err, &txn));
+	zassert_ok(network_apply(txn.id, 0, "apply-key-0123456789", 11, &err, first));
+	zassert_ok(network_apply(txn.id, 0, "apply-key-0123456789", 11, &err, job));
+	zassert_str_equal(first, job);
+	zassert_true(network_manager_process() > 0);
+	zassert_ok(network_apply(txn.id, 0, "apply-key-0123456789", 11, &err, job));
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_APPLY], 1, "a replay is not a second change");
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1);
+}
+
+ZTEST(network_manager, test_a_scan_the_coprocessor_refuses_is_busy)
+{
+	struct api_error err;
+
+	with_exclusive_hooks();
+	net.refuse_claim[NETWORK_EXCLUSIVE_SCAN] = -EBUSY;
+
+	zassert_equal(network_scan_begin("scan-key-0123456789", 3, &err, job), -EBUSY);
+	zassert_equal(err.code, API_ERR_BUSY);
+	(void)network_manager_process();
+	zassert_equal(net.scan_calls, 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+
+	net.refuse_claim[NETWORK_EXCLUSIVE_SCAN] = 0;
+	zassert_ok(network_scan_begin("scan-key-0123456789", 3, &err, job),
+		   "the refusal left nothing under the key");
+	zassert_equal(job_state_of(job), JOB_STATE_QUEUED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 1);
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(job_state_of(job), JOB_STATE_SUCCEEDED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0, "the results are in");
+}
+
+ZTEST(network_manager, test_every_end_of_a_scan_gives_its_claim_back)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+	char again[JOB_ID_MAX_LEN + 1];
+
+	with_exclusive_hooks();
+
+	/* A replay does not claim twice. */
+	zassert_ok(network_scan_begin("scan-key-0123456789", 1, &err, job));
+	zassert_ok(network_scan_begin("scan-key-0123456789", 1, &err, again));
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_SCAN], 1);
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+
+	/* Failed. */
+	net.fail_scan = -ETIMEDOUT;
+	zassert_ok(network_scan_begin(NULL, 0, &err, job));
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(job_state_of(job), JOB_STATE_FAILED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+
+	/* Overtaken by an apply accepted before the worker reached it. */
+	zassert_ok(stage(&in, &err, &txn));
+	zassert_ok(network_scan_begin(NULL, 0, &err, again));
+	zassert_ok(apply(txn.id, 0, &err));
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(job_state_of(again), JOB_STATE_FAILED);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1);
+
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_SCAN], 3);
+	zassert_equal(net.unbalanced_releases, 0);
+}
+
+ZTEST(network_manager, test_starting_over_gives_back_what_was_held)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+	char scan_job[JOB_ID_MAX_LEN + 1];
+
+	with_exclusive_hooks();
+	zassert_ok(network_scan_begin(NULL, 0, &err, scan_job));
+	zassert_ok(stage(&in, &err, &txn));
+	zassert_ok(apply(txn.id, 0, &err));
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 1);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 1);
+
+	bring_up();
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+	zassert_equal(net.unbalanced_releases, 0);
+}
+
+ZTEST(network_manager, test_half_a_pair_of_exclusion_hooks_is_refused)
+{
+	struct network_iface_ops partial;
+
+	net.exclusive_hooks = true;
+	fake_net_bind(&net, &partial);
+	partial.exclusive_release = NULL;
+	zassert_equal(network_manager_init(&partial), -EINVAL);
+
+	fake_net_bind(&net, &partial);
+	partial.exclusive_claim = NULL;
+	zassert_equal(network_manager_init(&partial), -EINVAL);
+}
+
+/* A claim given back is forgotten: starting over does not give it back twice. */
+ZTEST(network_manager, test_a_claim_is_given_back_once)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+
+	with_exclusive_hooks();
+	apply_to_awaiting(&in, &txn);
+	confirm_and_commit(&txn);
+	zassert_ok(network_scan_begin(NULL, 0, &err, job));
+	zassert_true(network_manager_process() > 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+
+	bring_up();
+	zassert_equal(net.unbalanced_releases, 0);
+	zassert_equal(net.releases[NETWORK_EXCLUSIVE_APPLY], 1);
+	zassert_equal(net.releases[NETWORK_EXCLUSIVE_SCAN], 1);
+}
+
+/* Every job slot holds work in flight: 429, and the claim made for it is back. */
+ZTEST(network_manager, test_a_refusal_for_lack_of_jobs_gives_the_claim_back)
+{
+	struct network_config_input in = valid_input();
+	struct api_error err;
+	struct network_transaction txn;
+	struct job_snapshot filler;
+	const struct job_create_params busy = {.kind = JOB_KIND_MATTER_OPEN};
+
+	with_exclusive_hooks();
+	zassert_ok(stage(&in, &err, &txn));
+	for (int i = 0; i < CONFIG_JOB_MANAGER_MAX_JOBS; i++) {
+		zassert_equal(job_create(&busy, &filler), JOB_CREATE_NEW);
+	}
+
+	zassert_not_equal(apply(txn.id, 0, &err), 0);
+	zassert_equal(err.code, API_ERR_RATE_LIMITED);
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_APPLY], 1);
+	zassert_equal(held(NETWORK_EXCLUSIVE_APPLY), 0);
+	zassert_equal(state_of(txn.id), NETWORK_TXN_STAGED);
+
+	zassert_not_equal(network_scan_begin(NULL, 0, &err, job), 0);
+	zassert_equal(err.code, API_ERR_RATE_LIMITED);
+	zassert_equal(net.claims[NETWORK_EXCLUSIVE_SCAN], 1);
+	zassert_equal(held(NETWORK_EXCLUSIVE_SCAN), 0);
+	zassert_equal(net.unbalanced_releases, 0);
+}
+
 /* --- boot and the physical recovery ------------------------------------- */
 
 ZTEST(network_manager, test_boot_puts_the_committed_configuration_on_the_interfaces)

@@ -83,6 +83,8 @@ struct transaction {
 	/* A confirm was accepted; process() writes the commit. */
 	bool commit_requested;
 	enum rollback_reason rollback_reason;
+	/* The coprocessor was claimed for this apply and not yet given back. */
+	bool claimed;
 };
 
 struct scan_record {
@@ -92,6 +94,8 @@ struct scan_record {
 	bool requested;
 	bool complete;
 	bool failed;
+	/* The coprocessor was claimed for this scan and not yet given back. */
+	bool claimed;
 	struct network_scan_results results;
 };
 
@@ -299,6 +303,37 @@ static void fail_job(const char *id, enum api_error_code code)
 	(void)job_fail(id, api_error_str(code), api_error_is_retryable(code));
 }
 
+/*
+ * The coprocessor's other owners. Claim-then-check on both sides (plan section
+ * 3, coprocessor_manager.h): the claim is made once a request is otherwise
+ * acceptable and before its job or journal exists, so a refusal leaves
+ * nothing under the Idempotency-Key and a corrected retry is not answered with
+ * an old refusal. Without the hooks everything is always granted.
+ */
+static bool claim_locked(enum network_exclusive what)
+{
+	return nm.ops->exclusive_claim == NULL || nm.ops->exclusive_claim(nm.ops->ctx, what) == 0;
+}
+
+static void release_locked(enum network_exclusive what, bool *claimed)
+{
+	if (!*claimed) {
+		return;
+	}
+	*claimed = false;
+	if (nm.ops->exclusive_release != NULL) {
+		nm.ops->exclusive_release(nm.ops->ctx, what);
+	}
+}
+
+static void reject_claimed(struct api_error *err)
+{
+	(void)api_error_init(err, API_ERR_BUSY,
+			     "The Wi-Fi coprocessor is taken by its USB bridge, a firmware update "
+			     "or a reset; retry when it is back",
+			     NULL);
+}
+
 /* The configuration the interfaces are running: the candidate once it has been
  * pushed and until it is undone or committed, the committed one otherwise.
  */
@@ -318,6 +353,8 @@ static void in_force_locked(struct device_config *out)
  */
 static void finish(enum network_transaction_state state, enum api_error_code code, bool has_error)
 {
+	/* Every end of a transaction comes through here: the one place to give back. */
+	release_locked(NETWORK_EXCLUSIVE_APPLY, &nm.txn.claimed);
 	nm.txn.state = state;
 	nm.txn.deadline_ms = 0;
 	nm.txn.commit_requested = false;
@@ -716,6 +753,15 @@ int network_apply(const char *txn_id, uint16_t confirmation_timeout_seconds,
 		goto out;
 	}
 
+	if (!claim_locked(NETWORK_EXCLUSIVE_APPLY)) {
+		reject_claimed(err);
+		rc = -EBUSY;
+		goto out;
+	}
+	/* From here every way out either keeps the claim with the transaction or
+	 * gives it back: finish() does, and so do the paths that create no job. */
+	nm.txn.claimed = true;
+
 	const struct job_create_params params = {
 		.kind = JOB_KIND_NETWORK_APPLY,
 		/*
@@ -734,15 +780,18 @@ int network_apply(const char *txn_id, uint16_t confirmation_timeout_seconds,
 	case JOB_CREATE_NEW:
 		break;
 	case JOB_CREATE_EXISTING:
+		release_locked(NETWORK_EXCLUSIVE_APPLY, &nm.txn.claimed);
 		copy_job_id(job_id, job.id);
 		rc = 0;
 		goto out;
 	case JOB_CREATE_CONFLICT:
+		release_locked(NETWORK_EXCLUSIVE_APPLY, &nm.txn.claimed);
 		(void)api_error_init(err, API_ERR_IDEMPOTENCY_CONFLICT,
 				     "This Idempotency-Key was used with a different request",
 				     NULL);
 		goto out;
 	default:
+		release_locked(NETWORK_EXCLUSIVE_APPLY, &nm.txn.claimed);
 		reject_exhausted(err);
 		goto out;
 	}
@@ -1004,6 +1053,15 @@ int network_scan_begin(const char *idempotency_key, uint32_t request_hash, struc
 		goto out;
 	}
 
+	if (!claim_locked(NETWORK_EXCLUSIVE_SCAN)) {
+		reject_claimed(err);
+		rc = -EBUSY;
+		goto out;
+	}
+
+	/* The previous scan is complete and gave its claim back; this one is new. */
+	bool claimed = true;
+
 	const struct job_create_params params = {
 		.kind = JOB_KIND_WIFI_SCAN,
 		.cancellable = false,
@@ -1016,15 +1074,18 @@ int network_scan_begin(const char *idempotency_key, uint32_t request_hash, struc
 	case JOB_CREATE_NEW:
 		break;
 	case JOB_CREATE_EXISTING:
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &claimed);
 		copy_job_id(job_id, job.id);
 		rc = 0;
 		goto out;
 	case JOB_CREATE_CONFLICT:
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &claimed);
 		(void)api_error_init(err, API_ERR_IDEMPOTENCY_CONFLICT,
 				     "This Idempotency-Key was used with a different request",
 				     NULL);
 		goto out;
 	default:
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &claimed);
 		reject_exhausted(err);
 		goto out;
 	}
@@ -1032,6 +1093,7 @@ int network_scan_begin(const char *idempotency_key, uint32_t request_hash, struc
 	memset(&nm.scan, 0, sizeof(nm.scan));
 	nm.scan.used = true;
 	nm.scan.requested = true;
+	nm.scan.claimed = claimed;
 	strncpy(nm.scan.job_id, job.id, sizeof(nm.scan.job_id) - 1);
 	copy_job_id(job_id, job.id);
 	rc = 0;
@@ -1342,6 +1404,7 @@ static int process_scan(void)
 		/* An apply was accepted after this scan was: it waits for no scan. */
 		nm.scan.complete = true;
 		nm.scan.failed = true;
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &nm.scan.claimed);
 		k_mutex_unlock(&lock);
 		(void)job_set_state(id, JOB_STATE_RUNNING);
 		fail_job(id, API_ERR_BUSY);
@@ -1380,6 +1443,7 @@ static int process_scan(void)
 	if (nm.scan.used && strncmp(nm.scan.job_id, id, JOB_ID_MAX_LEN) == 0) {
 		nm.scan.complete = true;
 		nm.scan.failed = (err != 0);
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &nm.scan.claimed);
 		if (err == 0) {
 			nm.scan.results = scratch;
 		}
@@ -1597,9 +1661,18 @@ int network_manager_init(const struct network_iface_ops *ops)
 	    ops->wifi_disconnect == NULL || ops->get_status == NULL || ops->set_dns == NULL) {
 		return -EINVAL;
 	}
+	/* A claim that could never be given back would exclude the other owner forever. */
+	if ((ops->exclusive_claim == NULL) != (ops->exclusive_release == NULL)) {
+		return -EINVAL;
+	}
 
 	k_mutex_lock(&lock, K_FOREVER);
 
+	if (nm.initialised) {
+		/* Starting over forgets the transaction and the scan; not their claims. */
+		release_locked(NETWORK_EXCLUSIVE_APPLY, &nm.txn.claimed);
+		release_locked(NETWORK_EXCLUSIVE_SCAN, &nm.scan.claimed);
+	}
 	secure_wipe(&nm, sizeof(nm));
 	nm.ops = ops;
 	nm.initialised = true;

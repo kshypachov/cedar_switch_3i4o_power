@@ -1,0 +1,109 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.22,
+   "step": "login",
+   "ms": 2787
+  },
+  {
+   "t": 3.34,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "446879",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.68,
+   "step": "before",
+   "esp32": "esp32: records 4379, used 262132 of 262144 B, appended 100859, overwritten 96480, lost backend 0, lost uart 13",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 390,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 3.91,
+   "step": "esp32 ring",
+   "line": "esp32: records 4381, used 262144 of 262144 B, appended 101092, overwritten 96711, lost backend 0, lost uart 13"
+  },
+  {
+   "t": 34.74,
+   "step": "old cursor after the wrap",
+   "status": 200,
+   "gap": true,
+   "items": 68,
+   "first_seq": "109320",
+   "schema": [],
+   "dropped": "13"
+  },
+  {
+   "t": 34.88,
+   "step": "damaged cursor",
+   "status": 400,
+   "body": {
+    "error": {
+     "code": "invalid_cursor",
+     "message": "The cursor is not one this device issued for these filters; drop it and read the tail",
+     "request_id": "req_5b2bbf51",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 35.02,
+   "step": "cursor of other filters",
+   "status": 400,
+   "body": {
+    "error": {
+     "code": "invalid_cursor",
+     "message": "The cursor is not one this device issued for these filters; drop it and read the tail",
+     "request_id": "req_5b2bbf52",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 35.16,
+   "step": "sources",
+   "body": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 435,
+      "dropped_count": "13"
+     }
+    ]
+   }
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

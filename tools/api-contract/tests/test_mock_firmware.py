@@ -384,7 +384,9 @@ def test_an_offline_coprocessor_refuses_an_install_and_says_why(document: Docume
     status = harness.client.get("/coprocessor/status").json
     assert status["state"] == "offline"
     assert status["firmware_version"] is None
-    assert status["uart_mode"] == "unavailable"
+    # The UART's owner does not follow the C6's answer over ESP-Hosted (P5): the
+    # console keeps it, as on board B whose C6 has no firmware.
+    assert status["uart_mode"] == "console"
     assert status["uart_update"]["available"] is False
     assert status["uart_update"]["reason"], "unavailable always comes with a reason"
     response = harness.client.post(

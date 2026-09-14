@@ -111,6 +111,20 @@ class MockApp:
     def reset(self, scenario: Scenario | None = None) -> None:
         self.state = DeviceState(self.clock, scenario or Scenario())
 
+    def reboot(self) -> None:
+        """A new boot of the same device: a new `boot_id`, uptime from zero, and
+        everything the device keeps in RAM gone - sessions, jobs, the log rings,
+        a staged or applied transaction. What it keeps durably stays: the
+        administrator password and the committed network configuration."""
+        old = self.state
+        self.state = DeviceState(self.clock, old.scenario)
+        self.state.auth.password = old.auth.password
+        self.state.auth.setup_required = old.auth.setup_required
+        self.state.auth.setup_allowed = old.auth.setup_allowed
+        self.state.network.revision = old.network.revision
+        self.state.network.config = old.network.config
+        self.state.coprocessor.version = old.coprocessor.version
+
     # -- entry point -----------------------------------------------------
 
     def handle(self, request: Request) -> Response:
@@ -418,6 +432,9 @@ class MockApp:
             self.clock.advance(int(seconds * 1000))
             self.state.settle()
             return json_response(200, {"uptime_ms": self.state.uptime_ms})
+        if request.method == "POST" and path == "reboot":
+            self.reboot()
+            return json_response(200, self.state.to_json())
         if request.method == "POST" and path == "scenario":
             payload = json.loads(request.body) if request.body else {}
             self.state.scenario.update(payload)

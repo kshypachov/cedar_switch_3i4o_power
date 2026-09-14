@@ -27,6 +27,10 @@ export type NetworkTransactionRequest = S['NetworkTransactionRequest'];
 export type NetworkTransaction = S['NetworkTransaction'];
 export type ScanResults = S['ScanResults'];
 export type AccessPoint = S['AccessPoint'];
+export type LogSource = S['LogSource'];
+export type LogSources = S['LogSources'];
+export type LogRecord = S['LogRecord'];
+export type LogPage = S['LogPage'];
 
 export const TERMINAL_JOB_STATES: ReadonlySet<Job['state']> = new Set([
   'succeeded',

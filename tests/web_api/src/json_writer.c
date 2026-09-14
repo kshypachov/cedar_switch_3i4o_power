@@ -183,3 +183,33 @@ ZTEST(json_writer, test_overflow_is_sticky_and_never_overruns)
 	web_json_null(&w);
 	zassert_equal(web_json_writer_finish(&w), -ENOMEM);
 }
+
+ZTEST(json_writer, test_room_and_rollback)
+{
+	struct web_json_writer saved;
+
+	zassert_equal(web_json_writer_room(&w), sizeof(buf) - 1, "all but the NUL");
+	web_json_array_begin(&w);
+	zassert_equal(web_json_writer_room(&w), sizeof(buf) - 2);
+
+	saved = w;
+	web_json_string(&w, "first");
+	zassert_equal(web_json_writer_room(&w), sizeof(buf) - 2 - 7);
+	web_json_writer_rollback(&w, &saved);
+	zassert_equal(web_json_writer_room(&w), sizeof(buf) - 2);
+	zassert_str_equal(buf, "[", "discarded text is gone, terminated where it stood");
+
+	/* A failure after the copy is forgotten with it. */
+	char big[300];
+
+	memset(big, 'x', sizeof(big) - 1);
+	big[sizeof(big) - 1] = '\0';
+	web_json_string(&w, big);
+	zassert_equal(web_json_writer_room(&w), 0, "a failed writer has no room");
+	web_json_writer_rollback(&w, &saved);
+	web_json_string(&w, "ok");
+	web_json_array_end(&w);
+	zassert_equal(web_json_writer_finish(&w), 6);
+	zassert_str_equal(buf, "[\"ok\"]");
+	zassert_str_equal(buf, "[\"ok\"]", "no comma from the discarded element");
+}

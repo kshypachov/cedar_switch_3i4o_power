@@ -1,0 +1,97 @@
+{
+ "steps": [
+  {
+   "t": 0.56,
+   "step": "device up",
+   "seconds": 0.2
+  },
+  {
+   "t": 4.03,
+   "step": "login",
+   "ms": 3471
+  },
+  {
+   "t": 4.15,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "483751",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 4.69,
+   "step": "J-Link reset",
+   "rc": 0
+  },
+  {
+   "t": 27.83,
+   "step": "up again",
+   "seconds": 18.1
+  },
+  {
+   "t": 30.72,
+   "step": "login",
+   "ms": 2889
+  },
+  {
+   "t": 30.88,
+   "step": "cursor of the previous boot",
+   "status": 200,
+   "gap": true,
+   "boot_id": "boot_ff283222cb7c585e",
+   "old_boot_id": "boot_de52a0fd9dcfe770",
+   "items": [
+    [
+     "3129",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "3130",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "3131",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "3132",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "3133",
+     "esp32",
+     "�"
+    ]
+   ],
+   "schema": []
+  },
+  {
+   "t": 31.79,
+   "step": "earliest records of this boot",
+   "seq": [
+    "3034",
+    "3035",
+    "3036",
+    "3037",
+    "3038",
+    "3039",
+    "3040",
+    "3041"
+   ],
+   "early": [
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff",
+    "invalid header: 0xffffffff"
+   ]
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

@@ -37,4 +37,8 @@ const char *response_header(const char *name);
 /* The value of "name": in the body, as raw JSON text up to , or } */
 bool body_has(const char *fragment);
 
+/* Empty log-store, and coprocessor-manager on a fake platform with the console
+ * owning the UART and no transport (src/v1_logs.c). */
+void v1_coprocessor_fake_init(void);
+
 #endif

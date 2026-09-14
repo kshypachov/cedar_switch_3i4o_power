@@ -108,6 +108,17 @@ struct fake_net {
 	void (*during_io)(void *arg);
 	void *during_io_arg;
 
+	/* The coprocessor's other owners (coprocessor-manager on the board). */
+	/** Present exclusive_claim and exclusive_release in the ops table. */
+	bool exclusive_hooks;
+	/** errno a claim of that kind is refused with, or 0 to grant it. Sticky. */
+	int refuse_claim[NETWORK_EXCLUSIVE_COUNT];
+	unsigned int refused[NETWORK_EXCLUSIVE_COUNT];
+	unsigned int claims[NETWORK_EXCLUSIVE_COUNT];
+	unsigned int releases[NETWORK_EXCLUSIVE_COUNT];
+	/** Releases of a claim that was not held: a bug in network-manager. */
+	unsigned int unbalanced_releases;
+
 	/* Scan. */
 	struct network_scan_results scan_results;
 	unsigned int scan_calls;

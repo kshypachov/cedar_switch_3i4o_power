@@ -1,0 +1,13 @@
+[+    0.63] ==== host: device up
+[+    3.47] ==== host: login
+[+    3.61] ==== host: system
+[+    3.76] ==== host: /logs/sources
+[+    3.92] ==== host: /capabilities
+[+    4.07] ==== host: /coprocessor/status
+[+    5.09] ==== host: page
+[+    5.22] coproc logs
+[+    5.22] stm32: records 61, used 5248 of 262144 B, appended 61, overwritten 0, lost backend 0, lost uart 0
+[+    5.22] esp32: records 4379, used 262100 of 262144 B, appended 29041, overwritten 24662, lost backend 0, lost uart 95331
+[+    5.22] lock: append hold max 4053 us, append wait max 19507 us, read hold max 337 us
+[+    5.22] next seq 29103
+[+    5.22] [1;32muart:~$ [m[8D[J[00:01:18.747,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m

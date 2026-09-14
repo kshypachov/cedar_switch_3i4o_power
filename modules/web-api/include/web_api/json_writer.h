@@ -72,6 +72,19 @@ void web_json_int(struct web_json_writer *w, int64_t value);
 void web_json_decimal(struct web_json_writer *w, uint64_t value);
 
 /**
+ * @brief Put the writer back where @p saved (a copy taken earlier with plain
+ *        assignment) stood, discarding everything written since.
+ *
+ * For a response bounded by bytes: copy the writer, write one element, and if
+ * the writer failed or left too little room for the rest of the document, roll
+ * back and stop. A failure that happened after the copy is forgotten with it.
+ */
+void web_json_writer_rollback(struct web_json_writer *w, const struct web_json_writer *saved);
+
+/** @brief Bytes still free, not counting the terminating NUL; 0 once failed. */
+size_t web_json_writer_room(const struct web_json_writer *w);
+
+/**
  * @brief Close the document and report.
  *
  * @return its length in bytes (the buffer is NUL-terminated), or -ENOMEM if it

@@ -46,6 +46,30 @@ def stage(
     )
 
 
+# -- the coprocessor's UART owner (P5) --------------------------------------
+
+
+def test_apply_is_busy_while_the_coprocessor_uart_is_taken(harness: Harness) -> None:
+    """P5 device rule: an apply excludes the USB bridge and a coprocessor update
+    (plan section 3). The refusal comes before the journal: the candidate stays
+    staged and the same apply goes through once the console has the UART back."""
+    transaction = stage(harness).json["id"]
+    for mode in ("usb_bridge", "flashing"):
+        harness.app.state.scenario.uart_mode = mode
+        refused = harness.client.post(
+            f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+        )
+        assert refused.status == 409, mode
+        assert refused.json["error"]["code"] == "busy"
+        assert harness.client.get(f"/network/transactions/{transaction}").json["state"] == "staged"
+
+    harness.app.state.scenario.uart_mode = "console"
+    accepted = harness.client.post(
+        f"/network/transactions/{transaction}/apply", {"confirmation_timeout_seconds": 120}
+    )
+    assert accepted.status == 202
+
+
 # -- the two resources are two resources ----------------------------------
 
 

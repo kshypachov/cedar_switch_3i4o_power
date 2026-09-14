@@ -1,0 +1,55 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.47,
+   "step": "login",
+   "ms": 2047
+  },
+  {
+   "t": 2.58,
+   "step": "system",
+   "boot_id": "boot_98c13f5fb65389e4",
+   "uptime_ms": "11674",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 6.83,
+   "step": "stacks",
+   "lines": [
+    "0x20005f68 web_auth_kdf                     (real size 4096):\tunused 2472\tusage 1624 / 4096 (39 %)",
+    "0x70004bf8 web_v1_jobs                      (real size 4096):\tunused 3896\tusage  200 / 4096 ( 4 %)",
+    "0x7001cfa8 matter_boot_thread               (real size 8192):\tunused 6936\tusage 1256 / 8192 (15 %)",
+    "0x20006490 network                          (real size 8192):\tunused 4920\tusage 3272 / 8192 (39 %)",
+    "0x200066b8 coprocessor                      (real size 2048):\tunused 1416\tusage  632 / 2048 (30 %)",
+    "0x7000a820 io_outputs_task                  (real size 1024):\tunused  760\tusage  264 / 1024 (25 %)",
+    "0x7019c350 reg_notify_wq                    (real size 2048):\tunused 1848\tusage  200 / 2048 ( 9 %)",
+    "0x20004df8 input                            (real size 1024):\tunused  824\tusage  200 / 1024 (19 %)",
+    "0x70007d08 http_server_tid                  (real size 6144):\tunused 3576\tusage 2568 / 6144 (41 %)",
+    "0x20003fb0 shell_telnet                     (real size 4096):\tunused 3344\tusage  752 / 4096 (18 %)",
+    "0x70004d30 conn_mgr_monitor                 (real size  512):\tunused  208\tusage  304 /  512 (59 %)",
+    "0x700217b8 net_socket_service               (real size 2048):\tunused 1192\tusage  856 / 2048 (41 %)",
+    "0x20000a10 eth_w5500                        (real size 1024):\tunused  504\tusage  520 / 1024 (50 %)",
+    "0x7001fa88 tx_q[0]                          (real size 2048):\tunused 1424\tusage  624 / 2048 (30 %)",
+    "0x7001f980 rx_q[0]                          (real size 2560):\tunused 1392\tusage 1168 / 2560 (45 %)",
+    "0x7001f7a0 net_mgmt                         (real size 2048):\tunused 1456\tusage  592 / 2048 (28 %)",
+    "0x70022368 tcp_work                         (real size 1024):\tunused  696\tusage  328 / 1024 (32 %)",
+    "0x20004d18 usbd                             (real size 1024):\tunused  416\tusage  608 / 1024 (59 %)",
+    "0x20003c10 shell_uart                       (real size 4096):\tunused 3016\tusage 1080 / 4096 (26 %)",
+    "0x701a6020                                  (real size 4096):\tunused 3728\tusage  368 / 4096 ( 8 %)",
+    "0x701a6100 esp_hosted_tx                    (real size 4096):\tunused 3880\tusage  216 / 4096 ( 5 %)",
+    "0x20005428 otgfs@42040000                   (real size  512):\tunused  240\tusage  272 /  512 (53 %)",
+    "0x7001b6d8 logging                          (real size 2048):\tunused 1456\tusage  592 / 2048 (28 %)",
+    "0x20006248 sysworkq                         (real size 4096):\tunused 3328\tusage  768 / 4096 (18 %)",
+    "0x20006048 idle                             (real size  320):\tunused  216\tusage  104 /  320 (32 %)",
+    "0x20006128 main                             (real size 2048):\tunused  600\tusage 1448 / 2048 (70 %)",
+    "0x2000c420 IRQ 00                           (real size 2048):\tunused 1736\tusage  312 / 2048 (15 %)"
+   ]
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

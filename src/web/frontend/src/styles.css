@@ -94,3 +94,21 @@ fieldset.bare { border: 0; margin: 0; padding: 0; min-width: 0; }
 .scan table { margin-top: 0.5rem; }
 .small { display: block; font-size: 0.85rem; }
 .reconnect a { overflow-wrap: anywhere; }
+
+/* Logs (P5) */
+.log-scroll { max-height: 60vh; overflow: auto; border: 1px solid var(--border); border-radius: 0.375rem; }
+.log-scroll > p { margin: 0.5rem; }
+table.logs { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.85rem; }
+table.logs th { position: sticky; top: 0; background: var(--surface); }
+table.logs td { padding: 0.15rem 0.4rem; }
+.log-time { white-space: nowrap; }
+.log-message { white-space: pre-wrap; overflow-wrap: anywhere; }
+.log-kind, .log-truncated { font-size: 0.75rem; border: 1px solid var(--border); border-radius: 0.25rem; padding: 0 0.25rem; }
+.log-kind { margin-right: 0.35rem; }
+.log-truncated { margin-left: 0.35rem; }
+.log-level-warning td { background: var(--warning-bg); }
+.log-level-error td { background: var(--error-bg); }
+.log-reset td, .log-paused td { font-style: italic; color: var(--muted); }
+.log-gap td { background: var(--warning-bg); text-align: center; }
+.log-boot td { background: var(--bg); font-weight: 600; text-align: center; }
+a.button-link { display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 0.375rem; color: var(--text); text-decoration: none; }

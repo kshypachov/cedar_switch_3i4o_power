@@ -37,6 +37,28 @@ config WEB_API_DECODED_BODY_MAX
 	  Per HTTP client. Every route's decoded struct must fit; that is
 	  checked at build time by the route table.
 
+config WEB_API_STREAM_STATE_MAX
+	int "State a streamed response keeps between chunks, in bytes"
+	default 1024
+	range 0 4096
+	help
+	  Per HTTP client. A handler that answers with a body produced in pieces
+	  (the log export) keeps its position here rather than on a stack,
+	  because the server calls back once per chunk. 0 leaves no room, and a
+	  handler asking for a stream answers 500.
+
+config WEB_API_HTTP_SEND_TIMEOUT_MS
+	int "Longest a response waits for a client to take data, in ms"
+	default 5000
+	range 0 60000
+	help
+	  The HTTP server sends on blocking sockets from its one thread, so a
+	  client that stops reading - a browser tab frozen in the middle of an
+	  export - holds that thread in send() until TCP gives up on the peer.
+	  The adapter sets SO_SNDTIMEO on every client socket: such a send fails
+	  after this long and the server closes the connection. Takes effect only
+	  with CONFIG_NET_CONTEXT_SNDTIMEO; 0 leaves the socket alone.
+
 config WEB_API_EXTRA_HOSTS
 	string "Host names accepted besides IP literals and localhost"
 	default ""
