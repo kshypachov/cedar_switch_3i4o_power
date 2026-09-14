@@ -22,8 +22,8 @@ test('the board serves the application, signs in, shows itself, Matter and the n
   await page.getByRole('button', { name: t('login.submit') }).click();
   await expect(page.getByRole('heading', { name: t('overview.title') })).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText('cedar_switch_3in4out_power')).toBeVisible();
-  // This firmware does not serve coprocessor status yet.
-  await expect(page.getByText(t('overview.unavailable')).first()).toBeVisible();
+  // Coprocessor status is served since P5; before that the card says it is not.
+  await expect(page.getByRole('region', { name: t('overview.coprocessor') })).toBeVisible();
 
   // Matter is served since P3. Read-only here: opening a window on the board
   // is a hardware check with a controller, not part of this run.
@@ -39,6 +39,12 @@ test('the board serves the application, signs in, shows itself, Matter and the n
   await expect(page.getByRole('heading', { level: 1, name: t('network.title'), exact: true })).toBeVisible();
   await expect(page.getByText(t('network.dns_in_force')).first()).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText(new URL(baseURL!).hostname).first()).toBeVisible();
+
+  // Logs are served since P5. Reading only: the tail and the sources. A
+  // firmware before P5 answers 404, which the screen says in words.
+  await page.getByRole('link', { name: t('nav.logs') }).click();
+  await expect(page.getByRole('heading', { level: 1, name: t('logs.title'), exact: true })).toBeVisible();
+  await expect(page.getByTestId('log-row').first().or(page.getByText(t('overview.unavailable')).first())).toBeVisible({ timeout: 30_000 });
 
   await page.goto('/access');
   await expect(page.getByRole('heading', { name: t('access.title') })).toBeVisible();

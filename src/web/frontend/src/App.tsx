@@ -5,6 +5,7 @@ import { AccessScreen } from './features/auth/AccessScreen';
 import { LoginScreen } from './features/auth/LoginScreen';
 import { SetupScreen } from './features/auth/SetupScreen';
 import { OverviewScreen } from './features/device/OverviewScreen';
+import { LogsScreen } from './features/logs/LogsScreen';
 import { MatterScreen } from './features/matter/MatterScreen';
 import { NetworkScreen } from './features/network/NetworkScreen';
 import { t } from './i18n';
@@ -47,6 +48,8 @@ function Shell() {
             <MatterScreen session={view.session} />
           ) : route === 'network' ? (
             <NetworkScreen session={view.session} />
+          ) : route === 'logs' ? (
+            <LogsScreen />
           ) : (
             <OverviewScreen />
           )}

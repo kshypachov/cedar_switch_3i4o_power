@@ -48,6 +48,9 @@ describe('the dictionary covers what the device can say', () => {
     ['NetworkTransaction', 'state', 'network.tx'],
     ['IPv4Config', 'mode', 'network.ipv4_mode'],
     ['DNSConfig', 'mode', 'network.dns_mode'],
+    ['LogSource', 'id', 'logs.source'],
+    ['LogRecord', 'kind', 'logs.kind'],
+    ['CoprocessorStatus', 'uart_mode', 'logs.uart_mode'],
   ])('%s.%s values all have text', (schema, property, prefix) => {
     for (const value of enumOf(schema, property)) {
       expect(ru, `${prefix}.${value}`).toHaveProperty(`${prefix}.${value}`);
@@ -59,6 +62,7 @@ describe('the dictionary covers what the device can say', () => {
     ['CommissioningWindow', 'mode', 'matter.mode'],
     ['CommissioningWindow', 'source', 'matter.source'],
     ['OnboardingCodes', 'reason', 'matter.codes'],
+    ['LogRecord', 'level', 'logs.level'],
   ])('%s.%s values all have text', (schema, property, prefix) => {
     const values: string[] = schemas[schema].properties[property].anyOf.find((s: { enum?: string[] }) => s.enum).enum;
     expect(values.length).toBeGreaterThan(0);

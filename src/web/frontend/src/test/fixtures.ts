@@ -10,6 +10,9 @@ import type {
   Fabrics,
   Job,
   JobAccepted,
+  LogPage,
+  LogRecord,
+  LogSources,
   MatterStatus,
   NetworkConfigOutput,
   NetworkConfigResponse,
@@ -433,7 +436,109 @@ export const scanResults: ScanResults = {
 
 export const scanResultsTruncated: ScanResults = { ...scanResults, truncated: true };
 
+const LOG_BOOT = 'boot_0123456789abcdef';
+
+const logRecord = (over: Partial<LogRecord>): LogRecord => ({
+  source: 'stm32',
+  boot_id: LOG_BOOT,
+  source_generation: 0,
+  seq: '1',
+  uptime_ms: '1200',
+  wall_time: null,
+  level: 'info',
+  module: 'net_dhcpv4',
+  message: 'Received: 192.168.88.13',
+  truncated: false,
+  kind: 'message',
+  ...over,
+});
+
+/** A tail with every awkward row the screen must render. */
+export const logPage: LogPage = {
+  boot_id: LOG_BOOT,
+  items: [
+    logRecord({ seq: '1', uptime_ms: '4', level: null, module: null, message: '*** Booting Zephyr OS build v4.4.0 ***' }),
+    logRecord({ seq: '2', uptime_ms: '15210' }),
+    logRecord({
+      source: 'esp32',
+      source_generation: 2,
+      seq: '3',
+      uptime_ms: '15300',
+      level: null,
+      module: null,
+      message: 'ESP32 reset by the STM32 (EN)',
+      kind: 'reset',
+    }),
+    logRecord({ source: 'esp32', source_generation: 2, seq: '4', uptime_ms: '15420', level: 'unknown', module: null, message: 'invalid header: 0xffffffff' }),
+    logRecord({ seq: '5', uptime_ms: '3723456', level: 'error', module: 'web', message: '<b>not markup</b>', truncated: true }),
+    logRecord({
+      source: 'esp32',
+      source_generation: 2,
+      seq: '6',
+      uptime_ms: '3723500',
+      level: null,
+      module: null,
+      message: 'UART handed to the USB bridge',
+      kind: 'paused',
+    }),
+  ],
+  next_cursor: 'Y3Vyc29yLTAx',
+  has_more: false,
+  gap: false,
+  dropped_count: '0',
+};
+
+export const logPageNext: LogPage = {
+  boot_id: LOG_BOOT,
+  items: [logRecord({ seq: '7', uptime_ms: '3724000', level: 'warning', module: 'eth_w5500', message: 'socket 0 reopened' })],
+  next_cursor: 'Y3Vyc29yLTAy',
+  has_more: false,
+  gap: false,
+  dropped_count: '0',
+};
+
+/** The answer to a cursor of the previous boot: the new tail, the new boot, and a gap. */
+export const logPageAfterReboot: LogPage = {
+  boot_id: 'boot_fedcba9876543210',
+  items: [logRecord({ boot_id: 'boot_fedcba9876543210', seq: '1', uptime_ms: '3', level: null, module: null, message: '*** Booting Zephyr OS build v4.4.0 ***' })],
+  next_cursor: 'Y3Vyc29yLTAz',
+  has_more: false,
+  gap: true,
+  dropped_count: '0',
+};
+
+export const logSources: LogSources = {
+  items: [
+    { id: 'stm32', available: true, reason: null, generation: 0, dropped_count: '0' },
+    { id: 'esp32', available: true, reason: null, generation: 2, dropped_count: '17' },
+  ],
+};
+
+/** The C6's UART is lent to the USB bridge: its logs stop, with the reason. */
+export const logSourcesBridge: LogSources = {
+  items: [
+    { id: 'stm32', available: true, reason: null, generation: 0, dropped_count: '0' },
+    { id: 'esp32', available: false, reason: 'uart_usb_bridge', generation: 2, dropped_count: '17' },
+  ],
+};
+
+export const coprocessorBridge: CoprocessorStatus = {
+  ...coprocessorStatus,
+  state: 'failed',
+  firmware_version: null,
+  host_protocol: null,
+  partition_layout_id: null,
+  transport_ready: false,
+  uart_mode: 'usb_bridge',
+};
+
 export const all: Record<string, [string, unknown]> = {
+  logPage: ['LogPage', logPage],
+  logPageNext: ['LogPage', logPageNext],
+  logPageAfterReboot: ['LogPage', logPageAfterReboot],
+  logSources: ['LogSources', logSources],
+  logSourcesBridge: ['LogSources', logSourcesBridge],
+  coprocessorBridge: ['CoprocessorStatus', coprocessorBridge],
   authStateFresh: ['AuthState', authStateFresh],
   authStateConfigured: ['AuthState', authStateConfigured],
   session: ['Session', session],

@@ -32,7 +32,8 @@ src/state/      auth view, the one polling scheduler, the router, usePolling
 src/i18n/       ru.ts - every string - and t()
 src/components/ layout, cards, fields, error display, formatting
 src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics),
-                network (status, forms, Wi-Fi scan, the apply transaction)
+                network (status, forms, Wi-Fi scan, the apply transaction),
+                logs (live tail, filters, pause, export, sources)
 e2e/            Playwright, against the mock or the board
 ```
 
@@ -97,6 +98,24 @@ Decisions that are easy to undo by accident:
 - **Wi-Fi is unavailable** when its interface carries `capability_unavailable`
   (the coprocessor is not ready) or a scan is refused with it: enabling and
   scanning are disabled, switching an enabled Wi-Fi off is not.
+- **Logs are a live tail, not a history browser** (`features/logs`). The first
+  request has no cursor and gets the newest records; each next request carries the
+  cursor the device returned, every second on the shared scheduler, and again at
+  once (up to five pages) while `has_more` says the device stopped early - by
+  bytes or by its scan budget, which may leave a page empty. A filter change
+  drops the cursor and the rows; so does `400 invalid_cursor`, which is not shown
+  as an error. Text filters wait 400 ms after typing.
+- **Pause stops the polling task**, not just the scrolling, so a paused page sends
+  nothing; resume continues from the old cursor, and what the ring overwrote
+  meanwhile arrives as the device's `gap`. Scrolling up stops following new rows
+  until the button brings the view back.
+- **A gap and a new boot are rows where they happened**; the page keeps 2000 rows
+  and says when older ones were removed. Row keys are boot, source, kind and seq -
+  seq restarts with a boot and a gap record may share one.
+- **The export is a plain link** with the current filters: the browser downloads
+  the attachment with the session cookie; nothing is buffered by the page.
+- **Why ESP32 logs stop** comes from `logs/sources` (`reason`) and the UART's
+  owner from `coprocessor/status.uart_mode`; the ESP32 screen itself is P6.
 
 ## Commands
 
@@ -148,6 +167,14 @@ origin and console checks. It never touches the mock's control plane.
   rollback, discard, `?txn=` and a missing transaction.
 - **Unit** (network): SSID bytes, the candidate built from the form, the
   password action, JSON Pointer placement, reconnect links and `?txn=`.
+- **Logs**: the controller (queries, cursor, gap and boot rows, unique keys,
+  repeats, the row cap, filter change and invalid_cursor, uptime formatting,
+  following) as units; the screen on OpenAPI fixtures - markup and ANSI-free
+  text as text, markers and cut lines, polling from the cursor, has_more
+  catch-up, filter change and debounce, invalid_cursor, reboot with gap, pause
+  sending nothing, the USB-bridge reason, export links, 404 and 401; e2e against
+  the mock (source filter, pause, both exports' headers) and a reboot answer
+  injected with `page.route`, since the mock cannot reboot.
 - **End-to-end** (Playwright, against the mock): setup from the page, the
   policy refusal, sign in / reload / sign out with the cookie's flags, the
   password change, two browsers at once; the network change applied and
