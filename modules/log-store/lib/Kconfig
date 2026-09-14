@@ -1,0 +1,37 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig LOG_STORE
+	bool "Bounded log rings for the web interface"
+	help
+	  One byte ring per log source (STM32, ESP32) with a global sequence,
+	  cursors bound to filters and boot, gaps when a reader falls behind,
+	  and loss counters. See include/log_store/log_store.h.
+
+if LOG_STORE
+
+config LOG_STORE_STM32_KIB
+	int "STM32 ring size, KiB (power of two)"
+	default 256
+	range 4 4096
+	help
+	  Records of the Zephyr log. The plan's starting budget is 256 KiB per
+	  source (section 9); must be a power of two.
+
+config LOG_STORE_ESP32_KIB
+	int "ESP32 ring size, KiB (power of two)"
+	default 256
+	range 4 4096
+	help
+	  Lines received from the C6's UART. Must be a power of two.
+
+config LOG_STORE_SCAN_BUDGET
+	int "Records a reader looks at per request"
+	default 2048
+	range 16 65536
+	help
+	  The bound callers pass to log_store_read() and
+	  log_store_reader_tail(): how many records, matching or not, one HTTP
+	  request may walk before it answers with a cursor that continues the
+	  scan. Bounds the time a request spends on the server's one thread.
+
+endif # LOG_STORE
