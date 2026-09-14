@@ -239,6 +239,31 @@ struct web_api_router {
 #define WEB_API_DECODED_MAX CONFIG_WEB_API_DECODED_BODY_MAX
 
 /**
+ * @brief Produce the next piece of a streamed body.
+ *
+ * @param state  the handler's state, kept in the request's context
+ * @param buf    where to write, @p cap bytes (the response buffer)
+ * @return the bytes written (> 0), 0 when the body is complete, or a negative
+ *         errno: the connection is closed mid-body, so the client can tell the
+ *         body is incomplete. Never 0 for "nothing yet": the server reads an
+ *         empty piece as the end.
+ */
+typedef int (*web_api_stream_next_t)(void *state, char *buf, size_t cap);
+
+/**
+ * @brief Called exactly once for every stream that was started: after the
+ *        last piece, after a failed one, or when the client went away.
+ */
+typedef void (*web_api_stream_end_t)(void *state);
+
+/** A response whose body is produced piece by piece. Private to web-api. */
+struct web_api_stream {
+	web_api_stream_next_t next;
+	web_api_stream_end_t end;
+	bool active;
+};
+
+/**
  * Everything one in-flight request needs, owned by the adapter, one per HTTP
  * client. Large on purpose - it holds the body, the decoded body and the
  * response - and therefore statically allocated and linked into PSRAM, never
@@ -252,6 +277,9 @@ struct web_api_context {
 	char response_body[CONFIG_WEB_API_RESPONSE_BODY_MAX];
 	/** Aligned for any struct a body decodes into. */
 	uint64_t decoded[DIV_ROUND_UP(WEB_API_DECODED_MAX, sizeof(uint64_t))];
+	struct web_api_stream stream;
+	/** A streamed response's state between pieces (web_api_reply_stream()). */
+	uint64_t stream_state[DIV_ROUND_UP(CONFIG_WEB_API_STREAM_STATE_MAX, sizeof(uint64_t)) + 1];
 };
 
 /** What a handler is given. */
@@ -358,6 +386,58 @@ void web_api_expire_session_cookie(struct web_api_call *call);
 
 /** @brief Map a web-auth verdict onto the error table and reject with it. */
 void web_api_reject_auth(struct web_api_call *call, const struct web_auth_result *result);
+
+/**
+ * @brief Add a response header. @p value must outlive the response: a literal,
+ *        or storage in the context.
+ */
+void web_api_add_header(struct web_api_call *call, const char *name, const char *value);
+
+/**
+ * @brief The value of query parameter @p name, decoded: `+` is a space and
+ *        `%XX` a byte, as a browser's form encoding writes them.
+ *
+ * The middleware has already refused undeclared and repeated parameters.
+ *
+ * @return the value's length in bytes (the value may be empty), -ENOENT when
+ *         the parameter is absent, -ENOSPC when it does not fit @p cap with its
+ *         NUL, -EINVAL when it decodes to a NUL byte.
+ */
+int web_api_query_get(const struct web_api_request *req, const char *name, char *out, size_t cap);
+
+/**
+ * @brief Answer with @p status and a body produced piece by piece.
+ *
+ * For a body too large for the response buffer (the log export). The handler
+ * validates first and replies last: after this call it may only fill the
+ * returned state and add headers. Content-Type is @p content_type; X-Request-ID
+ * and Cache-Control are sent as with every answer. The pieces are pulled by
+ * the adapter (web_api_stream_pull()) into the response buffer, one per call
+ * of the server, so RAM holds one piece at a time.
+ *
+ * @return zeroed state of @p state_size bytes that the context keeps until
+ *         @p end runs, or NULL - when it exceeds CONFIG_WEB_API_STREAM_STATE_MAX,
+ *         in which case the request has been answered 500.
+ */
+void *web_api_reply_stream(struct web_api_call *call, uint16_t status, const char *content_type,
+			   size_t state_size, web_api_stream_next_t next, web_api_stream_end_t end);
+
+/**
+ * @brief Pull the next piece of @p ctx's stream into its response buffer
+ *        (ctx->rsp.body, body_len).
+ *
+ * @param[out] final  true when there is nothing after this piece; the stream
+ *                    has then ended. Also true when no stream is active.
+ * @return 0, or the negative errno the handler's piece returned (the stream has
+ *         ended; the connection must be closed).
+ */
+int web_api_stream_pull(struct web_api_context *ctx, bool *final);
+
+/** @brief End @p ctx's stream if one is active: the client has gone. */
+void web_api_stream_end(struct web_api_context *ctx);
+
+/** @brief Whether @p ctx is in the middle of a streamed response. */
+bool web_api_stream_active(const struct web_api_context *ctx);
 
 /* -- pure helpers, exposed for the adapter and for tests ---------------- */
 

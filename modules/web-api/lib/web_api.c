@@ -449,6 +449,132 @@ void web_api_reject_auth(struct web_api_call *call, const struct web_auth_result
 	call->replied = true;
 }
 
+void web_api_add_header(struct web_api_call *call, const char *name, const char *value)
+{
+	add_header(&call->ctx->rsp, name, value);
+}
+
+/* -- streamed responses --------------------------------------------------- */
+
+void *web_api_reply_stream(struct web_api_call *call, uint16_t status, const char *content_type,
+			   size_t state_size, web_api_stream_next_t next, web_api_stream_end_t end)
+{
+	struct web_api_context *ctx = call->ctx;
+
+	if (state_size > CONFIG_WEB_API_STREAM_STATE_MAX || next == NULL) {
+		LOG_ERR("%s: stream state %zu does not fit %d", call->route->operation_id,
+			state_size, CONFIG_WEB_API_STREAM_STATE_MAX);
+		web_api_reject(call, API_ERR_INTERNAL_ERROR, "The response could not be streamed");
+		return NULL;
+	}
+
+	memset(ctx->stream_state, 0, sizeof(ctx->stream_state));
+	ctx->stream.next = next;
+	ctx->stream.end = end;
+	ctx->stream.active = true;
+	ctx->rsp.status = status;
+	ctx->rsp.body = NULL;
+	ctx->rsp.body_len = 0U;
+	add_header(&ctx->rsp, "Content-Type", content_type);
+	call->replied = true;
+
+	return ctx->stream_state;
+}
+
+bool web_api_stream_active(const struct web_api_context *ctx)
+{
+	return ctx->stream.active;
+}
+
+void web_api_stream_end(struct web_api_context *ctx)
+{
+	if (!ctx->stream.active) {
+		return;
+	}
+	ctx->stream.active = false;
+	if (ctx->stream.end != NULL) {
+		ctx->stream.end(ctx->stream_state);
+	}
+}
+
+int web_api_stream_pull(struct web_api_context *ctx, bool *final)
+{
+	int n;
+
+	*final = true;
+	ctx->rsp.body = NULL;
+	ctx->rsp.body_len = 0U;
+	if (!ctx->stream.active) {
+		return 0;
+	}
+
+	n = ctx->stream.next(ctx->stream_state, ctx->response_body, sizeof(ctx->response_body));
+	if (n <= 0) {
+		web_api_stream_end(ctx);
+		return n;
+	}
+	ctx->rsp.body = ctx->response_body;
+	ctx->rsp.body_len = MIN((size_t)n, sizeof(ctx->response_body));
+	*final = false;
+
+	return 0;
+}
+
+/* -- query values ---------------------------------------------------------- */
+
+static int hex_digit(char c);
+
+int web_api_query_get(const struct web_api_request *req, const char *name, char *out, size_t cap)
+{
+	const char *p = req->query;
+	const size_t want = strlen(name);
+
+	while (p != NULL && *p != '\0') {
+		const char *amp = strchr(p, '&');
+		size_t len = amp ? (size_t)(amp - p) : strlen(p);
+		const char *eq = memchr(p, '=', len);
+		size_t name_len = eq ? (size_t)(eq - p) : len;
+
+		/* Names the route declares are plain ASCII, so they are compared
+		 * as written; query_ok() has already refused anything else. */
+		if (len > 0U && name_len == want && memcmp(p, name, want) == 0) {
+			const char *v = eq ? eq + 1 : p + len;
+			size_t vn = eq ? len - name_len - 1U : 0U;
+			size_t n = 0;
+
+			for (size_t i = 0; i < vn; i++) {
+				char c = v[i];
+
+				if (c == '+') {
+					c = ' ';
+				} else if (c == '%' && i + 2U < vn && hex_digit(v[i + 1]) >= 0 &&
+					   hex_digit(v[i + 2]) >= 0) {
+					c = (char)(hex_digit(v[i + 1]) * 16 + hex_digit(v[i + 2]));
+					i += 2U;
+					if (c == '\0') {
+						return -EINVAL;
+					}
+				}
+				if (n + 1U >= cap) {
+					return -ENOSPC;
+				}
+				out[n++] = c;
+			}
+			if (cap == 0U) {
+				return -ENOSPC;
+			}
+			out[n] = '\0';
+			return (int)n;
+		}
+		if (amp == NULL) {
+			break;
+		}
+		p = amp + 1;
+	}
+
+	return -ENOENT;
+}
+
 /* -- routing ------------------------------------------------------------ */
 
 /* Match @p tail against @p tmpl, capturing {parameters}. */
@@ -698,6 +824,9 @@ void web_api_dispatch(const struct web_api_router *router, struct web_api_contex
 	bool params_valid;
 	const char *why = NULL;
 
+	/* A context reused before its last stream was told to end (the adapter
+	 * always tells it; a test might not) must not leak that stream's state. */
+	web_api_stream_end(ctx);
 	memset(&call, 0, sizeof(call));
 	call.ctx = ctx;
 	call.req = req;

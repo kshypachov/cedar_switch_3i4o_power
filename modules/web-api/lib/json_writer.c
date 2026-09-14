@@ -222,6 +222,23 @@ void web_json_decimal(struct web_json_writer *w, uint64_t value)
 	end_value(w);
 }
 
+void web_json_writer_rollback(struct web_json_writer *w, const struct web_json_writer *saved)
+{
+	*w = *saved;
+	if (w->buf != NULL && w->pos < w->cap) {
+		w->buf[w->pos] = '\0';
+	}
+}
+
+size_t web_json_writer_room(const struct web_json_writer *w)
+{
+	if (w->failed || w->pos + 1U >= w->cap) {
+		return 0U;
+	}
+
+	return w->cap - w->pos - 1U;
+}
+
 int web_json_writer_finish(struct web_json_writer *w)
 {
 	if (w->failed || w->depth != 0U || w->after_key || !w->has_value[0]) {
