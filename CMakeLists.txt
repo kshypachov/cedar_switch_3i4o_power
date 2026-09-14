@@ -49,6 +49,10 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-api          # API v1 request pipeline, strict JSON, HTTP server adapter (CONFIG_WEB_API)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/web-assets       # Browser application from flash: MIME, ETag, gzip, cache (CONFIG_WEB_ASSETS)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/matter-service   # Matter snapshot and commissioning window requests for the web API (CONFIG_MATTER_SERVICE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/log-store        # Bounded STM32 and ESP32 log rings, cursor, filters, export (CONFIG_LOG_STORE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/zephyr-log-source # Zephyr log backend into log-store (CONFIG_ZEPHYR_LOG_SOURCE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/esp32-log-source # C6 UART bytes into log lines (CONFIG_ESP32_LOG_SOURCE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/coprocessor-manager # Owner of USART3 and EN/BOOT, UART modes and exclusion (CONFIG_COPROCESSOR_MANAGER)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -91,6 +95,8 @@ target_sources(app PRIVATE
         src/web/api/v1/system.c
         src/web/api/v1/matter.c
         src/web/api/v1/network.c
+        src/web/api/v1/logs.c
+        src/web/api/v1/coprocessor.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c
@@ -123,6 +129,8 @@ target_sources(app PRIVATE
 
 # Network service (P4): adapter, store, recovery rule and worker.
 add_subdirectory(src/services/network)
+# Coprocessor service (P5): USART3 owner's platform, CDC passthrough, ESP32 logs.
+add_subdirectory(src/services/coprocessor)
 
 #chip_configure_data_model(app
 #        ZAP_FILE ${CHIP_ROOT}/examples/chef/devices/rootnode_onoffpluginunit_Wtf8ss5EBY.zap

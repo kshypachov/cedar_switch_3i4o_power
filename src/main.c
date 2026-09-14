@@ -26,6 +26,7 @@
 #include <settings_registry/settings_registry.h>
 
 #include "helpers/memory.h"
+#include "services/coprocessor/coprocessor_service.h"
 #include "services/network/network_service.h"
 #include "web/api/v1/web_api_v1.h"
 #include "web/web_server.h"
@@ -222,6 +223,14 @@ int main(void)
 	matter_service_chip_init();
 	/* Before the network too: network-manager tracks its work as jobs. */
 	job_manager_init();
+	/* The C6's UART and EN/BOOT: before the network service, whose apply and
+	 * scan claim against the UART's owner. */
+	coprocessor_service_start();
+	static const struct web_api_v1_coprocessor coprocessor_hooks = {
+		.firmware_version = coprocessor_service_firmware_version,
+		.rx_seen = coprocessor_service_rx_seen,
+	};
+	web_api_v1_set_coprocessor(&coprocessor_hooks);
 	/* The W5500 with its EEPROM MAC; addressing is the network service's. */
 	ethernet_interfaces_init();
 	network_service_start();

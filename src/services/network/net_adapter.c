@@ -21,6 +21,8 @@
 #include <zephyr/sys/atomic.h>
 #include <zephyr/sys/util.h>
 
+#include <coprocessor_manager/coprocessor_manager.h>
+
 #include "net_adapter.h"
 #include "net_adapter_map.h"
 
@@ -619,6 +621,32 @@ static int set_default(void *ctx, enum device_config_interface iface)
 	return 0;
 }
 
+/*
+ * Apply and scan against the C6's UART owner (plan section 3): an apply
+ * excludes the USB bridge, the flasher and a C6 reset; a scan excludes the
+ * flasher. coprocessor-manager's claims never block, as network-manager's
+ * mutex requires.
+ */
+static enum coprocessor_claim claim_of(enum network_exclusive what)
+{
+	return what == NETWORK_EXCLUSIVE_SCAN ? COPROCESSOR_CLAIM_WIFI_SCAN
+					      : COPROCESSOR_CLAIM_NETWORK_APPLY;
+}
+
+static int exclusive_claim(void *ctx, enum network_exclusive what)
+{
+	ARG_UNUSED(ctx);
+
+	return coprocessor_manager_claim(claim_of(what));
+}
+
+static void exclusive_release(void *ctx, enum network_exclusive what)
+{
+	ARG_UNUSED(ctx);
+
+	coprocessor_manager_release(claim_of(what));
+}
+
 const struct network_iface_ops net_adapter_ops = {
 	.configure = configure,
 	.wifi_connect = wifi_connect,
@@ -628,6 +656,8 @@ const struct network_iface_ops net_adapter_ops = {
 	.get_dns = get_dns,
 	.set_default = set_default,
 	.wifi_scan = wifi_scan,
+	.exclusive_claim = exclusive_claim,
+	.exclusive_release = exclusive_release,
 	.ctx = NULL,
 };
 

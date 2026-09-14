@@ -16,6 +16,16 @@
 	};
 };
 
+/*
+ * USART3 has one owner, coprocessor-manager (src/services/coprocessor): the
+ * console for ESP32 logs, a passthrough to cdc_acm_uart0, or the flasher. The
+ * board's Zephyr bridge would take the UART's interrupt at init and can only be
+ * stopped through device PM, so it is off (plan section 3, reports/p5).
+ */
+&{/uart-bridge0} {
+	status = "disabled";
+};
+
 &clk_msis {
 	status = "disabled";
 	msi-range = <4>;
