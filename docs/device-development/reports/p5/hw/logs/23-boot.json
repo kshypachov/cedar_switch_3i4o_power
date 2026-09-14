@@ -1,0 +1,178 @@
+{
+ "steps": [
+  {
+   "t": 0.44,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.53,
+   "step": "login",
+   "ms": 2093
+  },
+  {
+   "t": 2.65,
+   "step": "system",
+   "boot_id": "boot_82a8b65de6391875",
+   "uptime_ms": "218180",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.16,
+   "step": "J-Link reset",
+   "rc": 0
+  },
+  {
+   "t": 17.28,
+   "step": "up again",
+   "seconds": 9.1
+  },
+  {
+   "t": 19.39,
+   "step": "login",
+   "ms": 2113
+  },
+  {
+   "t": 19.54,
+   "step": "cursor of the previous boot",
+   "status": 200,
+   "gap": true,
+   "boot_id": "boot_98c13f5fb65389e4",
+   "old_boot_id": "boot_82a8b65de6391875",
+   "items": [
+    [
+     "2120",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "2121",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "2122",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "2123",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ],
+    [
+     "2124",
+     "esp32",
+     "invalid header: 0xffffffff"
+    ]
+   ],
+   "schema": []
+  },
+  {
+   "t": 20.06,
+   "step": "earliest STM32 records of this boot",
+   "count": 41,
+   "first": [
+    [
+     "1",
+     "1655",
+     "warning",
+     "esp_hosted_mcu_core",
+     "coprocessor firmware version unknown, expected v3.0.0"
+    ],
+    [
+     "2",
+     "1655",
+     "error",
+     "mb85rsxx",
+     "invalid device ID: 00 00 00 00"
+    ],
+    [
+     "3",
+     "1655",
+     "error",
+     "mb85rsxx",
+     "Failed to initialize device, RDID check failed (err -5)"
+    ],
+    [
+     "4",
+     "1655",
+     "info",
+     "eth_w5500",
+     "ETH_W5500: interrupt mode"
+    ],
+    [
+     "5",
+     "1664",
+     "info",
+     "eth_w5500",
+     "W5500 Initialized"
+    ],
+    [
+     "6",
+     "1664",
+     "info",
+     "spi_nor",
+     "SPI_FLASH: SFDP v 1.5 AP ff with 1 PH"
+    ],
+    [
+     "7",
+     "1665",
+     "info",
+     "spi_nor",
+     "PH0: ff00 rev 1.5: 16 DW @ 80"
+    ],
+    [
+     "8",
+     "1665",
+     "info",
+     "spi_nor",
+     "SPI_FLASH: 16 MiBy flash"
+    ],
+    [
+     "9",
+     "1767",
+     "error",
+     "esp_hosted_mcu",
+     "coprocessor WifiInit failed"
+    ],
+    [
+     "10",
+     "1771",
+     "error",
+     "net_if",
+     "Iface 0x20002fe0 device not ready"
+    ],
+    [
+     "11",
+     "1772",
+     "error",
+     "net_ethernet",
+     "Invalid MAC address for iface 1 (0x20002ea8)"
+    ],
+    [
+     "12",
+     "1772",
+     "info",
+     "littlefs",
+     "LittleFS version 2.11, disk version 2.1"
+    ]
+   ],
+   "before_main": [
+    "coprocessor firmware version unknown, expected v3.0.0",
+    "invalid device ID: 00 00 00 00",
+    "Failed to initialize device, RDID check failed (err -5)",
+    "ETH_W5500: interrupt mode",
+    "W5500 Initialized",
+    "SPI_FLASH: SFDP v 1.5 AP ff with 1 PH",
+    "PH0: ff00 rev 1.5: 16 DW @ 80",
+    "SPI_FLASH: 16 MiBy flash",
+    "coprocessor WifiInit failed",
+    "Iface 0x20002fe0 device not ready",
+    "Invalid MAC address for iface 1 (0x20002ea8)",
+    "LittleFS version 2.11, disk version 2.1"
+   ]
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

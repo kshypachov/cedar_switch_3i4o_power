@@ -1,0 +1,340 @@
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.21,
+   "step": "login",
+   "ms": 2784
+  },
+  {
+   "t": 3.32,
+   "step": "system",
+   "boot_id": "boot_9d3c4116c685284c",
+   "uptime_ms": "275697",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.44,
+   "step": "status before",
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 191,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 4.05,
+   "step": "shell: console -> usb_bridge",
+   "answer": "coproc mode bridge: 0 in 11 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "usb_bridge",
+    "generation": 191,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   },
+   "sources": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "1098"
+     },
+     {
+      "id": "esp32",
+      "available": false,
+      "reason": "uart_usb_bridge",
+      "generation": 191,
+      "dropped_count": "35"
+     }
+    ]
+   }
+  },
+  {
+   "t": 9.3,
+   "step": "host reads the CDC for 5 s",
+   "port": "/dev/cu.usbmodem11201",
+   "bytes": 57202,
+   "sample": ": 0xffffffff\r\ninvalid heade: 0xfffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid "
+  },
+  {
+   "t": 111.4,
+   "step": "host not reading the CDC for 60 s",
+   "samples": [
+    {
+     "t": 9.3,
+     "ping_ms": 12.773,
+     "http": "TimeoutError",
+     "shell": true
+    },
+    {
+     "t": 30.28,
+     "ping_ms": 26.961,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 38.05,
+     "ping_ms": 29.776,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 45.5,
+     "ping_ms": 27.587,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 52.92,
+     "ping_ms": 26.942,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 59.4,
+     "ping_ms": 26.841,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 67.16,
+     "ping_ms": 25.214,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 74.63,
+     "ping_ms": 27.751,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 82.05,
+     "ping_ms": 27.098,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 88.53,
+     "ping_ms": 28.688,
+     "http": 200,
+     "shell": false
+    },
+    {
+     "t": 96.69,
+     "ping_ms": 26.95,
+     "http": 200,
+     "shell": true
+    },
+    {
+     "t": 106.07,
+     "ping_ms": 25.473,
+     "http": 200,
+     "shell": true
+    }
+   ],
+   "coproc": "bridge dropped to host 196944, to chip 0; host bytes discarded 0; host TX wakeups 336"
+  },
+  {
+   "t": 111.56,
+   "step": "shell: usb_bridge -> console",
+   "answer": "coproc mode console: 0 in 10 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 192,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 113.77,
+   "step": "shell: console -> flashing (stand-in)",
+   "answer": "coproc mode flashing: 0 in 11 ms",
+   "status": {
+    "state": "updating",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "flashing",
+    "generation": 196,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   },
+   "capabilities": {
+    "available": false,
+    "reason": "uart_flashing"
+   }
+  },
+  {
+   "t": 116.98,
+   "step": "shell: flashing -> console",
+   "answer": "coproc mode console: 0 in 11 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 197,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 119.72,
+   "step": "markers",
+   "markers": [
+    [
+     "paused",
+     191,
+     "UART handed to the USB bridge",
+     "52938"
+    ],
+    [
+     "reset",
+     192,
+     "UART returned to the log",
+     "52966"
+    ],
+    [
+     "reset",
+     193,
+     "ESP32 restarted by itself",
+     "53082"
+    ],
+    [
+     "reset",
+     194,
+     "ESP32 restarted by itself",
+     "53210"
+    ],
+    [
+     "reset",
+     195,
+     "ESP32 restarted by itself",
+     "53480"
+    ],
+    [
+     "reset",
+     196,
+     "ESP32 restarted by itself",
+     "53746"
+    ],
+    [
+     "paused",
+     196,
+     "UART handed to the flasher",
+     "53858"
+    ],
+    [
+     "reset",
+     197,
+     "UART returned to the log",
+     "53859"
+    ],
+    [
+     "reset",
+     198,
+     "ESP32 restarted by itself",
+     "53952"
+    ],
+    [
+     "reset",
+     199,
+     "ESP32 restarted by itself",
+     "54168"
+    ],
+    [
+     "reset",
+     200,
+     "ESP32 restarted by itself",
+     "54296"
+    ],
+    [
+     "reset",
+     201,
+     "ESP32 restarted by itself",
+     "54572"
+    ]
+   ],
+   "gap": false
+  },
+  {
+   "t": 124.84,
+   "step": "DTR high",
+   "mode": "console",
+   "seconds": null
+  },
+  {
+   "t": 124.95,
+   "step": "DTR low",
+   "mode": "console",
+   "seconds": 0.11
+  }
+ ],
+ "image_sha256": "2e2f30b52e14d4f97610f128300914946ac4a1ef1d5d7c6f881ce553fbea4ec8"
+}

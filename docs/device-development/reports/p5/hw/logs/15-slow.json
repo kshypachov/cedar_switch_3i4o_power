@@ -1,0 +1,326 @@
+{
+ "steps": [
+  {
+   "t": 0.44,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.21,
+   "step": "login",
+   "ms": 2769
+  },
+  {
+   "t": 3.33,
+   "step": "system",
+   "boot_id": "boot_ff283222cb7c585e",
+   "uptime_ms": "22528",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 64.37,
+   "step": "a page a minute",
+   "minute": 1,
+   "status": 200,
+   "ms": 892,
+   "gap": true,
+   "items": 62,
+   "has_more": true,
+   "dropped": "5"
+  },
+  {
+   "t": 125.18,
+   "step": "a page a minute",
+   "minute": 2,
+   "status": 200,
+   "ms": 790,
+   "gap": true,
+   "items": 63,
+   "has_more": true,
+   "dropped": "6"
+  },
+  {
+   "t": 186.98,
+   "step": "a page a minute",
+   "minute": 3,
+   "status": 200,
+   "ms": 1783,
+   "gap": true,
+   "items": 64,
+   "has_more": true,
+   "dropped": "7"
+  },
+  {
+   "t": 188.69,
+   "step": "samples",
+   "count": 37,
+   "ping_lost": 5,
+   "http_failed": 0,
+   "shell_failed": 1,
+   "http_p50": 95,
+   "http_max": 1103,
+   "all": [
+    {
+     "t": 3.77,
+     "ping_ms": 22.495,
+     "http": 200,
+     "http_ms": 117,
+     "shell": true
+    },
+    {
+     "t": 8.63,
+     "ping_ms": 10.292,
+     "http": 200,
+     "http_ms": 96,
+     "shell": true
+    },
+    {
+     "t": 17.24,
+     "ping_ms": null,
+     "http": 200,
+     "http_ms": 1094,
+     "shell": true
+    },
+    {
+     "t": 18.7,
+     "ping_ms": 10.04,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 26.62,
+     "ping_ms": 12.279,
+     "http": 200,
+     "http_ms": 112,
+     "shell": false
+    },
+    {
+     "t": 28.7,
+     "ping_ms": 10.527,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 36.22,
+     "ping_ms": null,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 38.79,
+     "ping_ms": 10.169,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 43.79,
+     "ping_ms": 12.802,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 48.79,
+     "ping_ms": 10.467,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 53.8,
+     "ping_ms": 10.378,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 58.83,
+     "ping_ms": 13.481,
+     "http": 200,
+     "http_ms": 103,
+     "shell": true
+    },
+    {
+     "t": 64.56,
+     "ping_ms": 231.427,
+     "http": 200,
+     "http_ms": 618,
+     "shell": true
+    },
+    {
+     "t": 69.03,
+     "ping_ms": 323.713,
+     "http": 200,
+     "http_ms": 106,
+     "shell": true
+    },
+    {
+     "t": 73.78,
+     "ping_ms": 10.627,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 78.78,
+     "ping_ms": 10.501,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 83.79,
+     "ping_ms": 10.307,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 88.8,
+     "ping_ms": 10.313,
+     "http": 200,
+     "http_ms": 92,
+     "shell": true
+    },
+    {
+     "t": 93.82,
+     "ping_ms": 16.568,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 98.8,
+     "ping_ms": 10.055,
+     "http": 200,
+     "http_ms": 91,
+     "shell": true
+    },
+    {
+     "t": 107.38,
+     "ping_ms": null,
+     "http": 200,
+     "http_ms": 1095,
+     "shell": true
+    },
+    {
+     "t": 108.88,
+     "ping_ms": 10.101,
+     "http": 200,
+     "http_ms": 92,
+     "shell": true
+    },
+    {
+     "t": 113.89,
+     "ping_ms": 10.32,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 118.84,
+     "ping_ms": 10.597,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 126.29,
+     "ping_ms": null,
+     "http": 200,
+     "http_ms": 99,
+     "shell": true
+    },
+    {
+     "t": 128.85,
+     "ping_ms": 16.703,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 133.84,
+     "ping_ms": 10.283,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    },
+    {
+     "t": 138.96,
+     "ping_ms": 167.812,
+     "http": 200,
+     "http_ms": 96,
+     "shell": true
+    },
+    {
+     "t": 143.86,
+     "ping_ms": 9.997,
+     "http": 200,
+     "http_ms": 92,
+     "shell": true
+    },
+    {
+     "t": 148.81,
+     "ping_ms": 10.86,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 153.82,
+     "ping_ms": 10.574,
+     "http": 200,
+     "http_ms": 97,
+     "shell": true
+    },
+    {
+     "t": 159.42,
+     "ping_ms": 532.063,
+     "http": 200,
+     "http_ms": 116,
+     "shell": true
+    },
+    {
+     "t": 163.83,
+     "ping_ms": 10.664,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 168.94,
+     "ping_ms": 10.737,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 177.36,
+     "ping_ms": null,
+     "http": 200,
+     "http_ms": 1103,
+     "shell": true
+    },
+    {
+     "t": 178.85,
+     "ping_ms": 10.226,
+     "http": 200,
+     "http_ms": 95,
+     "shell": true
+    },
+    {
+     "t": 183.91,
+     "ping_ms": 10.541,
+     "http": 200,
+     "http_ms": 94,
+     "shell": true
+    }
+   ]
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

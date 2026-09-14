@@ -1,0 +1,48 @@
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/p5/image-1.signed.bin sha256 7dddb9d1d0246d6b8066c79d655f200fb2f69f3f97c9e0f411874c05a8c31c8c
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 363 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 56df83e9f3d5191993ff390d337c5a74d06e2aaf232429532e71eae526268ec9
+Split status: N/A (0)
+
+d[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.890,000] [0m<inf> io: Start io outputs task[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.287,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.507,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.609,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.539,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.540,000] [0m<inf> matter: Matter start work already submitted[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.525,000] [0m<inf> device_config_store: configuration loaded, revision 8[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.525,000] [0m<inf> network_service: network configuration revision 8: clean (5634 ms)[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.526,000] [0m<inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.885,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.086,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.287,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.436,000] [0m<inf> network_service: boot 1 of 5 in a row shorter than 30 s[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.436,000] [0m<inf> network_service: worker stack: 4872 of 8192 bytes never used[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.149,000] [0m<inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4582fe45da06-dirty, frontend 0.1.0+4582fe45da06-dirty, boot_d01d85e18cd38936[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.158,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.694,000] [0m<inf> matter: Init CHIP stack[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:14.205,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:14.211,000] [0m<inf> network_manager: default route via ethernet[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:15.110,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:20.909,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.580,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.179,000] [0m<inf> chip: [SVR]Initializing session resumption storage...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.183,000] [0m<inf> chip: [SVR]Server initializing...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.184,000] [0m<dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:34.455,000] [0m<inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.523,000] [0m<inf> chip: [DMG]AccessControl: initializing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.524,000] [0m<inf> chip: [DMG]Examples::AccessControlDelegate::Init[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.525,000] [0m<inf> chip: [DMG]AccessControl: setting[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.526,000] [0m<inf> chip: [DMG]DefaultAclStorage: initializing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.527,000] [0m<inf> chip: [DMG]DefaultAclStorage: 0 entries loaded[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.528,000] [0m<inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.529,000] [0m<dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.534,000] [0m<dbg> chip.LogV: [IN]UDP::Init bound to port=5540[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:45.535,000] [0m<dbg> chip.LogV: [IN]TransportMgr initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

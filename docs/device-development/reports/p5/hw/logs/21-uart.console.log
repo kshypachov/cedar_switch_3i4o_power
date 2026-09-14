@@ -1,0 +1,28 @@
+[+    0.53] ==== host: device up
+[+    2.56] ==== host: login
+[+    2.67] ==== host: system
+[+    2.78] ==== host: status before
+[+    2.97] coproc dtr off
+[+    2.97] dtr follow off
+[+    3.07] [1;32muart:~$ [mcoproc mode bridge
+[+    3.18] coproc mode bridge: 0 in 99 ms
+[+    3.18] [1;32muart:~$ [m[8D[J[00:01:58.654,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    3.43] ==== host: shell: console -> usb_bridge
+[+    8.48] ==== host: host reads the CDC for 5 s
+[+    9.26] [1;32muart:~$ [mkernel uptime
+[+    9.26] Uptime: 127481 ms
+[+   12.12] [1;32muart:~$ [m[8D[J[00:02:05.877,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   17.01] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:06.079,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   17.01] [1;32muart:~$ [mkernel uptime
+[+   17.34] Uptime: 135243 ms
+[+   20.22] [1;32muart:~$ [m[8D[J[00:02:06.281,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   24.38] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:02:06.482,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   24.38] [1;32muart:~$ [mkernel uptime
+[+   25.03] Uptime: 142661 ms
+[+   46.94] ==== host: scenario failed
+[+   48.34] [1;32muart:~$ [m[8D[J[00:02:29.129,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   48.98] [1;32muart:~$ [mcoproc logs
+[+   49.94] stm32: records 529, used 89256 of 262144 B, appended 529, overwritten 0, lost backend 2598, lost uart 0
+[+   51.87] esp32: records 4378, used 262132 of 262144 B, appended 39960, overwritten 35582, lost backend 0, lost uart 7
+[+   52.81] lock: append hold max 32813 us, append wait max 11884 us, read hold max 502 us
+[+   52.81] next seq 40490

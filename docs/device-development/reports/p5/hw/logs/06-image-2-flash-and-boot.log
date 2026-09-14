@@ -1,0 +1,43 @@
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/p5/image-2.signed.bin sha256 9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7
+recovery on /dev/cu.usbmodem11201 after 1.7 s
+upload rc=0 in 363 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 7edd0649968ddcb0838c086a12d2890e3fadfdc9551b7cd233dbb2c9e363b81a
+Split status: N/A (0)
+
+processor missing[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.173,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.374,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.558,000] [0m<inf> network_service: boot 1 of 5 in a row shorter than 30 s[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.559,000] [0m<inf> network_service: worker stack: 4872 of 8192 bytes never used[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.256,000] [0m<inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4582fe45da06-dirty, frontend 0.1.0+4582fe45da06-dirty, boot_de52a0fd9dcfe770[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.265,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.703,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:11.904,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.105,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.307,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:12.689,000] [0m<inf> matter: Init CHIP stack[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.308,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.315,000] [0m<inf> network_manager: default route via ethernet[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.732,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:17.933,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:21.004,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.421,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.622,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:23.823,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.313,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.515,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:26.716,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.312,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.513,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:29.714,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.975,000] [0m<inf> chip: [SVR]Initializing session resumption storage...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.978,000] [0m<inf> chip: [SVR]Server initializing...[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:31.978,000] [0m<dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:35.264,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:35.465,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m

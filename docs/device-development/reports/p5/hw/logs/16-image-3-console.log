@@ -1,0 +1,5 @@
+# Attempt 1 to write image 3 (cc933cfd...) failed before the upload: "recovery did not answer"
+# (the bench MCUboot's CDC 3543501200210047 was not found within 12 s of the J-Link reset).
+# Nothing was written; the board rebooted into image 2 (new boot_id boot_eab20d5af386ee44).
+# The console of this attempt was not recorded: the copy that stood here was the previous
+# run's console and has been replaced by this note. Attempt 2: logs/17-image-3-*.

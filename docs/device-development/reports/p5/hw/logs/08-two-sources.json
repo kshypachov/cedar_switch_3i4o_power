@@ -1,0 +1,224 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.65,
+   "step": "login",
+   "ms": 3220
+  },
+  {
+   "t": 3.77,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "86291",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 4.43,
+   "step": "telnet: log enable dbg net_tcp"
+  },
+  {
+   "t": 4.65,
+   "step": "C6 reset through EN",
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 28.45,
+   "step": "telnet: log enable inf net_tcp"
+  },
+  {
+   "t": 28.45,
+   "step": "read live",
+   "records": 1307,
+   "by_source": {
+    "stm32": 4,
+    "esp32": 1303
+   },
+   "kinds": [
+    "message",
+    "reset"
+   ],
+   "ordered": true,
+   "unique": true,
+   "debug": 0,
+   "resets": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 120,
+     "seq": "29107",
+     "uptime_ms": "86540",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 restarted by itself",
+     "truncated": false,
+     "kind": "reset"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 121,
+     "seq": "29257",
+     "uptime_ms": "86895",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 restarted by itself",
+     "truncated": false,
+     "kind": "reset"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 122,
+     "seq": "29314",
+     "uptime_ms": "87131",
+     "wall_time": null,
+     "level": null,
+     "module": "coprocessor",
+     "message": "ESP32 reset through EN",
+     "truncated": false,
+     "kind": "reset"
+    }
+   ],
+   "banner": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 119,
+     "seq": "28984",
+     "uptime_ms": "86522",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "ESP-ROM:esp32c6-20220919",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 120,
+     "seq": "29254",
+     "uptime_ms": "86895",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "ESP-ROM:esp32c6-20220919",
+     "truncated": false,
+     "kind": "message"
+    }
+   ],
+   "sample_stm32": [
+    {
+     "source": "stm32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 0,
+     "seq": "29108",
+     "uptime_ms": "84548",
+     "wall_time": null,
+     "level": "error",
+     "module": "eth_w5500",
+     "message": "W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "stm32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 0,
+     "seq": "29120",
+     "uptime_ms": "84749",
+     "wall_time": null,
+     "level": "error",
+     "module": "eth_w5500",
+     "message": "W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "stm32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 0,
+     "seq": "30231",
+     "uptime_ms": "96155",
+     "wall_time": null,
+     "level": "error",
+     "module": "eth_w5500",
+     "message": "W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+     "truncated": false,
+     "kind": "message"
+    }
+   ],
+   "sample_esp32": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 119,
+     "seq": "28951",
+     "uptime_ms": "86517",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 119,
+     "seq": "28952",
+     "uptime_ms": "86517",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_de52a0fd9dcfe770",
+     "source_generation": 119,
+     "seq": "28953",
+     "uptime_ms": "86517",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    }
+   ]
+  },
+  {
+   "t": 28.56,
+   "step": "sources",
+   "body": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 128,
+      "dropped_count": "7"
+     }
+    ]
+   }
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

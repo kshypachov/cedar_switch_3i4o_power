@@ -1,0 +1,13 @@
+[+    0.43] ==== host: device up
+[+    3.20] ==== host: login
+[+    3.32] ==== host: system
+[+   32.47] ==== host: export ndjson
+[+   41.21] ==== host: export text
+[+   41.24] copoc logs
+[+   41.24] [1;31mcopoc: command not found
+[+   42.41] [m[1;32muart:~$ [m[8D[J[00:02:33.344,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0[0m
+[+   44.31] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc logs
+[+   44.31] stm32: records 106, used 10692 of 262144 B, appended 106, overwritten 0, lost backend 0, lost uart 0
+[+   44.31] esp32: records 4386, used 262140 of 262144 B, appended 35005, overwritten 30619, lost backend 0, lost uart 9
+[+   44.31] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 401 us
+[+   44.31] next seq 35112

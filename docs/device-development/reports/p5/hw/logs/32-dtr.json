@@ -1,0 +1,52 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.56,
+   "step": "login",
+   "ms": 2134
+  },
+  {
+   "t": 2.67,
+   "step": "system",
+   "boot_id": "boot_9d3c4116c685284c",
+   "uptime_ms": "528649",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 2.84,
+   "step": "dtr follow",
+   "answer": "dtr follow on"
+  },
+  {
+   "t": 12.29,
+   "step": "DTR rounds",
+   "results": [
+    {
+     "round": 0,
+     "to_bridge_s": 0.56,
+     "bytes_read": 4096,
+     "to_console_s": 1.78
+    },
+    {
+     "round": 1,
+     "to_bridge_s": 0.78,
+     "bytes_read": 4096,
+     "to_console_s": 1.35
+    },
+    {
+     "round": 2,
+     "to_bridge_s": 0.56,
+     "bytes_read": 4096,
+     "to_console_s": 1.34
+    }
+   ],
+   "coproc": "switches 14, rx stop failures 0, last switch error 0, resets 0 (unexpected 424)"
+  }
+ ],
+ "image_sha256": "2e2f30b52e14d4f97610f128300914946ac4a1ef1d5d7c6f881ce553fbea4ec8"
+}

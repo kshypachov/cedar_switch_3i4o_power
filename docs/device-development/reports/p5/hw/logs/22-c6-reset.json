@@ -1,0 +1,96 @@
+{
+ "steps": [
+  {
+   "t": 0.43,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.72,
+   "step": "login",
+   "ms": 2295
+  },
+  {
+   "t": 2.84,
+   "step": "system",
+   "boot_id": "boot_82a8b65de6391875",
+   "uptime_ms": "174727",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.33,
+   "step": "reset",
+   "i": 0,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 8.56,
+   "step": "reset",
+   "i": 1,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 13.75,
+   "step": "reset",
+   "i": 2,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 18.99,
+   "step": "reset",
+   "i": 3,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 24.16,
+   "step": "reset",
+   "i": 4,
+   "answer": "coproc reset: 0"
+  },
+  {
+   "t": 39.71,
+   "step": "after",
+   "generation_before": 160,
+   "generation_after": 165,
+   "markers_through_en": 5,
+   "markers_by_itself": 0,
+   "markers_gap": false,
+   "first_markers": [
+    [
+     "reset",
+     161,
+     "ESP32 reset through EN",
+     "40509"
+    ],
+    [
+     "reset",
+     162,
+     "ESP32 reset through EN",
+     "40510"
+    ],
+    [
+     "reset",
+     163,
+     "ESP32 reset through EN",
+     "40511"
+    ],
+    [
+     "reset",
+     164,
+     "ESP32 reset through EN",
+     "40514"
+    ],
+    [
+     "reset",
+     165,
+     "ESP32 reset through EN",
+     "40516"
+    ]
+   ],
+   "faults": [],
+   "ping_ms": 24.677,
+   "http": 200
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

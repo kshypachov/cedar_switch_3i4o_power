@@ -1,0 +1,1066 @@
+[+    1.43] ==== host: device up
+[+    1.63] [12D[J[00:10:30.047,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    1.63] [1;32muart:~$ [mcopr[12D[J[00:10:30.248,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    3.53] ==== host: login
+[+    3.63] ==== host: system
+[+    3.77] [1;32muart:~$ [mcopr[12D[J[1;32muart:~$ [mcopr[12D[J[1;32muart:~$ [mcoprcoproc dtr off
+[+    3.77] [1;31mcoprcoproc: command not found
+[+    6.79] [m[1;32muart:~$ [mcoproc dtr off
+[+    6.79] dtr follow off
+[+    6.89] [1;32muart:~$ [mkernel thread list
+[+    6.89] Scheduler: 63 since last call
+[+    6.89] Threads:
+[+    6.89]  0x7001c840 io_to_matter_stream
+[+    6.89] 	options: 0x0, priority: 10 timeout: 0
+[+    6.89] 	state: pending, entry: 0x2008715
+[+    6.89] 	Total execution cycles: 54157 (0 %)
+[+    6.89] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+    6.89] 
+[+    6.89]  0x701868a0 CHIP      
+[+    6.89] 	options: 0x0, priority: 14 timeout: 4445891722
+[+    6.89] 	state: pending, entry: 0x208a411
+[+    6.89] 	Total execution cycles: 512510994 (0 %)
+[+    6.89] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+    6.89] 
+[+    6.89]  0x20005f68 web_auth_kdf
+[+    6.89] 	options: 0x0, priority: 13 timeout: 0
+[+    6.89] 	state: pending, entry: 0x2076d1d
+[+    6.89] 	Total execution cycles: 1655192678 (1 %)
+[+    6.89] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+    6.89] 
+[+    6.89]  0x70004bf8 web_v1_jobs
+[+    6.89] 	options: 0x0, priority: 10 timeout: 0
+[+    6.89] 	state: pending, entry: 0x207d645
+[+    6.89] 	Total execution cycles: 23176 (0 %)
+[+    6.89] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+    6.89] 
+[+    6.89]  0x20006490 network   
+[+    6.99] 	options: 0x0, priority: 10 timeout: 0
+[+    6.99] 	state: pending, entry: 0x207d645
+[+    6.99] 	Total execution cycles: 188096618 (0 %)
+[+    6.99] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+    6.99] 
+[+    6.99]  0x200066b8 coprocessor
+[+    6.99] 	options: 0x0, priority: 12 timeout: 0
+[+    6.99] 	state: queued, entry: 0x20a2e15
+[+    6.99] 	Total execution cycles: 2402776505 (2 %)
+[+    6.99] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+    6.99] 
+[+    6.99]  0x7000a820 io_outputs_task
+[+    6.99] 	options: 0x0, priority: 2 timeout: 0
+[+    6.99] 	state: pending, entry: 0x2006885
+[+    6.99] 	Total execution cycles: 74073 (0 %)
+[+    6.99] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+    6.99] 
+[+    6.99]  0x7019c350 reg_notify_wq
+[+    6.99] 	options: 0x0, priority: 10 timeout: 0
+[+    6.99] 	state: pending, entry: 0x207d645
+[+    6.99] 	Total execution cycles: 15321 (0 %)
+[+    6.99] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+    6.99] 
+[+    6.99]  0x20004df8 input     
+[+    6.99] 	options: 0x0, priority: 14 timeout: 0
+[+    6.99] 	state: pending, entry: 0x2022395
+[+    6.99] 	Total execution cycles: 9506 (0 %)
+[+    6.99] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+    6.99] 
+[+    6.99]  0x70007d08 http_server_tid
+[+    7.09] 	options: 0x0, priority: -1 timeout: 563
+[+    7.09] 	state: pending, entry: 0x204e961
+[+    7.09] 	Total execution cycles: 576150988 (0 %)
+[+    7.09] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+    7.09] 
+[+    7.09]  0x20003fb0 shell_telnet
+[+    7.09] 	options: 0x0, priority: 0 timeout: 0
+[+    7.09] 	state: pending, entry: 0x201a311
+[+    7.09] 	Total execution cycles: 142663115 (0 %)
+[+    7.09] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+    7.09] 
+[+    7.09]  0x70004d30 conn_mgr_monitor
+[+    7.09] 	options: 0x0, priority: -1 timeout: 0
+[+    7.09] 	state: pending, entry: 0x2050bad
+[+    7.09] 	Total execution cycles: 409409 (0 %)
+[+    7.09] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+    7.09] 
+[+    7.09]  0x700217b8 net_socket_service
+[+    7.09] 	options: 0x0, priority: 13 timeout: 0
+[+    7.09] 	state: pending, entry: 0x2026d59
+[+    7.09] 	Total execution cycles: 440305 (0 %)
+[+    7.09] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+    7.09] 
+[+    7.09]  0x20000a10 eth_w5500 
+[+    7.09] 	options: 0x0, priority: -14 timeout: 1765
+[+    7.09] 	state: pending, entry: 0x20ca211
+[+    7.09] 	Total execution cycles: 3079472342 (3 %)
+[+    7.09] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+    7.09] 
+[+    7.09]  0x7001fa88 tx_q[0]   
+[+    7.19] 	options: 0x0, priority: -1 timeout: 155
+[+    7.19] 	state: pending, entry: 0x20be9a9
+[+    7.19] 	Total execution cycles: 326545745 (0 %)
+[+    7.19] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+    7.19] 
+[+    7.19]  0x7001f980 rx_q[0]   
+[+    7.19] 	options: 0x0, priority: -1 timeout: 0
+[+    7.19] 	state: pending, entry: 0x20be9c5
+[+    7.19] 	Total execution cycles: 646076499 (0 %)
+[+    7.19] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+    7.19] 
+[+    7.19]  0x7001f7a0 net_mgmt  
+[+    7.19] 	options: 0x0, priority: -1 timeout: 0
+[+    7.19] 	state: pending, entry: 0x207d645
+[+    7.19] 	Total execution cycles: 5669869 (0 %)
+[+    7.19] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+    7.19] 
+[+    7.19]  0x70022368 tcp_work  
+[+    7.19] 	options: 0x0, priority: -14 timeout: 0
+[+    7.19] 	state: pending, entry: 0x207d645
+[+    7.19] 	Total execution cycles: 17613032 (0 %)
+[+    7.19] 	stack size 1024, unused 480, usage 544 / 1024 (53 %)
+[+    7.19] 
+[+    7.19]  0x20004d18 usbd      
+[+    7.19] 	options: 0x0, priority: -8 timeout: 0
+[+    7.19] 	state: pending, entry: 0x2021289
+[+    7.19] 	Total execution cycles: 2462628290 (2 %)
+[+    7.19] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+    7.19] 
+[+    7.19] *0x20003c10 shell_uart
+[+    7.29] 	options: 0x0, priority: 0 timeout: 0
+[+    7.29] 	state: queued, entry: 0x201a311
+[+    7.29] 	Total execution cycles: 3686902705 (46 %)
+[+    7.29] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+    7.29] 
+[+    7.29]  0x701a6020           
+[+    7.29] 	options: 0x0, priority: 4 timeout: 0
+[+    7.29] 	state: queued, entry: 0x2052355
+[+    7.29] 	Total execution cycles: 642007450 (0 %)
+[+    7.29] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+    7.29] 
+[+    7.29]  0x701a6100 esp_hosted_tx
+[+    7.29] 	options: 0x0, priority: 5 timeout: 0
+[+    7.29] 	state: pending, entry: 0x2052091
+[+    7.29] 	Total execution cycles: 14047 (0 %)
+[+    7.29] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+    7.29] 
+[+    7.29]  0x20005428 otgfs@42040000
+[+    7.29] 	options: 0x1, priority: -8 timeout: 0
+[+    7.29] 	state: pending, entry: 0x20c71e9
+[+    7.29] 	Total execution cycles: 2026044907 (2 %)
+[+    7.29] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+    7.29] 
+[+    7.29]  0x7001b6d8 logging   
+[+    7.29] 	options: 0x0, priority: 13 timeout: 860
+[+    7.29] 	state: pending, entry: 0x2014ed9
+[+    7.29] 	Total execution cycles: 374322612 (0 %)
+[+    7.29] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+    7.29] 
+[+    7.29]  0x20006248 sysworkq  
+[+    7.39] 	options: 0x1, priority: -1 timeout: 0
+[+    7.39] 	state: pending, entry: 0x207d645
+[+    7.39] 	Total execution cycles: 323411316 (8 %)
+[+    7.39] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+    7.39] 
+[+    7.39]  0x20006048 idle      
+[+    7.39] 	options: 0x1, priority: 15 timeout: 0
+[+    7.39] 	state: , entry: 0x207c4b9
+[+    7.39] 	Total execution cycles: 1159302821 (26 %)
+[+    7.39] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+    7.39] 
+[+    7.39]  0x20006128 main      
+[+    7.39] 	options: 0x1, priority: 0 timeout: 13054
+[+    7.39] 	state: sleeping, entry: 0x207bedd
+[+    7.39] 	Total execution cycles: 71211293 (0 %)
+[+    7.39] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+    7.39] 
+[+   10.07] [1;32muart:~$ [m[8D[J[00:10:38.600,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:10:38.802,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   10.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:10:39.003,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   24.82] ==== host: probe: console, nobody on the CDC
+[+   24.89] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc mode bridge
+[+   24.89] coproc mode bridge: 0 in 11 ms
+[+   24.94] ==== host: bridge on
+[+   25.21] [1;32muart:~$ [mkernel thread list
+[+   25.85] Scheduler: 531 since last call
+[+   25.85] Threads:
+[+   26.17]  0x7001c840 io_to_matter_stream
+[+   26.90] 	options: 0x0, priority: 10 timeout: 0
+[+   27.55] 	state: pending, entry: 0x2008715
+[+   28.19] 	Total execution cycles: 54157 (0 %)
+[+   28.83] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+   28.83] 
+[+   29.15]  0x701868a0 CHIP      
+[+   29.79] 	options: 0x0, priority: 14 timeout: 4445178328
+[+   30.43] 	state: queued, entry: 0x208a411
+[+   31.08] 	Total execution cycles: 542963631 (0 %)
+[+   31.72] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+   31.72] 
+[+   32.05]  0x20005f68 web_auth_kdf
+[+   32.69] 	options: 0x0, priority: 13 timeout: 0
+[+   33.34] 	state: pending, entry: 0x2076d1d
+[+   33.97] 	Total execution cycles: 1655192678 (1 %)
+[+   34.60] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+   34.60] 
+[+   34.92]  0x70004bf8 web_v1_jobs
+[+   35.57] 	options: 0x0, priority: 10 timeout: 0
+[+   36.22] 	state: pending, entry: 0x207d645
+[+   36.86] 	Total execution cycles: 23176 (0 %)
+[+   37.51] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+   37.51] 
+[+   37.84]  0x20006490 network   
+[+   38.48] 	options: 0x0, priority: 10 timeout: 0
+[+   39.12] 	state: queued, entry: 0x207d645
+[+   39.77] 	Total execution cycles: 190389575 (0 %)
+[+   40.41] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+   40.41] 
+[+   40.72]  0x200066b8 coprocessor
+[+   41.48] 	options: 0x0, priority: 12 timeout: 0
+[+   42.12] 	state: queued, entry: 0x20a2e15
+[+   42.67] 	Total execution cycles: 2591614139 (2 %)
+[+   43.41] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+   43.41] 
+[+   43.72]  0x7000a820 io_outputs_task
+[+   44.37] 	options: 0x0, priority: 2 timeout: 0
+[+   45.02] 	state: pending, entry: 0x2006885
+[+   45.65] 	Total execution cycles: 74073 (0 %)
+[+   46.29] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+   46.29] 
+[+   46.61]  0x7019c350 reg_notify_wq
+[+   47.23] 	options: 0x0, priority: 10 timeout: 0
+[+   47.87] 	state: pending, entry: 0x207d645
+[+   48.52] 	Total execution cycles: 15321 (0 %)
+[+   49.15] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+   49.15] 
+[+   49.47]  0x20004df8 input     
+[+   50.11] 	options: 0x0, priority: 14 timeout: 0
+[+   50.85] 	state: pending, entry: 0x2022395
+[+   51.49] 	Total execution cycles: 9506 (0 %)
+[+   52.43] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+   52.43] 
+[+   53.70]  0x70007d08 http_server_tid
+[+   55.00] 	options: 0x0, priority: -1 timeout: 563
+[+   55.96] 	state: pending, entry: 0x204e961
+[+   56.58] 	Total execution cycles: 917048330 (0 %)
+[+   57.98] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+   57.98] 
+[+   58.95]  0x20003fb0 shell_telnet
+[+   60.22] 	options: 0x0, priority: 0 timeout: 0
+[+   61.18] 	state: pending, entry: 0x201a311
+[+   62.47] 	Total execution cycles: 143410864 (0 %)
+[+   63.75] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+   63.75] 
+[+   64.71]  0x70004d30 conn_mgr_monitor
+[+   65.36] 	options: 0x0, priority: -1 timeout: 0
+[+   66.63] 	state: pending, entry: 0x2050bad
+[+   66.63] 	Total execution cycles: 409409 (0 %)
+[+   67.59] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+   67.59] 
+[+   68.98]  0x700217b8 net_socket_service
+[+   69.93] 	options: 0x0, priority: 13 timeout: 0
+[+   69.93] 	state: pending, entry: 0x2026d59
+[+   71.21] 	Total execution cycles: 440305 (0 %)
+[+   71.30] ==== host: probe: bridge, host reading the CDC
+[+   72.49] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+   72.49] 
+[+   72.49]  0x20000a10 eth_w5500 
+[+   72.81] 	options: 0x0, priority: -14 timeout: 814
+[+   73.45] 	state: pending, entry: 0x20ca211
+[+   74.08] 	Total execution cycles: 3473853527 (3 %)
+[+   74.82] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+   74.82] 
+[+   75.46]  0x7001fa88 tx_q[0]   
+[+   75.78] 	options: 0x0, priority: -1 timeout: 1053
+[+   76.42] 	state: pending, entry: 0x20be9a9
+[+   77.06] 	Total execution cycles: 762135580 (0 %)
+[+   77.71] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+   78.35] 
+[+   78.35]  0x7001f980 rx_q[0]   
+[+   78.67] 	options: 0x0, priority: -1 timeout: 0
+[+   79.31] 	state: pending, entry: 0x20be9c5
+[+   79.96] 	Total execution cycles: 1234249239 (1 %)
+[+   80.61] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+   80.61] 
+[+   81.24]  0x7001f7a0 net_mgmt  
+[+   81.57] 	options: 0x0, priority: -1 timeout: 0
+[+   82.21] 	state: pending, entry: 0x207d645
+[+   82.85] 	Total execution cycles: 6555048 (0 %)
+[+   84.13] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+   84.13] 
+[+   84.13]  0x70022368 tcp_work  
+[+   84.44] 	options: 0x0, priority: -14 timeout: 0
+[+   85.18] 	state: pending, entry: 0x207d645
+[+   86.46] 	Total execution cycles: 30459506 (0 %)
+[+   87.10] 	stack size 1024, unused 480, usage 544 / 1024 (53 %)
+[+   87.10] 
+[+   87.42]  0x20004d18 usbd      
+[+   88.07] 	options: 0x0, priority: -8 timeout: 0
+[+   88.71] 	state: pending, entry: 0x2021289
+[+   89.36] 	Total execution cycles: 3972184441 (3 %)
+[+   89.99] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+   89.99] 
+[+   90.31] *0x20003c10 shell_uart
+[+   90.96] 	options: 0x0, priority: 0 timeout: 0
+[+   90.96] 	state: queued, entry: 0x201a311
+[+   91.59] 	Total execution cycles: 3769796415 (41 %)
+[+   92.88] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+   92.88] 
+[+   92.88]  0x701a6020           
+[+   93.20] 	options: 0x0, priority: 4 timeout: 0
+[+   93.85] 	state: pending, entry: 0x2052355
+[+   94.50] 	Total execution cycles: 668509599 (0 %)
+[+   95.77] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+   95.77] 
+[+   95.77]  0x701a6100 esp_hosted_tx
+[+   96.09] 	options: 0x0, priority: 5 timeout: 0
+[+   96.73] 	state: pending, entry: 0x2052091
+[+   97.47] 	Total execution cycles: 14047 (0 %)
+[+   97.47] ==== host: host read
+[+   98.76] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+  100.34] 
+[+  100.34]  0x20005428 otgfs@42040000
+[+  100.98] 	options: 0x1, priority: -8 timeout: 0
+[+  101.61] 	state: pending, entry: 0x20c71e9
+[+  101.93] 	Total execution cycles: 3503172533 (3 %)
+[+  103.32] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+  103.32] 
+[+  104.59]  0x7001b6d8 logging   
+[+  104.91] 	options: 0x0, priority: 13 timeout: 860
+[+  105.55] 	state: queued, entry: 0x2014ed9
+[+  106.20] 	Total execution cycles: 375919681 (0 %)
+[+  106.85] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  106.85] 
+[+  108.46]  0x20006248 sysworkq  
+[+  109.11] 	options: 0x1, priority: -1 timeout: 0
+[+  110.39] 	state: pending, entry: 0x207d645
+[+  111.36] 	Total execution cycles: 2972510626 (13 %)
+[+  112.67] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+  112.67] 
+[+  112.79] ==== host: probe: bridge, host not reading
+[+  112.98]  0x20006048 idle      
+[+  112.98] 	options: 0x1, priority: 15 timeout: 0
+[+  112.98] 	state: , entry: 0x207c4b9
+[+  112.98] 	Total execution cycles: 2899117377 (24 %)
+[+  112.98] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+  112.98] 
+[+  112.98]  0x20006128 main      
+[+  112.98] 	options: 0x1, priority: 0 timeout: 3784
+[+  112.98] 	state: sleeping, entry: 0x207bedd
+[+  112.98] 	Total execution cycles: 71866217 (0 %)
+[+  112.98] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+  112.98] 
+[+  112.98] [1;32muart:~$ [mkernel thread list
+[+  112.98] Scheduler: 84 since last call
+[+  112.98] Threads:
+[+  112.98]  0x7001c840 io_to_matter_stream
+[+  112.98] 	options: 0x0, priority: 10 timeout: 0
+[+  112.98] 	state: pending, entry: 0x2008715
+[+  112.98] 	Total execution cycles: 54157 (0 %)
+[+  112.98] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+  112.98] 
+[+  112.98]  0x701868a0 CHIP      
+[+  112.98] 	options: 0x0, priority: 14 timeout: 4445178328
+[+  112.98] 	state: queued, entry: 0x208a411
+[+  112.98] 	Total execution cycles: 542963631 (0 %)
+[+  112.98] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+  112.98] 
+[+  112.98]  0x20005f68 web_auth_kdf
+[+  113.08] 	options: 0x0, priority: 13 timeout: 0
+[+  113.08] 	state: pending, entry: 0x2076d1d
+[+  113.08] 	Total execution cycles: 1655192678 (1 %)
+[+  113.08] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+  113.08] 
+[+  113.08]  0x70004bf8 web_v1_jobs
+[+  113.08] 	options: 0x0, priority: 10 timeout: 0
+[+  113.08] 	state: pending, entry: 0x207d645
+[+  113.08] 	Total execution cycles: 23176 (0 %)
+[+  113.08] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+  113.08] 
+[+  113.08]  0x20006490 network   
+[+  113.08] 	options: 0x0, priority: 10 timeout: 0
+[+  113.08] 	state: queued, entry: 0x207d645
+[+  113.08] 	Total execution cycles: 190391133 (0 %)
+[+  113.08] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+  113.08] 
+[+  113.08]  0x200066b8 coprocessor
+[+  113.08] 	options: 0x0, priority: 12 timeout: 0
+[+  113.08] 	state: queued, entry: 0x20a2e15
+[+  113.08] 	Total execution cycles: 2591614139 (2 %)
+[+  113.08] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+  113.08] 
+[+  113.08]  0x7000a820 io_outputs_task
+[+  113.08] 	options: 0x0, priority: 2 timeout: 0
+[+  113.08] 	state: pending, entry: 0x2006885
+[+  113.08] 	Total execution cycles: 74073 (0 %)
+[+  113.08] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+  113.08] 
+[+  113.19]  0x7019c350 reg_notify_wq
+[+  113.19] 	options: 0x0, priority: 10 timeout: 0
+[+  113.19] 	state: pending, entry: 0x207d645
+[+  113.19] 	Total execution cycles: 15321 (0 %)
+[+  113.19] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+  113.19] 
+[+  113.19]  0x20004df8 input     
+[+  113.19] 	options: 0x0, priority: 14 timeout: 0
+[+  113.19] 	state: pending, entry: 0x2022395
+[+  113.19] 	Total execution cycles: 9506 (0 %)
+[+  113.19] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+  113.19] 
+[+  113.19]  0x70007d08 http_server_tid
+[+  113.19] 	options: 0x0, priority: -1 timeout: 563
+[+  113.19] 	state: pending, entry: 0x204e961
+[+  113.19] 	Total execution cycles: 1435064009 (1 %)
+[+  113.19] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+  113.19] 
+[+  113.19]  0x20003fb0 shell_telnet
+[+  113.19] 	options: 0x0, priority: 0 timeout: 0
+[+  113.19] 	state: pending, entry: 0x201a311
+[+  113.19] 	Total execution cycles: 143410864 (0 %)
+[+  113.19] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+  113.19] 
+[+  113.19]  0x70004d30 conn_mgr_monitor
+[+  113.19] 	options: 0x0, priority: -1 timeout: 0
+[+  113.19] 	state: pending, entry: 0x2050bad
+[+  113.19] 	Total execution cycles: 409409 (0 %)
+[+  113.29] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+  113.29] 
+[+  113.29]  0x700217b8 net_socket_service
+[+  113.29] 	options: 0x0, priority: 13 timeout: 0
+[+  113.29] 	state: pending, entry: 0x2026d59
+[+  113.29] 	Total execution cycles: 440305 (0 %)
+[+  113.29] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+  113.29] 
+[+  113.29]  0x20000a10 eth_w5500 
+[+  113.29] 	options: 0x0, priority: -14 timeout: 1224
+[+  113.29] 	state: pending, entry: 0x20ca211
+[+  113.29] 	Total execution cycles: 3624685556 (3 %)
+[+  113.29] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+  113.29] 
+[+  113.29]  0x7001fa88 tx_q[0]   
+[+  113.29] 	options: 0x0, priority: -1 timeout: 0
+[+  113.29] 	state: pending, entry: 0x20be9a9
+[+  113.29] 	Total execution cycles: 930890790 (0 %)
+[+  113.29] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+  113.29] 
+[+  113.29]  0x7001f980 rx_q[0]   
+[+  113.29] 	options: 0x0, priority: -1 timeout: 1192
+[+  113.29] 	state: pending, entry: 0x20be9c5
+[+  113.29] 	Total execution cycles: 1459571086 (1 %)
+[+  113.29] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+  113.29] 
+[+  113.29]  0x7001f7a0 net_mgmt  
+[+  113.29] 	options: 0x0, priority: -1 timeout: 0
+[+  113.39] 	state: pending, entry: 0x207d645
+[+  113.39] 	Total execution cycles: 6555048 (0 %)
+[+  113.39] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  113.39] 
+[+  113.39]  0x70022368 tcp_work  
+[+  113.39] 	options: 0x0, priority: -14 timeout: 0
+[+  113.39] 	state: pending, entry: 0x207d645
+[+  113.39] 	Total execution cycles: 39340130 (0 %)
+[+  113.39] 	stack size 1024, unused 472, usage 552 / 1024 (53 %)
+[+  113.39] 
+[+  113.39]  0x20004d18 usbd      
+[+  113.39] 	options: 0x0, priority: -8 timeout: 0
+[+  113.39] 	state: pending, entry: 0x2021289
+[+  113.39] 	Total execution cycles: 205544293 (3 %)
+[+  113.39] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+  113.39] 
+[+  113.39] *0x20003c10 shell_uart
+[+  113.39] 	options: 0x0, priority: 0 timeout: 0
+[+  113.39] 	state: queued, entry: 0x201a311
+[+  113.39] 	Total execution cycles: 3848864510 (40 %)
+[+  113.39] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+  113.39] 
+[+  113.39]  0x701a6020           
+[+  113.39] 	options: 0x0, priority: 4 timeout: 0
+[+  113.39] 	state: queued, entry: 0x2052355
+[+  113.39] 	Total execution cycles: 669025613 (0 %)
+[+  113.39] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+  113.39] 
+[+  113.39]  0x701a6100 esp_hosted_tx
+[+  113.49] 	options: 0x0, priority: 5 timeout: 0
+[+  113.49] 	state: pending, entry: 0x2052091
+[+  113.49] 	Total execution cycles: 14047 (0 %)
+[+  113.49] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+  113.49] 
+[+  113.49]  0x20005428 otgfs@42040000
+[+  113.49] 	options: 0x1, priority: -8 timeout: 0
+[+  113.49] 	state: pending, entry: 0x20c71e9
+[+  113.49] 	Total execution cycles: 3671991896 (3 %)
+[+  113.49] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+  113.49] 
+[+  113.49]  0x7001b6d8 logging   
+[+  113.49] 	options: 0x0, priority: 13 timeout: 860
+[+  113.49] 	state: queued, entry: 0x2014ed9
+[+  113.49] 	Total execution cycles: 375919681 (0 %)
+[+  113.49] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  113.49] 
+[+  113.49]  0x20006248 sysworkq  
+[+  113.49] 	options: 0x1, priority: -1 timeout: 0
+[+  113.49] 	state: pending, entry: 0x207d645
+[+  113.49] 	Total execution cycles: 3135394457 (13 %)
+[+  113.49] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+  113.49] 
+[+  113.49]  0x20006048 idle      
+[+  113.49] 	options: 0x1, priority: 15 timeout: 0
+[+  113.49] 	state: , entry: 0x207c4b9
+[+  113.49] 	Total execution cycles: 2899117377 (24 %)
+[+  113.49] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+  113.49] 
+[+  113.59]  0x20006128 main      
+[+  113.59] 	options: 0x1, priority: 0 timeout: 17518
+[+  113.59] 	state: sleeping, entry: 0x207bedd
+[+  113.59] 	Total execution cycles: 71888822 (0 %)
+[+  113.59] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+  113.59] 
+[+  113.59] [1;32muart:~$ [mkernel thread list
+[+  113.59] Scheduler: 91 since last call
+[+  113.59] Threads:
+[+  113.59]  0x7001c840 io_to_matter_stream
+[+  113.59] 	options: 0x0, priority: 10 timeout: 0
+[+  113.59] 	state: pending, entry: 0x2008715
+[+  113.59] 	Total execution cycles: 54157 (0 %)
+[+  113.59] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+  113.59] 
+[+  113.59]  0x701868a0 CHIP      
+[+  113.59] 	options: 0x0, priority: 14 timeout: 4445178328
+[+  113.59] 	state: queued, entry: 0x208a411
+[+  113.59] 	Total execution cycles: 542963631 (0 %)
+[+  113.59] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+  113.59] 
+[+  113.59]  0x20005f68 web_auth_kdf
+[+  113.59] 	options: 0x0, priority: 13 timeout: 0
+[+  113.59] 	state: pending, entry: 0x2076d1d
+[+  113.59] 	Total execution cycles: 1655192678 (1 %)
+[+  113.59] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+  113.59] 
+[+  113.59]  0x70004bf8 web_v1_jobs
+[+  113.69] 	options: 0x0, priority: 10 timeout: 0
+[+  113.69] 	state: pending, entry: 0x207d645
+[+  113.69] 	Total execution cycles: 23176 (0 %)
+[+  113.69] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+  113.69] 
+[+  113.69]  0x20006490 network   
+[+  113.69] 	options: 0x0, priority: 10 timeout: 0
+[+  113.69] 	state: queued, entry: 0x207d645
+[+  113.69] 	Total execution cycles: 190391133 (0 %)
+[+  113.69] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+  113.69] 
+[+  113.69]  0x200066b8 coprocessor
+[+  113.69] 	options: 0x0, priority: 12 timeout: 0
+[+  113.69] 	state: queued, entry: 0x20a2e15
+[+  113.69] 	Total execution cycles: 2591614139 (2 %)
+[+  113.69] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+  113.69] 
+[+  113.69]  0x7000a820 io_outputs_task
+[+  113.69] 	options: 0x0, priority: 2 timeout: 0
+[+  113.69] 	state: pending, entry: 0x2006885
+[+  113.69] 	Total execution cycles: 74073 (0 %)
+[+  113.69] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+  113.69] 
+[+  113.69]  0x7019c350 reg_notify_wq
+[+  113.69] 	options: 0x0, priority: 10 timeout: 0
+[+  113.69] 	state: pending, entry: 0x207d645
+[+  113.69] 	Total execution cycles: 15321 (0 %)
+[+  113.69] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+  113.69] 
+[+  113.79]  0x20004df8 input     
+[+  113.79] 	options: 0x0, priority: 14 timeout: 0
+[+  113.79] 	state: pending, entry: 0x2022395
+[+  113.79] 	Total execution cycles: 9506 (0 %)
+[+  113.79] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+  113.79] 
+[+  113.79]  0x70007d08 http_server_tid
+[+  113.79] 	options: 0x0, priority: -1 timeout: 563
+[+  113.79] 	state: pending, entry: 0x204e961
+[+  113.79] 	Total execution cycles: 1435064009 (1 %)
+[+  113.79] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+  113.79] 
+[+  113.79]  0x20003fb0 shell_telnet
+[+  113.79] 	options: 0x0, priority: 0 timeout: 0
+[+  113.79] 	state: pending, entry: 0x201a311
+[+  113.79] 	Total execution cycles: 143410864 (0 %)
+[+  113.79] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+  113.79] 
+[+  113.79]  0x70004d30 conn_mgr_monitor
+[+  113.79] 	options: 0x0, priority: -1 timeout: 0
+[+  113.79] 	state: pending, entry: 0x2050bad
+[+  113.79] 	Total execution cycles: 409409 (0 %)
+[+  113.79] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+  113.79] 
+[+  113.79]  0x700217b8 net_socket_service
+[+  113.79] 	options: 0x0, priority: 13 timeout: 0
+[+  113.79] 	state: pending, entry: 0x2026d59
+[+  113.79] 	Total execution cycles: 440305 (0 %)
+[+  113.89] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+  113.89] 
+[+  113.89]  0x20000a10 eth_w5500 
+[+  113.89] 	options: 0x0, priority: -14 timeout: 5007
+[+  113.89] 	state: pending, entry: 0x20ca211
+[+  113.89] 	Total execution cycles: 3625349191 (3 %)
+[+  113.89] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+  113.89] 
+[+  113.89]  0x7001fa88 tx_q[0]   
+[+  113.89] 	options: 0x0, priority: -1 timeout: 0
+[+  113.89] 	state: pending, entry: 0x20be9a9
+[+  113.89] 	Total execution cycles: 930890790 (0 %)
+[+  113.89] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+  113.89] 
+[+  113.89]  0x7001f980 rx_q[0]   
+[+  113.89] 	options: 0x0, priority: -1 timeout: 0
+[+  113.89] 	state: pending, entry: 0x20be9c5
+[+  113.89] 	Total execution cycles: 1459704049 (1 %)
+[+  113.89] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+  113.89] 
+[+  113.89]  0x7001f7a0 net_mgmt  
+[+  113.89] 	options: 0x0, priority: -1 timeout: 0
+[+  113.89] 	state: pending, entry: 0x207d645
+[+  113.89] 	Total execution cycles: 6555048 (0 %)
+[+  113.89] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  113.89] 
+[+  113.89]  0x70022368 tcp_work  
+[+  113.89] 	options: 0x0, priority: -14 timeout: 0
+[+  113.89] 	state: pending, entry: 0x207d645
+[+  113.99] 	Total execution cycles: 39340130 (0 %)
+[+  113.99] 	stack size 1024, unused 472, usage 552 / 1024 (53 %)
+[+  113.99] 
+[+  113.99]  0x20004d18 usbd      
+[+  113.99] 	options: 0x0, priority: -8 timeout: 0
+[+  113.99] 	state: pending, entry: 0x2021289
+[+  113.99] 	Total execution cycles: 205544293 (3 %)
+[+  113.99] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+  113.99] 
+[+  113.99] *0x20003c10 shell_uart
+[+  113.99] 	options: 0x0, priority: 0 timeout: 0
+[+  113.99] 	state: queued, entry: 0x201a311
+[+  113.99] 	Total execution cycles: 3930773362 (40 %)
+[+  113.99] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+  113.99] 
+[+  113.99]  0x701a6020           
+[+  113.99] 	options: 0x0, priority: 4 timeout: 0
+[+  113.99] 	state: queued, entry: 0x2052355
+[+  113.99] 	Total execution cycles: 669063512 (0 %)
+[+  113.99] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+  113.99] 
+[+  113.99]  0x701a6100 esp_hosted_tx
+[+  113.99] 	options: 0x0, priority: 5 timeout: 0
+[+  113.99] 	state: pending, entry: 0x2052091
+[+  113.99] 	Total execution cycles: 14047 (0 %)
+[+  113.99] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+  113.99] 
+[+  113.99]  0x20005428 otgfs@42040000
+[+  113.99] 	options: 0x1, priority: -8 timeout: 0
+[+  114.09] 	state: pending, entry: 0x20c71e9
+[+  114.09] 	Total execution cycles: 3671991896 (3 %)
+[+  114.09] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+  114.09] 
+[+  114.09]  0x7001b6d8 logging   
+[+  114.09] 	options: 0x0, priority: 13 timeout: 860
+[+  114.09] 	state: queued, entry: 0x2014ed9
+[+  114.09] 	Total execution cycles: 375919681 (0 %)
+[+  114.09] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  114.09] 
+[+  114.09]  0x20006248 sysworkq  
+[+  114.09] 	options: 0x1, priority: -1 timeout: 0
+[+  114.09] 	state: pending, entry: 0x207d645
+[+  114.09] 	Total execution cycles: 3135394457 (13 %)
+[+  114.09] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+  114.09] 
+[+  114.09]  0x20006048 idle      
+[+  114.09] 	options: 0x1, priority: 15 timeout: 0
+[+  114.09] 	state: , entry: 0x207c4b9
+[+  114.09] 	Total execution cycles: 2899117377 (24 %)
+[+  114.09] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+  114.09] 
+[+  114.09]  0x20006128 main      
+[+  114.09] 	options: 0x1, priority: 0 timeout: 12511
+[+  114.09] 	state: sleeping, entry: 0x207bedd
+[+  114.09] 	Total execution cycles: 71888822 (0 %)
+[+  114.09] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+  114.09] 
+[+  114.09] [1;32muart:~$ [mkernel thread list
+[+  114.19] Scheduler: 261 since last call
+[+  114.19] Threads:
+[+  114.19]  0x7001c840 io_to_matter_stream
+[+  114.19] 	options: 0x0, priority: 10 timeout: 0
+[+  114.19] 	state: pending, entry: 0x2008715
+[+  114.19] 	Total execution cycles: 54157 (0 %)
+[+  114.19] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+  114.19] 
+[+  114.19]  0x701868a0 CHIP      
+[+  114.19] 	options: 0x0, priority: 14 timeout: 4445178328
+[+  114.19] 	state: queued, entry: 0x208a411
+[+  114.19] 	Total execution cycles: 542963631 (0 %)
+[+  114.19] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+  114.19] 
+[+  114.19]  0x20005f68 web_auth_kdf
+[+  114.19] 	options: 0x0, priority: 13 timeout: 0
+[+  114.19] 	state: pending, entry: 0x2076d1d
+[+  114.19] 	Total execution cycles: 1655192678 (1 %)
+[+  114.19] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+  114.19] 
+[+  114.19]  0x70004bf8 web_v1_jobs
+[+  114.19] 	options: 0x0, priority: 10 timeout: 0
+[+  114.19] 	state: pending, entry: 0x207d645
+[+  114.19] 	Total execution cycles: 23176 (0 %)
+[+  114.19] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+  114.19] 
+[+  114.19]  0x20006490 network   
+[+  114.19] 	options: 0x0, priority: 10 timeout: 0
+[+  114.19] 	state: queued, entry: 0x207d645
+[+  114.29] 	Total execution cycles: 190391133 (0 %)
+[+  114.29] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+  114.29] 
+[+  114.29]  0x200066b8 coprocessor
+[+  114.29] 	options: 0x0, priority: 12 timeout: 0
+[+  114.29] 	state: queued, entry: 0x20a2e15
+[+  114.29] 	Total execution cycles: 2591614139 (2 %)
+[+  114.29] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+  114.29] 
+[+  114.29]  0x7000a820 io_outputs_task
+[+  114.29] 	options: 0x0, priority: 2 timeout: 0
+[+  114.29] 	state: pending, entry: 0x2006885
+[+  114.29] 	Total execution cycles: 74073 (0 %)
+[+  114.29] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+  114.29] 
+[+  114.29]  0x7019c350 reg_notify_wq
+[+  114.29] 	options: 0x0, priority: 10 timeout: 0
+[+  114.29] 	state: pending, entry: 0x207d645
+[+  114.29] 	Total execution cycles: 15321 (0 %)
+[+  114.29] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+  114.29] 
+[+  114.29]  0x20004df8 input     
+[+  114.29] 	options: 0x0, priority: 14 timeout: 0
+[+  114.29] 	state: pending, entry: 0x2022395
+[+  114.29] 	Total execution cycles: 9506 (0 %)
+[+  114.29] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+  114.29] 
+[+  114.29]  0x70007d08 http_server_tid
+[+  114.39] 	options: 0x0, priority: -1 timeout: 563
+[+  114.39] 	state: pending, entry: 0x204e961
+[+  114.39] 	Total execution cycles: 1435064009 (1 %)
+[+  114.39] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+  114.39] 
+[+  114.39]  0x20003fb0 shell_telnet
+[+  114.39] 	options: 0x0, priority: 0 timeout: 0
+[+  114.39] 	state: pending, entry: 0x201a311
+[+  114.39] 	Total execution cycles: 143410864 (0 %)
+[+  114.39] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+  114.39] 
+[+  114.39]  0x70004d30 conn_mgr_monitor
+[+  114.39] 	options: 0x0, priority: -1 timeout: 0
+[+  114.39] 	state: pending, entry: 0x2050bad
+[+  114.39] 	Total execution cycles: 409409 (0 %)
+[+  114.39] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+  114.39] 
+[+  114.39]  0x700217b8 net_socket_service
+[+  114.39] 	options: 0x0, priority: 13 timeout: 0
+[+  114.39] 	state: pending, entry: 0x2026d59
+[+  114.39] 	Total execution cycles: 440305 (0 %)
+[+  114.39] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+  114.39] 
+[+  114.39]  0x20000a10 eth_w5500 
+[+  114.39] 	options: 0x0, priority: -14 timeout: 3959
+[+  114.39] 	state: pending, entry: 0x20ca211
+[+  114.39] 	Total execution cycles: 3625443494 (3 %)
+[+  114.39] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+  114.39] 
+[+  114.49]  0x7001fa88 tx_q[0]   
+[+  114.49] 	options: 0x0, priority: -1 timeout: 0
+[+  114.49] 	state: pending, entry: 0x20be9a9
+[+  114.49] 	Total execution cycles: 930890790 (0 %)
+[+  114.49] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+  114.49] 
+[+  114.49]  0x7001f980 rx_q[0]   
+[+  114.49] 	options: 0x0, priority: -1 timeout: 0
+[+  114.49] 	state: pending, entry: 0x20be9c5
+[+  114.49] 	Total execution cycles: 1459704049 (1 %)
+[+  114.49] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+  114.49] 
+[+  114.49]  0x7001f7a0 net_mgmt  
+[+  114.49] 	options: 0x0, priority: -1 timeout: 0
+[+  114.49] 	state: pending, entry: 0x207d645
+[+  114.49] 	Total execution cycles: 6555048 (0 %)
+[+  114.49] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  114.49] 
+[+  114.49]  0x70022368 tcp_work  
+[+  114.49] 	options: 0x0, priority: -14 timeout: 0
+[+  114.49] 	state: pending, entry: 0x207d645
+[+  114.49] 	Total execution cycles: 39340130 (0 %)
+[+  114.49] 	stack size 1024, unused 472, usage 552 / 1024 (53 %)
+[+  114.49] 
+[+  114.49]  0x20004d18 usbd      
+[+  114.49] 	options: 0x0, priority: -8 timeout: 0
+[+  114.49] 	state: pending, entry: 0x2021289
+[+  114.49] 	Total execution cycles: 205544293 (3 %)
+[+  114.59] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+  114.59] 
+[+  114.59] *0x20003c10 shell_uart
+[+  114.59] 	options: 0x0, priority: 0 timeout: 0
+[+  114.59] 	state: queued, entry: 0x201a311
+[+  114.59] 	Total execution cycles: 4012689542 (40 %)
+[+  114.59] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+  114.59] 
+[+  114.59]  0x701a6020           
+[+  114.59] 	options: 0x0, priority: 4 timeout: 0
+[+  114.59] 	state: queued, entry: 0x2052355
+[+  114.59] 	Total execution cycles: 669065386 (0 %)
+[+  114.59] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+  114.59] 
+[+  114.59]  0x701a6100 esp_hosted_tx
+[+  114.59] 	options: 0x0, priority: 5 timeout: 0
+[+  114.59] 	state: pending, entry: 0x2052091
+[+  114.59] 	Total execution cycles: 14047 (0 %)
+[+  114.59] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+  114.59] 
+[+  114.59]  0x20005428 otgfs@42040000
+[+  114.59] 	options: 0x1, priority: -8 timeout: 0
+[+  114.59] 	state: pending, entry: 0x20c71e9
+[+  114.59] 	Total execution cycles: 3671991896 (3 %)
+[+  114.59] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+  114.59] 
+[+  114.59]  0x7001b6d8 logging   
+[+  114.59] 	options: 0x0, priority: 13 timeout: 860
+[+  114.59] 	state: queued, entry: 0x2014ed9
+[+  114.59] 	Total execution cycles: 375919681 (0 %)
+[+  114.69] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  114.69] 
+[+  114.69]  0x20006248 sysworkq  
+[+  114.69] 	options: 0x1, priority: -1 timeout: 0
+[+  114.69] 	state: pending, entry: 0x207d645
+[+  114.69] 	Total execution cycles: 3135394457 (13 %)
+[+  114.69] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+  114.69] 
+[+  114.69]  0x20006048 idle      
+[+  114.69] 	options: 0x1, priority: 15 timeout: 0
+[+  114.69] 	state: , entry: 0x207c4b9
+[+  114.69] 	Total execution cycles: 2899117377 (24 %)
+[+  114.69] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+  114.69] 
+[+  114.69]  0x20006128 main      
+[+  114.69] 	options: 0x1, priority: 0 timeout: 7504
+[+  114.69] 	state: sleeping, entry: 0x207bedd
+[+  114.69] 	Total execution cycles: 71888822 (0 %)
+[+  114.69] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+  114.69] 
+[+  114.69] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.79] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.79] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.79] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.79] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.90] [1;32muart:~$ [mker[11D[J[00:11:49.050,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.90] [1;32muart:~$ [mker[11D[J[00:11:49.051,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.90] [1;32muart:~$ [mker[11D[J[00:11:49.051,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  114.90] [1;32muart:~$ [mker[11D[J[00:11:49.051,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.00] [1;32muart:~$ [mker[11D[J[00:11:49.051,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.00] [1;32muart:~$ [mker[11D[J[00:11:49.051,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.00] [1;32muart:~$ [mker[11D[J[00:11:57.100,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.00] [1;32muart:~$ [mker[11D[J[00:11:57.100,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.10] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.10] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.10] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.10] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.21] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.21] [1;32muart:~$ [mker[11D[J[00:11:57.101,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.21] [1;32muart:~$ [mker[11D[J[00:11:57.102,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.21] [1;32muart:~$ [mker[11D[J[00:11:57.102,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.31] [1;32muart:~$ [mker[11D[J[00:11:57.102,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.31] [1;32muart:~$ [mker[11D[J[00:12:09.134,000] [1;33m<wrn> net_if: iface 1 pkt 0x7017b764 send failure status -5[0m
+[+  115.31] [1;32muart:~$ [mker[11D[J[00:12:22.512,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.31] [1;32muart:~$ [mker[11D[J[00:12:22.512,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.41] [1;32muart:~$ [mker[11D[J[00:12:22.512,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.41] [1;32muart:~$ [mker[11D[J[00:12:22.512,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.41] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.41] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.51] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.51] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.51] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.51] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.61] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.61] [1;32muart:~$ [mker[11D[J[00:12:22.513,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.61] [1;32muart:~$ [mker[11D[J[00:12:22.514,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  115.61] [1;32muart:~$ [mker[11D[J[00:12:22.514,000] [1;33m<wrn> shell_uart: RX ring buffer full.[0m
+[+  117.85] [1;32muart:~$ [mker[11D[J[1;32muart:~$ [mker[11D[J[1;32muart:~$ [mkercoproc mode console
+[+  117.85] [1;31mkercoproc: command not found
+[+  122.89] [m[1;32muart:~$ [mcoproc mode console
+[+  122.89] coproc mode console: 0 in 11 ms
+[+  122.89] ==== host: console again
+[+  122.99] [1;32muart:~$ [mkernel thread list
+[+  122.99] Scheduler: 110 since last call
+[+  122.99] Threads:
+[+  122.99]  0x7001c840 io_to_matter_stream
+[+  122.99] 	options: 0x0, priority: 10 timeout: 0
+[+  122.99] 	state: pending, entry: 0x2008715
+[+  122.99] 	Total execution cycles: 54157 (0 %)
+[+  122.99] 	stack size 4096, unused 3832, usage 264 / 4096 (6 %)
+[+  122.99] 
+[+  122.99]  0x701868a0 CHIP      
+[+  122.99] 	options: 0x0, priority: 14 timeout: 4445671652
+[+  122.99] 	state: pending, entry: 0x208a411
+[+  122.99] 	Total execution cycles: 609589937 (0 %)
+[+  122.99] 	stack size 16384, unused 14544, usage 1840 / 16384 (11 %)
+[+  122.99] 
+[+  122.99]  0x20005f68 web_auth_kdf
+[+  122.99] 	options: 0x0, priority: 13 timeout: 0
+[+  122.99] 	state: pending, entry: 0x2076d1d
+[+  122.99] 	Total execution cycles: 1655192678 (1 %)
+[+  122.99] 	stack size 4096, unused 2472, usage 1624 / 4096 (39 %)
+[+  122.99] 
+[+  122.99]  0x70004bf8 web_v1_jobs
+[+  122.99] 	options: 0x0, priority: 10 timeout: 0
+[+  122.99] 	state: pending, entry: 0x207d645
+[+  122.99] 	Total execution cycles: 23176 (0 %)
+[+  123.09] 	stack size 4096, unused 3896, usage 200 / 4096 (4 %)
+[+  123.09] 
+[+  123.09]  0x20006490 network   
+[+  123.09] 	options: 0x0, priority: 10 timeout: 0
+[+  123.09] 	state: pending, entry: 0x207d645
+[+  123.09] 	Total execution cycles: 191696755 (0 %)
+[+  123.09] 	stack size 8192, unused 4920, usage 3272 / 8192 (39 %)
+[+  123.09] 
+[+  123.09]  0x200066b8 coprocessor
+[+  123.09] 	options: 0x0, priority: 12 timeout: 0
+[+  123.09] 	state: queued, entry: 0x20a2e15
+[+  123.09] 	Total execution cycles: 2600581087 (2 %)
+[+  123.09] 	stack size 2048, unused 1416, usage 632 / 2048 (30 %)
+[+  123.09] 
+[+  123.09]  0x7000a820 io_outputs_task
+[+  123.09] 	options: 0x0, priority: 2 timeout: 0
+[+  123.09] 	state: pending, entry: 0x2006885
+[+  123.09] 	Total execution cycles: 74073 (0 %)
+[+  123.09] 	stack size 1024, unused 760, usage 264 / 1024 (25 %)
+[+  123.09] 
+[+  123.09]  0x7019c350 reg_notify_wq
+[+  123.09] 	options: 0x0, priority: 10 timeout: 0
+[+  123.09] 	state: pending, entry: 0x207d645
+[+  123.09] 	Total execution cycles: 15321 (0 %)
+[+  123.09] 	stack size 2048, unused 1848, usage 200 / 2048 (9 %)
+[+  123.09] 
+[+  123.09]  0x20004df8 input     
+[+  123.09] 	options: 0x0, priority: 14 timeout: 0
+[+  123.09] 	state: pending, entry: 0x2022395
+[+  123.09] 	Total execution cycles: 9506 (0 %)
+[+  123.09] 	stack size 1024, unused 824, usage 200 / 1024 (19 %)
+[+  123.09] 
+[+  123.19]  0x70007d08 http_server_tid
+[+  123.19] 	options: 0x0, priority: -1 timeout: 563
+[+  123.19] 	state: pending, entry: 0x204e961
+[+  123.19] 	Total execution cycles: 1435064009 (1 %)
+[+  123.19] 	stack size 6144, unused 3576, usage 2568 / 6144 (41 %)
+[+  123.19] 
+[+  123.19]  0x20003fb0 shell_telnet
+[+  123.19] 	options: 0x0, priority: 0 timeout: 0
+[+  123.19] 	state: pending, entry: 0x201a311
+[+  123.19] 	Total execution cycles: 153436121 (0 %)
+[+  123.19] 	stack size 4096, unused 3344, usage 752 / 4096 (18 %)
+[+  123.19] 
+[+  123.19]  0x70004d30 conn_mgr_monitor
+[+  123.19] 	options: 0x0, priority: -1 timeout: 0
+[+  123.19] 	state: pending, entry: 0x2050bad
+[+  123.19] 	Total execution cycles: 409409 (0 %)
+[+  123.19] 	stack size 512, unused 208, usage 304 / 512 (59 %)
+[+  123.19] 
+[+  123.19]  0x700217b8 net_socket_service
+[+  123.19] 	options: 0x0, priority: 13 timeout: 0
+[+  123.19] 	state: pending, entry: 0x2026d59
+[+  123.19] 	Total execution cycles: 440305 (0 %)
+[+  123.19] 	stack size 2048, unused 1192, usage 856 / 2048 (41 %)
+[+  123.19] 
+[+  123.19]  0x20000a10 eth_w5500 
+[+  123.19] 	options: 0x0, priority: -14 timeout: 1319
+[+  123.19] 	state: pending, entry: 0x20ca211
+[+  123.19] 	Total execution cycles: 3629078333 (3 %)
+[+  123.19] 	stack size 1024, unused 496, usage 528 / 1024 (51 %)
+[+  123.19] 
+[+  123.29]  0x7001fa88 tx_q[0]   
+[+  123.29] 	options: 0x0, priority: -1 timeout: 0
+[+  123.29] 	state: pending, entry: 0x20be9a9
+[+  123.29] 	Total execution cycles: 930890790 (0 %)
+[+  123.29] 	stack size 2048, unused 1424, usage 624 / 2048 (30 %)
+[+  123.29] 
+[+  123.29]  0x7001f980 rx_q[0]   
+[+  123.29] 	options: 0x0, priority: -1 timeout: 0
+[+  123.29] 	state: pending, entry: 0x20be9c5
+[+  123.29] 	Total execution cycles: 1462895012 (1 %)
+[+  123.29] 	stack size 2560, unused 1392, usage 1168 / 2560 (45 %)
+[+  123.29] 
+[+  123.29]  0x7001f7a0 net_mgmt  
+[+  123.29] 	options: 0x0, priority: -1 timeout: 0
+[+  123.29] 	state: pending, entry: 0x207d645
+[+  123.29] 	Total execution cycles: 6555048 (0 %)
+[+  123.29] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  123.29] 
+[+  123.29]  0x70022368 tcp_work  
+[+  123.29] 	options: 0x0, priority: -14 timeout: 0
+[+  123.29] 	state: pending, entry: 0x207d645
+[+  123.29] 	Total execution cycles: 39340130 (0 %)
+[+  123.29] 	stack size 1024, unused 472, usage 552 / 1024 (53 %)
+[+  123.29] 
+[+  123.29]  0x20004d18 usbd      
+[+  123.29] 	options: 0x0, priority: -8 timeout: 0
+[+  123.29] 	state: pending, entry: 0x2021289
+[+  123.29] 	Total execution cycles: 205544293 (3 %)
+[+  123.39] 	stack size 1024, unused 416, usage 608 / 1024 (59 %)
+[+  123.39] 
+[+  123.39] *0x20003c10 shell_uart
+[+  123.39] 	options: 0x0, priority: 0 timeout: 0
+[+  123.39] 	state: queued, entry: 0x201a311
+[+  123.39] 	Total execution cycles: 4153447215 (40 %)
+[+  123.39] 	stack size 4096, unused 2992, usage 1104 / 4096 (26 %)
+[+  123.39] 
+[+  123.39]  0x701a6020           
+[+  123.39] 	options: 0x0, priority: 4 timeout: 0
+[+  123.39] 	state: queued, entry: 0x2052355
+[+  123.39] 	Total execution cycles: 694888450 (0 %)
+[+  123.39] 	stack size 4096, unused 3728, usage 368 / 4096 (8 %)
+[+  123.39] 
+[+  123.39]  0x701a6100 esp_hosted_tx
+[+  123.39] 	options: 0x0, priority: 5 timeout: 0
+[+  123.39] 	state: pending, entry: 0x2052091
+[+  123.39] 	Total execution cycles: 14047 (0 %)
+[+  123.39] 	stack size 4096, unused 3880, usage 216 / 4096 (5 %)
+[+  123.39] 
+[+  123.39]  0x20005428 otgfs@42040000
+[+  123.39] 	options: 0x1, priority: -8 timeout: 0
+[+  123.39] 	state: pending, entry: 0x20c71e9
+[+  123.39] 	Total execution cycles: 3671991896 (3 %)
+[+  123.39] 	stack size 512, unused 240, usage 272 / 512 (53 %)
+[+  123.39] 
+[+  123.39]  0x7001b6d8 logging   
+[+  123.39] 	options: 0x0, priority: 13 timeout: 842
+[+  123.39] 	state: pending, entry: 0x2014ed9
+[+  123.39] 	Total execution cycles: 388762924 (0 %)
+[+  123.49] 	stack size 2048, unused 1456, usage 592 / 2048 (28 %)
+[+  123.49] 
+[+  123.49]  0x20006248 sysworkq  
+[+  123.49] 	options: 0x1, priority: -1 timeout: 0
+[+  123.49] 	state: pending, entry: 0x207d645
+[+  123.49] 	Total execution cycles: 3135394457 (13 %)
+[+  123.49] 	stack size 4096, unused 3328, usage 768 / 4096 (18 %)
+[+  123.49] 
+[+  123.49]  0x20006048 idle      
+[+  123.49] 	options: 0x1, priority: 15 timeout: 0
+[+  123.49] 	state: , entry: 0x207c4b9
+[+  123.49] 	Total execution cycles: 4011564334 (25 %)
+[+  123.49] 	stack size 320, unused 216, usage 104 / 320 (32 %)
+[+  123.49] 
+[+  123.49]  0x20006128 main      
+[+  123.49] 	options: 0x1, priority: 0 timeout: 1897
+[+  123.49] 	state: sleeping, entry: 0x207bedd
+[+  123.49] 	Total execution cycles: 71934259 (0 %)
+[+  123.49] 	stack size 2048, unused 600, usage 1448 / 2048 (70 %)
+[+  123.49] 
+[+  125.52] ==== host: thread cycles while the host read the bridge
+[+  125.63] [1;32muart:~$ [mcoproc status
+[+  125.63] uart_mode console, generation 412, transport down, dtr follow off
+[+  125.63] switches 8, rx stop failures 0, last switch error 0, resets 0 (unexpected 407)
+[+  125.63] rx bytes 8496836, rx activity 8496712, console ring overflows 5 (3231691 bytes lost, 0 pending)
+[+  125.63] bridge dropped to host 421412, to chip 0; host bytes discarded 0
+[+  125.63] lines 98754, truncated 4, replacements 395, escapes 0, idle flushes 0, overflows 5
+[+  125.63] ==== host: coproc status
+[+  125.74] [1;32muart:~$ [mcoproc dtr on
+[+  125.74] dtr follow on
+[+  125.84] [1;32muart:~$ [mcoproc logs
+[+  125.84] stm32: records 635, used 100184 of 262144 B, appended 635, overwritten 0, lost backend 1001808, lost uart 0
+[+  125.84] esp32: records 4378, used 262104 of 262144 B, appended 99262, overwritten 94884, lost backend 0, lost uart 5
+[+  125.84] lock: append hold max 108681 us, append wait max 697406 us, read hold max 346 us
+[+  125.84] next seq 99898

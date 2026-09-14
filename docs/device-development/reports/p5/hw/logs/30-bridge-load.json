@@ -1,0 +1,623 @@
+{
+ "steps": [
+  {
+   "t": 1.42,
+   "step": "device up",
+   "seconds": 1.1
+  },
+  {
+   "t": 3.61,
+   "step": "login",
+   "ms": 2190
+  },
+  {
+   "t": 3.73,
+   "step": "system",
+   "boot_id": "boot_9d3c4116c685284c",
+   "uptime_ms": "160771",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 21.5,
+   "step": "probe: console, nobody on the CDC",
+   "samples": 31,
+   "ping_lost": 2,
+   "http_failed": 0,
+   "rows": [
+    {
+     "t": 6.49,
+     "ping_ms": 10.235,
+     "http_ms": 97
+    },
+    {
+     "t": 6.91,
+     "ping_ms": 10.14,
+     "http_ms": 98
+    },
+    {
+     "t": 7.33,
+     "ping_ms": 10.226,
+     "http_ms": 96
+    },
+    {
+     "t": 7.76,
+     "ping_ms": 10.341,
+     "http_ms": 97
+    },
+    {
+     "t": 8.18,
+     "ping_ms": 10.116,
+     "http_ms": 97
+    },
+    {
+     "t": 8.61,
+     "ping_ms": 10.577,
+     "http_ms": 95
+    },
+    {
+     "t": 9.03,
+     "ping_ms": 10.161,
+     "http_ms": 97
+    },
+    {
+     "t": 9.45,
+     "ping_ms": 10.222,
+     "http_ms": 97
+    },
+    {
+     "t": 9.87,
+     "ping_ms": 10.294,
+     "http_ms": 98
+    },
+    {
+     "t": 10.3,
+     "ping_ms": 10.375,
+     "http_ms": 97
+    },
+    {
+     "t": 10.72,
+     "ping_ms": 10.309,
+     "http_ms": 97
+    },
+    {
+     "t": 11.15,
+     "ping_ms": 10.377,
+     "http_ms": 97
+    },
+    {
+     "t": 11.58,
+     "ping_ms": 10.536,
+     "http_ms": 94
+    },
+    {
+     "t": 12.0,
+     "ping_ms": 10.146,
+     "http_ms": 97
+    },
+    {
+     "t": 12.43,
+     "ping_ms": 10.188,
+     "http_ms": 102
+    },
+    {
+     "t": 12.85,
+     "ping_ms": 10.448,
+     "http_ms": 94
+    },
+    {
+     "t": 13.27,
+     "ping_ms": 10.087,
+     "http_ms": 97
+    },
+    {
+     "t": 13.69,
+     "ping_ms": 10.273,
+     "http_ms": 97
+    },
+    {
+     "t": 14.11,
+     "ping_ms": 10.358,
+     "http_ms": 95
+    },
+    {
+     "t": 14.53,
+     "ping_ms": null,
+     "http_ms": 106
+    },
+    {
+     "t": 16.36,
+     "ping_ms": 10.35,
+     "http_ms": 96
+    },
+    {
+     "t": 16.78,
+     "ping_ms": 10.451,
+     "http_ms": 110
+    },
+    {
+     "t": 17.22,
+     "ping_ms": 10.32,
+     "http_ms": 96
+    },
+    {
+     "t": 17.64,
+     "ping_ms": null,
+     "http_ms": 101
+    },
+    {
+     "t": 18.52,
+     "ping_ms": 10.705,
+     "http_ms": 94
+    },
+    {
+     "t": 18.95,
+     "ping_ms": 10.549,
+     "http_ms": 95
+    },
+    {
+     "t": 19.37,
+     "ping_ms": 9.722,
+     "http_ms": 97
+    },
+    {
+     "t": 19.8,
+     "ping_ms": 10.111,
+     "http_ms": 97
+    },
+    {
+     "t": 20.22,
+     "ping_ms": 10.124,
+     "http_ms": 97
+    },
+    {
+     "t": 20.65,
+     "ping_ms": 10.296,
+     "http_ms": 97
+    },
+    {
+     "t": 21.07,
+     "ping_ms": 10.55,
+     "http_ms": 97
+    }
+   ]
+  },
+  {
+   "t": 21.72,
+   "step": "bridge on",
+   "answer": "coproc mode bridge: 0 in 99 ms"
+  },
+  {
+   "t": 68.07,
+   "step": "probe: bridge, host reading the CDC",
+   "samples": 46,
+   "ping_lost": 0,
+   "http_failed": 0,
+   "rows": [
+    {
+     "t": 47.85,
+     "ping_ms": 12.369,
+     "http_ms": 109
+    },
+    {
+     "t": 48.29,
+     "ping_ms": 13.288,
+     "http_ms": 109
+    },
+    {
+     "t": 48.73,
+     "ping_ms": 12.764,
+     "http_ms": 114
+    },
+    {
+     "t": 49.17,
+     "ping_ms": 13.6,
+     "http_ms": 118
+    },
+    {
+     "t": 49.61,
+     "ping_ms": 13.192,
+     "http_ms": 110
+    },
+    {
+     "t": 50.06,
+     "ping_ms": 13.593,
+     "http_ms": 107
+    },
+    {
+     "t": 50.49,
+     "ping_ms": 12.635,
+     "http_ms": 110
+    },
+    {
+     "t": 50.94,
+     "ping_ms": 13.31,
+     "http_ms": 110
+    },
+    {
+     "t": 51.37,
+     "ping_ms": 12.844,
+     "http_ms": 106
+    },
+    {
+     "t": 51.81,
+     "ping_ms": 12.591,
+     "http_ms": 110
+    },
+    {
+     "t": 52.25,
+     "ping_ms": 13.406,
+     "http_ms": 107
+    },
+    {
+     "t": 52.69,
+     "ping_ms": 12.357,
+     "http_ms": 110
+    },
+    {
+     "t": 53.12,
+     "ping_ms": 13.195,
+     "http_ms": 111
+    },
+    {
+     "t": 53.57,
+     "ping_ms": 12.731,
+     "http_ms": 107
+    },
+    {
+     "t": 54.01,
+     "ping_ms": 13.504,
+     "http_ms": 110
+    },
+    {
+     "t": 54.45,
+     "ping_ms": 13.219,
+     "http_ms": 110
+    },
+    {
+     "t": 54.89,
+     "ping_ms": 13.397,
+     "http_ms": 106
+    },
+    {
+     "t": 55.32,
+     "ping_ms": 12.9,
+     "http_ms": 110
+    },
+    {
+     "t": 55.76,
+     "ping_ms": 13.098,
+     "http_ms": 110
+    },
+    {
+     "t": 56.2,
+     "ping_ms": 13.382,
+     "http_ms": 109
+    },
+    {
+     "t": 56.64,
+     "ping_ms": 13.017,
+     "http_ms": 109
+    },
+    {
+     "t": 57.08,
+     "ping_ms": 13.322,
+     "http_ms": 110
+    },
+    {
+     "t": 57.52,
+     "ping_ms": 13.339,
+     "http_ms": 110
+    },
+    {
+     "t": 57.96,
+     "ping_ms": 12.588,
+     "http_ms": 110
+    },
+    {
+     "t": 58.4,
+     "ping_ms": 13.39,
+     "http_ms": 110
+    },
+    {
+     "t": 58.84,
+     "ping_ms": 10.856,
+     "http_ms": 110
+    },
+    {
+     "t": 59.28,
+     "ping_ms": 13.062,
+     "http_ms": 110
+    },
+    {
+     "t": 59.71,
+     "ping_ms": 13.055,
+     "http_ms": 110
+    },
+    {
+     "t": 60.15,
+     "ping_ms": 13.497,
+     "http_ms": 110
+    },
+    {
+     "t": 60.6,
+     "ping_ms": 13.347,
+     "http_ms": 109
+    },
+    {
+     "t": 61.03,
+     "ping_ms": 12.73,
+     "http_ms": 107
+    },
+    {
+     "t": 61.46,
+     "ping_ms": 13.014,
+     "http_ms": 110
+    },
+    {
+     "t": 61.9,
+     "ping_ms": 13.181,
+     "http_ms": 110
+    },
+    {
+     "t": 62.35,
+     "ping_ms": 12.707,
+     "http_ms": 112
+    },
+    {
+     "t": 62.79,
+     "ping_ms": 13.264,
+     "http_ms": 110
+    },
+    {
+     "t": 63.23,
+     "ping_ms": 12.715,
+     "http_ms": 110
+    },
+    {
+     "t": 63.67,
+     "ping_ms": 12.694,
+     "http_ms": 106
+    },
+    {
+     "t": 64.1,
+     "ping_ms": 12.594,
+     "http_ms": 110
+    },
+    {
+     "t": 64.54,
+     "ping_ms": 13.461,
+     "http_ms": 110
+    },
+    {
+     "t": 64.99,
+     "ping_ms": 12.736,
+     "http_ms": 110
+    },
+    {
+     "t": 65.43,
+     "ping_ms": 12.807,
+     "http_ms": 111
+    },
+    {
+     "t": 65.87,
+     "ping_ms": 12.626,
+     "http_ms": 107
+    },
+    {
+     "t": 66.31,
+     "ping_ms": 13.54,
+     "http_ms": 111
+    },
+    {
+     "t": 66.75,
+     "ping_ms": 12.471,
+     "http_ms": 122
+    },
+    {
+     "t": 67.2,
+     "ping_ms": 12.551,
+     "http_ms": 113
+    },
+    {
+     "t": 67.64,
+     "ping_ms": 12.932,
+     "http_ms": 116
+    }
+   ]
+  },
+  {
+   "t": 90.75,
+   "step": "host read",
+   "bytes": 776176
+  },
+  {
+   "t": 105.87,
+   "step": "probe: bridge, host not reading",
+   "samples": 31,
+   "ping_lost": 1,
+   "http_failed": 0,
+   "rows": [
+    {
+     "t": 90.75,
+     "ping_ms": 21.862,
+     "http_ms": 112
+    },
+    {
+     "t": 91.19,
+     "ping_ms": 12.803,
+     "http_ms": 113
+    },
+    {
+     "t": 91.63,
+     "ping_ms": 13.596,
+     "http_ms": 113
+    },
+    {
+     "t": 92.07,
+     "ping_ms": 13.135,
+     "http_ms": 111
+    },
+    {
+     "t": 92.51,
+     "ping_ms": null,
+     "http_ms": 125
+    },
+    {
+     "t": 94.37,
+     "ping_ms": 12.668,
+     "http_ms": 109
+    },
+    {
+     "t": 94.81,
+     "ping_ms": 13.397,
+     "http_ms": 112
+    },
+    {
+     "t": 95.24,
+     "ping_ms": 12.719,
+     "http_ms": 113
+    },
+    {
+     "t": 95.69,
+     "ping_ms": 13.047,
+     "http_ms": 109
+    },
+    {
+     "t": 96.13,
+     "ping_ms": 12.758,
+     "http_ms": 113
+    },
+    {
+     "t": 96.56,
+     "ping_ms": 13.539,
+     "http_ms": 113
+    },
+    {
+     "t": 97.01,
+     "ping_ms": 12.593,
+     "http_ms": 112
+    },
+    {
+     "t": 97.45,
+     "ping_ms": 13.022,
+     "http_ms": 112
+    },
+    {
+     "t": 97.89,
+     "ping_ms": 13.112,
+     "http_ms": 113
+    },
+    {
+     "t": 98.33,
+     "ping_ms": 12.711,
+     "http_ms": 112
+    },
+    {
+     "t": 98.77,
+     "ping_ms": 12.693,
+     "http_ms": 113
+    },
+    {
+     "t": 99.21,
+     "ping_ms": 13.29,
+     "http_ms": 112
+    },
+    {
+     "t": 99.66,
+     "ping_ms": 13.206,
+     "http_ms": 112
+    },
+    {
+     "t": 100.1,
+     "ping_ms": 12.244,
+     "http_ms": 111
+    },
+    {
+     "t": 100.54,
+     "ping_ms": 12.666,
+     "http_ms": 113
+    },
+    {
+     "t": 100.99,
+     "ping_ms": 12.851,
+     "http_ms": 112
+    },
+    {
+     "t": 101.43,
+     "ping_ms": 13.475,
+     "http_ms": 113
+    },
+    {
+     "t": 101.87,
+     "ping_ms": 13.06,
+     "http_ms": 110
+    },
+    {
+     "t": 102.31,
+     "ping_ms": 13.513,
+     "http_ms": 112
+    },
+    {
+     "t": 102.76,
+     "ping_ms": 13.646,
+     "http_ms": 112
+    },
+    {
+     "t": 103.2,
+     "ping_ms": 10.089,
+     "http_ms": 147
+    },
+    {
+     "t": 103.66,
+     "ping_ms": 13.607,
+     "http_ms": 112
+    },
+    {
+     "t": 104.1,
+     "ping_ms": 13.038,
+     "http_ms": 112
+    },
+    {
+     "t": 104.54,
+     "ping_ms": 12.786,
+     "http_ms": 127
+    },
+    {
+     "t": 105.0,
+     "ping_ms": 13.249,
+     "http_ms": 113
+    },
+    {
+     "t": 105.44,
+     "ping_ms": 13.296,
+     "http_ms": 109
+    }
+   ]
+  },
+  {
+   "t": 111.05,
+   "step": "console again",
+   "answer": "coproc mode console: 0 in 11 ms"
+  },
+  {
+   "t": 113.76,
+   "step": "thread cycles while the host read the bridge",
+   "share_percent": {
+    "idle": 41.2,
+    "shell_uart": 19.1,
+    "otgfs@42040000": 13.9,
+    "usbd": 12.4,
+    "sysworkq": 8.0,
+    "logging": 3.3,
+    "?": 2.1,
+    "esp_hosted_tx": 0.0
+   }
+  },
+  {
+   "t": 114.31,
+   "step": "coproc status",
+   "answer": "bridge dropped to host 76563, to chip 0; host bytes discarded 0; host TX wakeups 149"
+  }
+ ],
+ "image_sha256": "2e2f30b52e14d4f97610f128300914946ac4a1ef1d5d7c6f881ce553fbea4ec8"
+}

@@ -1,0 +1,45 @@
+{
+ "steps": [
+  {
+   "t": 0.46,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.79,
+   "step": "login",
+   "ms": 2336
+  },
+  {
+   "t": 2.91,
+   "step": "system",
+   "boot_id": "boot_9d3c4116c685284c",
+   "uptime_ms": "39529",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 3.57,
+   "step": "burst sent over telnet",
+   "n": 1500,
+   "length": 120,
+   "dropped_before": 0
+  },
+  {
+   "t": 119.51,
+   "step": "burst accounted",
+   "n": 1500,
+   "length": 120,
+   "stored": 402,
+   "lost_delta": 1098,
+   "stored_plus_lost": 1500,
+   "exact": true,
+   "stored_range": [
+    1099,
+    1500
+   ],
+   "stored_contiguous": true,
+   "shell": "stm32: records 527, used 88212 of 262144 B, appended 527, overwritten 0, lost backend 1098, lost uart 0"
+  }
+ ],
+ "image_sha256": "2e2f30b52e14d4f97610f128300914946ac4a1ef1d5d7c6f881ce553fbea4ec8"
+}

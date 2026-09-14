@@ -1,0 +1,99 @@
+{
+ "steps": [
+  {
+   "t": 0.53,
+   "step": "device up",
+   "seconds": 0.2
+  },
+  {
+   "t": 2.56,
+   "step": "login",
+   "ms": 2029
+  },
+  {
+   "t": 2.67,
+   "step": "system",
+   "boot_id": "boot_82a8b65de6391875",
+   "uptime_ms": "120929",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 2.78,
+   "step": "status before",
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 160,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 3.43,
+   "step": "shell: console -> usb_bridge",
+   "answer": "coproc mode bridge: 0 in 99 ms",
+   "status": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "usb_bridge",
+    "generation": 160,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   },
+   "sources": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "2598"
+     },
+     {
+      "id": "esp32",
+      "available": false,
+      "reason": "uart_usb_bridge",
+      "generation": 160,
+      "dropped_count": "7"
+     }
+    ]
+   }
+  },
+  {
+   "t": 8.48,
+   "step": "host reads the CDC for 5 s",
+   "port": "/dev/cu.usbmodem11201",
+   "bytes": 51998,
+   "sample": "hfffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid header: 0xffffffff\r\ninvalid he"
+  },
+  {
+   "t": 46.94,
+   "step": "scenario failed",
+   "error": "TimeoutError('timed out')"
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

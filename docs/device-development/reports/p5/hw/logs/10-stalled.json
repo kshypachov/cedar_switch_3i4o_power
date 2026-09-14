@@ -1,0 +1,73 @@
+{
+ "steps": [
+  {
+   "t": 0.53,
+   "step": "device up",
+   "seconds": 0.2
+  },
+  {
+   "t": 3.85,
+   "step": "login",
+   "ms": 3320
+  },
+  {
+   "t": 3.96,
+   "step": "system",
+   "boot_id": "boot_de52a0fd9dcfe770",
+   "uptime_ms": "161068",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 5.01,
+   "step": "export started, client stops reading"
+  },
+  {
+   "t": 26.32,
+   "step": "other client during the stall",
+   "waits": [
+    {
+     "t": 14.68,
+     "status": 200,
+     "wait_ms": 14685
+    },
+    {
+     "t": 15.9,
+     "status": 200,
+     "wait_ms": 206
+    },
+    {
+     "t": 17.0,
+     "status": 200,
+     "wait_ms": 98
+    },
+    {
+     "t": 18.11,
+     "status": 200,
+     "wait_ms": 95
+    },
+    {
+     "t": 19.21,
+     "status": 200,
+     "wait_ms": 97
+    },
+    {
+     "t": 20.31,
+     "status": 200,
+     "wait_ms": 97
+    }
+   ]
+  },
+  {
+   "t": 26.32,
+   "step": "stalled client reads again",
+   "bytes": 65536,
+   "closed": false
+  },
+  {
+   "t": 26.61,
+   "step": "shell during",
+   "answer": "Uptime: 183694 ms"
+  }
+ ],
+ "image_sha256": "9bc06cebc2850562ec09047a045b5cd25855fc1f16f361d883df164a9b1c33e7"
+}

@@ -1,0 +1,42 @@
+[+    0.43] ==== host: device up
+[+    3.22] ==== host: login
+[+    3.34] ==== host: system
+[+    3.54] coproc logs
+[+    3.54] stm32: records 230, used 24628 of 262144 B, appended 230, overwritten 0, lost backend 0, lost uart 0
+[+    3.54] esp32: records 4379, used 262132 of 262144 B, appended 100859, overwritten 96480, lost backend 0, lost uart 13
+[+    3.54] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 401 us
+[+    3.54] next seq 101090
+[+    3.68] ==== host: before
+[+    3.76] [1;32muart:~$ [mcoproc reset
+[+    3.86] coproc reset: 0
+[+    3.86] [1;32muart:~$ [mcoproc logs
+[+    3.86] stm32: records 230, used 24628 of 262144 B, appended 230, overwritten 0, lost backend 0, lost uart 0
+[+    3.86] esp32: records 4381, used 262144 of 262144 B, appended 101092, overwritten 96711, lost backend 0, lost uart 13
+[+    3.86] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 401 us
+[+    3.86] next seq 101323
+[+    3.91] ==== host: esp32 ring
+[+   13.69] [1;32muart:~$ [m[8D[J[00:07:36.232,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   13.69] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:36.433,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   13.80] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:36.634,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   19.97] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:42.494,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   25.28] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:47.839,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   25.39] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:48.040,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   25.39] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:48.241,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   25.39] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:48.443,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   28.49] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:50.977,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   28.49] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:51.178,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   28.49] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:51.380,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   31.41] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:53.922,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   31.41] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:54.123,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   34.74] ==== host: old cursor after the wrap
+[+   34.88] ==== host: damaged cursor
+[+   35.02] ==== host: cursor of other filters
+[+   35.16] ==== host: sources
+[+   35.25] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc logs
+[+   35.25] stm32: records 243, used 26240 of 262144 B, appended 243, overwritten 0, lost backend 0, lost uart 0
+[+   35.25] esp32: records 4379, used 262064 of 262144 B, appended 113464, overwritten 109085, lost backend 0, lost uart 13
+[+   35.25] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 401 us
+[+   35.25] next seq 113708
+[+   35.35] [1;32muart:~$ [m[8D[J[00:07:56.752,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   35.35] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:56.953,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   35.46] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:07:57.155,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m

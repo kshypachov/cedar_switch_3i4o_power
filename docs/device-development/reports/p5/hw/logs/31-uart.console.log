@@ -1,0 +1,96 @@
+[+    0.42] ==== host: device up
+[+    3.21] ==== host: login
+[+    3.32] ==== host: system
+[+    3.44] ==== host: status before
+[+    3.67] coproc dtr off
+[+    3.67] dtr follow off
+[+    3.77] [1;32muart:~$ [m[8D[J[00:04:33.622,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    3.77] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:33.823,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    3.77] [1;32muart:~$ [mcoproc mode bridge
+[+    3.77] coproc mode bridge: 0 in 11 ms
+[+    3.77] [1;32muart:~$ [m[8D[J[00:04:34.024,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    3.77] [1;32muart:~$ [m[8D[J[00:04:34.225,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    4.05] ==== host: shell: console -> usb_bridge
+[+    9.30] ==== host: host reads the CDC for 5 s
+[+   24.51] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+[+   25.26] Uptime: 297583 ms
+[+   28.14] [1;32muart:~$ [m[8D[J[00:04:41.363,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   31.64] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:41.564,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   33.02] [1;32muart:~$ [mkernel uptime
+[+   33.33] Uptime: 305370 ms
+[+   35.92] [1;32muart:~$ [m[8D[J[00:04:41.766,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   39.73] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:41.967,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   40.48] [1;32muart:~$ [mkernel uptime
+[+   41.12] Uptime: 312819 ms
+[+   43.36] [1;32muart:~$ [m[8D[J[00:04:44.283,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   47.59] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:44.485,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   47.91] [1;32muart:~$ [mkernel uptime
+[+   47.91] Uptime: 320265 ms
+[+   50.78] [1;32muart:~$ [m[8D[J[00:04:44.686,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   53.72] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:44.887,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   54.35] [1;32muart:~$ [mkernel uptime
+[+   54.99] Uptime: 326747 ms
+[+   57.31] [1;32muart:~$ [m[8D[J[00:04:47.202,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   61.51] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:47.403,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   62.15] [1;32muart:~$ [mkernel uptime
+[+   62.15] Uptime: 334528 ms
+[+   65.03] [1;32muart:~$ [m[8D[J[00:04:47.604,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   68.94] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:47.806,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   69.59] [1;32muart:~$ [mkernel uptime
+[+   70.21] Uptime: 341976 ms
+[+   72.55] [1;32muart:~$ [m[8D[J[00:04:50.123,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   76.70] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:50.324,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   76.70] [1;32muart:~$ [mkernel uptime
+[+   77.02] Uptime: 349110 ms
+[+   79.98] [1;32muart:~$ [m[8D[J[00:04:50.526,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   82.85] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:50.727,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   83.48] [1;32muart:~$ [mkernel uptime
+[+   84.22] Uptime: 355909 ms
+[+   86.47] [1;32muart:~$ [m[8D[J[00:04:53.044,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   90.06] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:53.245,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   90.70] [1;32muart:~$ [mkrnel uptime
+[+   91.34] [1;31mkrnel: command not found
+[+  100.40] [m[1;32muart:~$ [m[8D[J[00:04:53.446,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  101.05] [1;32muart:~$ [mkernel uptime
+[+  101.05] Uptime: 373418 ms
+[+  103.92] [1;32muart:~$ [m[8D[J[00:04:53.647,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  104.97] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:55.965,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:56.166,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:56.367,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:04:56.568,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.18] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:06.440,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.18] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:09.132,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  105.18] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:09.333,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  106.25] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mkernel uptime
+[+  106.25] Uptime: 378664 ms
+[+  111.35] [1;32muart:~$ [mcoproc status
+[+  111.35] uart_mode usb_bridge, generation 191, transport down, dtr follow off
+[+  111.35] switches 3, rx stop failures 0, last switch error 0, resets 0 (unexpected 189)
+[+  111.35] rx bytes 4338671, rx activity 4338565, console ring overflows 35 (648084 bytes lost, 0 pending)
+[+  111.35] bridge dropped to host 196944, to chip 0; host bytes discarded 0; host TX wakeups 336
+[+  111.35] lines 52176, truncated 25, replacements 229, escapes 0, idle flushes 0, overflows 35
+[+  111.40] ==== host: host not reading the CDC for 60 s
+[+  111.46] [1;32muart:~$ [mcoproc mode console
+[+  111.46] coproc mode console: 0 in 10 ms
+[+  111.56] ==== host: shell: usb_bridge -> console
+[+  113.62] [1;32muart:~$ [mcoproc mode flashing
+[+  113.62] coproc mode flashing: 0 in 11 ms
+[+  113.62] [1;32muart:~$ [m[8D[J[00:06:25.013,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  113.77] ==== host: shell: console -> flashing (stand-in)
+[+  116.83] [1;32muart:~$ [mcoproc mode console
+[+  116.83] coproc mode console: 0 in 11 ms
+[+  116.98] ==== host: shell: flashing -> console
+[+  118.96] [1;32muart:~$ [m[8D[J[00:06:30.293,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  118.96] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:30.494,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  118.96] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:30.695,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  119.07] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:06:30.896,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+  119.72] ==== host: markers
+[+  119.82] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc dtr on
+[+  119.82] dtr follow on
+[+  124.84] ==== host: DTR high
+[+  124.95] ==== host: DTR low
+[+  125.07] [1;32muart:~$ [mcoproc logs
+[+  125.07] stm32: records 602, used 95892 of 262144 B, appended 602, overwritten 0, lost backend 1098, lost uart 0
+[+  125.07] esp32: records 4379, used 262112 of 262144 B, appended 54558, overwritten 50179, lost backend 0, lost uart 36
+[+  125.07] lock: append hold max 610038 us, append wait max 168443 us, read hold max 429 us
+[+  125.07] next seq 55161

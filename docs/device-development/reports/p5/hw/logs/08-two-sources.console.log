@@ -1,0 +1,23 @@
+[+    0.43] ==== host: device up
+[+    3.65] ==== host: login
+[+    3.77] ==== host: system
+[+    4.00] [8D[J[00:01:24.548,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    4.10] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:24.749,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    4.43] ==== host: telnet: log enable dbg net_tcp
+[+    4.53] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc reset
+[+    4.64] coproc reset: 0
+[+    4.65] ==== host: C6 reset through EN
+[+   21.77] [1;32muart:~$ [m[8D[J[00:01:36.155,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   21.87] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:36.356,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   23.14] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:44.599,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   23.25] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:44.801,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   23.25] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:45.002,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   23.36] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:01:45.203,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   28.45] ==== host: telnet: log enable inf net_tcp
+[+   28.45] ==== host: read live
+[+   28.56] ==== host: sources
+[+   28.66] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc logs
+[+   28.66] stm32: records 105, used 10580 of 262144 B, appended 105, overwritten 0, lost backend 0, lost uart 0
+[+   28.66] esp32: records 4385, used 262108 of 262144 B, appended 31274, overwritten 26889, lost backend 0, lost uart 7
+[+   28.66] lock: append hold max 415805 us, append wait max 1724542 us, read hold max 328 us
+[+   28.66] next seq 31380

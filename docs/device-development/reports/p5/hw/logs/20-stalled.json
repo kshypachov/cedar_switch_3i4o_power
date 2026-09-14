@@ -1,0 +1,74 @@
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 13.63,
+   "step": "login",
+   "ms": 13209
+  },
+  {
+   "t": 13.75,
+   "step": "system",
+   "boot_id": "boot_82a8b65de6391875",
+   "uptime_ms": "102239",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 14.86,
+   "step": "export started, client stops reading",
+   "rcvbuf": 36455
+  },
+  {
+   "t": 28.82,
+   "step": "other client during the stall",
+   "waits": [
+    {
+     "t": 6.89,
+     "status": 200,
+     "wait_ms": 6894
+    },
+    {
+     "t": 7.99,
+     "status": 200,
+     "wait_ms": 84
+    },
+    {
+     "t": 9.66,
+     "status": 200,
+     "wait_ms": 669
+    },
+    {
+     "t": 10.76,
+     "status": 200,
+     "wait_ms": 86
+    },
+    {
+     "t": 11.85,
+     "status": 200,
+     "wait_ms": 84
+    },
+    {
+     "t": 12.95,
+     "status": 200,
+     "wait_ms": 91
+    }
+   ]
+  },
+  {
+   "t": 28.82,
+   "step": "stalled client reads again",
+   "bytes": 36455,
+   "closed": false
+  },
+  {
+   "t": 28.93,
+   "step": "shell during",
+   "answer": "Uptime: 117379 ms"
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

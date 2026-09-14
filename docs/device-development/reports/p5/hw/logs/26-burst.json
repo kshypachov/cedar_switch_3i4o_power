@@ -1,0 +1,68 @@
+{
+ "steps": [
+  {
+   "t": 0.44,
+   "step": "device up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.48,
+   "step": "login",
+   "ms": 2039
+  },
+  {
+   "t": 2.58,
+   "step": "system",
+   "boot_id": "boot_98c13f5fb65389e4",
+   "uptime_ms": "281616",
+   "firmware": "4582fe45da06-dirty"
+  },
+  {
+   "t": 182.76,
+   "step": "burst sent",
+   "answer": null,
+   "before": [
+    183,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 256.58,
+   "step": "burst accounted",
+   "n": 1000,
+   "length": 120,
+   "before": [
+    183,
+    0,
+    0
+   ],
+   "after": null,
+   "stored": 0,
+   "lost_backend_delta": null,
+   "stored_plus_lost": null,
+   "overwritten_delta": null,
+   "first_stored": [],
+   "last_stored": [],
+   "sources": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 254,
+      "dropped_count": "4"
+     }
+    ]
+   }
+  }
+ ],
+ "image_sha256": "cc933cfdb38fa4e01003b64457ddfd83b854a0cf467aa891b51982682179a68d"
+}

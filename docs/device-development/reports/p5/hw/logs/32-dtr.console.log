@@ -1,0 +1,31 @@
+[+    0.43] ==== host: device up
+[+    2.56] ==== host: login
+[+    2.67] ==== host: system
+[+    2.80] coproc dtr on
+[+    2.80] dtr follow on
+[+    2.84] ==== host: dtr follow
+[+    4.40] [1;32muart:~$ [m[8D[J[00:08:49.306,000] [0m<inf> coprocessor_service: USB host opened the CDC: bridge on (0)[0m
+[+    5.37] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:50.329,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    5.37] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:50.643,000] [0m<inf> coprocessor_service: USB host closed the CDC: console back (0)[0m
+[+    8.04] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:52.870,000] [0m<inf> coprocessor_service: USB host opened the CDC: bridge on (0)[0m
+[+    8.04] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:53.252,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    8.04] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:53.453,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    8.26] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:53.655,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+    9.20] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:54.206,000] [0m<inf> coprocessor_service: USB host closed the CDC: console back (0)[0m
+[+   10.90] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:55.785,000] [0m<inf> coprocessor_service: USB host opened the CDC: bridge on (0)[0m
+[+   10.90] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:56.159,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   11.01] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:56.360,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   11.11] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:56.561,000] [1;31m<err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened[0m
+[+   12.19] [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:08:57.122,000] [0m<inf> coprocessor_service: USB host closed the CDC: console back (0)[0m
+[+   12.29] [1;32muart:~$ [m[8D[J[1;32muart:~$ [mcoproc status
+[+   12.29] uart_mode console, generation 432, transport down, dtr follow on
+[+   12.29] switches 14, rx stop failures 0, last switch error 0, resets 0 (unexpected 424)
+[+   12.29] rx bytes 6063710, rx activity 6063597, console ring overflows 36 (648897 bytes lost, 0 pending)
+[+   12.29] bridge dropped to host 252890, to chip 0; host bytes discarded 0; host TX wakeups 344
+[+   12.29] lines 109604, truncated 26, replacements 454, escapes 0, idle flushes 1, overflows 36
+[+   12.29] ==== host: DTR rounds
+[+   12.40] [1;32muart:~$ [mcoproc logs
+[+   12.40] stm32: records 669, used 103944 of 262144 B, appended 669, overwritten 0, lost backend 1098, lost uart 0
+[+   12.40] esp32: records 4378, used 262128 of 262144 B, appended 110044, overwritten 105666, lost backend 0, lost uart 36
+[+   12.40] lock: append hold max 610038 us, append wait max 168443 us, read hold max 429 us
+[+   12.40] next seq 110714

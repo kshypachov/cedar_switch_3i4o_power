@@ -1,0 +1,49 @@
+{
+ "image_sha256": "7dddb9d1d0246d6b8066c79d655f200fb2f69f3f97c9e0f411874c05a8c31c8c",
+ "series": [
+  {
+   "path": "/system/status",
+   "p50": 147,
+   "max": 148,
+   "min": 135,
+   "bytes": 276,
+   "status": 200
+  },
+  {
+   "path": "/logs/sources",
+   "p50": 150,
+   "max": 165,
+   "min": 143,
+   "bytes": 200,
+   "status": 200
+  },
+  {
+   "path": "/logs/records?limit=5",
+   "p50": 216,
+   "max": 233,
+   "min": 212,
+   "bytes": 1450,
+   "status": 200
+  },
+  {
+   "path": "/logs/records?limit=100&source=stm32",
+   "p50": 959,
+   "max": 997,
+   "min": 952,
+   "bytes": 17445,
+   "status": 200
+  },
+  {
+   "path": "/logs/records?limit=100",
+   "p50": 999,
+   "max": 1026,
+   "min": 988,
+   "bytes": 17776,
+   "status": 200
+  },
+  {
+   "ping_lost": 0,
+   "ping_p50": 12.735
+  }
+ ]
+}
