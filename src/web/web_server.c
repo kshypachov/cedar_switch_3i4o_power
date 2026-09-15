@@ -40,6 +40,9 @@
 #include <web_auth/web_auth.h>
 #include <web_auth/web_auth_adapters.h>
 
+#include <app_version.h>
+
+#include "../services/system/system_service.h"
 #include "api/v1/web_api_v1.h"
 #include "cedar_version.h"
 #include "web_server.h"
@@ -160,7 +163,13 @@ static void make_identity(void)
 	identity = (struct web_api_v1_identity){
 		.device_id = device_id,
 		.model = MODEL,
-		.firmware_version = CEDAR_FIRMWARE_VERSION,
+		/* The MCUboot image version, major.minor.revision+build, as slot 1's
+		 * header says - what the STM32 update compares and shows
+		 * (reports/stm32-update); the compiled-in VERSION string only when the
+		 * header could not be read. The source revision stays in the start log. */
+		.firmware_version = system_service_running_version() != NULL
+					    ? system_service_running_version()
+					    : APP_VERSION_TWEAK_STRING,
 		.frontend_version = web_assets.version,
 		.boot_id = boot_id,
 	};
@@ -191,8 +200,9 @@ int app_web_init(void)
 		LOG_ERR("API v1 init failed: %d", rc);
 	}
 
-	LOG_INF("web interface %s, firmware %s, frontend %s, %s", device_id,
-		CEDAR_FIRMWARE_VERSION, web_assets.version, boot_id);
+	LOG_INF("web interface %s, firmware %s (built as %s, %s), frontend %s, %s", device_id,
+		identity.firmware_version, APP_VERSION_TWEAK_STRING, CEDAR_FIRMWARE_VERSION,
+		web_assets.version, boot_id);
 
 	return http_server_start();
 }

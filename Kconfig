@@ -38,4 +38,23 @@ config TF_PSA_CRYPTO_DISPATCH_DIR
 	string
 	default "$(APP_DIR)/modules/psa-driver-stm32/dispatch" if PSA_CRYPTO_DRIVER_STM32_PKA
 
+menu "STM32 firmware update (src/services/system)"
+
+config APP_IWDG
+	bool "Start and feed the independent watchdog"
+	depends on WATCHDOG
+	help
+	  The board's service starts the IWDG from its own cooperative thread
+	  and feeds it; a hang, an IRQ lock or a cooperative thread that does
+	  not yield resets the board, and MCUboot reverts a new image that was
+	  not yet confirmed (reports/stm32-update).
+
+config APP_IWDG_TIMEOUT_MS
+	int "IWDG timeout (ms)"
+	depends on APP_IWDG
+	default 20000
+	range 1000 26214
+
+endmenu
+
 source "Kconfig.zephyr"

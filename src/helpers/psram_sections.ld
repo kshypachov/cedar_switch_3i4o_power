@@ -37,6 +37,8 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libfirmware_store.a:*(.bss .bss.* COMMON)
 	*libesp_loader_adapter.a:*(.bss .bss.* COMMON)
 	*libcoprocessor_updater.a:*(.bss .bss.* COMMON)
+	*libsystem_image_store.a:*(.bss .bss.* COMMON)
+	*libsystem_updater.a:*(.bss .bss.* COMMON)
 	. = ALIGN(4);
 	__psram_ext_bss_end = .;
 	*libsettings_registry.a:*(.noinit .noinit.*)
@@ -56,6 +58,8 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libfirmware_store.a:*(.noinit .noinit.*)
 	*libesp_loader_adapter.a:*(.noinit .noinit.*)
 	*libcoprocessor_updater.a:*(.noinit .noinit.*)
+	*libsystem_image_store.a:*(.noinit .noinit.*)
+	*libsystem_updater.a:*(.noinit .noinit.*)
 	. = ALIGN(4);
 	__psram_used_end = .;
 } GROUP_LINK_IN(PSRAM)

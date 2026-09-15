@@ -74,6 +74,15 @@
 };
 
 /*
+ * Independent watchdog for the STM32 update (owner's decision 2026-09-15): a new
+ * image that hangs is reset and MCUboot reverts it. Started and fed by
+ * src/services/system; the application only, MCUboot does not enable it.
+ */
+&iwdg {
+	status = "okay";
+};
+
+/*
  * PKA (public key accelerator): upstream stm32u5.dtsi has no node yet (STM32WBA
  * one is in zephyrproject-rtos/zephyr#116564). Binding st,stm32-pka and the driver:
  * modules/psa-driver-stm32. PKA_BASE_NS = AHB2PERIPH_BASE_NS + 0xA2000, PKAEN is

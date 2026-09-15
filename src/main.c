@@ -28,6 +28,7 @@
 #include "helpers/memory.h"
 #include "services/coprocessor/coprocessor_service.h"
 #include "services/network/network_service.h"
+#include "services/system/system_service.h"
 #include "web/api/v1/web_api_v1.h"
 #include "web/web_server.h"
 #include "mqtt/ha_mqtt.h"
@@ -214,6 +215,8 @@ int main(void)
 	LOG_INF("Start main app (build: %s %s) version 8", __DATE__, __TIME__);
 
 	psram_selftest();
+	/* Reset cause and the running MCUboot image (STM32 update, reports/stm32-update). */
+	system_service_start();
 
 	/*
 	 * Реестр настроек: /lfs уже смонтирован через fstab (automount), поэтому
@@ -245,6 +248,15 @@ int main(void)
 	};
 	if (coprocessor_service_firmware_ready()) {
 		web_api_v1_set_firmware(&firmware_hooks);
+	}
+	/* The STM32 update bindings open over the slot store and the updater that
+	 * system_service_start() opened (reports/stm32-update). */
+	static struct web_api_v1_system system_hooks = {
+		.now_ms = NULL,
+	};
+	if (system_service_update_ready()) {
+		system_hooks.upload_max_bytes = system_service_upload_max_bytes();
+		web_api_v1_set_system(&system_hooks);
 	}
 	/* The W5500 with its EEPROM MAC; addressing is the network service's. */
 	ethernet_interfaces_init();

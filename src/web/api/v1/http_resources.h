@@ -48,4 +48,6 @@ WEB_API_V1_RESOURCE(web_api_24_firmware_upload_data, "/api/v1/firmware/uploads/*
 WEB_API_V1_RESOURCE(web_api_25_firmware_upload_verify, "/api/v1/firmware/uploads/*/verify")
 WEB_API_V1_RESOURCE(web_api_26_firmware_upload, "/api/v1/firmware/uploads/*")
 WEB_API_V1_RESOURCE(web_api_27_coprocessor_updates, "/api/v1/coprocessor/updates")
+WEB_API_V1_RESOURCE(web_api_28_system_firmware, "/api/v1/system/firmware")
+WEB_API_V1_RESOURCE(web_api_29_system_updates, "/api/v1/system/updates")
 /* clang-format on */

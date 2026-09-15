@@ -126,6 +126,14 @@ struct v1_upload_body {
 	char filename[128 * 4 + 1];
 	int64_t size_bytes;
 	char sha256[128 + 1];
+	/* Checked against its enum; empty when absent, which means esp32c6. */
+	char target[16];
+};
+
+/* SystemUpdateRequest; upload_id wider than 64 so a longer id is too_long, not cut. */
+struct v1_system_update_body {
+	char upload_id[128 + 1];
+	bool acknowledge_downgrade;
 };
 
 extern const struct web_json_object v1_setup_schema;
@@ -137,6 +145,7 @@ extern const struct web_json_object v1_apply_schema;
 extern const struct web_json_object v1_empty_schema;
 extern const struct web_json_object v1_upload_schema;
 extern const struct web_json_object v1_update_schema;
+extern const struct web_json_object v1_system_update_schema;
 
 void v1_get_auth_state(struct web_api_call *call);
 void v1_setup_admin(struct web_api_call *call);
@@ -173,6 +182,26 @@ void v1_verify_upload(struct web_api_call *call);
 void v1_delete_upload(struct web_api_call *call);
 void v1_cancel_job(struct web_api_call *call);
 void v1_start_coprocessor_update(struct web_api_call *call);
+void v1_get_system_firmware(struct web_api_call *call);
+void v1_start_system_update(struct web_api_call *call);
+
+/** The board's STM32 update hooks, or NULL until it opened both modules (system_update.c). */
+const struct web_api_v1_system *v1_system(void);
+
+/**
+ * Why an STM32 install could not be accepted now - `firmware_unconfirmed`,
+ * `update_running`, `service_not_ready`, `not_implemented` - or NULL (system_update.c).
+ */
+const char *v1_system_update_unavailable_reason(void);
+
+/** capabilities.limits.system_upload_max_bytes: the board's, or the slot's design size (system_update.c). */
+uint32_t v1_system_upload_max_bytes(void);
+
+/** An install of the STM32 or of the C6 is accepted or running (system_update.c). */
+bool v1_install_running(void);
+
+/** Ids of system-image-store start with this; firmware-store's with "upload_". */
+#define V1_SYSTEM_UPLOAD_PREFIX "sysimg_"
 
 /** The board says @p req arrived on the Ethernet interface; false without its hook (coprocessor.c). */
 bool v1_request_over_ethernet(const struct web_api_request *req);

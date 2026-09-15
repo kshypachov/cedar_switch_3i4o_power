@@ -58,7 +58,14 @@ void v1_get_system_status(struct web_api_call *call)
 
 /* A chunk must fit both the request body web-api keeps and firmware-store's
  * staging buffer. */
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+/* ...and system-image-store's, which takes the same chunks for the STM32 image. */
+#define UPLOAD_CHUNK_BYTES                                                                         \
+	MIN(MIN(CONFIG_WEB_API_OCTET_BODY_MAX, CONFIG_FIRMWARE_STORE_CHUNK_MAX),                   \
+	    CONFIG_SYSTEM_IMAGE_STORE_CHUNK_MAX)
+#else
 #define UPLOAD_CHUNK_BYTES       MIN(CONFIG_WEB_API_OCTET_BODY_MAX, CONFIG_FIRMWARE_STORE_CHUNK_MAX)
+#endif
 /* The merged coprocessor file is written from 0x0 and must end before ota_1 at
  * 0x1d0000 (api-contract.md, "Формат файла", P6). */
 #define UPLOAD_MAX_BYTES         CONFIG_FIRMWARE_STORE_MAX_BYTES
@@ -119,6 +126,11 @@ void v1_get_capabilities(struct web_api_call *call)
 	feature(w, "esp32_logs", esp32_logs_reason == NULL, esp32_logs_reason);
 	feature(w, "esp32_ota", false, "not_implemented");
 	feature(w, "esp32_uart", esp32_uart_reason == NULL, esp32_uart_reason);
+	/* The STM32 update: not while the running image waits for its confirmation
+	 * or an install of either processor runs (system_update.c). */
+	const char *stm32_update_reason = v1_system_update_unavailable_reason();
+
+	feature(w, "stm32_update", stm32_update_reason == NULL, stm32_update_reason);
 	web_json_object_end(w);
 
 	web_json_key(w, "limits");
@@ -129,6 +141,8 @@ void v1_get_capabilities(struct web_api_call *call)
 	web_json_int(w, UPLOAD_CHUNK_BYTES);
 	web_json_key(w, "upload_max_bytes");
 	web_json_int(w, UPLOAD_MAX_BYTES);
+	web_json_key(w, "system_upload_max_bytes");
+	web_json_int(w, v1_system_upload_max_bytes());
 	web_json_key(w, "log_page_records");
 	web_json_int(w, LOG_PAGE_RECORDS);
 	web_json_key(w, "scan_records");
@@ -160,6 +174,10 @@ void v1_get_capabilities(struct web_api_call *call)
 	web_json_key(w, "firmware_formats");
 	web_json_array_begin(w);
 	web_json_string(w, "raw_full_flash");
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	/* The STM32 application as imgtool signs it (reports/stm32-update). */
+	web_json_string(w, "mcuboot_image");
+#endif
 	web_json_array_end(w);
 
 	web_json_key(w, "update_requires_ethernet");
@@ -189,6 +207,8 @@ const char *v1_job_resource_url(const struct job_snapshot *job, char *buf, size_
 		return v1_upload_job_resource_url(job, buf, cap);
 	case JOB_KIND_COPROCESSOR_UPDATE:
 		return WEB_API_BASE_PATH "/coprocessor/status";
+	case JOB_KIND_SYSTEM_UPDATE:
+		return WEB_API_BASE_PATH "/system/firmware";
 	default:
 		/* A delete's upload is gone once it succeeds, as the mock answers. */
 		return NULL;

@@ -56,6 +56,8 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/firmware-store   # Staged coprocessor image in LittleFS: chunks, recovery, merged-file check (CONFIG_FIRMWARE_STORE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/esp-loader-adapter # esp-serial-flasher session with guaranteed UART/strap cleanup (CONFIG_ESP_LOADER_ADAPTER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/coprocessor-updater # UART install of the C6 image as one job, journal, health (CONFIG_COPROCESSOR_UPDATER)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/system-image-store # STM32 image straight into MCUboot slot 2, MCUboot image check (CONFIG_SYSTEM_IMAGE_STORE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/system-updater   # STM32 install through the MCUboot swap, journal, self-confirmation (CONFIG_SYSTEM_UPDATER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/psa-driver-stm32 # STM32 PKA: P-256 on the public key accelerator, PSA driver (CONFIG_STM32_PKA)
 )
 
@@ -102,6 +104,7 @@ target_sources(app PRIVATE
         src/web/api/v1/logs.c
         src/web/api/v1/coprocessor.c
         src/web/api/v1/firmware.c
+        src/web/api/v1/system_update.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c
@@ -136,6 +139,8 @@ target_sources(app PRIVATE
 add_subdirectory(src/services/network)
 # Coprocessor service (P5): USART3 owner's platform, CDC passthrough, ESP32 logs.
 add_subdirectory(src/services/coprocessor)
+# System service (STM32 update): MCUboot slots, reset cause, IWDG, `sysupd` shell.
+add_subdirectory(src/services/system)
 
 #chip_configure_data_model(app
 #        ZAP_FILE ${CHIP_ROOT}/examples/chef/devices/rootnode_onoffpluginunit_Wtf8ss5EBY.zap
