@@ -3,7 +3,11 @@
  *
  * Debug shell: time the settings file backend and the LittleFS reads under it.
  *
- *   storage_bench [rounds]
+ *   storage_bench [rounds] [key]
+ *
+ * key is the entry timed as the hit, reg/auth/admin_verifier by default. That
+ * one exists only once the web password is set, so after storage_wipe pass a
+ * key Matter always writes, e.g. mt/cfg/unique-id.
  *
  * Added in P3 to find where Matter's storage time goes: with two fabrics its
  * initialisation took minutes, though /lfs/settings held 4.4 KB. Each line is
@@ -152,6 +156,7 @@ static int64_t bench_val_len(const char *key, ssize_t *result)
 static int cmd_storage_bench(const struct shell *sh, size_t argc, char **argv)
 {
 	int rounds = argc > 1 ? atoi(argv[1]) : 3;
+	const char *hit_key = argc > 2 ? argv[2] : BENCH_HIT_KEY;
 	struct stat_line miss = {0}, all = {0};
 	struct stat_line one_hit = {0}, one_miss = {0}, len_hit = {0}, len_miss = {0};
 	int entries = 0;
@@ -178,9 +183,9 @@ static int cmd_storage_bench(const struct shell *sh, size_t argc, char **argv)
 #endif
 		add(&miss, bench_scan("zz-storage-bench-missing", &none));
 		add(&all, bench_scan(NULL, &entries));
-		add(&one_hit, bench_load_one(BENCH_HIT_KEY, &hit_len));
+		add(&one_hit, bench_load_one(hit_key, &hit_len));
 		add(&one_miss, bench_load_one(BENCH_MISS_KEY, &miss_len));
-		add(&len_hit, bench_val_len(BENCH_HIT_KEY, &val_hit));
+		add(&len_hit, bench_val_len(hit_key, &val_hit));
 		add(&len_miss, bench_val_len(BENCH_MISS_KEY, &val_miss));
 	}
 #if defined(CONFIG_SETTINGS_FILE)
@@ -244,7 +249,7 @@ SHELL_CMD_ARG_REGISTER(storage_wipe, NULL, "Erase the settings partition: storag
 		       cmd_storage_wipe, 2, 0);
 
 SHELL_CMD_ARG_REGISTER(storage_bench, NULL,
-		       "Time settings/LittleFS reads: storage_bench [rounds]", cmd_storage_bench, 1,
-		       1);
+		       "Time settings/LittleFS reads: storage_bench [rounds] [key]",
+		       cmd_storage_bench, 1, 2);
 
 #endif

@@ -26,6 +26,48 @@
 	status = "disabled";
 };
 
+/*
+ * The 8-byte receive FIFO: without it one byte waits in RDR for the next and is
+ * lost if USART3's interrupt comes more than ~87 us late at 115200. Attempt 7
+ * (reports/p6 hw/logs/14) caught a ROM answer to FLASH_DATA one byte short while
+ * the CPU was 97 % busy; with the FIFO the interrupt may be ~700 us late.
+ */
+&usart3 {
+	fifo-enable;
+};
+
+/*
+ * esp-serial-flasher's target: the same USART3, EN (PA8) and BOOT strap (PC0)
+ * that tests/esp_loader_integration proved on both boards. Stays at 115200
+ * until the first flash through the web is accepted (owner's decision №7).
+ *
+ * zephyr,deferred-init: the library's device init would run esp_loader_init_serial()
+ * at boot - tty_serial's handler on USART3 with its receive interrupt enabled and
+ * nobody reading. An unflashed C6's ROM output fills the 512-byte ring, and the
+ * handler then writes "~" per dropped byte from the ISR with K_FOREVER into a
+ * transmit ring nobody drains: board B hung at boot (reports/p6, hw/logs/02).
+ * The device is never initialised through the kernel; esp-loader-adapter runs the
+ * port's init itself in `flashing`, right before connect, and deinit after.
+ */
+/ {
+	esp_loader0: esp_loader {
+		compatible = "espressif,esp-loader";
+		uart = <&usart3>;
+		reset-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>;
+		boot-gpios = <&gpioc 0 GPIO_ACTIVE_LOW>;
+		default-baudrate = <115200>;
+		higher-baudrate = <0>;
+		num-trials = <10>;
+		sync-timeout-ms = <100>;
+		zephyr,deferred-init;
+		status = "okay";
+	};
+
+	chosen {
+		zephyr,esp-loader = &esp_loader0;
+	};
+};
+
 &clk_msis {
 	status = "disabled";
 	msi-range = <4>;

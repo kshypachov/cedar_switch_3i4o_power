@@ -107,5 +107,7 @@ interface number, not serial - the method is recorded in reports/p5/hw.
 | `coproc reset [download]` | EN pulse; `download` holds BOOT |
 | `coproc dtr on\|off` | follow DTR or not |
 | `coproc logs` | log-store rings, losses, lock hold times |
+| `coproc upload drop` | debug: removes the staged upload's files in /lfs/firmware and reopens firmware-store, for an upload whose id nobody holds any more; refused during an install (P6) |
+| `coproc loader` | debug, read-only for the C6: esp-loader-adapter session open (ROM loader, connect, ESP32-C6 check) and close (normal boot, EN/BOOT idle, console back); refused during an install (P6) |
 | `coproc burst <n> [len]` | debug: n `LOG_INF` messages from the shell thread, for the STM32 burst on the bench (`log enable dbg` has nothing to enable: modules are compiled at the default level) |
 | `wifi_ctrl reset`, `wifi_ctrl init` | kept debug commands, through the manager (`init` = ROM download mode) |

@@ -1,11 +1,11 @@
 # Release manifest: what this product changes outside its own repository
 
-A build of this firmware is not reproducible from this repository alone. Three
-edits live in the `zephyr` checkout, which this product does not own and which
-is shared with several unrelated projects in the same workspace. Anything that
-resets or re-clones that repository removes all three, and the build either
-fails or — worse, in the case of the W5500 patch — succeeds and misbehaves on
-the bench.
+A build of this firmware is not reproducible from this repository alone. The
+six edits in the table below live in the `zephyr` checkout, which this product
+does not own and which is shared with several unrelated projects in the same
+workspace. Anything that resets or re-clones that repository removes all of
+them, and the build either fails or — worse, in the case of the W5500 patches —
+succeeds and misbehaves on the bench.
 
 This directory holds every one of those edits so they can be restored, and this
 file is the record of what they are, why they exist and when each can be
@@ -15,6 +15,8 @@ dropped.
 |---|---|---|---|
 | W5500 IPv4 multicast blocking | `zephyr/drivers/ethernet/eth_w5500.c`, `eth_w5500_priv.h` | `west patch apply`, see below | Upstream accepts the request in `docs/upstream/`, or [#115626](https://github.com/zephyrproject-rtos/zephyr/issues/115626) makes the RX thread preemptible |
 | W5500 socket reopened when the receive state is inconsistent | `zephyr/drivers/ethernet/eth_w5500.c` (`w5500_rx`) | `west patch apply`, see below | [#115626](https://github.com/zephyrproject-rtos/zephyr/pull/115626) is merged — its rewrite of `w5500_rx` compares the length with `Sn_RX_RSR` |
+| ESP-Hosted link restart after the ESP32-C6 is re-flashed (`esp_hosted_mcu_restart`, `esp_hosted_mcu_wifi_restart`) | `zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.{c,h}`, `esp_hosted_mcu_spi.c`, `zephyr/drivers/wifi/esp_hosted_mcu/esp_hosted_mcu.c` | `west patch apply` of that one entry, see below; made against the driver as this checkout already carries it | The upstream driver can re-initialise its link and Wi-Fi after a coprocessor restart |
+| ESP-Hosted receive thread: suspended while the ESP32-C6 is in its ROM loader (`esp_hosted_mcu_suspend`), and a sleep after a burst that carried no frame | `zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.{c,h}` | `west patch apply` of that one entry, after the restart entry | The upstream receive thread stops treating a high data-ready line without frames as work, or offers a suspend |
 | Manifest entries for Matter and the three Cedar repositories | `zephyr/west.yml` | `git apply` of `workspace/west.yml.patch` | The workspace moves to an application-owned manifest repository |
 | esp-serial-flasher submanifest | `zephyr/submanifests/esp-serial-flasher.yaml` | copy from `workspace/submanifests/` | Same as above |
 

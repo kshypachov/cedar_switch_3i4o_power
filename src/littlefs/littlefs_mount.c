@@ -10,7 +10,13 @@
 #include <zephyr/fs/littlefs.h>
 #include <zephyr/storage/flash_map.h>
 
-#define LFS_PARTITION_ID FIXED_PARTITION_ID(storage_lfs_partition)
+/*
+ * ВНИМАНИЕ: storage_zms (бывший storage_lfs) теперь хранит настройки в ZMS
+ * (zephyr,settings-partition). fs_service_init() на нём сделает fs_mkfs и
+ * уничтожит все настройки, включая fabrics Matter. Вызов в main.c закомментирован;
+ * /lfs монтируется через fstab на storage_partition.
+ */
+#define LFS_PARTITION_ID FIXED_PARTITION_ID(storage_zms_partition)
 
 LOG_MODULE_REGISTER(fs_srv, LOG_LEVEL_INF);
 FS_LITTLEFS_DECLARE_DEFAULT_CONFIG(lfs_cfg);

@@ -37,6 +37,19 @@
 #include <coprocessor_manager/coprocessor_manager.h>
 #include <esp32_log_source/esp32_log_source.h>
 #include <log_store/log_store.h>
+#if defined(CONFIG_FIRMWARE_STORE)
+#include <zephyr/fs/fs.h>
+
+#include <firmware_store/firmware_store.h>
+#endif
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+#include <zephyr/fs/fs.h>
+#include <zephyr/sys/crc.h>
+
+#include <coprocessor_updater/coprocessor_updater.h>
+#include <esp_loader_adapter/esp_loader_adapter.h>
+#include <esp_loader_adapter/updater_loader.h>
+#endif
 
 #include "services/network/net_adapter.h"
 #include "coprocessor_service.h"
@@ -51,6 +64,11 @@ LOG_MODULE_REGISTER(coprocessor_service, LOG_LEVEL_INF);
 #define DTR_POLL_MS       100
 /* DTR low this long after a bridge it started hands the UART back. */
 #define DTR_RELEASE_MS    1000
+
+/* The staged coprocessor image (firmware-store); the updater's journal lives here too. */
+#define FIRMWARE_DIR      "/lfs/firmware"
+/* An upload untouched for a day is removed on the next tick; once a minute is plenty. */
+#define FIRMWARE_TICK_MS  60000
 
 /* Pulse lengths of src/plugin_wifi/wifi.c, the sequence proven on this board
  * in P0 (tests/esp_loader_integration). */
@@ -234,9 +252,66 @@ static void cdc_isr(const struct device *dev, void *user_data)
 
 /* -- the ESP32 log source -------------------------------------------------------- */
 
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+/*
+ * The updater's early sign that the new firmware runs: ESP-IDF's application
+ * start as the console assembles it after the normal boot. Recorded next to the
+ * transport's answer, never decisive on its own (owner's decision №2).
+ * Written on the worker under asm_lock, read by the updater's thread.
+ */
+static struct k_spinlock evidence_lock;
+static bool evidence_seen;
+static char evidence_version[COPROCESSOR_UPDATE_VERSION_MAX_LEN + 1];
+
+static bool tag_is(const struct esp32_log_line *line, const char *tag)
+{
+	size_t n = strlen(tag);
+
+	return line->module != NULL && line->module_len == n && memcmp(line->module, tag, n) == 0;
+}
+
+static bool text_starts(const struct esp32_log_line *line, const char *prefix)
+{
+	size_t n = strlen(prefix);
+
+	return line->text_len >= n && memcmp(line->text, prefix, n) == 0;
+}
+
+static void note_boot_evidence(const struct esp32_log_line *line)
+{
+	static const char version_prefix[] = "App version:";
+
+	if (tag_is(line, "app_init") && text_starts(line, version_prefix)) {
+		const char *v = line->text + sizeof(version_prefix) - 1U;
+		size_t n = line->text_len - (sizeof(version_prefix) - 1U);
+
+		while (n > 0U && *v == ' ') {
+			v++;
+			n--;
+		}
+		n = MIN(n, sizeof(evidence_version) - 1U);
+
+		K_SPINLOCK(&evidence_lock) {
+			memcpy(evidence_version, v, n);
+			evidence_version[n] = '\0';
+			evidence_seen = true;
+		}
+	} else if ((tag_is(line, "main_task") && text_starts(line, "Calling app_main")) ||
+		   (tag_is(line, "app_init") && text_starts(line, "Project name:"))) {
+		K_SPINLOCK(&evidence_lock) {
+			evidence_seen = true;
+		}
+	}
+}
+#endif
+
 static void emit_line(void *ctx, const struct esp32_log_line *line)
 {
 	ARG_UNUSED(ctx);
+
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+	note_boot_evidence(line);
+#endif
 
 	const struct log_store_entry e = {
 		.source = LOG_STORE_ESP32,
@@ -438,6 +513,477 @@ static const struct coprocessor_platform platform = {
 
 /* -- the worker ----------------------------------------------------------------------- */
 
+/* -- the install: esp-loader-adapter's board steps and coprocessor-updater's platform -- */
+
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+#if defined(CONFIG_WIFI_ESP_HOSTED_MCU)
+/* The restart patch (patches/zephyr/esp_hosted_mcu-restart-after-coprocessor-flash.patch). */
+int esp_hosted_mcu_restart(k_timeout_t timeout);
+int esp_hosted_mcu_wifi_restart(void);
+/* patches/zephyr/esp_hosted_mcu-suspend-while-coprocessor-flashes.patch */
+void esp_hosted_mcu_suspend(bool suspend);
+#endif
+
+#define JOURNAL_PATH     FIRMWARE_DIR "/update.journal"
+#define JOURNAL_TMP_PATH FIRMWARE_DIR "/update.journal.tmp"
+#define JOURNAL_MAGIC    0x4a504350U /* "PCPJ" */
+
+/*
+ * The C6 must be quiet whenever esp-serial-flasher's port is up. The port's
+ * tty_serial receives USART3 into a 512-byte ring and, once it is full, writes "~"
+ * from the ISR with an unbounded wait (zephyr/subsys/console/tty.c; the library
+ * sets a finite tx timeout only inside its own writes). An unflashed C6 prints its
+ * ROM loop at ~11 KB/s, so a preemption of ~50 ms between the port's init and the
+ * library's first read - the W5500's cooperative thread busy-waits ~200 ms on each
+ * socket reopen - fills the ring and stops the STM32: board B hung that way at boot
+ * (hw/logs/02) and in the owner's first install through the web (hw/logs/08). The
+ * same window follows reset_target, when the booting firmware prints its log before
+ * the port is deinitialised. Therefore: the C6 is put into its ROM download mode (a
+ * short banner, then silence) before the port's init, and reset_target only records
+ * that a normal boot is due; lines_idle(), called after the port's deinit, releases it.
+ */
+static int (*lib_port_init)(void *ctx);
+static bool boot_after_deinit;
+
+static int quiet_port_init(void *ctx)
+{
+#if defined(CONFIG_WIFI_ESP_HOSTED_MCU)
+	/*
+	 * In its ROM loader the C6 holds IO23 (data-ready, PC9) high. ESP-Hosted's
+	 * receive thread takes that level for "frames queued" and polls the shared
+	 * SPI2 without pause: board B's STM32 spent the owner's second install in
+	 * spi_stm32 under esp_hosted_mcu_event_task, with the W5500 and HTTP starved
+	 * and the updater stuck in entering_bootloader (hw/logs/09, two J-Link halts).
+	 * The transport stays suspended for the whole session.
+	 */
+	esp_hosted_mcu_suspend(true);
+#endif
+	(void)op_reset(NULL, true);
+	boot_after_deinit = false;
+	return lib_port_init(ctx);
+}
+
+static void deferred_reset_target(void *ctx)
+{
+	ARG_UNUSED(ctx);
+	boot_after_deinit = true;
+}
+
+/*
+ * What each library call returned and how long it took, for `coproc updater`. The
+ * adapter logs a failure, but the deferred log dropped every line of the first
+ * install that reached `writing` (20 s of silence on the console, hw/logs/11), so
+ * the codes are kept here where a full log buffer cannot lose them.
+ */
+static struct {
+	int connect_rc;
+	uint32_t connect_ms;
+	int start_rc;
+	uint32_t start_ms;
+	uint32_t writes;
+	int write_rc;
+	uint32_t write_ms_last;
+	uint32_t write_ms_max;
+	uint32_t writes_over_250ms;
+	uint32_t writes_over_500ms;
+	/* Debug (hw row 18, worker ~107 s CPU per install): where the worker's time goes. */
+	uint32_t image_reads;
+	int64_t image_read_ticks;
+	uint64_t image_read_cpu;
+	int64_t write_ticks;
+	uint64_t write_cpu;
+	int target;
+	int finish_rc;
+	uint32_t finish_ms;
+} flash_stats;
+
+/*
+ * Debug (reports/p6 hw, attempt 5): CPU time of every thread from flash_start to
+ * the first failed write or to finish. A block's 1000 ms ran out with the ROM
+ * silent; whoever held the processor shows up here. The ISR time lands on the
+ * thread it interrupted.
+ */
+#define CPU_THREADS_MAX 48
+
+static struct {
+	k_tid_t tid;
+	uint64_t cycles;
+	uint64_t delta;
+} cpu_threads[CPU_THREADS_MAX];
+static size_t cpu_threads_n;
+static uint64_t cpu_all_start;
+static uint64_t cpu_idle_start;
+static uint64_t cpu_all_delta;
+static uint64_t cpu_idle_delta;
+static bool cpu_window_open;
+
+static void cpu_thread_start(const struct k_thread *thread, void *user)
+{
+	k_thread_runtime_stats_t s;
+
+	ARG_UNUSED(user);
+	if (cpu_threads_n < CPU_THREADS_MAX &&
+	    k_thread_runtime_stats_get((k_tid_t)thread, &s) == 0) {
+		cpu_threads[cpu_threads_n].tid = (k_tid_t)thread;
+		cpu_threads[cpu_threads_n].cycles = s.execution_cycles;
+		cpu_threads[cpu_threads_n].delta = 0;
+		cpu_threads_n++;
+	}
+}
+
+static void cpu_thread_end(const struct k_thread *thread, void *user)
+{
+	k_thread_runtime_stats_t s;
+
+	ARG_UNUSED(user);
+	if (k_thread_runtime_stats_get((k_tid_t)thread, &s) != 0) {
+		return;
+	}
+	for (size_t i = 0; i < cpu_threads_n; i++) {
+		if (cpu_threads[i].tid == (k_tid_t)thread) {
+			cpu_threads[i].delta = s.execution_cycles - cpu_threads[i].cycles;
+			return;
+		}
+	}
+}
+
+static void cpu_window_begin(void)
+{
+	k_thread_runtime_stats_t all;
+
+	cpu_threads_n = 0;
+	k_thread_foreach_unlocked(cpu_thread_start, NULL);
+	(void)k_thread_runtime_stats_all_get(&all);
+	cpu_all_start = all.execution_cycles;
+	cpu_idle_start = all.idle_cycles;
+	cpu_all_delta = 0;
+	cpu_idle_delta = 0;
+	cpu_window_open = true;
+}
+
+static void cpu_window_end(void)
+{
+	k_thread_runtime_stats_t all;
+
+	if (!cpu_window_open) {
+		return;
+	}
+	cpu_window_open = false;
+	k_thread_foreach_unlocked(cpu_thread_end, NULL);
+	(void)k_thread_runtime_stats_all_get(&all);
+	cpu_all_delta = all.execution_cycles - cpu_all_start;
+	cpu_idle_delta = all.idle_cycles - cpu_idle_start;
+}
+
+static uint32_t cycles_ms(uint64_t cycles)
+{
+	return (uint32_t)(cycles * 1000U / (uint64_t)sys_clock_hw_cycles_per_sec());
+}
+
+/* CPU cycles the calling thread has run so far (0 when the stats are off). */
+static uint64_t own_cycles(void)
+{
+	k_thread_runtime_stats_t s;
+
+	return k_thread_runtime_stats_get(k_current_get(), &s) == 0 ? s.execution_cycles : 0U;
+}
+
+static int (*lib_connect)(void *ctx);
+static int (*lib_flash_start)(void *ctx, uint32_t offset, uint32_t size, uint32_t block_size);
+static int (*lib_flash_write)(void *ctx, const uint8_t *data, uint32_t len);
+static int (*lib_flash_finish)(void *ctx);
+
+static int timed_connect(void *ctx)
+{
+	const int64_t t0 = k_uptime_get();
+
+	memset(&flash_stats, 0, sizeof(flash_stats));
+	flash_stats.target = -1;
+	/* The window is the whole session: attempt 6 lost ~600 ms while connecting (hw/logs/13). */
+	esp_loader_adapter_zephyr_io_reset();
+	cpu_window_begin();
+	flash_stats.connect_rc = lib_connect(ctx);
+	flash_stats.connect_ms = (uint32_t)(k_uptime_get() - t0);
+	return flash_stats.connect_rc;
+}
+
+static int (*lib_get_target)(void *ctx);
+
+static int recorded_get_target(void *ctx)
+{
+	flash_stats.target = lib_get_target(ctx);
+	return flash_stats.target;
+}
+
+static int timed_flash_start(void *ctx, uint32_t offset, uint32_t size, uint32_t block_size)
+{
+	const int64_t t0 = k_uptime_get();
+
+	flash_stats.start_rc = lib_flash_start(ctx, offset, size, block_size);
+	flash_stats.start_ms = (uint32_t)(k_uptime_get() - t0);
+	if (flash_stats.start_rc != 0) {
+		cpu_window_end();
+	}
+	return flash_stats.start_rc;
+}
+
+static int timed_flash_write(void *ctx, const uint8_t *data, uint32_t len)
+{
+	const int64_t t0 = k_uptime_get();
+	const int64_t w0 = k_uptime_ticks();
+	const uint64_t c0 = own_cycles();
+	const int rc = lib_flash_write(ctx, data, len);
+	const uint32_t ms = (uint32_t)(k_uptime_get() - t0);
+
+	flash_stats.write_ticks += k_uptime_ticks() - w0;
+	flash_stats.write_cpu += own_cycles() - c0;
+	flash_stats.writes++;
+	flash_stats.write_rc = rc;
+	flash_stats.write_ms_last = ms;
+	flash_stats.write_ms_max = MAX(flash_stats.write_ms_max, ms);
+	flash_stats.writes_over_250ms += ms > 250U ? 1U : 0U;
+	flash_stats.writes_over_500ms += ms > 500U ? 1U : 0U;
+	if (rc != 0) {
+		cpu_window_end();
+	}
+	return rc;
+}
+
+static int timed_flash_finish(void *ctx)
+{
+	const int64_t t0 = k_uptime_get();
+
+	flash_stats.finish_rc = lib_flash_finish(ctx);
+	flash_stats.finish_ms = (uint32_t)(k_uptime_get() - t0);
+	cpu_window_end();
+	return flash_stats.finish_rc;
+}
+
+/* EN and BOOT back to inactive outputs (esp_loader_deinit() leaves them floating),
+ * with the normal boot reset_target asked for, now that the port is down. */
+static int lines_idle(void *ctx)
+{
+	int rc;
+
+	ARG_UNUSED(ctx);
+	cpu_window_end();
+	if (boot_after_deinit) {
+		boot_after_deinit = false;
+		/* Leaves both lines inactive outputs after the EN pulse, BOOT released. */
+		rc = op_reset(NULL, false);
+	} else {
+		rc = gpio_pin_configure_dt(&en, GPIO_OUTPUT_INACTIVE);
+		rc = rc ? rc : gpio_pin_configure_dt(&boot, GPIO_OUTPUT_INACTIVE);
+	}
+#if defined(CONFIG_WIFI_ESP_HOSTED_MCU)
+	/* The C6 left its ROM loader: ESP-Hosted may read data-ready again. */
+	esp_hosted_mcu_suspend(false);
+#endif
+	return rc;
+}
+
+static int console_restore(void *ctx)
+{
+	ARG_UNUSED(ctx);
+	restore_console_config();
+	return 0;
+}
+
+static struct esp_loader_adapter_lib loader_lib;
+
+static char image_upload[COPROCESSOR_UPDATE_UPLOAD_ID_MAX_LEN + 1];
+
+/* The install holds the staged file for as long as it reads it: no delete, no expiry. */
+static int up_image_open(void *ctx, const char *upload_id, uint32_t *size)
+{
+	int rc;
+
+	ARG_UNUSED(ctx);
+	rc = fw_store_set_in_use(upload_id, true);
+	if (rc != 0) {
+		return rc;
+	}
+	rc = fw_store_image_open(upload_id, size);
+	if (rc != 0) {
+		(void)fw_store_set_in_use(upload_id, false);
+		return rc;
+	}
+	strncpy(image_upload, upload_id, sizeof(image_upload) - 1U);
+	image_upload[sizeof(image_upload) - 1U] = '\0';
+
+	return 0;
+}
+
+static int up_image_read(void *ctx, uint32_t offset, uint8_t *buf, size_t len)
+{
+	const int64_t t0 = k_uptime_ticks();
+	const uint64_t c0 = own_cycles();
+	int rc;
+
+	ARG_UNUSED(ctx);
+	rc = fw_store_image_read(offset, buf, len);
+	flash_stats.image_reads++;
+	flash_stats.image_read_ticks += k_uptime_ticks() - t0;
+	flash_stats.image_read_cpu += own_cycles() - c0;
+	return rc;
+}
+
+static void up_image_close(void *ctx)
+{
+	ARG_UNUSED(ctx);
+	fw_store_image_close();
+	if (image_upload[0] != '\0') {
+		(void)fw_store_set_in_use(image_upload, false);
+		image_upload[0] = '\0';
+	}
+}
+
+struct journal_file {
+	uint32_t magic;
+	uint32_t size;
+	uint32_t crc;
+	struct coprocessor_update_journal journal;
+};
+
+static int up_journal_load(void *ctx, struct coprocessor_update_journal *out)
+{
+	static struct journal_file f;
+	struct fs_file_t file;
+	ssize_t n;
+	int rc;
+
+	ARG_UNUSED(ctx);
+	fs_file_t_init(&file);
+	rc = fs_open(&file, JOURNAL_PATH, FS_O_READ);
+	if (rc != 0) {
+		return -ENOENT;
+	}
+	n = fs_read(&file, &f, sizeof(f));
+	(void)fs_close(&file);
+	if (n != (ssize_t)sizeof(f) || f.magic != JOURNAL_MAGIC || f.size != sizeof(f.journal) ||
+	    f.crc != crc32_ieee((const uint8_t *)&f.journal, sizeof(f.journal))) {
+		LOG_WRN("update journal unreadable; treated as none");
+		return -ENOENT;
+	}
+	*out = f.journal;
+
+	return 0;
+}
+
+/* Written beside the old one, synced, then renamed over it: a power cut leaves either. */
+static int up_journal_save(void *ctx, const struct coprocessor_update_journal *journal)
+{
+	static struct journal_file f;
+	struct fs_file_t file;
+	ssize_t n;
+	int rc;
+
+	ARG_UNUSED(ctx);
+	f.magic = JOURNAL_MAGIC;
+	f.size = sizeof(f.journal);
+	f.journal = *journal;
+	f.crc = crc32_ieee((const uint8_t *)&f.journal, sizeof(f.journal));
+
+	fs_file_t_init(&file);
+	rc = fs_open(&file, JOURNAL_TMP_PATH, FS_O_CREATE | FS_O_WRITE | FS_O_TRUNC);
+	if (rc != 0) {
+		return rc;
+	}
+	n = fs_write(&file, &f, sizeof(f));
+	rc = fs_sync(&file);
+	(void)fs_close(&file);
+	if (n != (ssize_t)sizeof(f) || rc != 0) {
+		(void)fs_unlink(JOURNAL_TMP_PATH);
+		return n < 0 ? (int)n : -EIO;
+	}
+	rc = fs_rename(JOURNAL_TMP_PATH, JOURNAL_PATH);
+	if (rc != 0) {
+		(void)fs_unlink(JOURNAL_PATH);
+		rc = fs_rename(JOURNAL_TMP_PATH, JOURNAL_PATH);
+	}
+
+	return rc;
+}
+
+static void up_boot_evidence_arm(void *ctx)
+{
+	ARG_UNUSED(ctx);
+	K_SPINLOCK(&evidence_lock) {
+		evidence_seen = false;
+		evidence_version[0] = '\0';
+	}
+}
+
+static bool up_boot_evidence(void *ctx, char *app_version, size_t cap)
+{
+	bool seen = false;
+
+	ARG_UNUSED(ctx);
+	K_SPINLOCK(&evidence_lock) {
+		seen = evidence_seen;
+		if (cap > 0U) {
+			strncpy(app_version, evidence_version, cap - 1U);
+			app_version[cap - 1U] = '\0';
+		}
+	}
+
+	return seen;
+}
+
+static int up_transport_restart(void *ctx, uint32_t timeout_ms, char *version, size_t cap)
+{
+	ARG_UNUSED(ctx);
+	if (cap > 0U) {
+		version[0] = '\0';
+	}
+#if defined(CONFIG_WIFI_ESP_HOSTED_MCU)
+	int rc = esp_hosted_mcu_restart(K_MSEC(timeout_ms));
+
+	if (rc != 0) {
+		/* -ENODEV here is the core that never came up: no answer either way. */
+		return -ETIMEDOUT;
+	}
+	(void)coprocessor_service_firmware_version(version, cap);
+
+	rc = esp_hosted_mcu_wifi_restart();
+	if (rc != 0) {
+		LOG_WRN("Wi-Fi restart after the install: %d", rc);
+	}
+	return rc;
+#else
+	ARG_UNUSED(timeout_ms);
+	return -ETIMEDOUT;
+#endif
+}
+
+static int64_t up_now(void *ctx)
+{
+	ARG_UNUSED(ctx);
+	return k_uptime_get();
+}
+
+static void up_sleep(void *ctx, uint32_t ms)
+{
+	ARG_UNUSED(ctx);
+	k_msleep(ms);
+}
+
+static struct coprocessor_updater_platform updater_platform = {
+	.image_open = up_image_open,
+	.image_read = up_image_read,
+	.image_close = up_image_close,
+	.journal_load = up_journal_load,
+	.journal_save = up_journal_save,
+	.boot_evidence_arm = up_boot_evidence_arm,
+	.boot_evidence = up_boot_evidence,
+	.transport_restart = up_transport_restart,
+	.now_ms = up_now,
+	.sleep_ms = up_sleep,
+};
+#endif /* CONFIG_COPROCESSOR_UPDATER */
+
+static bool firmware_ready;
+
 static bool dtr_high;
 static bool dtr_bridge;
 static int64_t dtr_low_since;
@@ -508,6 +1054,7 @@ static void follow_baud(void)
 static void worker(void *p1, void *p2, void *p3)
 {
 	int64_t next_dtr = 0;
+	int64_t next_firmware_tick = FIRMWARE_TICK_MS;
 
 	ARG_UNUSED(p1);
 	ARG_UNUSED(p2);
@@ -534,6 +1081,13 @@ static void worker(void *p1, void *p2, void *p3)
 			follow_baud();
 			next_dtr = now + DTR_POLL_MS;
 		}
+#if defined(CONFIG_FIRMWARE_STORE)
+		/* Takes the store's lock only; file I/O stays on the API's job worker. */
+		if (now >= next_firmware_tick) {
+			fw_store_tick(now);
+			next_firmware_tick = now + FIRMWARE_TICK_MS;
+		}
+#endif
 	}
 }
 
@@ -559,6 +1113,48 @@ int coprocessor_service_start(void)
 		LOG_ERR("coprocessor manager: %d", rc);
 	}
 
+#if defined(CONFIG_FIRMWARE_STORE)
+	/* /lfs is mounted by fstab before main() runs (see main.c). A store that does
+	 * not open leaves the upload operations answering 503, not the service down. */
+	int fw_rc = fw_store_init(FIRMWARE_DIR, k_uptime_get());
+
+	if (fw_rc != 0) {
+		LOG_ERR("firmware store in %s: %d", FIRMWARE_DIR, fw_rc);
+	}
+	firmware_ready = fw_rc == 0;
+#endif
+
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+	/* The install needs the store (image and journal live in its directory). */
+	if (firmware_ready) {
+		int up_rc;
+
+		esp_loader_adapter_zephyr_fill(&loader_lib);
+		/* Keep the C6 quiet while the port is up (see quiet_port_init()). */
+		lib_port_init = loader_lib.port_init;
+		loader_lib.port_init = quiet_port_init;
+		lib_connect = loader_lib.connect;
+		loader_lib.connect = timed_connect;
+		lib_get_target = loader_lib.get_target;
+		loader_lib.get_target = recorded_get_target;
+		lib_flash_start = loader_lib.flash_start;
+		loader_lib.flash_start = timed_flash_start;
+		lib_flash_write = loader_lib.flash_write;
+		loader_lib.flash_write = timed_flash_write;
+		lib_flash_finish = loader_lib.flash_finish;
+		loader_lib.flash_finish = timed_flash_finish;
+		loader_lib.reset_target = deferred_reset_target;
+		loader_lib.lines_idle = lines_idle;
+		loader_lib.console_restore = console_restore;
+		up_rc = esp_loader_adapter_init(&loader_lib);
+		updater_platform.loader = esp_loader_adapter_updater_loader();
+		up_rc = up_rc ? up_rc : coprocessor_updater_init(&updater_platform);
+		if (up_rc != 0) {
+			LOG_ERR("coprocessor updater: %d", up_rc);
+		}
+	}
+#endif
+
 	k_thread_create(&worker_thread, coprocessor_worker_stack, WORKER_STACK_SIZE, worker, NULL,
 			NULL, NULL, WORKER_PRIORITY, 0, K_NO_WAIT);
 	k_thread_name_set(&worker_thread, "coprocessor");
@@ -570,6 +1166,16 @@ int coprocessor_service_start(void)
 bool coprocessor_service_rx_seen(void)
 {
 	return atomic_get(&rx_bytes) > 0;
+}
+
+bool coprocessor_service_firmware_ready(void)
+{
+	return firmware_ready;
+}
+
+bool coprocessor_service_request_over_ethernet(uint8_t family, const uint8_t *addr)
+{
+	return net_adapter_is_ethernet_address(family, addr);
 }
 
 #if defined(CONFIG_WIFI_ESP_HOSTED_MCU)
@@ -729,6 +1335,180 @@ static int cmd_burst(const struct shell *sh, size_t argc, char **argv)
 	return 0;
 }
 
+#if defined(CONFIG_FIRMWARE_STORE)
+/*
+ * Debug: the staged upload survives a reboot, and the API names it only to the client
+ * that created it. A bench script that died mid-upload left one on board B, which then
+ * refused every new upload with 409 busy (reports/p6). `coproc upload drop` removes
+ * the store's files and reopens it. Refused while an install runs.
+ */
+static int cmd_upload(const struct shell *sh, size_t argc, char **argv)
+{
+	static const char *const files[] = {
+		FIRMWARE_DIR "/upload.bin",
+		FIRMWARE_DIR "/upload.meta",
+		FIRMWARE_DIR "/upload.meta.tmp",
+	};
+	int rc;
+
+	if (argc != 2 || strcmp(argv[1], "drop") != 0) {
+		shell_error(sh, "usage: coproc upload drop");
+		return -EINVAL;
+	}
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+	if (coprocessor_updater_check() != 0) {
+		shell_error(sh, "coproc upload: refused, an install is active or the bridge owns the UART");
+		return -EBUSY;
+	}
+#endif
+	for (size_t i = 0; i < ARRAY_SIZE(files); i++) {
+		shell_print(sh, "coproc upload: unlink %s: %d", files[i], fs_unlink(files[i]));
+	}
+	rc = fw_store_init(FIRMWARE_DIR, k_uptime_get());
+	firmware_ready = rc == 0;
+	shell_print(sh, "coproc upload: store reopened: %d", rc);
+	return rc;
+}
+#endif
+
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+/* Debug: the updater's journal, including the upload an interrupted install used. */
+static int cmd_updater(const struct shell *sh, size_t argc, char **argv)
+{
+	struct coprocessor_updater_state st;
+
+	ARG_UNUSED(argc);
+	ARG_UNUSED(argv);
+
+	coprocessor_updater_get_state(&st);
+	shell_print(sh, "updater: active %s, phase %s, job %s, upload %s", st.active ? "yes" : "no",
+		    coprocessor_update_phase_str(st.phase), st.job_id[0] ? st.job_id : "-",
+		    st.upload_id[0] ? st.upload_id : "-");
+	if (st.has_last) {
+		shell_print(sh, "updater: last %s %s, version %s, recovery_required %s, error %s: %s",
+			    st.last.job_id, coprocessor_update_outcome_str(st.last.state),
+			    st.last.version[0] ? st.last.version : "-",
+			    st.last.recovery_required ? "yes" : "no",
+			    st.last.has_error ? st.last.error_code : "-",
+			    st.last.has_error ? st.last.error_message : "-");
+	}
+	shell_print(sh,
+		    "library: connect %d in %u ms, flash_start %d in %u ms, writes %u (last %d in "
+		    "%u ms, max %u ms), finish %d in %u ms",
+		    flash_stats.connect_rc, flash_stats.connect_ms, flash_stats.start_rc,
+		    flash_stats.start_ms, flash_stats.writes, flash_stats.write_rc,
+		    flash_stats.write_ms_last, flash_stats.write_ms_max, flash_stats.finish_rc,
+		    flash_stats.finish_ms);
+	shell_print(sh, "library: target %d, writes over 250 ms %u, over 500 ms %u",
+		    flash_stats.target, flash_stats.writes_over_250ms,
+		    flash_stats.writes_over_500ms);
+
+	struct esp_loader_adapter_zephyr_io io;
+
+	esp_loader_adapter_zephyr_io_get(&io);
+	shell_print(sh,
+		    "worker: image reads %u in %u ms wall, %u ms own CPU; library writes %u ms wall, "
+		    "%u ms own CPU",
+		    flash_stats.image_reads,
+		    (uint32_t)k_ticks_to_ms_floor64(flash_stats.image_read_ticks),
+		    cycles_ms(flash_stats.image_read_cpu),
+		    (uint32_t)k_ticks_to_ms_floor64(flash_stats.write_ticks),
+		    cycles_ms(flash_stats.write_cpu));
+	shell_print(sh, "port: longest read past its timeout %u ms, at uptime %lld ms",
+		    io.overrun_max_ms, (long long)io.overrun_at_ms);
+
+	/* Last bytes in, oldest first; "|" where the library wrote. */
+	char tail[3 * ARRAY_SIZE(io.rx_tail) + 1];
+	size_t len = 0;
+
+	for (size_t i = 0; i < io.rx_tail_count; i++) {
+		size_t at = (io.rx_tail_next + ARRAY_SIZE(io.rx_tail) - io.rx_tail_count + i) %
+			    ARRAY_SIZE(io.rx_tail);
+		uint16_t v = io.rx_tail[at];
+
+		len += snprintf(&tail[len], sizeof(tail) - len, v > 0xFFU ? "| " : "%02x ",
+				(unsigned int)v);
+	}
+	tail[len] = '\0';
+	shell_print(sh, "port: rx tail %s", tail);
+	shell_print(sh,
+		    "port: reads %u in %u ms (max %u, last failure %d after %u of %u ms, %u bytes "
+		    "since write), writes %u in %u ms (max %u, last failure %d after %u of %u ms)",
+		    io.reads, (uint32_t)k_ticks_to_ms_floor64(io.read_ticks), io.read_max_ms,
+		    io.read_rc, io.read_fail_ms, io.read_fail_timeout_ms, io.read_fail_bytes, io.writes,
+		    (uint32_t)k_ticks_to_ms_floor64(io.write_ticks), io.write_max_ms, io.write_rc,
+		    io.write_fail_ms, io.write_fail_timeout_ms);
+
+	if (cpu_window_open) {
+		shell_print(sh, "cpu: window still open (no failed write or finish yet)");
+		return 0;
+	}
+	shell_print(sh, "cpu: window %u ms, idle %u ms, %u threads", cycles_ms(cpu_all_delta),
+		    cycles_ms(cpu_idle_delta), (uint32_t)cpu_threads_n);
+	/* Top threads by CPU time over the window, largest first, selection by hand. */
+	bool shown[CPU_THREADS_MAX] = {false};
+
+	for (int k = 0; k < 10; k++) {
+		size_t best = cpu_threads_n;
+
+		for (size_t i = 0; i < cpu_threads_n; i++) {
+			if (!shown[i] && (best == cpu_threads_n ||
+					  cpu_threads[i].delta > cpu_threads[best].delta)) {
+				best = i;
+			}
+		}
+		if (best == cpu_threads_n || cpu_threads[best].delta == 0U) {
+			break;
+		}
+		shown[best] = true;
+		const char *name = k_thread_name_get(cpu_threads[best].tid);
+
+		shell_print(sh, "cpu: %-24s %u ms", name != NULL && name[0] ? name : "?",
+			    cycles_ms(cpu_threads[best].delta));
+	}
+	return 0;
+}
+
+/*
+ * Debug, read-only for the C6 (reports/p6 hw step 2): take the UART through
+ * esp-loader-adapter, enter the ROM loader, connect and check the chip, then close
+ * the session - normal boot, EN/BOOT idle, console back. No write, erase or begin.
+ * Refused while an install runs; blocks this shell for about a second.
+ */
+static int cmd_loader(const struct shell *sh, size_t argc, char **argv)
+{
+	struct esp_loader_adapter_error err = {0};
+	struct coprocessor_status st;
+	int64_t t0;
+	int64_t opened_ms;
+	int rc;
+
+	ARG_UNUSED(argc);
+	ARG_UNUSED(argv);
+
+	if (coprocessor_updater_check() != 0) {
+		shell_error(sh, "coproc loader: refused, an install is active or the bridge owns the UART");
+		return -EBUSY;
+	}
+	t0 = k_uptime_get();
+	rc = esp_loader_adapter_open(&err);
+	opened_ms = k_uptime_get() - t0;
+	if (rc != 0) {
+		shell_print(sh, "coproc loader: open %d in %lld ms (%s: %s, cause %d)", rc, opened_ms,
+			    err.code ? err.code : "-", err.message ? err.message : "-", err.cause);
+	} else {
+		shell_print(sh, "coproc loader: ESP32-C6 in its ROM loader after %lld ms", opened_ms);
+		rc = esp_loader_adapter_close();
+		shell_print(sh, "coproc loader: close %d after %lld ms", rc, k_uptime_get() - t0);
+	}
+	coprocessor_manager_get_status(&st);
+	shell_print(sh, "coproc loader: uart_mode %s, generation %u, session %s",
+		    coprocessor_uart_mode_str(st.uart_mode), st.generation,
+		    esp_loader_adapter_is_open() ? "open" : "closed");
+	return rc;
+}
+#endif
+
 SHELL_STATIC_SUBCMD_SET_CREATE(coproc_cmds,
 	SHELL_CMD(burst, NULL, "Debug: <n> [len] STM32 log messages as fast as possible.", cmd_burst),
 	SHELL_CMD(status, NULL, "UART owner, generation, counters.", cmd_status),
@@ -736,6 +1516,15 @@ SHELL_STATIC_SUBCMD_SET_CREATE(coproc_cmds,
 	SHELL_CMD(reset, NULL, "Reset the C6 through EN; 'download' holds BOOT.", cmd_reset),
 	SHELL_CMD(dtr, NULL, "Follow DTR on the CDC: on|off.", cmd_dtr),
 	SHELL_CMD(logs, NULL, "log-store rings, losses and lock times.", cmd_logstore),
+#if defined(CONFIG_FIRMWARE_STORE)
+	SHELL_CMD(upload, NULL, "Debug: 'drop' removes the staged upload's files.", cmd_upload),
+#endif
+#if defined(CONFIG_COPROCESSOR_UPDATER)
+	SHELL_CMD(loader, NULL, "Debug: ROM loader connect and back to normal boot, no write.",
+		  cmd_loader),
+	SHELL_CMD(updater, NULL, "Debug: updater journal - phase, job, upload, last outcome.",
+		  cmd_updater),
+#endif
 	SHELL_SUBCMD_SET_END
 );
 

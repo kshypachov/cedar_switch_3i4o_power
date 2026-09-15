@@ -51,4 +51,16 @@ void net_adapter_refresh(void);
 /** @brief Whether the Wi-Fi coprocessor completed its initialisation. */
 bool net_adapter_wifi_present(void);
 
+/**
+ * @brief Whether @p addr is an address the Ethernet interface holds right now.
+ *
+ * For the coprocessor update, which must be requested over Ethernet (plan
+ * section 8): the HTTP request's local address names the interface it arrived
+ * on. Answers from the stack's address tables without blocking.
+ *
+ * @param family  4 or 6; anything else is false
+ * @param addr    4 or 16 bytes, network order
+ */
+bool net_adapter_is_ethernet_address(uint8_t family, const uint8_t *addr);
+
 #endif /* NET_ADAPTER_H_ */

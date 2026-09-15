@@ -89,6 +89,29 @@ bool net_adapter_wifi_present(void)
 	return wifi_ready();
 }
 
+bool net_adapter_is_ethernet_address(uint8_t family, const uint8_t *addr)
+{
+	struct net_if *iface = NULL;
+
+	if (ad.eth == NULL || addr == NULL) {
+		return false;
+	}
+	if (family == 4) {
+		struct net_in_addr a;
+
+		memcpy(&a, addr, sizeof(a));
+		return net_if_ipv4_addr_lookup(&a, &iface) != NULL && iface == ad.eth;
+	}
+	if (family == 6) {
+		struct net_in6_addr a;
+
+		memcpy(&a, addr, sizeof(a));
+		return net_if_ipv6_addr_lookup(&a, &iface) != NULL && iface == ad.eth;
+	}
+
+	return false;
+}
+
 /* -- events: copy, wake, return ------------------------------------------------- */
 
 static void on_event(struct net_mgmt_event_callback *cb, uint64_t event, struct net_if *iface)

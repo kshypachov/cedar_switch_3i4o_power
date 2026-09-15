@@ -31,6 +31,9 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libzephyr_log_source.a:*(.bss .bss.* COMMON)
 	*libesp32_log_source.a:*(.bss .bss.* COMMON)
 	*libcoprocessor_manager.a:*(.bss .bss.* COMMON)
+	*libfirmware_store.a:*(.bss .bss.* COMMON)
+	*libesp_loader_adapter.a:*(.bss .bss.* COMMON)
+	*libcoprocessor_updater.a:*(.bss .bss.* COMMON)
 	. = ALIGN(4);
 	__psram_ext_bss_end = .;
 	*libCHIP.a:*(.noinit .noinit.*)
@@ -49,6 +52,9 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libzephyr_log_source.a:*(.noinit .noinit.*)
 	*libesp32_log_source.a:*(.noinit .noinit.*)
 	*libcoprocessor_manager.a:*(.noinit .noinit.*)
+	*libfirmware_store.a:*(.noinit .noinit.*)
+	*libesp_loader_adapter.a:*(.noinit .noinit.*)
+	*libcoprocessor_updater.a:*(.noinit .noinit.*)
 	. = ALIGN(4);
 	__psram_used_end = .;
 } GROUP_LINK_IN(PSRAM)
