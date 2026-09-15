@@ -320,6 +320,9 @@ static void before(void *f)
 	matter_reset();
 	network_reset();
 	v1_coprocessor_fake_init();
+	v1_update_fake_reset();
+	/* Closed until a firmware test opens its store (src/v1_firmware.c). */
+	web_api_v1_set_firmware(NULL);
 	cookie[0] = '\0';
 	csrf[0] = '\0';
 }
@@ -663,13 +666,13 @@ ZTEST(v1, test_capabilities)
 		"\"matter\":{\"available\":false,\"reason\":\"not_ready\"},"
 		"\"esp32_logs\":{\"available\":true,\"reason\":null},"
 		"\"esp32_ota\":{\"available\":false,\"reason\":\"not_implemented\"},"
-		"\"esp32_uart\":{\"available\":false,\"reason\":\"not_implemented\"}},"
+		"\"esp32_uart\":{\"available\":true,\"reason\":null}},"
 		"\"limits\":{\"json_body_bytes\":8192,\"upload_chunk_bytes\":16384,"
-		"\"upload_max_bytes\":2097152,\"log_page_records\":100,\"scan_records\":64,"
+		"\"upload_max_bytes\":1900544,\"log_page_records\":100,\"scan_records\":64,"
 		"\"commissioning_min_seconds\":180,\"commissioning_max_seconds\":900,"
 		"\"network_confirm_min_seconds\":60,\"network_confirm_max_seconds\":300},"
 		"\"wifi_security_modes\":[\"open\",\"wpa2_psk\",\"wpa3_sae\"],"
-		"\"firmware_formats\":[\"raw_app\"],\"update_requires_ethernet\":true}");
+		"\"firmware_formats\":[\"raw_full_flash\"],\"update_requires_ethernet\":true}");
 }
 
 ZTEST(v1, test_jobs)

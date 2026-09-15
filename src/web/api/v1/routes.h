@@ -28,6 +28,7 @@ WEB_API_V1_ROUTE(changePassword, PUT, "/auth/password", WEB_API_CSRF | WEB_API_I
 WEB_API_V1_ROUTE(getSystemStatus, GET, "/system/status", 0, V1_NO_BODY, NULL, NULL, v1_get_system_status)
 WEB_API_V1_ROUTE(getCapabilities, GET, "/capabilities", 0, V1_NO_BODY, NULL, NULL, v1_get_capabilities)
 WEB_API_V1_ROUTE(getJob, GET, "/jobs/{job_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_job)
+WEB_API_V1_ROUTE(cancelJob, POST, "/jobs/{job_id}/cancel", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_cancel_job)
 WEB_API_V1_ROUTE(getMatterStatus, GET, "/matter/status", 0, V1_NO_BODY, NULL, NULL, v1_get_matter_status)
 WEB_API_V1_ROUTE(getCommissioningWindow, GET, "/matter/commissioning", 0, V1_NO_BODY, NULL, NULL, v1_get_commissioning_window)
 WEB_API_V1_ROUTE(openCommissioningWindow, POST, "/matter/commissioning", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_commissioning_body), &v1_commissioning_schema, NULL, v1_open_commissioning_window)
@@ -47,4 +48,10 @@ WEB_API_V1_ROUTE(getLogSources, GET, "/logs/sources", 0, V1_NO_BODY, NULL, NULL,
 WEB_API_V1_ROUTE(getLogRecords, GET, "/logs/records", 0, V1_NO_BODY, NULL, v1_log_records_query, v1_get_log_records)
 WEB_API_V1_ROUTE(exportLogs, GET, "/logs/export", 0, V1_NO_BODY, NULL, v1_log_export_query, v1_export_logs)
 WEB_API_V1_ROUTE(getCoprocessorStatus, GET, "/coprocessor/status", 0, V1_NO_BODY, NULL, NULL, v1_get_coprocessor_status)
+WEB_API_V1_ROUTE(startCoprocessorUpdate, POST, "/coprocessor/updates", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_update_body), &v1_update_schema, NULL, v1_start_coprocessor_update)
+WEB_API_V1_ROUTE(createUpload, POST, "/firmware/uploads", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_upload_body), &v1_upload_schema, NULL, v1_create_upload)
+WEB_API_V1_ROUTE(getUpload, GET, "/firmware/uploads/{upload_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_upload)
+WEB_API_V1_ROUTE(deleteUpload, DELETE, "/firmware/uploads/{upload_id}", WEB_API_CSRF | WEB_API_IDEMPOTENT, V1_NO_BODY, NULL, NULL, v1_delete_upload)
+WEB_API_V1_ROUTE(writeUploadChunk, PUT, "/firmware/uploads/{upload_id}/data", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED | WEB_API_BODY_OCTETS, V1_NO_BODY, NULL, v1_upload_chunk_query, v1_write_upload_chunk)
+WEB_API_V1_ROUTE(verifyUpload, POST, "/firmware/uploads/{upload_id}/verify", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_verify_upload)
 /* clang-format on */

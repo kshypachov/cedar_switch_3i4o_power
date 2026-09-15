@@ -17,6 +17,13 @@
 #include <zephyr/net/socket.h>
 #include <zephyr/ztest.h>
 
+#include <zephyr/fs/fs.h>
+#include <zephyr/fs/littlefs.h>
+#include <zephyr/storage/flash_map.h>
+
+#include <psa/crypto.h>
+
+#include <firmware_store/firmware_store.h>
 #include <job_manager/job_manager.h>
 #include <log_store/log_store.h>
 #include <web_api/web_api_http.h>
@@ -29,8 +36,13 @@
 
 /* -- the service, as the firmware defines it ----------------------------- */
 
+/* The device's end of the last connection a static request arrived on. */
+static struct web_auth_peer last_local;
+
 static void answer_static(struct web_api_context *ctx)
 {
+	last_local = ctx->req.local;
+
 	const struct web_assets_request req = {
 		.is_get = ctx->req.method == WEB_API_GET,
 		.path = ctx->req.path,
@@ -248,9 +260,29 @@ static void wait_contexts_released(void)
 
 /* -- suite ----------------------------------------------------------------- */
 
+FS_LITTLEFS_DECLARE_DEFAULT_CONFIG(fw_lfs);
+
+static struct fs_mount_t fw_mnt = {
+	.type = FS_LITTLEFS,
+	.fs_data = &fw_lfs,
+	.storage_dev = (void *)PARTITION_ID(fw_test_partition),
+	.mnt_point = "/fw",
+};
+
+static const struct web_api_v1_firmware fw_hooks = {.now_ms = NULL};
+
 static void *suite_setup(void)
 {
+	const struct flash_area *fa;
+
 	zassert_ok(web_api_v1_init(&identity));
+	/* The firmware store as the board opens it, on an empty volume. */
+	zassert_ok(flash_area_open(PARTITION_ID(fw_test_partition), &fa));
+	zassert_ok(flash_area_erase(fa, 0, fa->fa_size));
+	flash_area_close(fa);
+	zassert_ok(fs_mount(&fw_mnt));
+	zassert_ok(fw_store_init("/fw/firmware", k_uptime_get()));
+	web_api_v1_set_firmware(&fw_hooks);
 	return NULL;
 }
 
@@ -831,4 +863,181 @@ ZTEST(web_api_http, test_log_page_fits_the_response_buffer)
 	zassert_equal(status(), 200, "%s", rsp);
 	zassert_true(has("\"has_more\":true"), "cut by bytes, not by limit");
 	zassert_true(rsp_closed || rsp_len < (int)sizeof(rsp) - 1, "the page arrived whole");
+}
+
+/* -- the request's own address ------------------------------------------------ */
+
+ZTEST(web_api_http, test_request_carries_the_devices_end_of_the_connection)
+{
+	memset(&last_local, 0, sizeof(last_local));
+	exchange("GET /index.html HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
+	zassert_equal(status(), 200, "%s", rsp);
+	/* The client connected to 127.0.0.1 on the dual-stack socket. */
+	zassert_equal(last_local.family, 4, "local family %u", last_local.family);
+	zassert_mem_equal(last_local.addr, ((uint8_t[]){127, 0, 0, 1}), 4);
+}
+
+/* -- an upload chunk through the real server ---------------------------------- */
+
+static char up_cookie[64];
+static char up_csrf[64];
+
+static void sign_in_for_upload(void)
+{
+	char token[64], req[512];
+
+	exchange("GET /api/v1/auth/state HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n");
+	zassert_true(json_value("setup_token", token, sizeof(token)), "%s", rsp);
+	snprintf(req, sizeof(req),
+		 "POST /api/v1/auth/setup HTTP/1.1\r\nHost: 127.0.0.1:8080\r\n"
+		 "Origin: http://127.0.0.1:8080\r\nX-Setup-Token: %s\r\n"
+		 "Content-Type: application/json\r\nContent-Length: 32\r\n\r\n"
+		 "{\"password\":\"a fine password\"}  ",
+		 token);
+	exchange(req);
+	zassert_equal(status(), 201, "%s", rsp);
+	zassert_true(header_value("Set-Cookie: cedar_session=", up_cookie, sizeof(up_cookie)));
+	zassert_true(json_value("csrf_token", up_csrf, sizeof(up_csrf)));
+}
+
+static uint8_t chunk_bytes[16385];
+
+/* A chunk request's head; @p type NULL sends no Content-Type. */
+static int chunk_head(char *out, size_t cap, const char *id, const char *type, size_t len,
+		      const char *key)
+{
+	char type_line[64] = "";
+
+	if (type != NULL) {
+		snprintf(type_line, sizeof(type_line), "Content-Type: %s\r\n", type);
+	}
+	return snprintf(out, cap,
+			"PUT /api/v1/firmware/uploads/%s/data?offset=0 HTTP/1.1\r\n"
+			"Host: 127.0.0.1\r\nCookie: cedar_session=%s\r\nX-CSRF-Token: %s\r\n"
+			"Idempotency-Key: %s\r\n%sContent-Length: %zu\r\n\r\n",
+			id, up_cookie, up_csrf, key, type_line, len);
+}
+
+static void create_upload(char *id, size_t cap, const char *key)
+{
+	uint8_t digest[32];
+	char hexd[65], json[200], req[768];
+	size_t n;
+
+	for (size_t i = 0; i < sizeof(chunk_bytes); i++) {
+		chunk_bytes[i] = (uint8_t)(i * 31U + 7U);
+	}
+	zassert_ok(psa_crypto_init());
+	zassert_ok(psa_hash_compute(PSA_ALG_SHA_256, chunk_bytes, sizeof(chunk_bytes), digest,
+				    sizeof(digest), &n));
+	for (size_t i = 0; i < 32; i++) {
+		snprintf(&hexd[2 * i], 3, "%02x", digest[i]);
+	}
+	n = (size_t)snprintf(json, sizeof(json),
+			     "{\"filename\":\"cp.bin\",\"size_bytes\":%zu,\"sha256\":\"%s\"}",
+			     sizeof(chunk_bytes), hexd);
+	snprintf(req, sizeof(req),
+		 "POST /api/v1/firmware/uploads HTTP/1.1\r\nHost: 127.0.0.1\r\n"
+		 "Cookie: cedar_session=%s\r\nX-CSRF-Token: %s\r\nIdempotency-Key: %s\r\n"
+		 "Content-Type: application/json\r\nContent-Length: %zu\r\n\r\n%s",
+		 up_cookie, up_csrf, key, n, json);
+	exchange(req);
+	zassert_equal(status(), 201, "%s", rsp);
+	zassert_true(json_value("id", id, cap), "%s", rsp);
+}
+
+static void fresh_store(void)
+{
+	const struct flash_area *fa;
+
+	zassert_ok(fs_unmount(&fw_mnt));
+	zassert_ok(flash_area_open(PARTITION_ID(fw_test_partition), &fa));
+	zassert_ok(flash_area_erase(fa, 0, fa->fa_size));
+	flash_area_close(fa);
+	zassert_ok(fs_mount(&fw_mnt));
+	zassert_ok(fw_store_init("/fw/firmware", k_uptime_get()));
+}
+
+ZTEST(web_api_http, test_a_whole_chunk_arrives_in_fragments)
+{
+	char id[FW_STORE_ID_LEN + 1], job[40], head[512], req[256];
+	int fd, n;
+	struct job_snapshot snap;
+
+	fresh_store();
+	sign_in_for_upload();
+	create_upload(id, sizeof(id), "create-wire-fragments");
+
+	fd = client();
+	n = chunk_head(head, sizeof(head), id, "application/octet-stream", 16384, "chunk-over-the-wire");
+	send_all(fd, head, n);
+	k_msleep(20);
+	/* Pieces smaller and larger than the server's receive buffer. */
+	send_all(fd, (const char *)chunk_bytes, 1000);
+	k_msleep(20);
+	send_all(fd, (const char *)chunk_bytes + 1000, 9000);
+	k_msleep(20);
+	send_all(fd, (const char *)chunk_bytes + 10000, 6384);
+	receive(fd);
+	zsock_close(fd);
+	zassert_equal(status(), 202, "%s", rsp);
+	zassert_true(json_value("job_id", job, sizeof(job)), "%s", rsp);
+
+	for (int i = 0; i < 500; i++) {
+		zassert_ok(job_get(job, &snap));
+		if (job_state_is_terminal(snap.state)) {
+			break;
+		}
+		k_msleep(10);
+	}
+	zassert_equal(snap.state, JOB_STATE_SUCCEEDED, "job state %d", snap.state);
+
+	snprintf(req, sizeof(req),
+		 "GET /api/v1/firmware/uploads/%s HTTP/1.1\r\nHost: 127.0.0.1\r\n"
+		 "Cookie: cedar_session=%s\r\n\r\n",
+		 id, up_cookie);
+	exchange(req);
+	zassert_equal(status(), 200, "%s", rsp);
+	zassert_true(has("\"received_bytes\":16384"), "every byte of the chunk kept: %s", rsp);
+}
+
+ZTEST(web_api_http, test_a_chunk_without_its_media_type_is_415)
+{
+	char id[FW_STORE_ID_LEN + 1], head[512];
+	int fd, n;
+
+	fresh_store();
+	sign_in_for_upload();
+	create_upload(id, sizeof(id), "create-wire-no-type-x");
+
+	fd = client();
+	n = chunk_head(head, sizeof(head), id, NULL, 64, "chunk-without-type");
+	send_all(fd, head, n);
+	send_all(fd, (const char *)chunk_bytes, 64);
+	receive(fd);
+	zsock_close(fd);
+	zassert_equal(status(), 415, "%s", rsp);
+	zassert_true(has("\"code\":\"unsupported_media_type\""), "%s", rsp);
+}
+
+ZTEST(web_api_http, test_a_chunk_over_the_limit_is_413_and_not_kept)
+{
+	char id[FW_STORE_ID_LEN + 1], head[512];
+	int fd, n;
+
+	fresh_store();
+	sign_in_for_upload();
+	create_upload(id, sizeof(id), "create-wire-over-limit");
+
+	fd = client();
+	n = chunk_head(head, sizeof(head), id, "application/octet-stream", sizeof(chunk_bytes),
+		       "chunk-over-limit-x");
+	send_all(fd, head, n);
+	send_all(fd, (const char *)chunk_bytes, sizeof(chunk_bytes));
+	receive(fd);
+	zsock_close(fd);
+	zassert_equal(status(), 413, "%s", rsp);
+	zassert_true(has("\"code\":\"payload_too_large\""), "%s", rsp);
+	wait_contexts_released();
+	zassert_equal(web_api_http_contexts_in_use(), 0);
 }

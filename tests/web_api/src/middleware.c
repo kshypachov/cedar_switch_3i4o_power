@@ -68,6 +68,22 @@ static void h_empty(struct web_api_call *call)
 	web_api_reply_empty(call, 204);
 }
 
+static size_t seen_octets_len;
+static uint8_t seen_octets_first;
+static uint8_t seen_octets_last;
+static bool seen_decoded_body;
+
+static void h_blob(struct web_api_call *call)
+{
+	handler_ran = true;
+	seen_octets_len = call->octets != NULL ? call->octets_len : 0U;
+	seen_octets_first = seen_octets_len ? call->octets[0] : 0U;
+	seen_octets_last = seen_octets_len ? call->octets[seen_octets_len - 1U] : 0U;
+	seen_decoded_body = call->body != NULL;
+	seen_hash = call->request_hash;
+	web_api_reply_empty(call, 204);
+}
+
 static const char *const thing_query[] = {"limit", "cursor", NULL};
 
 static const struct web_api_route test_routes[] = {
@@ -83,6 +99,9 @@ static const struct web_api_route test_routes[] = {
 	{"huge", WEB_API_GET, "/huge", WEB_API_PUBLIC, NULL, 0, NULL, h_huge},
 	{"openSetup", WEB_API_POST, "/setup", WEB_API_PUBLIC | WEB_API_ORIGIN | WEB_API_SETUP_TOKEN,
 	 NULL, 0, NULL, h_ok},
+	{"putBlob", WEB_API_PUT, "/blobs/{blob_id}",
+	 WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED | WEB_API_BODY_OCTETS, NULL, 0,
+	 NULL, h_blob},
 };
 
 static const struct web_api_router test_router = {test_routes, ARRAY_SIZE(test_routes)};
@@ -457,6 +476,108 @@ ZTEST(middleware, test_optional_body_may_be_absent)
 	zassert_equal(ctx.rsp.status, 200);
 }
 
+static uint8_t chunk[CONFIG_WEB_API_OCTET_BODY_MAX];
+
+static void fill_chunk(size_t n, uint8_t seed)
+{
+	for (size_t i = 0; i < n; i++) {
+		chunk[i] = (uint8_t)(seed + i * 7U);
+	}
+}
+
+ZTEST(middleware, test_octet_body_reaches_the_handler_as_bytes)
+{
+	/* A whole chunk, including bytes a JSON parser would choke on. */
+	fill_chunk(sizeof(chunk), 0);
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, sizeof(chunk), "application/octet-stream");
+	dispatch(&test_router);
+	zassert_equal(ctx.rsp.status, 204, "%s", body);
+	zassert_equal(seen_octets_len, sizeof(chunk));
+	zassert_equal(seen_octets_first, chunk[0]);
+	zassert_equal(seen_octets_last, chunk[sizeof(chunk) - 1U]);
+	zassert_false(seen_decoded_body, "raw bytes are not decoded");
+
+	/* Media type parameters and case do not matter. */
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 1, "Application/Octet-Stream; x=1");
+	dispatch(&test_router);
+	zassert_equal(ctx.rsp.status, 204, "%s", body);
+	zassert_equal(seen_octets_len, 1);
+}
+
+ZTEST(middleware, test_octet_body_steps)
+{
+	/* Absent: the mock's answer to an empty chunk. */
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	dispatch(&test_router);
+	expect_error(422, "validation_failed");
+
+	/* No Content-Type is not taken for bytes, and JSON is not bytes. */
+	fill_chunk(64, 3);
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 64, NULL);
+	dispatch(&test_router);
+	expect_error(415, "unsupported_media_type");
+
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 64, "application/json");
+	dispatch(&test_router);
+	expect_error(415, "unsupported_media_type");
+
+	/* One byte past a chunk: the adapter kept nothing (body NULL). */
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	ctx.req.headers.content_type = "application/octet-stream";
+	ctx.req.body_received = CONFIG_WEB_API_OCTET_BODY_MAX + 1;
+	dispatch(&test_router);
+	expect_error(413, "payload_too_large");
+
+	/* A JSON route still refuses bytes. */
+	authorised(WEB_API_PUT, "/api/v1/things/t1");
+	request_octets(chunk, 64, "application/octet-stream");
+	dispatch(&test_router);
+	expect_error(415, "unsupported_media_type");
+}
+
+ZTEST(middleware, test_csrf_comes_before_the_octet_body)
+{
+	fill_chunk(64, 9);
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	ctx.req.headers.csrf_token = "wrong";
+	request_octets(chunk, 64, "text/plain");
+	dispatch(&test_router);
+	expect_error(403, "csrf_failed");
+}
+
+ZTEST(middleware, test_octet_request_hash_covers_the_bytes)
+{
+	uint32_t first;
+
+	/* The same key with a different chunk must be a different request, or a
+	 * retry with other bytes would be answered with the first chunk's job. */
+	fill_chunk(256, 1);
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 256, "application/octet-stream");
+	dispatch(&test_router);
+	first = seen_hash;
+
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 256, "application/octet-stream");
+	dispatch(&test_router);
+	zassert_equal(seen_hash, first, "same bytes, same hash");
+
+	chunk[200] ^= 0x01;
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 256, "application/octet-stream");
+	dispatch(&test_router);
+	zassert_not_equal(seen_hash, first, "one bit of the chunk changes the hash");
+
+	authorised(WEB_API_PUT, "/api/v1/blobs/b1");
+	request_octets(chunk, 255, "application/octet-stream");
+	dispatch(&test_router);
+	zassert_not_equal(seen_hash, first, "the length is part of the request");
+}
+
 /* -- 9. query -------------------------------------------------------------- */
 
 ZTEST(middleware, test_query)
@@ -584,6 +705,10 @@ ZTEST(middleware, test_body_limit_lookup)
 		      CONFIG_WEB_API_JSON_BODY_MAX);
 	zassert_equal(web_api_body_limit(&test_router, WEB_API_DELETE, "/api/v1/things/x"), 0);
 	zassert_equal(web_api_body_limit(&test_router, WEB_API_PUT, "/api/v1/nowhere"), 0);
+	zassert_equal(web_api_body_limit(&test_router, WEB_API_PUT, "/api/v1/blobs/x"),
+		      CONFIG_WEB_API_OCTET_BODY_MAX);
+	zassert_true(sizeof(ctx.body) >= CONFIG_WEB_API_OCTET_BODY_MAX,
+		     "the context keeps a whole chunk");
 }
 
 /* -- query values (web_api_query_get) ----------------------------------- */

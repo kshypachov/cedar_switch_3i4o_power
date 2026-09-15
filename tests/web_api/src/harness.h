@@ -31,6 +31,8 @@ void harness_reset(void);
 /* Start a request: Host is a LAN address, everything else empty. */
 void request(enum web_api_method method, const char *path);
 void request_body(const char *json);
+/* A raw body with @p content_type (NULL: no Content-Type header). */
+void request_octets(const uint8_t *data, size_t n, const char *content_type);
 void dispatch(const struct web_api_router *router);
 
 const char *response_header(const char *name);
@@ -40,5 +42,9 @@ bool body_has(const char *fragment);
 /* Empty log-store, and coprocessor-manager on a fake platform with the console
  * owning the UART and no transport (src/v1_logs.c). */
 void v1_coprocessor_fake_init(void);
+
+/* coprocessor-updater on its fake platform with no journal and no last install
+ * (src/v1_firmware.c). */
+void v1_update_fake_reset(void);
 
 #endif

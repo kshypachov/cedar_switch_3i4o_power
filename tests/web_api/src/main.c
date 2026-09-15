@@ -143,6 +143,16 @@ void request_body(const char *json)
 	ctx.req.body_received = n;
 }
 
+void request_octets(const uint8_t *data, size_t n, const char *content_type)
+{
+	zassert_true(n <= sizeof(ctx.body));
+	memcpy(ctx.body, data, n);
+	ctx.req.body = ctx.body;
+	ctx.req.body_len = n;
+	ctx.req.body_received = n;
+	ctx.req.headers.content_type = content_type;
+}
+
 void dispatch(const struct web_api_router *router)
 {
 	web_api_dispatch(router, &ctx);

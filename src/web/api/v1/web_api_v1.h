@@ -77,6 +77,13 @@ struct web_api_v1_coprocessor {
 	bool (*firmware_version)(char *buf, size_t cap);
 	/** The C6 has sent at least one byte on its UART since boot. */
 	bool (*rx_seen)(void);
+	/**
+	 * The request whose device-side address is @p local arrived on the
+	 * Ethernet interface (the board: net_adapter_is_ethernet_address()). NULL,
+	 * or no hooks at all, means the check cannot be made, and an install is
+	 * refused 409 ethernet_required.
+	 */
+	bool (*request_over_ethernet)(const struct web_auth_peer *local);
 };
 
 /**
@@ -87,6 +94,24 @@ struct web_api_v1_coprocessor {
  * outlive the program.
  */
 void web_api_v1_set_coprocessor(const struct web_api_v1_coprocessor *coprocessor);
+
+/** What the firmware upload bindings need from the board. */
+struct web_api_v1_firmware {
+	/** Uptime for the store's expiry and activity; NULL: k_uptime_get(). */
+	int64_t (*now_ms)(void);
+};
+
+/**
+ * @brief Tell the upload bindings that firmware-store is open.
+ *
+ * Call after fw_store_init() on the store's directory (/lfs/firmware) has
+ * succeeded. Until then createUpload, getUpload, writeUploadChunk,
+ * verifyUpload and deleteUpload answer 503 service_not_ready. The store's
+ * expiry of an untouched upload also needs fw_store_tick() from a periodic
+ * caller - the board's coprocessor service worker. @p firmware must outlive the
+ * program; NULL closes the bindings again.
+ */
+void web_api_v1_set_firmware(const struct web_api_v1_firmware *firmware);
 
 #ifdef __cplusplus
 }
