@@ -1,0 +1,4 @@
+2026-09-15 17:47:56 cmd 'sysupd selfcopy'
+2026-09-15 17:48:46 cmd 'sysupd request test'
+2026-09-15 17:49:02 cmd 'kernel reboot cold'
+2026-09-15 17:50:51 cmd 'sysupd hang'
