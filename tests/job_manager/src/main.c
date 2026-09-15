@@ -361,6 +361,7 @@ ZTEST(job_manager, test_rejects_bad_arguments)
 ZTEST(job_manager, test_wire_names_match_the_contract)
 {
 	zassert_equal(strcmp(job_kind_str(JOB_KIND_COPROCESSOR_UPDATE), "coprocessor_update"), 0);
+	zassert_equal(strcmp(job_kind_str(JOB_KIND_SYSTEM_UPDATE), "system_update"), 0);
 	zassert_equal(strcmp(job_kind_str(JOB_KIND_NETWORK_APPLY), "network_apply"), 0);
 	zassert_equal(strcmp(job_state_str(JOB_STATE_WAITING_CONFIRMATION),
 			     "waiting_confirmation"), 0);
