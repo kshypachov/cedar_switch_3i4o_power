@@ -1,5 +1,10 @@
+/* Settings on the 6 MB partition at offset 0 of the SPI NOR. Named storage_lfs
+ * during the P3 measurements (per-trial copies keep that name); renamed
+ * storage_zms on 2026-09-14, when the firmware moved its settings there. The
+ * application overlay now sets the same chosen node, so this is a no-op for
+ * current builds and kept for the tuning harness. */
 / {
 	chosen {
-		zephyr,settings-partition = &storage_lfs_partition;
+		zephyr,settings-partition = &storage_zms_partition;
 	};
 };

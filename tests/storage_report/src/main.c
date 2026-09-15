@@ -43,8 +43,8 @@ int main(void)
 #if FIXED_PARTITION_EXISTS(storage_partition)
 	part_info("storage_nvs", FIXED_PARTITION_ID(storage_partition));
 #endif
-#if FIXED_PARTITION_EXISTS(storage_lfs_partition)
-	part_info("storage_lfs", FIXED_PARTITION_ID(storage_lfs_partition));
+#if FIXED_PARTITION_EXISTS(storage_zms_partition)
+	part_info("storage_zms", FIXED_PARTITION_ID(storage_zms_partition));
 #endif
 #if FIXED_PARTITION_EXISTS(slot1_partition)
 	part_info("image-1", FIXED_PARTITION_ID(slot1_partition));

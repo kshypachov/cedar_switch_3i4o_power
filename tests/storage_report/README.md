@@ -17,6 +17,10 @@ image-1        off=0x00600000 size=4096 KiB
 /lfs: total=5120 KiB  free=4992 KiB  used=128 KiB  (64 KiB blocks, 80 total)
 ```
 
+Since 2026-09-14 the 6 MiB partition at offset 0 is renamed `storage_zms` and holds
+the settings store (ZMS, `zephyr,settings-partition`); it is no longer a free
+reserve, and the test now prints it under the new name.
+
 A 1.75 MiB C6 image fits with room to spare, so **the partition does not need
 to grow** for the first version.
 
