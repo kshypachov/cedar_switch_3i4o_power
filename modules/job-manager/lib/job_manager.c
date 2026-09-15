@@ -99,6 +99,7 @@ static const char *const kind_names[JOB_KIND_COUNT] = {
 	[JOB_KIND_FIRMWARE_DELETE] = "firmware_delete",
 	[JOB_KIND_COPROCESSOR_UPDATE] = "coprocessor_update",
 	[JOB_KIND_PASSWORD_CHANGE] = "password_change",
+	[JOB_KIND_SYSTEM_UPDATE] = "system_update",
 };
 
 static const char *const state_names[JOB_STATE_COUNT] = {

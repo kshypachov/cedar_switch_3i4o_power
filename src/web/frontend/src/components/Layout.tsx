@@ -14,7 +14,7 @@ function NavLink({
 }: {
   route: Route;
   current: Route;
-  label: 'nav.overview' | 'nav.matter' | 'nav.network' | 'nav.logs' | 'nav.coprocessor' | 'nav.access';
+  label: 'nav.overview' | 'nav.matter' | 'nav.network' | 'nav.logs' | 'nav.coprocessor' | 'nav.firmware' | 'nav.access';
 }) {
   return (
     <a
@@ -42,6 +42,7 @@ export function Layout({ session, route, children }: { session: Session; route: 
           <NavLink route="network" current={route} label="nav.network" />
           <NavLink route="logs" current={route} label="nav.logs" />
           <NavLink route="coprocessor" current={route} label="nav.coprocessor" />
+          <NavLink route="firmware" current={route} label="nav.firmware" />
           <NavLink route="access" current={route} label="nav.access" />
         </nav>
         <button

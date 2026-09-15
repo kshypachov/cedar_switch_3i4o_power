@@ -1,0 +1,995 @@
+diff --git a/drivers/flash/CMakeLists.txt b/drivers/flash/CMakeLists.txt
+index 0b8118f89cb..513be2ea718 100644
+--- a/drivers/flash/CMakeLists.txt
++++ b/drivers/flash/CMakeLists.txt
+@@ -58,6 +58,7 @@ zephyr_library_sources_ifdef(CONFIG_FLASH_S3AXX04 flash_s3axx04.c)
+ zephyr_library_sources_ifdef(CONFIG_FLASH_SF32LB_MPI_QSPI_NOR flash_sf32lb_mpi_qspi_nor.c)
+ zephyr_library_sources_ifdef(CONFIG_FLASH_SOC_LPC84X_IAP soc_flash_lpc84x_iap.c)
+ zephyr_library_sources_ifdef(CONFIG_FLASH_STM32_OSPI flash_stm32_ospi.c)
++zephyr_library_sources_ifdef(CONFIG_FLASH_STM32_OSPI_XIP flash_stm32_ospi_xip.c)
+ zephyr_library_sources_ifdef(CONFIG_FLASH_STM32_QSPI flash_stm32_qspi.c)
+ zephyr_library_sources_ifdef(CONFIG_FLASH_STM32_XSPI flash_stm32_xspi.c)
+ zephyr_library_sources_ifdef(CONFIG_NORDIC_QSPI_NOR nrf_qspi_nor.c)
+diff --git a/drivers/flash/Kconfig.stm32_ospi b/drivers/flash/Kconfig.stm32_ospi
+index fda241212f6..225828ae355 100644
+--- a/drivers/flash/Kconfig.stm32_ospi
++++ b/drivers/flash/Kconfig.stm32_ospi
+@@ -24,3 +24,46 @@ config FLASH_STM32_OSPI
+ 					$(DT_STM32_OCTOSPI_HAS_DMA)
+ 	help
+ 	  Enable OSPI-NOR support on the STM32 family of processors.
++
++config FLASH_STM32_OSPI_XIP
++	bool "XIP-safe program/erase (run from and write to the same OSPI NOR)"
++	depends on FLASH_STM32_OSPI
++	depends on FLASH_STM32_NOR_MEMMAP
++	depends on XIP
++	depends on SOC_SERIES_STM32U5X
++	help
++	  Program/erase the external NOR flash while the firmware executes from
++	  it (XIP), the way ESP32 does: the operation is split into page/sector
++	  sized chunks, each chunk runs from SRAM with interrupts masked and the
++	  controller temporarily out of memory-mapped mode, and the memory-mapped
++	  configuration (as programmed by the bootloader) is restored afterwards.
++	  Interrupt handlers that must keep running during a chunk have to be
++	  zero-latency IRQs whose code and data live in SRAM.
++
++if FLASH_STM32_OSPI_XIP
++
++config FLASH_STM32_OSPI_XIP_MAX_ERASE_SIZE
++	int "Largest erase command used per guarded chunk (bytes)"
++	default 4096
++	range 4096 65536
++	help
++	  4096 (sector erase, worst case 400 ms with interrupts masked),
++	  32768 (block erase 32K, up to 1.6 s) or 65536 (block erase 64K, up to
++	  2 s).  Larger blocks erase faster overall but mask interrupts longer.
++
++config FLASH_STM32_OSPI_XIP_WRITE_CHUNK
++	int "Bytes programmed per guarded chunk"
++	default 256
++	range 256 4096
++	help
++	  Multiple of the 256 byte page.  Each page takes up to 3 ms with
++	  interrupts masked; larger chunks reduce the guard entry/exit overhead.
++
++config FLASH_STM32_OSPI_XIP_YIELD
++	bool "Yield between chunks"
++	default y
++	help
++	  Call k_yield() after every guarded chunk so equal-priority threads
++	  get to run during long operations (ESP-IDF SPI_FLASH_YIELD_DURING_ERASE).
++
++endif # FLASH_STM32_OSPI_XIP
+diff --git a/drivers/flash/flash_stm32_ospi.c b/drivers/flash/flash_stm32_ospi.c
+index 91caf3dce37..c5ed5f96416 100644
+--- a/drivers/flash/flash_stm32_ospi.c
++++ b/drivers/flash/flash_stm32_ospi.c
+@@ -23,6 +23,9 @@
+ #include <zephyr/irq.h>
+ 
+ #include "spi_nor.h"
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++#include "flash_stm32_ospi_xip.h"
++#endif
+ #include "jesd216.h"
+ 
+ #include <zephyr/logging/log.h>
+@@ -177,6 +180,9 @@ struct flash_stm32_ospi_data {
+ #if STM32_OSPI_USE_DMA
+ 	struct stream dma;
+ #endif /* STM32_OSPI_USE_DMA */
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++	struct ospi_xip_ctx xip;
++#endif
+ };
+ 
+ static inline void ospi_lock_thread(const struct device *dev)
+@@ -1159,6 +1165,160 @@ static int stm32_ospi_abort(const struct device *dev)
+ }
+ #endif /* CONFIG_FLASH_STM32_NOR_MEMMAP */
+ 
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++/*
++ * XIP-safe program/erase (see flash_stm32_ospi_xip.h).  These run from
++ * flash; only the guarded chunk functions they call run from SRAM.
++ */
++static inline bool ospi_xip_buf_in_sram(const void *buf, size_t len)
++{
++	uintptr_t b = (uintptr_t)buf;
++
++	/* Internal SRAM 0x2000_0000..0x2FFF_FFFF (SRAM1-3) and 0x2800_0000 (SRAM4) */
++	return ((b >> 28) == 0x2U) && (((b + len - 1U) >> 28) == 0x2U);
++}
++
++static inline void ospi_xip_yield(void)
++{
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP_YIELD
++	if (!k_is_in_isr() && !k_is_pre_kernel()) {
++		k_yield();
++	}
++#endif
++}
++
++static int flash_stm32_ospi_xip_write(const struct device *dev, off_t addr,
++				      const void *data, size_t size)
++{
++	struct flash_stm32_ospi_data *dev_data = dev->data;
++	const uint8_t *src = data;
++	uint8_t bounce[SPI_NOR_PAGE_SIZE];
++	off_t start = addr;
++	size_t total = size;
++	int ret = 0;
++
++	ospi_lock_thread(dev);
++
++	while (size > 0 && ret == 0) {
++		size_t chunk = MIN(size, (size_t)CONFIG_FLASH_STM32_OSPI_XIP_WRITE_CHUNK);
++		size_t done = 0;
++
++		/* One guarded chunk: up to WRITE_CHUNK bytes, page by page */
++		while (done < chunk && ret == 0) {
++			size_t to_write = MIN(chunk - done, SPI_NOR_PAGE_SIZE);
++			const uint8_t *p = src + done;
++
++			/* Don't write across a page boundary */
++			if ((((addr + done) + to_write - 1U) / SPI_NOR_PAGE_SIZE) !=
++			    ((addr + done) / SPI_NOR_PAGE_SIZE)) {
++				to_write = SPI_NOR_PAGE_SIZE - ((addr + done) % SPI_NOR_PAGE_SIZE);
++			}
++			/* Source must be readable while the flash is not: bounce */
++			if (!ospi_xip_buf_in_sram(p, to_write)) {
++				memcpy(bounce, p, to_write);
++				p = bounce;
++			}
++			ret = flash_stm32_ospi_xip_program_page(&dev_data->xip,
++								(uint32_t)(addr + done), p,
++								(uint32_t)to_write);
++			done += to_write;
++		}
++		addr += done;
++		src += done;
++		size -= done;
++		if (size > 0) {
++			ospi_xip_yield();
++		}
++	}
++
++	flash_stm32_ospi_xip_cache_invalidate(&dev_data->xip, (uint32_t)start, (uint32_t)total);
++	ospi_unlock_thread(dev);
++
++	if (ret != 0) {
++		LOG_ERR("XIP write failed at 0x%lx: %d", (long)addr, ret);
++	}
++	return ret;
++}
++
++static int flash_stm32_ospi_xip_erase(const struct device *dev, off_t addr, size_t size)
++{
++	struct flash_stm32_ospi_data *dev_data = dev->data;
++	off_t start = addr;
++	size_t total = size;
++	int ret = 0;
++
++	ospi_lock_thread(dev);
++
++	while (size > 0 && ret == 0) {
++		uint32_t blk = SPI_NOR_SECTOR_SIZE;
++
++		if (CONFIG_FLASH_STM32_OSPI_XIP_MAX_ERASE_SIZE >= 65536 &&
++		    (addr % 65536U) == 0 && size >= 65536U) {
++			blk = 65536U;
++		} else if (CONFIG_FLASH_STM32_OSPI_XIP_MAX_ERASE_SIZE >= 32768 &&
++			   (addr % 32768U) == 0 && size >= 32768U) {
++			blk = 32768U;
++		}
++		ret = flash_stm32_ospi_xip_erase_block(&dev_data->xip, (uint32_t)addr, blk);
++		addr += blk;
++		size -= blk;
++		if (size > 0) {
++			ospi_xip_yield();
++		}
++	}
++
++	flash_stm32_ospi_xip_cache_invalidate(&dev_data->xip, (uint32_t)start, (uint32_t)total);
++	ospi_unlock_thread(dev);
++
++	if (ret != 0) {
++		LOG_ERR("XIP erase failed at 0x%lx: %d", (long)addr, ret);
++	}
++	return ret;
++}
++
++/* Called from init when the bootloader left the controller memory-mapped */
++static int flash_stm32_ospi_xip_setup(const struct device *dev)
++{
++	const struct flash_stm32_ospi_config *dev_cfg = dev->config;
++	struct flash_stm32_ospi_data *dev_data = dev->data;
++	int ret;
++
++	k_sem_init(&dev_data->sem, 1, 1);
++	k_sem_init(&dev_data->sync, 0, 1);
++
++#if defined(CONFIG_FLASH_PAGE_LAYOUT)
++	dev_data->layout.pages_size = SPI_NOR_SECTOR_SIZE;
++	dev_data->layout.pages_count = dev_cfg->flash_size / SPI_NOR_SECTOR_SIZE;
++#endif
++	dev_data->page_size = SPI_NOR_PAGE_SIZE;
++
++	ret = flash_stm32_ospi_xip_init(&dev_data->xip, dev_data->hospi.Instance,
++					STM32_OSPI_BASE_ADDRESS, dev_cfg->flash_size);
++	if (ret != 0) {
++		LOG_ERR("XIP-safe path init failed: %d", ret);
++		return ret;
++	}
++	LOG_INF("NOR in MemoryMapped mode, XIP-safe program/erase enabled");
++	return 0;
++}
++int flash_stm32_ospi_xip_get_stats(const struct device *dev, struct ospi_xip_stats *st,
++				   bool reset)
++{
++	struct flash_stm32_ospi_data *dev_data = dev->data;
++
++	if (!dev_data->xip.initialized) {
++		return -ENOTSUP;
++	}
++	st->max_guard_cycles = dev_data->xip.max_guard_cycles;
++	st->guard_count = dev_data->xip.guard_count;
++	if (reset) {
++		dev_data->xip.max_guard_cycles = 0;
++		dev_data->xip.guard_count = 0;
++	}
++	return 0;
++}
++#endif /* CONFIG_FLASH_STM32_OSPI_XIP */
++
+ /*
+  * Function to erase the flash : chip or sector with possible OSPI/SPI and STR/DTR
+  * to erase the complete chip (using dedicated command) :
+@@ -1194,6 +1354,12 @@ static int flash_stm32_ospi_erase(const struct device *dev, off_t addr,
+ 		return -ENOTSUP;
+ 	}
+ 
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++	if (dev_data->xip.initialized) {
++		return flash_stm32_ospi_xip_erase(dev, addr, size);
++	}
++#endif
++
+ 	ospi_lock_thread(dev);
+ 
+ #ifdef CONFIG_FLASH_STM32_NOR_MEMMAP
+@@ -1469,6 +1635,12 @@ static int flash_stm32_ospi_write(const struct device *dev, off_t addr,
+ 		return 0;
+ 	}
+ 
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++	if (dev_data->xip.initialized) {
++		return flash_stm32_ospi_xip_write(dev, addr, data, size);
++	}
++#endif
++
+ 	ospi_lock_thread(dev);
+ 
+ #ifdef CONFIG_FLASH_STM32_NOR_MEMMAP
+@@ -2223,7 +2395,11 @@ static int flash_stm32_ospi_init(const struct device *dev)
+ 		LOG_DBG("NOR init'd in MemMapped mode");
+ 		/* Force HAL instance in correct state */
+ 		dev_data->hospi.State = HAL_OSPI_STATE_BUSY_MEM_MAPPED;
++#ifdef CONFIG_FLASH_STM32_OSPI_XIP
++		return flash_stm32_ospi_xip_setup(dev);
++#else
+ 		return 0;
++#endif
+ 	}
+ #endif /* CONFIG_FLASH_STM32_NOR_MEMMAP */
+ 
+diff --git a/drivers/flash/flash_stm32_ospi_xip.c b/drivers/flash/flash_stm32_ospi_xip.c
+new file mode 100644
+index 00000000000..bb58789ed9c
+--- /dev/null
++++ b/drivers/flash/flash_stm32_ospi_xip.c
+@@ -0,0 +1,538 @@
++/*
++ * Copyright (c) 2026 Kirill Shypachov
++ *
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++/*
++ * XIP-safe program/erase for STM32 OCTOSPI NOR flash.  See the header for
++ * the design (ESP-IDF spi_flash guard model).
++ *
++ * RULES FOR EVERYTHING MARKED XIP_RAM_FUNC (executes while the flash that
++ * holds the firmware is NOT readable):
++ *   - no calls into anything that is not itself XIP_RAM_FUNC or inline
++ *     (no LOG, no k_*, no HAL, no memcpy/memset, no libgcc helpers such
++ *     as division)
++ *   - no access to const/rodata objects (they live in the flash)
++ *   - no access to memory-mapped external memories other than the
++ *     controller registers
++ *   - interrupts are masked by the caller
++ *
++ * The build is checked by scripts/check_ramfunc_calls.sh (objdump based):
++ * every branch leaving .ramfunc is an error.
++ */
++
++#include <zephyr/kernel.h>
++#include <zephyr/arch/cpu.h>
++#include <zephyr/sys/util.h>
++#include <zephyr/cache.h>
++#include <zephyr/logging/log.h>
++#include <errno.h>
++#include <soc.h>
++#include <cmsis_core.h>
++#ifdef CONFIG_CORTEX_M_SYSTICK
++#include <zephyr/drivers/timer/system_timer.h>
++#endif
++
++#include "flash_stm32_ospi_xip.h"
++
++LOG_MODULE_REGISTER(flash_stm32_ospi_xip, CONFIG_FLASH_LOG_LEVEL);
++
++/*
++ * __ramfunc: .ramfunc section (copied to SRAM at boot, RX in the MPU).
++ * no-tree-loop-distribute-patterns: keep GCC from turning our byte loops
++ * into memcpy()/memset() calls that would land in flash.
++ */
++#define XIP_RAM_FUNC __ramfunc __attribute__((optimize("no-tree-loop-distribute-patterns")))
++
++/* SPI NOR opcodes (1-1-1, valid for any JEDEC SPI NOR in SPI/QPI-less mode) */
++#define XIP_CMD_WREN    0x06U
++#define XIP_CMD_RDSR    0x05U
++#define XIP_CMD_SE_4K   0x20U
++#define XIP_CMD_SE_4K4B 0x21U
++#define XIP_CMD_BE_32K  0x52U
++#define XIP_CMD_BE_32K4B 0x5CU
++#define XIP_CMD_BE_64K  0xD8U
++#define XIP_CMD_BE_64K4B 0xDCU
++
++#define XIP_SR_WIP BIT(0)
++#define XIP_SR_WEL BIT(1)
++
++/* Worst case datasheet timings (W25Q128JV: tPP 3 ms, tSE 400 ms, tBE32 1.6 s, tBE64 2 s) */
++#define XIP_TIMEOUT_CMD_MS   5U
++#define XIP_TIMEOUT_PP_MS    10U
++#define XIP_TIMEOUT_SE4K_MS  500U
++#define XIP_TIMEOUT_BE32K_MS 2000U
++#define XIP_TIMEOUT_BE64K_MS 2500U
++
++/* OCTOSPI CR.FMODE values */
++#define XIP_FMODE_IND_WRITE 0U
++#define XIP_FMODE_IND_READ  OCTOSPI_CR_FMODE_0
++#define XIP_FMODE_MEMMAP    OCTOSPI_CR_FMODE
++
++/* CCR helpers (same encoding as HAL_OSPI_* constants) */
++#define XIP_CCR_IMODE_1LINE  OCTOSPI_CCR_IMODE_0
++#define XIP_CCR_ADMODE_1LINE OCTOSPI_CCR_ADMODE_0
++#define XIP_CCR_DMODE_1LINE  OCTOSPI_CCR_DMODE_0
++#define XIP_CCR_ADSIZE_24    OCTOSPI_CCR_ADSIZE_1
++#define XIP_CCR_ADSIZE_32    (OCTOSPI_CCR_ADSIZE_1 | OCTOSPI_CCR_ADSIZE_0)
++
++/* ------------------------------------------------------------------------
++ * SRAM resident primitives
++ * ---------------------------------------------------------------------- */
++
++static XIP_RAM_FUNC uint32_t xip_cycles(void)
++{
++	return DWT->CYCCNT;
++}
++
++/* SysTick has a single COUNTFLAG: while we sit here with interrupts masked
++ * every wrap but the last would be lost by the kernel.  Poll and count them
++ * (reading CTRL clears the flag), report them when the guard is released.
++ */
++static XIP_RAM_FUNC void xip_systick_poll(struct ospi_xip_ctx *ctx)
++{
++#ifdef CONFIG_CORTEX_M_SYSTICK
++	if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) {
++		ctx->systick_wraps++;
++	}
++#endif
++}
++
++/* Wait until (SR & mask) == want. Returns 0 or -ETIMEDOUT. */
++static XIP_RAM_FUNC int xip_wait_sr(struct ospi_xip_ctx *ctx, uint32_t mask,
++				    uint32_t want, uint32_t timeout_cycles)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++	uint32_t start = xip_cycles();
++
++	while ((regs->SR & mask) != want) {
++		xip_systick_poll(ctx);
++		if ((xip_cycles() - start) > timeout_cycles) {
++			if ((regs->SR & mask) != want) {
++				return -ETIMEDOUT;
++			}
++		}
++	}
++	return 0;
++}
++
++/* Leave memory-mapped (or any) mode: mirrors HAL_OSPI_Abort(). */
++static XIP_RAM_FUNC int xip_abort(struct ospi_xip_ctx *ctx)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++	int ret = 0;
++
++	regs->CR &= ~OCTOSPI_CR_DMAEN;
++
++	if (regs->SR & OCTOSPI_SR_BUSY) {
++		regs->CR |= OCTOSPI_CR_ABORT;
++		ret = xip_wait_sr(ctx, OCTOSPI_SR_TCF, OCTOSPI_SR_TCF,
++				  ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS);
++		regs->FCR = OCTOSPI_FCR_CTCF;
++		if (ret == 0) {
++			ret = xip_wait_sr(ctx, OCTOSPI_SR_BUSY, 0,
++					  ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS);
++		}
++	}
++	/* Clear stale flags (timeout flag is set constantly in memmap mode) */
++	regs->FCR = OCTOSPI_FCR_CTOF | OCTOSPI_FCR_CSMF | OCTOSPI_FCR_CTEF | OCTOSPI_FCR_CTCF;
++	/* Functional mode: indirect write (harmless idle state) */
++	regs->CR = (regs->CR & ~OCTOSPI_CR_FMODE) | XIP_FMODE_IND_WRITE;
++	return ret;
++}
++
++/* Command without data phase (WREN, erase). Address phase optional. */
++static XIP_RAM_FUNC int xip_cmd(struct ospi_xip_ctx *ctx, uint8_t instr,
++				bool has_addr, uint32_t addr)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++	uint32_t ccr = XIP_CCR_IMODE_1LINE; /* ISIZE = 8 bit */
++
++	regs->CR = (regs->CR & ~OCTOSPI_CR_FMODE) | XIP_FMODE_IND_WRITE;
++	regs->TCR = 0; /* no dummy cycles */
++	if (has_addr) {
++		ccr |= XIP_CCR_ADMODE_1LINE | ctx->adsize;
++	}
++	regs->CCR = ccr;
++	regs->IR = instr;   /* starts transfer when there is no address phase */
++	if (has_addr) {
++		regs->AR = addr; /* starts transfer */
++	}
++	int ret = xip_wait_sr(ctx, OCTOSPI_SR_TCF, OCTOSPI_SR_TCF,
++			      ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS);
++	regs->FCR = OCTOSPI_FCR_CTCF;
++	return ret;
++}
++
++/* RDSR: one byte on one line. */
++static XIP_RAM_FUNC int xip_rdsr(struct ospi_xip_ctx *ctx, uint8_t *sr)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++	int ret;
++
++	regs->CR = (regs->CR & ~OCTOSPI_CR_FMODE) | XIP_FMODE_IND_READ;
++	regs->TCR = 0;
++	regs->DLR = 0; /* 1 byte */
++	regs->CCR = XIP_CCR_IMODE_1LINE | XIP_CCR_DMODE_1LINE;
++	regs->IR = XIP_CMD_RDSR; /* starts transfer (no address phase) */
++
++	/* Wait for FIFO threshold or transfer complete (either one) */
++	{
++		uint32_t start = xip_cycles();
++		uint32_t timeout = ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS;
++
++		ret = 0;
++		while ((regs->SR & (OCTOSPI_SR_FTF | OCTOSPI_SR_TCF)) == 0) {
++			xip_systick_poll(ctx);
++			if ((xip_cycles() - start) > timeout) {
++				ret = -ETIMEDOUT;
++				break;
++			}
++		}
++	}
++	*sr = *(volatile uint8_t *)&regs->DR;
++	if (ret == 0) {
++		ret = xip_wait_sr(ctx, OCTOSPI_SR_TCF, OCTOSPI_SR_TCF,
++				  ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS);
++	}
++	regs->FCR = OCTOSPI_FCR_CTCF;
++	return ret;
++}
++
++/* Poll RDSR until WIP == 0. */
++static XIP_RAM_FUNC int xip_wait_wip(struct ospi_xip_ctx *ctx, uint32_t timeout_ms)
++{
++	uint32_t start = xip_cycles();
++	uint32_t timeout = ctx->cyc_per_ms * timeout_ms;
++	uint8_t sr = 0xFF;
++	int ret;
++
++	for (;;) {
++		ret = xip_rdsr(ctx, &sr);
++		if (ret != 0) {
++			return ret;
++		}
++		if ((sr & XIP_SR_WIP) == 0) {
++			return 0;
++		}
++		xip_systick_poll(ctx);
++		if ((xip_cycles() - start) > timeout) {
++			return -ETIMEDOUT;
++		}
++	}
++}
++
++static XIP_RAM_FUNC int xip_wren(struct ospi_xip_ctx *ctx)
++{
++	uint8_t sr = 0;
++	int ret = xip_cmd(ctx, XIP_CMD_WREN, false, 0);
++
++	if (ret != 0) {
++		return ret;
++	}
++	ret = xip_rdsr(ctx, &sr);
++	if (ret != 0) {
++		return ret;
++	}
++	return (sr & XIP_SR_WEL) ? 0 : -EIO;
++}
++
++/* Page program using the exact write command the bootloader configured for
++ * memory-mapped writes (WCCR/WTCR/WIR), i.e. the same opcode and line
++ * configuration (PP 1-1-1, 1-1-4 or 1-4-4).
++ */
++static XIP_RAM_FUNC int xip_pp(struct ospi_xip_ctx *ctx, uint32_t addr,
++			       const uint8_t *data, uint32_t len)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++	volatile uint8_t *dr = (volatile uint8_t *)&regs->DR;
++	uint32_t timeout = ctx->cyc_per_ms * XIP_TIMEOUT_CMD_MS;
++	int ret;
++
++	regs->CR = (regs->CR & ~OCTOSPI_CR_FMODE) | XIP_FMODE_IND_WRITE;
++	regs->TCR = ctx->wtcr & OCTOSPI_TCR_DCYC;
++	regs->DLR = len - 1U;
++	regs->CCR = ctx->wccr & (OCTOSPI_CCR_IMODE | OCTOSPI_CCR_IDTR | OCTOSPI_CCR_ISIZE |
++				 OCTOSPI_CCR_ADMODE | OCTOSPI_CCR_ADDTR | OCTOSPI_CCR_ADSIZE |
++				 OCTOSPI_CCR_DMODE | OCTOSPI_CCR_DDTR);
++	regs->IR = ctx->wir;
++	regs->AR = addr;
++
++	for (uint32_t i = 0; i < len; i++) {
++		ret = xip_wait_sr(ctx, OCTOSPI_SR_FTF, OCTOSPI_SR_FTF, timeout);
++		if (ret != 0) {
++			return ret;
++		}
++		*dr = data[i];
++	}
++	ret = xip_wait_sr(ctx, OCTOSPI_SR_TCF, OCTOSPI_SR_TCF, timeout);
++	regs->FCR = OCTOSPI_FCR_CTCF;
++	return ret;
++}
++
++/* Restore the memory-mapped configuration captured at init.
++ * Mirrors stm32_ospi_set_memorymap(): READ_CFG, WRITE_CFG, then FMODE=11.
++ */
++static XIP_RAM_FUNC void xip_restore_memmap(struct ospi_xip_ctx *ctx)
++{
++	OCTOSPI_TypeDef *regs = ctx->regs;
++
++	regs->CR = (regs->CR & ~OCTOSPI_CR_FMODE) | XIP_FMODE_IND_WRITE;
++	regs->ABR = ctx->abr;
++	regs->CCR = ctx->ccr;
++	regs->TCR = ctx->tcr;
++	regs->IR = ctx->ir;
++	regs->WABR = ctx->wabr;
++	regs->WCCR = ctx->wccr;
++	regs->WTCR = ctx->wtcr;
++	regs->WIR = ctx->wir;
++	regs->LPTR = ctx->lptr;
++	regs->FCR = OCTOSPI_FCR_CTOF | OCTOSPI_FCR_CTCF | OCTOSPI_FCR_CTEF | OCTOSPI_FCR_CSMF;
++	regs->CR = ctx->cr; /* FMODE=11, TCEN, TOIE, FTHRES... exactly as before */
++	__DSB();
++	__ISB();
++}
++
++/* ------------------------------------------------------------------------
++ * Guarded operations (whole function in SRAM; interrupts masked inside)
++ * ---------------------------------------------------------------------- */
++
++/* Guard epilogue: memory-mapped mode is back (flash readable again), interrupts
++ * still masked.  Kernel calls are allowed again from here on.
++ */
++static XIP_RAM_FUNC void xip_guard_stats(struct ospi_xip_ctx *ctx, uint32_t start)
++{
++	uint32_t d = xip_cycles() - start;
++
++	ctx->guard_count++;
++	if (d > ctx->max_guard_cycles) {
++		ctx->max_guard_cycles = d;
++	}
++#ifdef CONFIG_CORTEX_M_SYSTICK
++	xip_systick_poll(ctx);
++	if (ctx->systick_wraps != 0) {
++		sys_clock_systick_wraps_observed(ctx->systick_wraps);
++		ctx->systick_wraps = 0;
++	}
++#endif
++}
++
++XIP_RAM_FUNC int flash_stm32_ospi_xip_program_page(struct ospi_xip_ctx *ctx, uint32_t addr,
++						   const uint8_t *data, uint32_t len)
++{
++	unsigned int key;
++	uint32_t t0;
++	int ret;
++
++	key = arch_irq_lock();
++	t0 = xip_cycles();
++	__DSB();
++	__ISB();
++
++	ret = xip_abort(ctx);
++	if (ret == 0) {
++		ret = xip_wait_wip(ctx, XIP_TIMEOUT_PP_MS);
++	}
++	if (ret == 0) {
++		ret = xip_wren(ctx);
++	}
++	if (ret == 0) {
++		ret = xip_pp(ctx, addr, data, len);
++	}
++	if (ret == 0) {
++		ret = xip_wait_wip(ctx, XIP_TIMEOUT_PP_MS);
++	}
++	xip_restore_memmap(ctx);
++	xip_guard_stats(ctx, t0);
++	arch_irq_unlock(key);
++	return ret;
++}
++
++XIP_RAM_FUNC int flash_stm32_ospi_xip_erase_block(struct ospi_xip_ctx *ctx, uint32_t addr,
++						  uint32_t size)
++{
++	unsigned int key;
++	uint32_t t0;
++	uint32_t timeout_ms;
++	uint8_t cmd;
++	int ret;
++
++	if (size == 65536U) {
++		cmd = ctx->cmd_se_64k;
++		timeout_ms = XIP_TIMEOUT_BE64K_MS;
++	} else if (size == 32768U) {
++		cmd = ctx->cmd_se_32k;
++		timeout_ms = XIP_TIMEOUT_BE32K_MS;
++	} else if (size == 4096U) {
++		cmd = ctx->cmd_se_4k;
++		timeout_ms = XIP_TIMEOUT_SE4K_MS;
++	} else {
++		return -EINVAL;
++	}
++
++	key = arch_irq_lock();
++	t0 = xip_cycles();
++	__DSB();
++	__ISB();
++
++	ret = xip_abort(ctx);
++	if (ret == 0) {
++		ret = xip_wait_wip(ctx, XIP_TIMEOUT_PP_MS);
++	}
++	if (ret == 0) {
++		ret = xip_wren(ctx);
++	}
++	if (ret == 0) {
++		ret = xip_cmd(ctx, cmd, true, addr);
++	}
++	if (ret == 0) {
++		ret = xip_wait_wip(ctx, timeout_ms);
++	}
++	xip_restore_memmap(ctx);
++	xip_guard_stats(ctx, t0);
++	arch_irq_unlock(key);
++	return ret;
++}
++
++XIP_RAM_FUNC int flash_stm32_ospi_xip_read_status(struct ospi_xip_ctx *ctx, uint8_t *sr)
++{
++	unsigned int key;
++	uint8_t val = 0;
++	int ret;
++
++	key = arch_irq_lock();
++	__DSB();
++	__ISB();
++	ret = xip_abort(ctx);
++	if (ret == 0) {
++		ret = xip_rdsr(ctx, &val);
++	}
++	xip_restore_memmap(ctx);
++	arch_irq_unlock(key);
++	*sr = val;
++	return ret;
++}
++
++/* ------------------------------------------------------------------------
++ * Flash resident part
++ * ---------------------------------------------------------------------- */
++
++static bool xip_dwt_enable(void)
++{
++	uint32_t a, b;
++
++	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
++	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
++	a = DWT->CYCCNT;
++	for (volatile int i = 0; i < 100; i++) {
++	}
++	b = DWT->CYCCNT;
++	return b != a;
++}
++
++int flash_stm32_ospi_xip_init(struct ospi_xip_ctx *ctx, OCTOSPI_TypeDef *regs,
++			      uint32_t mmap_base, uint32_t flash_size)
++{
++	ctx->regs = regs;
++	ctx->mmap_base = mmap_base;
++	ctx->flash_size = flash_size;
++
++	if ((regs->CR & OCTOSPI_CR_FMODE) != XIP_FMODE_MEMMAP) {
++		LOG_ERR("controller is not in memory-mapped mode (CR=0x%08x)", regs->CR);
++		return -ENODEV;
++	}
++
++	ctx->cr = regs->CR;
++	ctx->ccr = regs->CCR;
++	ctx->tcr = regs->TCR;
++	ctx->ir = regs->IR;
++	ctx->abr = regs->ABR;
++	ctx->wccr = regs->WCCR;
++	ctx->wtcr = regs->WTCR;
++	ctx->wir = regs->WIR;
++	ctx->wabr = regs->WABR;
++	ctx->lptr = regs->LPTR;
++	ctx->adsize = ctx->ccr & OCTOSPI_CCR_ADSIZE;
++
++	if ((ctx->wccr & OCTOSPI_CCR_DMODE) == 0 || (ctx->wccr & OCTOSPI_CCR_ADMODE) == 0) {
++		LOG_ERR("no memory-mapped write command configured (WCCR=0x%08x)", ctx->wccr);
++		return -ENODEV;
++	}
++	if ((ctx->ccr & OCTOSPI_CCR_IMODE) != XIP_CCR_IMODE_1LINE) {
++		/* OPI / QPI instruction phase: WREN/RDSR/SE opcodes below would be wrong */
++		LOG_ERR("only 1-line instruction phase is supported (CCR=0x%08x)", ctx->ccr);
++		return -ENOTSUP;
++	}
++
++	if (ctx->adsize == XIP_CCR_ADSIZE_32) {
++		ctx->cmd_se_4k = XIP_CMD_SE_4K4B;
++		ctx->cmd_se_32k = XIP_CMD_BE_32K4B;
++		ctx->cmd_se_64k = XIP_CMD_BE_64K4B;
++	} else {
++		ctx->cmd_se_4k = XIP_CMD_SE_4K;
++		ctx->cmd_se_32k = XIP_CMD_BE_32K;
++		ctx->cmd_se_64k = XIP_CMD_BE_64K;
++	}
++
++	ctx->cyc_per_ms = CONFIG_SYS_CLOCK_HW_CYCLES_PER_SEC / 1000U;
++	if (!xip_dwt_enable()) {
++		LOG_ERR("DWT cycle counter not running");
++		return -EIO;
++	}
++
++	ctx->initialized = 1;
++	LOG_INF("XIP-safe path: CR=0x%08x CCR=0x%08x TCR=0x%08x IR=0x%02x WCCR=0x%08x WIR=0x%02x "
++		"adsize=%u-bit",
++		ctx->cr, ctx->ccr, ctx->tcr, ctx->ir, ctx->wccr, ctx->wir,
++		(ctx->adsize == XIP_CCR_ADSIZE_32) ? 32 : 24);
++	return 0;
++}
++
++void flash_stm32_ospi_xip_cache_invalidate(struct ospi_xip_ctx *ctx, uint32_t addr, uint32_t len)
++{
++	uint32_t start = ctx->mmap_base + addr;
++	uint32_t end = start + len;
++
++	/* ICACHE: remapped regions alias the flash into the code space; the
++	 * cache has no range invalidate, so invalidate all when overlapping.
++	 */
++	if (ICACHE->CR & ICACHE_CR_EN) {
++		bool overlap = false;
++		volatile uint32_t *crr = &ICACHE->CRR0;
++
++		for (int i = 0; i < 4; i++) {
++			uint32_t r = crr[i];
++
++			if (r & ICACHE_CRRx_REN) {
++				/* RSIZE: 1 -> 2MB, 2 -> 4MB, ... 7 -> 128MB */
++				uint32_t rsize = (1U << ((r & ICACHE_CRRx_RSIZE) >> ICACHE_CRRx_RSIZE_Pos))
++					<< 20;
++				uint32_t remap = (r & ICACHE_CRRx_REMAPADDR) >>
++						 ICACHE_CRRx_REMAPADDR_Pos << 21;
++				/* REMAPADDR holds bits [31:21] of the external address */
++				uint32_t rstart = remap;
++				uint32_t rend = remap + rsize;
++
++				if (start < rend && end > rstart) {
++					overlap = true;
++				}
++			}
++		}
++		if (overlap) {
++			ICACHE->FCR = ICACHE_FCR_CBSYENDF;
++			ICACHE->CR |= ICACHE_CR_CACHEINV;
++			while ((ICACHE->SR & ICACHE_SR_BSYENDF) == 0) {
++			}
++			ICACHE->FCR = ICACHE_FCR_CBSYENDF;
++			__DSB();
++			__ISB();
++		}
++	}
++
++#if defined(CONFIG_DCACHE)
++	if (DCACHE1->CR & DCACHE_CR_EN) {
++		sys_cache_data_invd_range((void *)start, len);
++	}
++#endif
++}
+diff --git a/drivers/flash/flash_stm32_ospi_xip.h b/drivers/flash/flash_stm32_ospi_xip.h
+new file mode 100644
+index 00000000000..18ba2d32129
+--- /dev/null
++++ b/drivers/flash/flash_stm32_ospi_xip.h
+@@ -0,0 +1,108 @@
++/*
++ * Copyright (c) 2026 Kirill Shypachov
++ *
++ * SPDX-License-Identifier: Apache-2.0
++ */
++
++/*
++ * XIP-safe program/erase path for the STM32 OCTOSPI NOR flash driver.
++ *
++ * Modelled on the ESP-IDF spi_flash design:
++ *   - the "guard" disables interrupts and takes the controller out of
++ *     memory-mapped mode (ESP: spi_flash_disable_interrupts_caches_and_other_cpu)
++ *   - everything that runs inside the guard lives in SRAM (ESP: IRAM_ATTR)
++ *   - operations are split into small chunks (page / sector) and the guard is
++ *     released between chunks so ISRs and other threads get to run
++ *     (ESP: MAX_WRITE_CHUNK, SPI_FLASH_YIELD_DURING_ERASE)
++ *   - caches are invalidated when the guard is released (ESP: Cache_Flush)
++ *
++ * The memory-mapped configuration (read/write command registers) is captured
++ * from the controller at init time, exactly as programmed by the bootloader,
++ * and restored after every chunk.  No SFDP, no HAL, no kernel calls inside the
++ * guard.
++ */
++
++#ifndef ZEPHYR_DRIVERS_FLASH_FLASH_STM32_OSPI_XIP_H_
++#define ZEPHYR_DRIVERS_FLASH_FLASH_STM32_OSPI_XIP_H_
++
++#include <stdint.h>
++#include <stddef.h>
++#include <stdbool.h>
++#include <stm32_ll_system.h>
++
++struct ospi_xip_ctx {
++	OCTOSPI_TypeDef *regs;
++	uint32_t mmap_base;	/* AHB address of the memory-mapped flash */
++	uint32_t flash_size;
++	/* Snapshot of the memory-mapped configuration */
++	uint32_t cr;
++	uint32_t ccr;
++	uint32_t tcr;
++	uint32_t ir;
++	uint32_t abr;
++	uint32_t wccr;
++	uint32_t wtcr;
++	uint32_t wir;
++	uint32_t wabr;
++	uint32_t lptr;
++	/* Derived */
++	uint32_t adsize;	/* CCR ADSIZE field of the read command */
++	uint32_t cyc_per_ms;	/* CPU cycles per millisecond (DWT) */
++	uint8_t cmd_se_4k;
++	uint8_t cmd_se_32k;
++	uint8_t cmd_se_64k;
++	uint8_t initialized;
++	/* SysTick wraps consumed inside the current guard */
++	uint32_t systick_wraps;
++	/* Statistics */
++	uint32_t max_guard_cycles;
++	uint32_t guard_count;
++};
++
++/**
++ * Snapshot the current (memory-mapped) controller configuration.
++ * Must be called while the controller is in memory-mapped mode.
++ * Runs from flash, no restrictions.
++ */
++int flash_stm32_ospi_xip_init(struct ospi_xip_ctx *ctx, OCTOSPI_TypeDef *regs,
++			      uint32_t mmap_base, uint32_t flash_size);
++
++/**
++ * Program @p len bytes (<= one page, not crossing a page boundary) at
++ * @p addr.  Whole operation runs inside the guard.  @p data must be in
++ * internal SRAM.  Returns 0 or -EIO / -ETIMEDOUT.
++ */
++int flash_stm32_ospi_xip_program_page(struct ospi_xip_ctx *ctx, uint32_t addr,
++				      const uint8_t *data, uint32_t len);
++
++/**
++ * Erase one block of @p size (4096, 32768 or 65536) at @p addr.
++ * Whole operation runs inside the guard.
++ */
++int flash_stm32_ospi_xip_erase_block(struct ospi_xip_ctx *ctx, uint32_t addr,
++				     uint32_t size);
++
++/**
++ * Read the flash status register (RDSR) inside the guard.  Debug aid.
++ */
++int flash_stm32_ospi_xip_read_status(struct ospi_xip_ctx *ctx, uint8_t *sr);
++
++/**
++ * Invalidate the CPU side caches for @p addr/@p len of the flash
++ * (ICACHE alias regions + DCACHE1).  Runs from flash.
++ */
++void flash_stm32_ospi_xip_cache_invalidate(struct ospi_xip_ctx *ctx,
++					   uint32_t addr, uint32_t len);
++
++/** Guard statistics, for diagnostics (also declared by test code) */
++struct ospi_xip_stats {
++	uint32_t max_guard_cycles;
++	uint32_t guard_count;
++};
++
++struct device;
++/** Read (and optionally reset) guard statistics. Returns -ENOTSUP if not in XIP mode. */
++int flash_stm32_ospi_xip_get_stats(const struct device *dev, struct ospi_xip_stats *st,
++				   bool reset);
++
++#endif /* ZEPHYR_DRIVERS_FLASH_FLASH_STM32_OSPI_XIP_H_ */
+diff --git a/drivers/timer/cortex_m_systick.c b/drivers/timer/cortex_m_systick.c
+index 3491f5787c8..62353d777e5 100644
+--- a/drivers/timer/cortex_m_systick.c
++++ b/drivers/timer/cortex_m_systick.c
+@@ -292,6 +292,22 @@ static void timer_driver_set_reload(uint32_t cycles)
+  * tracing overflow, so here is a stripped down version of it.
+  */
+ ARCH_ISR_DIAG_OFF
++/*
++ * Account for SysTick wraps that happened while interrupts were masked for
++ * longer than one SysTick period, e.g. by code that programs the XIP flash
++ * the firmware runs from.  SysTick keeps only one COUNTFLAG, so elapsed()
++ * alone would lose every wrap but the last.  The caller polls and clears
++ * COUNTFLAG itself while interrupts are masked, counts the wraps and reports
++ * them here BEFORE unmasking interrupts (still masked), so the pending
++ * SysTick interrupt announces the right number of ticks.
++ */
++void sys_clock_systick_wraps_observed(uint32_t wraps)
++{
++	if (last_load != TIMER_STOPPED) {
++		overflow_cyc += wraps * last_load;
++	}
++}
++
+ __attribute__((interrupt("IRQ"))) void sys_clock_isr(void)
+ {
+ #ifdef CONFIG_TRACING_ISR
+diff --git a/include/zephyr/drivers/timer/system_timer.h b/include/zephyr/drivers/timer/system_timer.h
+index 61b7068bbfc..b55104140b3 100644
+--- a/include/zephyr/drivers/timer/system_timer.h
++++ b/include/zephyr/drivers/timer/system_timer.h
+@@ -385,6 +385,19 @@ void z_sys_clock_hw_cycles_per_sec_update(uint32_t new_hz);
+  * @}
+  */
+ 
++#ifdef CONFIG_CORTEX_M_SYSTICK
++/**
++ * @brief Report SysTick wraps observed while interrupts were masked.
++ *
++ * For code that masks interrupts for longer than one SysTick period and
++ * polls/clears SysTick->CTRL.COUNTFLAG itself meanwhile.  Must be called
++ * with interrupts still masked, before they are re-enabled.
++ *
++ * @param wraps number of COUNTFLAG events consumed by the caller
++ */
++void sys_clock_systick_wraps_observed(uint32_t wraps);
++#endif
++
+ #ifdef __cplusplus
+ }
+ #endif

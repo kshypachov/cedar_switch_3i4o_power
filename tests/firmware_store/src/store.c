@@ -142,6 +142,30 @@ ZTEST(firmware_store, test_create_starts_receiving)
 	zassert_equal(fw_store_get(NULL, 6, &got), -ENOENT);
 }
 
+/* The binding's rule of one upload across targets asks without an id. */
+ZTEST(firmware_store, test_current_is_the_upload_whatever_its_id)
+{
+	const struct fixture *fx = fixture("valid");
+	const int64_t expiry = (int64_t)CONFIG_FIRMWARE_STORE_EXPIRE_SECONDS * 1000;
+	struct fw_upload got;
+
+	zassert_equal(fw_store_current(0, &got), -ENOENT, "nothing staged");
+	zassert_equal(fw_store_current(0, NULL), -ENOENT);
+
+	create_for(fx, 0);
+	zassert_ok(fw_store_current(1, &got));
+	zassert_mem_equal(&got, &up, sizeof(got));
+	zassert_ok(fw_store_current(1, NULL));
+
+	/* Reading is not activity, and an untouched upload expires here as in get. */
+	zassert_equal(fw_store_current(expiry, &got), -ENOENT);
+	zassert_equal(fw_store_get(up.id, expiry, &got), -ENOENT);
+
+	create_for(fx, expiry);
+	zassert_ok(fw_store_delete(up.id));
+	zassert_equal(fw_store_current(expiry, &got), -ENOENT, "deleted");
+}
+
 ZTEST(firmware_store, test_ids_differ_between_uploads)
 {
 	const struct fixture *fx = fixture("valid");

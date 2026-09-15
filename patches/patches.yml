@@ -33,6 +33,27 @@ patches:
       were characterised on the board, not taken from the datasheet. Upstream
       request drafted in docs/upstream/w5500-multicast-filtering-request.md.
 
+  - path: tf-psa-crypto/ecp-p256-stm32-pka.patch
+    sha256sum: a604ff1f59b30a090cfbd58765f553bd91892f769303529ec34292a77974962a
+    module: tf-psa-crypto
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-15
+    upstreamable: false
+    merge-status: false
+    comments: >-
+      Offloads P-256 mbedtls_ecp_mul() and mbedtls_ecp_muladd() in the builtin
+      ECP module to the STM32U585 PKA (ECCMul, ECCDoubleBaseLadder) through
+      modules/psa-driver-stm32. Matter's SPAKE2+ (PASE) calls these directly,
+      past the PSA driver interface, so the PSA driver alone does not reach it.
+      Everything added is under #if defined(CONFIG_STM32_PKA_ECP_P256), a
+      Kconfig symbol only this application defines, so other projects building
+      from the shared tf-psa-crypto checkout compile the file unchanged. Not
+      offloaded (other curves, restartable contexts, non-affine points, scalars
+      outside [1, N-1], any PKA error) falls through to the software path.
+      Applied to the tree on 2026-09-15 with git apply (tf-psa-crypto 000d24cb5).
+      Measurements and the change log: docs/device-development/reports/crypto/pka.
+
   - path: zephyr/eth_w5500-reopen-socket-on-inconsistent-rx.patch
     sha256sum: 1de08f1de330cbdaba6e5792dacf166aed8c39760e5c298962f1e8e57b227d08
     module: zephyr
@@ -107,3 +128,29 @@ patches:
       Applied to the shared zephyr checkout on 2026-09-14 ~13:40 +0300 after a
       reverse git apply --check against the tree and an application build; the
       owner allowed driver patches to be applied after verification (P6 №2).
+
+  - path: zephyr/flash_stm32_ospi-xip-safe-program-erase.patch
+    sha256sum: 57dba3e1b09255a65ec6fbdb4bcd354eb5a1b0915e03cd8d49a30f185c292dc1
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-06
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      FLASH_STM32_OSPI_XIP: program and erase the OCTOSPI NOR while the firmware
+      executes from it (ESP-IDF spi_flash guard model). Each page or sector runs
+      from .ramfunc with interrupts masked and the controller briefly out of
+      memory-mapped mode, restoring the configuration MCUboot left; SysTick
+      wraps counted meanwhile are reported through the new
+      sys_clock_systick_wraps_observed() in cortex_m_systick.c. Written by the
+      owner on 2026-09-06 and present in the shared zephyr checkout since then
+      (flash_stm32_ospi_xip.{c,h} staged, the other files modified); not
+      recorded until the STM32 web update needed it to write image_ok into
+      slot 1 (owner's decision 2026-09-15, reports/stm32-update). Recorded on
+      2026-09-15 from `git diff HEAD` of these seven paths at zephyr b6a5e6e8aa9;
+      a reverse git apply --check against the tree passes, and the tree was not
+      changed. Nothing changes unless an application sets
+      CONFIG_FLASH_STM32_OSPI_XIP. The same checkout carries separate,
+      unrelated edits to drivers/timer/esp32_sys_timer.c and Kconfig.esp32 that
+      are not part of this entry.

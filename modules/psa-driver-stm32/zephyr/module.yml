@@ -1,0 +1,10 @@
+# Zephyr module declaration for psa-driver-stm32.
+#
+# Registered by the application via ZEPHYR_EXTRA_MODULES (see the app
+# CMakeLists.txt), the same way as the other in-tree modules. dts_root brings
+# the st,stm32-pka binding: upstream Zephyr has no PKA node for STM32U5 yet.
+build:
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    dts_root: .

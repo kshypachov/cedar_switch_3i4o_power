@@ -1,0 +1,152 @@
+[
+  {
+    "name": "valid",
+    "bytes": 4064,
+    "sha256": "0e0c9bb42a1c76d69dc8909cb7a018272bcf82871cd807e8b9e2990ed034ff9d",
+    "code": null,
+    "message": null,
+    "version": "1.2.3+4",
+    "image_hash": "ceb5a088a3532bebccf9c3a5f0a20c958a923766c4cab17117fc5528b5659c71",
+    "what": "header 0x400, 3 000-byte body, SHA-256 TLV, version 1.2.3+4"
+  },
+  {
+    "name": "valid_large",
+    "bytes": 71064,
+    "sha256": "154fcda58f25337afed25bbdd142d8351767fe09d273544e0614253765c81d5c",
+    "code": null,
+    "message": null,
+    "version": "2.0.1+77",
+    "image_hash": "d3dc0430c9cf389625be31020914a025e21b156ef6ca1a1d9409800941e48bdf",
+    "what": "70 000-byte body: several 16 KiB chunks and 4 KiB sectors, version 2.0.1+77"
+  },
+  {
+    "name": "valid_prot_tlv",
+    "bytes": 4076,
+    "sha256": "5aa8e96157eeed2c3b6b8442c2122b822c7de0d604d544bfdfa0e53a357c8ed1",
+    "code": null,
+    "message": null,
+    "version": "1.2.3+4",
+    "image_hash": "bc342206b1add8425a39067d1d81a68011b1b4f16d6455338cbeefb3fd2c9ed9",
+    "what": "a protected TLV area (security counter) inside the hashed range"
+  },
+  {
+    "name": "bad_magic",
+    "bytes": 4064,
+    "sha256": "879bad67d3c466ec96da769974acccc9631ae094a0b445a41bda5f9dd3eae1ab",
+    "code": "invalid_image",
+    "message": "header magic is missing",
+    "version": null,
+    "image_hash": null,
+    "what": "the first header byte changed"
+  },
+  {
+    "name": "header_0x200",
+    "bytes": 3552,
+    "sha256": "f6e5423318e47460dfda306ccf8495b96e706a6547ac92eb01fe9579fdd887f8",
+    "code": "unsupported_target",
+    "message": "header size is not the one",
+    "version": null,
+    "image_hash": null,
+    "what": "signed with a 0x200 header"
+  },
+  {
+    "name": "flag_encrypted",
+    "bytes": 4064,
+    "sha256": "42139028b2dba3073284805c4e9c3efa49682491f4e81a0f22abccd7b8e3ba0e",
+    "code": "invalid_image",
+    "message": "encrypted, compressed",
+    "version": null,
+    "image_hash": null,
+    "what": "IMAGE_F_ENCRYPTED_AES128 set"
+  },
+  {
+    "name": "flag_ram_load",
+    "bytes": 4064,
+    "sha256": "b9e43781b5aba30ecea8a148cf61494d872934331c1772487ed4b9fab7594dbf",
+    "code": "invalid_image",
+    "message": "encrypted, compressed",
+    "version": null,
+    "image_hash": null,
+    "what": "IMAGE_F_RAM_LOAD set"
+  },
+  {
+    "name": "truncated",
+    "bytes": 4054,
+    "sha256": "40c3be69ab0df051d0ac63efb6b359ab26877b61684d0cb08b874275fde499dd",
+    "code": "invalid_image",
+    "message": "TLV area runs past the end",
+    "version": null,
+    "image_hash": null,
+    "what": "the last 10 bytes missing"
+  },
+  {
+    "name": "trailing_bytes",
+    "bytes": 4080,
+    "sha256": "0da2837f5e619e6df46f2ec7c0f4ac0970d3337f2bb713185984eb17612805bc",
+    "code": "invalid_image",
+    "message": "bytes after the image's TLV area",
+    "version": null,
+    "image_hash": null,
+    "what": "16 erased bytes after the TLV area"
+  },
+  {
+    "name": "bad_image_hash",
+    "bytes": 4064,
+    "sha256": "c1862bbdb9c0e26a98779f15b3b0e6a9845eecd107d341d6eef3782424c8233e",
+    "code": "invalid_image",
+    "message": "SHA-256 does not match the one in its TLV",
+    "version": null,
+    "image_hash": null,
+    "what": "one body byte changed after signing"
+  },
+  {
+    "name": "no_sha_tlv",
+    "bytes": 4064,
+    "sha256": "7d142078cb7854ccf2a5261518af7283ccf24b25c15079765dc43f7c5ac0b393",
+    "code": "invalid_image",
+    "message": "no SHA-256 TLV",
+    "version": null,
+    "image_hash": null,
+    "what": "the SHA-256 TLV retyped as 0x11"
+  },
+  {
+    "name": "bad_prot_tlv",
+    "bytes": 4076,
+    "sha256": "9e43d5363088bf03eb77de350cd57b1d30538a61dc6c0d04087450e4ebf47512",
+    "code": "invalid_image",
+    "message": "protected TLV area is malformed",
+    "version": null,
+    "image_hash": null,
+    "what": "the protected TLV info magic changed"
+  },
+  {
+    "name": "wrong_sp",
+    "bytes": 4064,
+    "sha256": "5af9bb6fd39c5fc0142df70c2ef19bd7429a9d34c907671088f0b492b75203c5",
+    "code": "unsupported_target",
+    "message": "stack pointer is not in this board's RAM",
+    "version": null,
+    "image_hash": null,
+    "what": "initial SP 0x10000000"
+  },
+  {
+    "name": "wrong_reset",
+    "bytes": 4064,
+    "sha256": "0d039895ada45026f9ab83a57f5f5614ea3e5e32eb0dde295aa6d0714d6a7407",
+    "code": "unsupported_target",
+    "message": "reset vector is not in this board",
+    "version": null,
+    "image_hash": null,
+    "what": "reset vector 0x08000401"
+  },
+  {
+    "name": "reset_even",
+    "bytes": 4064,
+    "sha256": "32466bb063c89af2aa2534cb5ee540b8fcea65bd4e174bf06d89cf64e5351f81",
+    "code": "unsupported_target",
+    "message": "reset vector is not in this board",
+    "version": null,
+    "image_hash": null,
+    "what": "reset vector without the Thumb bit"
+  }
+]

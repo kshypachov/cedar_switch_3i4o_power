@@ -1,0 +1,101 @@
+--- a/drivers/builtin/src/ecp.c
++++ b/drivers/builtin/src/ecp.c
+@@ -2469,6 +2469,63 @@
+  * This internal function can be called without an RNG in case where we know
+  * the inputs are not sensitive.
+  */
++#if defined(CONFIG_STM32_PKA_ECP_P256)
++/*
++ * STM32 PKA for P-256 scalar multiplication (cedar_switch_3in4out_power,
++ * modules/psa-driver-stm32, patches/tf-psa-crypto/ecp-p256-stm32-pka.patch).
++ * Matter's SPAKE2+ calls mbedtls_ecp_mul()/mbedtls_ecp_muladd() directly, past
++ * the PSA driver interface. Returns MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE when the
++ * operation is not offloaded (other curve, runtime switch off, non-affine point,
++ * scalar outside [1, N-1], PKA failure): the caller then takes the software path.
++ */
++#include <stm32_pka.h> /* stm32_pka_ecp_enabled, stm32_pka_p256_mul(), stm32_pka_p256_muladd() */
++
++static int ecp_pka_scalar_ok(const mbedtls_ecp_group *grp, const mbedtls_mpi *k)
++{
++    return mbedtls_mpi_cmp_int(k, 0) > 0 && mbedtls_mpi_cmp_mpi(k, &grp->N) < 0;
++}
++
++/* R = m * P, or R = m * P + n * Q when Q != NULL. P and Q must already be validated. */
++static int ecp_pka_mul(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
++                       const mbedtls_mpi *m, const mbedtls_ecp_point *P,
++                       const mbedtls_mpi *n, const mbedtls_ecp_point *Q)
++{
++    int ret = MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE;
++    unsigned char k1[32], k2[32], px[32], py[32], qx[32], qy[32], rx[32], ry[32];
++
++    if (!stm32_pka_ecp_enabled || grp->id != MBEDTLS_ECP_DP_SECP256R1 ||
++        !ecp_pka_scalar_ok(grp, m) || mbedtls_mpi_cmp_int(&P->Z, 1) != 0 ||
++        (Q != NULL && (!ecp_pka_scalar_ok(grp, n) || mbedtls_mpi_cmp_int(&Q->Z, 1) != 0))) {
++        return MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE;
++    }
++
++    MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(m, k1, sizeof(k1)));
++    MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(&P->X, px, sizeof(px)));
++    MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(&P->Y, py, sizeof(py)));
++    if (Q != NULL) {
++        MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(n, k2, sizeof(k2)));
++        MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(&Q->X, qx, sizeof(qx)));
++        MBEDTLS_MPI_CHK(mbedtls_mpi_write_binary(&Q->Y, qy, sizeof(qy)));
++        if (stm32_pka_p256_muladd(k1, px, py, k2, qx, qy, rx, ry) != 0) {
++            ret = MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE;
++            goto cleanup;
++        }
++    } else if (stm32_pka_p256_mul(k1, px, py, rx, ry) != 0) {
++        ret = MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE;
++        goto cleanup;
++    }
++
++    MBEDTLS_MPI_CHK(mbedtls_mpi_read_binary(&R->X, rx, sizeof(rx)));
++    MBEDTLS_MPI_CHK(mbedtls_mpi_read_binary(&R->Y, ry, sizeof(ry)));
++    MBEDTLS_MPI_CHK(mbedtls_mpi_lset(&R->Z, 1));
++
++cleanup:
++    mbedtls_platform_zeroize(k1, sizeof(k1));
++    mbedtls_platform_zeroize(k2, sizeof(k2));
++    return ret;
++}
++#endif /* CONFIG_STM32_PKA_ECP_P256 */
++
+ static int ecp_mul_restartable_internal(mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
+                                         const mbedtls_mpi *m, const mbedtls_ecp_point *P,
+                                         int (*f_rng)(void *, unsigned char *, size_t), void *p_rng,
+@@ -2499,6 +2556,15 @@
+         MBEDTLS_MPI_CHK(mbedtls_ecp_check_pubkey(grp, P));
+     }
+ 
++#if defined(CONFIG_STM32_PKA_ECP_P256)
++    if (rs_ctx == NULL) {
++        ret = ecp_pka_mul(grp, R, m, P, NULL, NULL);
++        if (ret != MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE) {
++            goto cleanup;
++        }
++    }
++#endif /* CONFIG_STM32_PKA_ECP_P256 */
++
+     ret = MBEDTLS_ERR_ECP_BAD_INPUT_DATA;
+ #if defined(MBEDTLS_ECP_MONTGOMERY_ENABLED)
+     if (mbedtls_ecp_get_type(grp) == MBEDTLS_ECP_TYPE_MONTGOMERY) {
+@@ -2648,6 +2714,18 @@
+ 
+     ECP_RS_ENTER(ma);
+ 
++#if defined(CONFIG_STM32_PKA_ECP_P256)
++    if (rs_ctx == NULL && grp->id == MBEDTLS_ECP_DP_SECP256R1 && stm32_pka_ecp_enabled) {
++        /* The software path validates both points inside mbedtls_ecp_mul(); keep that. */
++        MBEDTLS_MPI_CHK(mbedtls_ecp_check_pubkey(grp, P));
++        MBEDTLS_MPI_CHK(mbedtls_ecp_check_pubkey(grp, Q));
++        ret = ecp_pka_mul(grp, R, m, P, n, Q);
++        if (ret != MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE) {
++            goto cleanup;
++        }
++    }
++#endif /* CONFIG_STM32_PKA_ECP_P256 */
++
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ma != NULL) {
+         /* redirect intermediate results to restart context */

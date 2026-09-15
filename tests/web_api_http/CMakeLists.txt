@@ -45,6 +45,7 @@ target_sources(app PRIVATE
     ${V1_DIR}/logs.c
     ${V1_DIR}/coprocessor.c
     ${V1_DIR}/firmware.c
+    ${V1_DIR}/system_update.c
 )
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)

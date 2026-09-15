@@ -113,6 +113,24 @@ struct web_api_v1_firmware {
  */
 void web_api_v1_set_firmware(const struct web_api_v1_firmware *firmware);
 
+/** What the STM32 update bindings need from the board (reports/stm32-update). */
+struct web_api_v1_system {
+	/** Uptime for the slot store's expiry and activity; NULL: k_uptime_get(). */
+	int64_t (*now_ms)(void);
+	/** Largest stm32u585 upload: MCUboot's slot 2 less its trailer sector. */
+	uint32_t upload_max_bytes;
+};
+
+/**
+ * @brief Tell the STM32 update bindings that system-image-store and
+ *        system-updater are open.
+ *
+ * Until then a createUpload with target stm32u585 and startSystemUpdate answer
+ * 503 service_not_ready, getSystemFirmware too, and capabilities report
+ * stm32_update unavailable. @p system must outlive the program.
+ */
+void web_api_v1_set_system(const struct web_api_v1_system *system);
+
 #ifdef __cplusplus
 }
 #endif

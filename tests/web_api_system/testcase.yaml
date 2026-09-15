@@ -1,0 +1,14 @@
+tests:
+  cedar.web_api_system:
+    # The STM32 update branches of the v1 bindings (reports/stm32-update):
+    # uploads by target, one upload across targets, the slot store behind the
+    # upload operations, getSystemFirmware and startSystemUpdate, over the real
+    # stores and the updater on a fake board.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - web_api
+      - sim

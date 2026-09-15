@@ -153,6 +153,16 @@ int fw_store_create(const char *filename, uint32_t size, const uint8_t sha256[32
 int fw_store_get(const char *id, int64_t now_ms, struct fw_upload *out);
 
 /**
+ * @brief The upload, whatever its id - for the binding's rule of one upload
+ *        across targets (the STM32 image lives in system-image-store,
+ *        reports/stm32-update). Expires an untouched upload first, as get does.
+ *
+ * @retval 0       @p out filled (may be NULL)
+ * @retval -ENOENT none, or it expired just now
+ */
+int fw_store_current(int64_t now_ms, struct fw_upload *out);
+
+/**
  * @brief Take a chunk (writeUploadChunk), on the HTTP thread: check it and copy
  *        @p len bytes into the store's staging buffer. Nothing is written yet.
  *

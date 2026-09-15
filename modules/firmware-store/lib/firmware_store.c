@@ -580,6 +580,23 @@ int fw_store_get(const char *id, int64_t now_ms, struct fw_upload *out)
 	return rc;
 }
 
+int fw_store_current(int64_t now_ms, struct fw_upload *out)
+{
+	int rc = 0;
+
+	k_mutex_lock(&st.lock, K_FOREVER);
+	if (st.ready) {
+		expire(now_ms);
+	}
+	if (!st.ready || !st.present) {
+		rc = -ENOENT;
+	} else {
+		fill_view(out);
+	}
+	k_mutex_unlock(&st.lock);
+	return rc;
+}
+
 int fw_store_chunk_accept(const char *id, uint32_t offset, const uint8_t *data, size_t len,
 			  int64_t now_ms)
 {

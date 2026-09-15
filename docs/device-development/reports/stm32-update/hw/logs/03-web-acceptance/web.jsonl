@@ -1,0 +1,222 @@
+{"t": "18:16:35", "step": "setup", "status": 201, "body": "{\"username\":\"admin\",\"csrf_token\":\"qCmGGTPPPqKeZ-b2-21V_ENJMMZOkQLzRNDHX7m152Y\",\"idle_timeout_seconds\":1800,\"absolute_remaining_seconds\":28800}"}
+{"t": "18:16:37", "step": "signed in", "ms": 1152}
+{"t": "18:16:37", "step": "GET /capabilities", "status": 200, "ms": 83, "body": {"stm32_update": {"available": true, "reason": null}, "system_upload_max_bytes": 4128768, "firmware_formats": ["raw_full_flash", "mcuboot_image"]}}
+{"t": "18:16:37", "step": "GET /system/status", "status": 200, "ms": 84, "body": {"device_id": "cedar-2037394c3543501200550045", "model": "cedar_switch_3in4out_power", "firmware_version": "1.0.0+0", "frontend_version": "0.1.0+df852ea3a0fa-dirty", "boot_id": "boot_8c54d1cb8f4338b2", "uptime_ms": "51373", "wall_time": null, "active_job_ids": []}}
+{"t": "18:16:37", "step": "GET /system/firmware", "status": 200, "ms": 83, "body": {"running": {"version": "1.0.0+0", "image_hash": "021cb39e8adddb139d74445f2eabc53e00195877ff6d620aa0ec2dab5cd3151c", "confirmed": true}, "confirm_remaining_seconds": null, "swap_pending": false, "update": {"available": true, "reason": null}, "last_update": null}}
+{"t": "18:17:35", "step": "signed in", "ms": 1139}
+{"t": "18:17:35", "step": "create", "status": 409, "ms": 91, "body": {"error": {"code": "busy", "message": "An upload is already staged or installing; delete it first", "request_id": "req_1f51b9a2", "retryable": true}}, "file": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/74321da1-5eaf-4706-9da6-9a8349539b9f/scratchpad/images/garbage-64k.bin", "size": 65536, "sha256": "a71ae09b50d6895101bf7e028ec328af227a03e74d2fdec6a96840540d26627a"}
+{"t": "18:22:05", "step": "signed in", "ms": 1213}
+{"t": "18:22:05", "step": "delete", "status": 202, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": null}}
+{"t": "18:22:23", "step": "signed in", "ms": 1206}
+{"t": "18:22:24", "step": "create", "status": 201, "ms": 753, "body": {"id": "sysimg_75c772a3429a17ec", "target": "stm32u585", "filename": "garbage-64k.bin", "size_bytes": 65536, "received_bytes": 0, "sha256": "a71ae09b50d6895101bf7e028ec328af227a03e74d2fdec6a96840540d26627a", "state": "receiving", "active_job_id": null, "image": null, "error": null}, "file": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/74321da1-5eaf-4706-9da6-9a8349539b9f/scratchpad/images/garbage-64k.bin", "size": 65536, "sha256": "a71ae09b50d6895101bf7e028ec328af227a03e74d2fdec6a96840540d26627a"}
+{"t": "18:22:24", "step": "job phase", "job": "job_00000002", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:22:24", "step": "job phase", "job": "job_00000002", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:22:26", "step": "job phase", "job": "job_00000003", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:22:26", "step": "job phase", "job": "job_00000003", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:22:28", "step": "job phase", "job": "job_00000004", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:22:28", "step": "job phase", "job": "job_00000004", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:22:30", "step": "job phase", "job": "job_00000005", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:22:30", "step": "job phase", "job": "job_00000005", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:22:32", "step": "chunks done", "bytes": 65536, "seconds": 8.8, "kib_s": 7.3, "put_ms_p50": 398, "put_ms_max": 418, "job_s_p50": 1.7, "job_s_max": 2.3}
+{"t": "18:22:33", "step": "job phase", "job": "job_00000006", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:22:33", "step": "job phase", "job": "job_00000006", "phase": "verifying", "state": "running", "at_s": 0.4}
+{"t": "18:22:35", "step": "verify", "seconds": 2.3, "job_state": "failed", "upload": {"id": "sysimg_75c772a3429a17ec", "target": "stm32u585", "filename": "garbage-64k.bin", "size_bytes": 65536, "received_bytes": 65536, "sha256": "a71ae09b50d6895101bf7e028ec328af227a03e74d2fdec6a96840540d26627a", "state": "failed", "active_job_id": null, "image": null, "error": {"code": "invalid_image", "message": "This is not an MCUboot image: the header magic is missing", "request_id": "req_195da61b", "retryable": false}}}
+{"t": "18:23:12", "step": "signed in", "ms": 1206}
+{"t": "18:23:12", "step": "delete", "status": 202, "body": {"job_id": "job_00000007", "job_url": "/api/v1/jobs/job_00000007", "resource_url": null}}
+{"t": "18:23:18", "step": "signed in", "ms": 1206}
+{"t": "18:23:19", "step": "create", "status": 201, "ms": 759, "body": {"id": "sysimg_70f6b2b5aceee252", "target": "stm32u585", "filename": "api-v101.signed.bin", "size_bytes": 1427792, "received_bytes": 0, "sha256": "2598fec3b7a92dde43d3bcc8d20b78f51dfb09df060b84e0552d2d18386e85ca", "state": "receiving", "active_job_id": null, "image": null, "error": null}, "file": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/74321da1-5eaf-4706-9da6-9a8349539b9f/scratchpad/images/api-v101.signed.bin", "size": 1427792, "sha256": "2598fec3b7a92dde43d3bcc8d20b78f51dfb09df060b84e0552d2d18386e85ca"}
+{"t": "18:23:19", "step": "job phase", "job": "job_00000008", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:19", "step": "job phase", "job": "job_00000008", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:21", "step": "job phase", "job": "job_00000009", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:21", "step": "job phase", "job": "job_00000009", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:23", "step": "job phase", "job": "job_0000000a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:24", "step": "job phase", "job": "job_0000000a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:26", "step": "job phase", "job": "job_0000000b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:26", "step": "job phase", "job": "job_0000000b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:27", "step": "job phase", "job": "job_0000000c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:28", "step": "job phase", "job": "job_0000000c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:29", "step": "job phase", "job": "job_0000000d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:30", "step": "job phase", "job": "job_0000000d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:31", "step": "job phase", "job": "job_0000000e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:32", "step": "job phase", "job": "job_0000000e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:34", "step": "job phase", "job": "job_0000000f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:34", "step": "job phase", "job": "job_0000000f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:36", "step": "job phase", "job": "job_00000010", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:36", "step": "job phase", "job": "job_00000010", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:38", "step": "job phase", "job": "job_00000011", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:39", "step": "job phase", "job": "job_00000011", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:40", "step": "job phase", "job": "job_00000012", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:40", "step": "job phase", "job": "job_00000012", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:42", "step": "job phase", "job": "job_00000013", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:42", "step": "job phase", "job": "job_00000013", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:44", "step": "job phase", "job": "job_00000014", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:44", "step": "job phase", "job": "job_00000014", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:46", "step": "job phase", "job": "job_00000015", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:46", "step": "job phase", "job": "job_00000015", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:49", "step": "job phase", "job": "job_00000016", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:49", "step": "job phase", "job": "job_00000016", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:51", "step": "job phase", "job": "job_00000017", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:51", "step": "job phase", "job": "job_00000017", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:53", "step": "job phase", "job": "job_00000018", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:53", "step": "job phase", "job": "job_00000018", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:55", "step": "job phase", "job": "job_00000019", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:55", "step": "job phase", "job": "job_00000019", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:57", "step": "job phase", "job": "job_0000001a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:57", "step": "job phase", "job": "job_0000001a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:23:59", "step": "job phase", "job": "job_0000001b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:23:59", "step": "job phase", "job": "job_0000001b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:02", "step": "job phase", "job": "job_0000001c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:02", "step": "job phase", "job": "job_0000001c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:03", "step": "job phase", "job": "job_0000001d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:04", "step": "job phase", "job": "job_0000001d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:05", "step": "job phase", "job": "job_0000001e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:05", "step": "job phase", "job": "job_0000001e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:07", "step": "job phase", "job": "job_0000001f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:08", "step": "job phase", "job": "job_0000001f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:09", "step": "job phase", "job": "job_00000020", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:10", "step": "job phase", "job": "job_00000020", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:12", "step": "job phase", "job": "job_00000021", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:12", "step": "job phase", "job": "job_00000021", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:14", "step": "job phase", "job": "job_00000022", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:14", "step": "job phase", "job": "job_00000022", "phase": "writing", "state": "running", "at_s": 0.3}
+{"t": "18:24:16", "step": "job phase", "job": "job_00000023", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:16", "step": "job phase", "job": "job_00000023", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:18", "step": "job phase", "job": "job_00000024", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:18", "step": "job phase", "job": "job_00000024", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:20", "step": "job phase", "job": "job_00000025", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:20", "step": "job phase", "job": "job_00000025", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:22", "step": "job phase", "job": "job_00000026", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:22", "step": "job phase", "job": "job_00000026", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:25", "step": "job phase", "job": "job_00000027", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:25", "step": "job phase", "job": "job_00000027", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:27", "step": "job phase", "job": "job_00000028", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:27", "step": "job phase", "job": "job_00000028", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:28", "step": "job phase", "job": "job_00000029", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:29", "step": "job phase", "job": "job_00000029", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:30", "step": "job phase", "job": "job_0000002a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:31", "step": "job phase", "job": "job_0000002a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:33", "step": "job phase", "job": "job_0000002b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:33", "step": "job phase", "job": "job_0000002b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:35", "step": "job phase", "job": "job_0000002c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:35", "step": "job phase", "job": "job_0000002c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:37", "step": "job phase", "job": "job_0000002d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:37", "step": "job phase", "job": "job_0000002d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:39", "step": "job phase", "job": "job_0000002e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:39", "step": "job phase", "job": "job_0000002e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:41", "step": "job phase", "job": "job_0000002f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:41", "step": "job phase", "job": "job_0000002f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:43", "step": "job phase", "job": "job_00000030", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:43", "step": "job phase", "job": "job_00000030", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:45", "step": "job phase", "job": "job_00000031", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:45", "step": "job phase", "job": "job_00000031", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:48", "step": "job phase", "job": "job_00000032", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:48", "step": "job phase", "job": "job_00000032", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:50", "step": "job phase", "job": "job_00000033", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:50", "step": "job phase", "job": "job_00000033", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:52", "step": "job phase", "job": "job_00000034", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:52", "step": "job phase", "job": "job_00000034", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:54", "step": "job phase", "job": "job_00000035", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:54", "step": "job phase", "job": "job_00000035", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:56", "step": "job phase", "job": "job_00000036", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:56", "step": "job phase", "job": "job_00000036", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:24:59", "step": "job phase", "job": "job_00000037", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:24:59", "step": "job phase", "job": "job_00000037", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:01", "step": "job phase", "job": "job_00000038", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:01", "step": "job phase", "job": "job_00000038", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:03", "step": "job phase", "job": "job_00000039", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:03", "step": "job phase", "job": "job_00000039", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:05", "step": "job phase", "job": "job_0000003a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:05", "step": "job phase", "job": "job_0000003a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:07", "step": "job phase", "job": "job_0000003b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:07", "step": "job phase", "job": "job_0000003b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:09", "step": "job phase", "job": "job_0000003c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:09", "step": "job phase", "job": "job_0000003c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:12", "step": "job phase", "job": "job_0000003d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:12", "step": "job phase", "job": "job_0000003d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:14", "step": "job phase", "job": "job_0000003e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:14", "step": "job phase", "job": "job_0000003e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:15", "step": "job phase", "job": "job_0000003f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:16", "step": "job phase", "job": "job_0000003f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:18", "step": "job phase", "job": "job_00000040", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:18", "step": "job phase", "job": "job_00000040", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:20", "step": "job phase", "job": "job_00000041", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:20", "step": "job phase", "job": "job_00000041", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:22", "step": "job phase", "job": "job_00000042", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:23", "step": "job phase", "job": "job_00000042", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:24", "step": "job phase", "job": "job_00000043", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:24", "step": "job phase", "job": "job_00000043", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:26", "step": "job phase", "job": "job_00000044", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:26", "step": "job phase", "job": "job_00000044", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:28", "step": "job phase", "job": "job_00000045", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:28", "step": "job phase", "job": "job_00000045", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:30", "step": "job phase", "job": "job_00000046", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:31", "step": "job phase", "job": "job_00000046", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:32", "step": "job phase", "job": "job_00000047", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:33", "step": "job phase", "job": "job_00000047", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:35", "step": "job phase", "job": "job_00000048", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:35", "step": "job phase", "job": "job_00000048", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:37", "step": "job phase", "job": "job_00000049", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:37", "step": "job phase", "job": "job_00000049", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:39", "step": "job phase", "job": "job_0000004a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:39", "step": "job phase", "job": "job_0000004a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:41", "step": "job phase", "job": "job_0000004b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:41", "step": "job phase", "job": "job_0000004b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:43", "step": "job phase", "job": "job_0000004c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:43", "step": "job phase", "job": "job_0000004c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:46", "step": "job phase", "job": "job_0000004d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:46", "step": "job phase", "job": "job_0000004d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:48", "step": "job phase", "job": "job_0000004e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:48", "step": "job phase", "job": "job_0000004e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:49", "step": "job phase", "job": "job_0000004f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:50", "step": "job phase", "job": "job_0000004f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:51", "step": "job phase", "job": "job_00000050", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:52", "step": "job phase", "job": "job_00000050", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:54", "step": "job phase", "job": "job_00000051", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:54", "step": "job phase", "job": "job_00000051", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:56", "step": "job phase", "job": "job_00000052", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:56", "step": "job phase", "job": "job_00000052", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:25:58", "step": "job phase", "job": "job_00000053", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:25:59", "step": "job phase", "job": "job_00000053", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:00", "step": "job phase", "job": "job_00000054", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:01", "step": "job phase", "job": "job_00000054", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:02", "step": "job phase", "job": "job_00000055", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:02", "step": "job phase", "job": "job_00000055", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:04", "step": "job phase", "job": "job_00000056", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:04", "step": "job phase", "job": "job_00000056", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:06", "step": "job phase", "job": "job_00000057", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:07", "step": "job phase", "job": "job_00000057", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:09", "step": "job phase", "job": "job_00000058", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:09", "step": "job phase", "job": "job_00000058", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:11", "step": "job phase", "job": "job_00000059", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:11", "step": "job phase", "job": "job_00000059", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:13", "step": "job phase", "job": "job_0000005a", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:13", "step": "job phase", "job": "job_0000005a", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:15", "step": "job phase", "job": "job_0000005b", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:15", "step": "job phase", "job": "job_0000005b", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:17", "step": "job phase", "job": "job_0000005c", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:17", "step": "job phase", "job": "job_0000005c", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:19", "step": "job phase", "job": "job_0000005d", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:19", "step": "job phase", "job": "job_0000005d", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:22", "step": "job phase", "job": "job_0000005e", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:22", "step": "job phase", "job": "job_0000005e", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:23", "step": "job phase", "job": "job_0000005f", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:23", "step": "job phase", "job": "job_0000005f", "phase": "writing", "state": "running", "at_s": 0.4}
+{"t": "18:26:24", "step": "chunks done", "bytes": 1427792, "seconds": 185.1, "kib_s": 7.5, "put_ms_p50": 393, "put_ms_max": 434, "job_s_p50": 1.7, "job_s_max": 2.6}
+{"t": "18:26:24", "step": "job phase", "job": "job_00000060", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:26:24", "step": "job phase", "job": "job_00000060", "phase": "verifying", "state": "running", "at_s": 0.4}
+{"t": "18:27:27", "step": "verify", "seconds": 62.7, "job_state": "succeeded", "upload": {"id": "sysimg_70f6b2b5aceee252", "target": "stm32u585", "filename": "api-v101.signed.bin", "size_bytes": 1427792, "received_bytes": 1427792, "sha256": "2598fec3b7a92dde43d3bcc8d20b78f51dfb09df060b84e0552d2d18386e85ca", "state": "ready", "active_job_id": null, "image": {"format": "mcuboot_image", "format_version": null, "target": "stm32u585", "version": "1.0.1+0", "kind": "app", "partition_layout_id": null, "host_protocol": null, "signature_verified": null, "allowed_methods": ["ota"]}, "error": null}}
+{"t": "18:27:27", "step": "startSystemUpdate", "status": 202, "ms": 503, "body": {"job_id": "job_00000061", "job_url": "/api/v1/jobs/job_00000061", "resource_url": "/api/v1/system/firmware"}}
+{"t": "18:27:27", "step": "job phase", "job": "job_00000061", "phase": "", "state": "queued", "at_s": 0.1}
+{"t": "18:27:28", "step": "job phase", "job": "job_00000061", "phase": "preparing", "state": "running", "at_s": 0.4}
+{"t": "18:27:29", "step": "job phase", "job": "job_00000061", "phase": "requesting", "state": "running", "at_s": 1.4}
+{"t": "18:27:29", "step": "job phase", "job": "job_00000061", "phase": "rebooting", "state": "running", "at_s": 2.0}
+{"t": "18:27:42", "step": "job end seen", "after_s": 14.6, "job": {"lost": "timed out", "last_phase": "rebooting"}}
+{"t": "18:28:33", "step": "signed in", "ms": 1209}
+{"t": "18:28:33", "step": "back", "after_s": 66.2, "first_answer_s": 64.8, "firmware_version": "1.0.0+0", "boot_id": "boot_e1635f38a128abc7"}
+{"t": "18:28:33", "step": "GET /capabilities", "status": 200, "ms": 86, "body": {"stm32_update": {"available": false, "reason": "firmware_unconfirmed"}, "system_upload_max_bytes": 4128768, "firmware_formats": ["raw_full_flash", "mcuboot_image"]}}
+{"t": "18:28:34", "step": "GET /system/status", "status": 200, "ms": 78, "body": {"device_id": "cedar-2037394c3543501200550045", "model": "cedar_switch_3in4out_power", "firmware_version": "1.0.0+0", "frontend_version": "0.1.0+df852ea3a0fa-dirty", "boot_id": "boot_e1635f38a128abc7", "uptime_ms": "22483", "wall_time": null, "active_job_ids": []}}
+{"t": "18:28:34", "step": "GET /system/firmware", "status": 200, "ms": 82, "body": {"running": {"version": "1.0.1+0", "image_hash": "64b0098d9c5cd119a6f7036041a279b6b945b9524be1185c2af5a18e264ec25a", "confirmed": false}, "confirm_remaining_seconds": 1180, "swap_pending": false, "update": {"available": false, "reason": "firmware_unconfirmed"}, "last_update": {"job_id": "job_00000061", "state": "awaiting_confirmation", "from_version": "1.0.0+0", "version": "1.0.1+0", "error": null}}}
+{"t": "18:49:40", "step": "signed in", "ms": 1303}
+{"t": "18:49:40", "step": "GET /capabilities", "status": 200, "ms": 110, "body": {"stm32_update": {"available": true, "reason": null}, "system_upload_max_bytes": 4128768, "firmware_formats": ["raw_full_flash", "mcuboot_image"]}}
+{"t": "18:49:40", "step": "GET /system/status", "status": 200, "ms": 89, "body": {"device_id": "cedar-2037394c3543501200550045", "model": "cedar_switch_3in4out_power", "firmware_version": "1.0.0+0", "frontend_version": "0.1.0+df852ea3a0fa-dirty", "boot_id": "boot_e1635f38a128abc7", "uptime_ms": "1289420", "wall_time": null, "active_job_ids": []}}
+{"t": "18:49:40", "step": "GET /system/firmware", "status": 200, "ms": 82, "body": {"running": {"version": "1.0.1+0", "image_hash": "64b0098d9c5cd119a6f7036041a279b6b945b9524be1185c2af5a18e264ec25a", "confirmed": true}, "confirm_remaining_seconds": null, "swap_pending": false, "update": {"available": true, "reason": null}, "last_update": {"job_id": "job_00000061", "state": "succeeded", "from_version": "1.0.0+0", "version": "1.0.1+0", "error": null}}}

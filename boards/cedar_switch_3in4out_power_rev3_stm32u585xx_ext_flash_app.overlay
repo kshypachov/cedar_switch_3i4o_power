@@ -1,4 +1,9 @@
 / {
+	chosen {
+		/* Settings in ZMS on the 6 MB partition at offset 0 (see prj.conf) */
+		zephyr,settings-partition = &storage_zms_partition;
+	};
+
 	fstab {
 		compatible = "zephyr,fstab";
 
@@ -65,6 +70,55 @@
 
 	chosen {
 		zephyr,esp-loader = &esp_loader0;
+	};
+};
+
+/*
+ * Independent watchdog for the STM32 update (owner's decision 2026-09-15): a new
+ * image that hangs is reset and MCUboot reverts it. Started and fed by
+ * src/services/system; the application only, MCUboot does not enable it.
+ */
+&iwdg {
+	status = "okay";
+};
+
+/*
+ * Relay outputs are active high: the pins drive ULN2003 inputs and a high input
+ * energises the coil (reports/p0 finding 4, confirmed on board A's LEDs). The
+ * board's common DTS says GPIO_ACTIVE_LOW, which turned a relay off when Matter
+ * or the API switched it on, kept the coils energised while "off" and flipped
+ * every relay twice on each reset. gpio-leds drives these to the inactive level
+ * (low, coil off) at init.
+ */
+&relay_ac1 {
+	gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac2 {
+	gpios = <&gpioc 4 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac3 {
+	gpios = <&gpioc 5 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac4 {
+	gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+};
+
+/*
+ * PKA (public key accelerator): upstream stm32u5.dtsi has no node yet (STM32WBA
+ * one is in zephyrproject-rtos/zephyr#116564). Binding st,stm32-pka and the driver:
+ * modules/psa-driver-stm32. PKA_BASE_NS = AHB2PERIPH_BASE_NS + 0xA2000, PKAEN is
+ * RCC_AHB2ENR1 bit 19, PKA_IRQn 97 (stm32u585xx.h).
+ */
+&{/soc} {
+	pka: pka@420c2000 {
+		compatible = "st,stm32-pka";
+		reg = <0x420c2000 0x2000>;
+		clocks = <&rcc STM32_CLOCK(AHB2, 19)>;
+		interrupts = <97 0>;
+		status = "okay";
 	};
 };
 

@@ -88,6 +88,17 @@ def get_coprocessor_status(app, ctx: Context) -> Response:
     return json_response(200, app.state.coprocessor.status_json())
 
 
+@handles("getSystemFirmware")
+def get_system_firmware(app, ctx: Context) -> Response:
+    return json_response(200, app.state.system.status_json())
+
+
+@handles("startSystemUpdate")
+def start_system_update(app, ctx: Context) -> Response:
+    job_id = app.state.system.start_update(ctx.body)
+    return accepted(job_id, "/api/v1/system/firmware")
+
+
 # -- jobs ------------------------------------------------------------------
 
 
@@ -122,6 +133,8 @@ def cancel_job(app, ctx: Context) -> Response:
     )
     if job.kind == "coprocessor_update":
         app.state.coprocessor.cancelled(job)
+    elif job.kind == "system_update":
+        app.state.system.cancelled(job)
     elif job.kind == "firmware_verify":
         app.state.firmware.verify_cancelled(job)
     return accepted(job.id, job.resource_url)

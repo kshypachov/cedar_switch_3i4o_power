@@ -1,18 +1,30 @@
 /*
  * SPDX-License-Identifier: Apache-2.0
  *
- * API v1: the staged coprocessor image, its install and job cancellation -
- * createUpload, getUpload, writeUploadChunk, verifyUpload, deleteUpload,
- * startCoprocessorUpdate, cancelJob.
+ * API v1: the staged firmware images, the coprocessor's install and job
+ * cancellation - createUpload, getUpload, writeUploadChunk, verifyUpload,
+ * deleteUpload, startCoprocessorUpdate, cancelJob.
  *
- * Contract: "Upload и ESP32 update" and "Задачи" in api-contract.md, the Upload,
- * FirmwareImage and JobAccepted schemas in openapi.json. The decisions are
- * firmware-store's (modules/firmware-store/README.md); this file maps them onto
- * HTTP. What the binding itself decides:
+ * Contract: "Upload и ESP32 update", "Обновление STM32" and "Задачи" in
+ * api-contract.md, the Upload, FirmwareImage and JobAccepted schemas in
+ * openapi.json. The decisions are firmware-store's (modules/firmware-store/README.md)
+ * and system-image-store's (modules/system-image-store/README.md); this file maps
+ * them onto HTTP. What the binding itself decides:
  *
- * - **The store must have been opened by the board** (fw_store_init() on /lfs,
- *   then web_api_v1_set_firmware()). Until then every operation here answers
- *   503 service_not_ready rather than touching a store that is not there.
+ * - **Two stores, one resource.** An upload's `target` picks the store:
+ *   esp32c6 (the default) is a file in firmware-store, stm32u585 goes straight
+ *   into MCUboot's slot 2 through system-image-store. Afterwards the id says
+ *   which store holds it (system-image-store's start "sysimg_"), so get, chunk,
+ *   verify and delete need no target. The two stores keep the same call shapes
+ *   and errno meanings; the answers differ only where the contract does.
+ * - **One upload across both targets**: creating one while the other store
+ *   holds an upload that has not failed is 409 busy. For stm32u585 the order is
+ *   busy, then invalid_state (the running firmware is unconfirmed or a swap is
+ *   pending: slot 2 holds what a revert needs), then 413 ("Решения этапа").
+ * - **Each store must have been opened by the board** (fw_store_init() then
+ *   web_api_v1_set_firmware(); sys_img_init() and system_updater_init() then
+ *   web_api_v1_set_system()). Until then its operations answer 503
+ *   service_not_ready rather than touching a store that is not there.
  * - **createUpload replays by key**, the way stageNetworkConfig does: it creates
  *   no job, so the binding keeps the scoped key and the upload it created (8
  *   entries, 15 minutes). A retry with the same key and body gets that upload
@@ -23,24 +35,26 @@
  * - **Chunks and checks replay through job-manager**: the key is looked up
  *   before the chunk is staged, so a retry is answered with the original job and
  *   its bytes are never staged twice.
- * - **One worker**: every store call that does file I/O (commit, verify,
- *   delete) runs on the v1 job worker (auth.c), which is the single thread
- *   firmware-store requires. Each operation has one work item; the store's own
+ * - **One worker**: every store call that does file or flash I/O (commit,
+ *   verify, delete) runs on the v1 job worker (auth.c), which is the single
+ *   thread both stores require. Each operation has one work item; the stores'
  *   pending-chunk and verifying flags keep a second one from being accepted
  *   while the first has not run.
  * - **A check that finds the image wanting fails its job** with the image's
  *   code, and the upload is `failed` with code and message, as the mock does.
  *   A cancelled check leaves the upload `receiving`.
- * - **cancelJob** cancels what job-manager allows: a check, and (P6) an install
- *   before `begin`. Everything else - a chunk, a delete, a terminal job - is
+ * - **cancelJob** cancels what job-manager allows: a check, an install before
+ *   its point of no return (the coprocessor's `begin`, the STM32's
+ *   `requesting`). Everything else - a chunk, a delete, a terminal job - is
  *   409 invalid_state; a network apply is cancelled through its transaction.
  * - **startCoprocessorUpdate** refuses in the contract's order ("Решения P6"):
- *   `ota` 503, not over Ethernet 409, unknown upload 404, an install running
- *   409 busy, upload not `ready` 409 invalid_state, no acknowledge_recovery
- *   422, UART with the USB bridge 409 busy, UART unavailable 503. A replay by
- *   key is answered first, with the install's job. The install runs on the same
- *   v1 worker as firmware-store's file I/O, because the updater reads the staged
- *   image through the store. The C6's own state never refuses an install.
+ *   `ota` 503, not over Ethernet 409, unknown upload 404 (an STM32 upload 422
+ *   unsupported_target), an install running 409 busy, upload not `ready` 409
+ *   invalid_state, no acknowledge_recovery 422, UART with the USB bridge 409
+ *   busy, UART unavailable 503. A replay by key is answered first, with the
+ *   install's job. The install runs on the same v1 worker as firmware-store's
+ *   file I/O, because the updater reads the staged image through the store. The
+ *   C6's own state never refuses an install. startSystemUpdate is system_update.c.
  */
 
 #include <errno.h>
@@ -55,12 +69,22 @@
 #if defined(CONFIG_COPROCESSOR_UPDATER)
 #include <coprocessor_updater/coprocessor_updater.h>
 #endif
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+#include <system_image_store/system_image_store.h>
+#endif
+#if defined(CONFIG_SYSTEM_UPDATER)
+#include <system_updater/system_updater.h>
+#endif
 
 #include "v1_internal.h"
 
 LOG_MODULE_REGISTER(web_api_v1_firmware, LOG_LEVEL_INF);
 
 #define UPLOADS_URL WEB_API_BASE_PATH "/firmware/uploads"
+
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+BUILD_ASSERT(SYS_IMG_ID_LEN <= FW_STORE_ID_LEN, "the id buffers below are firmware-store's");
+#endif
 
 static const struct web_api_v1_firmware *fw_hooks;
 
@@ -89,6 +113,35 @@ static bool store_ready(struct web_api_call *call)
 	return true;
 }
 
+/* An id of system-image-store, whatever state that store is in. */
+static bool is_system_id(const char *id)
+{
+	return id != NULL &&
+	       strncmp(id, V1_SYSTEM_UPLOAD_PREFIX, strlen(V1_SYSTEM_UPLOAD_PREFIX)) == 0;
+}
+
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+static int64_t sys_now_ms(void)
+{
+	const struct web_api_v1_system *sys = v1_system();
+
+	return (sys != NULL && sys->now_ms != NULL) ? sys->now_ms() : k_uptime_get();
+}
+#endif
+
+static bool system_store_ready(struct web_api_call *call)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (v1_system() != NULL) {
+		return true;
+	}
+	web_api_reject(call, API_ERR_SERVICE_NOT_READY, "The STM32 image store is not ready");
+#else
+	web_api_reject(call, API_ERR_CAPABILITY_UNAVAILABLE, "This build has no STM32 updater");
+#endif
+	return false;
+}
+
 /* -- request schema ---------------------------------------------------------- */
 
 static bool sha256_hex(const char *value)
@@ -104,6 +157,8 @@ static bool sha256_hex(const char *value)
 	}
 	return n == 64U;
 }
+
+static const char *const upload_targets[] = {"esp32c6", "stm32u585", NULL};
 
 static const struct web_json_field upload_fields[] = {
 	{
@@ -131,6 +186,14 @@ static const struct web_json_field upload_fields[] = {
 		.size = sizeof(((struct v1_upload_body *)0)->sha256),
 		.max_len = sizeof(((struct v1_upload_body *)0)->sha256) - 1U,
 		.format = sha256_hex,
+	},
+	{
+		/* Optional: absent stays "", which is esp32c6. */
+		.name = "target",
+		.type = WEB_JSON_STRING,
+		.offset = offsetof(struct v1_upload_body, target),
+		.size = sizeof(((struct v1_upload_body *)0)->target),
+		.enum_values = upload_targets,
 	},
 };
 
@@ -263,6 +326,71 @@ const char *v1_upload_job_resource_url(const struct job_snapshot *job, char *buf
 
 /* -- responses ------------------------------------------------------------------ */
 
+/* An Upload as either store describes it: what the reply needs, borrowed. */
+struct upload_view {
+	const char *id;
+	const char *filename;
+	uint32_t size_bytes;
+	uint32_t received_bytes;
+	const uint8_t *sha256;
+	const char *state;
+	const char *active_job_id;
+	bool stm32;
+	/** Ready with a checked image. */
+	bool has_image;
+	/** Failed with a code. */
+	bool has_error;
+	const char *version;
+	const char *layout_id;
+	const char *host_protocol;
+	const char *error_code;
+	const char *error_message;
+};
+
+static void view_of_fw(const struct fw_upload *up, struct upload_view *v)
+{
+	*v = (struct upload_view){
+		.id = up->id,
+		.filename = up->filename,
+		.size_bytes = up->size_bytes,
+		.received_bytes = up->received_bytes,
+		.sha256 = up->sha256,
+		.state = fw_upload_state_str(up->state),
+		.active_job_id = up->active_job_id,
+		.stm32 = false,
+		.has_image = up->state == FW_UPLOAD_READY && up->has_image,
+		.has_error = up->state == FW_UPLOAD_FAILED && up->error_code[0] != '\0',
+		.version = up->version,
+		.layout_id = up->layout_id,
+		.host_protocol = up->host_protocol,
+		.error_code = up->error_code,
+		.error_message = up->error_message,
+	};
+}
+
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+static void view_of_sys(const struct sys_img_upload *up, struct upload_view *v)
+{
+	*v = (struct upload_view){
+		.id = up->id,
+		.filename = up->filename,
+		.size_bytes = up->size_bytes,
+		.received_bytes = up->received_bytes,
+		.sha256 = up->sha256,
+		.state = sys_img_state_str(up->state),
+		.active_job_id = up->active_job_id,
+		.stm32 = true,
+		.has_image = up->state == SYS_IMG_READY && up->has_image,
+		.has_error = up->state == SYS_IMG_FAILED && up->error_code[0] != '\0',
+		.version = up->version,
+		.layout_id = NULL,
+		.host_protocol = NULL,
+		.error_code = up->error_code,
+		.error_message = up->error_message,
+	};
+}
+#endif
+
 static const char *hex(const uint8_t *bytes, size_t n, char *out)
 {
 	static const char digits[] = "0123456789abcdef";
@@ -275,35 +403,36 @@ static const char *hex(const uint8_t *bytes, size_t n, char *out)
 	return out;
 }
 
-static void write_image(struct web_json_writer *w, const struct fw_upload *up)
+static void write_image(struct web_json_writer *w, const struct upload_view *up)
 {
 	web_json_object_begin(w);
 	web_json_key(w, "format");
-	web_json_string(w, "raw_full_flash");
+	web_json_string(w, up->stm32 ? "mcuboot_image" : "raw_full_flash");
 	web_json_key(w, "format_version");
 	web_json_null(w);
 	web_json_key(w, "target");
-	web_json_string(w, "esp32c6");
+	web_json_string(w, up->stm32 ? "stm32u585" : "esp32c6");
 	web_json_key(w, "version");
 	web_json_string(w, up->version);
-	/* The file replaces the chip's bootloader and table and erases its NVS. */
+	/* The merged file replaces the chip's bootloader and table and erases its
+	 * NVS; the STM32 image is an application MCUboot swaps in. */
 	web_json_key(w, "kind");
-	web_json_string(w, "recovery_bundle");
+	web_json_string(w, up->stm32 ? "app" : "recovery_bundle");
 	web_json_key(w, "partition_layout_id");
-	web_json_string(w, up->layout_id);
+	web_json_string_or_null(w, up->layout_id);
 	web_json_key(w, "host_protocol");
-	web_json_string(w, up->host_protocol);
+	web_json_string_or_null(w, up->host_protocol);
 	/* A raw file carries no signature: null, not a check that failed. */
 	web_json_key(w, "signature_verified");
 	web_json_null(w);
 	web_json_key(w, "allowed_methods");
 	web_json_array_begin(w);
-	web_json_string(w, "uart");
+	web_json_string(w, up->stm32 ? "ota" : "uart");
 	web_json_array_end(w);
 	web_json_object_end(w);
 }
 
-static void reply_upload(struct web_api_call *call, const struct fw_upload *up, uint16_t status)
+static void reply_upload(struct web_api_call *call, const struct upload_view *up, uint16_t status)
 {
 	struct web_json_writer *w = web_api_json(call);
 	char digest[65];
@@ -311,6 +440,8 @@ static void reply_upload(struct web_api_call *call, const struct fw_upload *up, 
 	web_json_object_begin(w);
 	web_json_key(w, "id");
 	web_json_string(w, up->id);
+	web_json_key(w, "target");
+	web_json_string(w, up->stm32 ? "stm32u585" : "esp32c6");
 	web_json_key(w, "filename");
 	web_json_string(w, up->filename);
 	web_json_key(w, "size_bytes");
@@ -318,19 +449,19 @@ static void reply_upload(struct web_api_call *call, const struct fw_upload *up, 
 	web_json_key(w, "received_bytes");
 	web_json_int(w, up->received_bytes);
 	web_json_key(w, "sha256");
-	web_json_string(w, hex(up->sha256, sizeof(up->sha256), digest));
+	web_json_string(w, hex(up->sha256, 32, digest));
 	web_json_key(w, "state");
-	web_json_string(w, fw_upload_state_str(up->state));
+	web_json_string(w, up->state);
 	web_json_key(w, "active_job_id");
 	web_json_string_or_null(w, up->active_job_id[0] != '\0' ? up->active_job_id : NULL);
 	web_json_key(w, "image");
-	if (up->state == FW_UPLOAD_READY && up->has_image) {
+	if (up->has_image) {
 		write_image(w, up);
 	} else {
 		web_json_null(w);
 	}
 	web_json_key(w, "error");
-	if (up->state == FW_UPLOAD_FAILED && up->error_code[0] != '\0') {
+	if (up->has_error) {
 		web_json_object_begin(w);
 		web_json_key(w, "code");
 		web_json_string(w, up->error_code);
@@ -353,6 +484,29 @@ static void reply_upload(struct web_api_call *call, const struct fw_upload *up, 
 		web_api_set_location(call, location);
 	}
 	web_api_reply_json(call, status);
+}
+
+/* The upload named @p id in whichever store holds it; false when neither does. */
+static bool find_upload(const char *id, struct upload_view *view)
+{
+	static struct fw_upload fw;
+
+	if (is_system_id(id)) {
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+		static struct sys_img_upload sys;
+
+		if (v1_system() != NULL && sys_img_get(id, sys_now_ms(), &sys) == 0) {
+			view_of_sys(&sys, view);
+			return true;
+		}
+#endif
+		return false;
+	}
+	if (fw_hooks != NULL && fw_store_get(id, now_ms(), &fw) == 0) {
+		view_of_fw(&fw, view);
+		return true;
+	}
+	return false;
 }
 
 static void reply_accepted_upload(struct web_api_call *call, const char *job_id,
@@ -383,6 +537,7 @@ static void reject_job_create(struct web_api_call *call, enum job_create_result 
  * What a work item works on, set by the HTTP thread before it submits and
  * copied by the worker when it starts. One item per operation: the store
  * refuses a second chunk, check or delete of its upload until the first has run.
+ * One item serves both stores: a second upload cannot exist while the first does.
  */
 struct fw_work {
 	struct k_work work;
@@ -391,6 +546,8 @@ struct fw_work {
 	size_t bytes;
 	/* A check whose job could not be created: undo the claim, nothing else. */
 	bool abandon;
+	/* The upload is system-image-store's. */
+	bool stm32;
 };
 
 static K_MUTEX_DEFINE(work_lock);
@@ -402,6 +559,7 @@ static void take(struct fw_work *fw, struct fw_work *out)
 	memcpy(out->upload, fw->upload, sizeof(out->upload));
 	out->bytes = fw->bytes;
 	out->abandon = fw->abandon;
+	out->stm32 = fw->stm32;
 	k_mutex_unlock(&work_lock);
 }
 
@@ -413,9 +571,32 @@ static int submit(struct fw_work *fw, const char *job_id, const char *upload_id,
 	(void)snprintf(fw->upload, sizeof(fw->upload), "%s", upload_id);
 	fw->bytes = bytes;
 	fw->abandon = abandon;
+	fw->stm32 = is_system_id(upload_id);
 	k_mutex_unlock(&work_lock);
 
 	return v1_worker_submit(&fw->work);
+}
+
+/* The store calls of the worker, by the upload's store. */
+static int store_commit(const struct fw_work *op)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (op->stm32) {
+		return sys_img_chunk_commit(op->upload, sys_now_ms());
+	}
+#endif
+	return fw_store_chunk_commit(op->upload, now_ms());
+}
+
+static void store_clear_job(const struct fw_work *op)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (op->stm32) {
+		(void)sys_img_set_active_job(op->upload, NULL);
+		return;
+	}
+#endif
+	(void)fw_store_set_active_job(op->upload, NULL);
 }
 
 static void run_chunk(struct k_work *work)
@@ -428,8 +609,8 @@ static void run_chunk(struct k_work *work)
 	(void)job_set_phase(op.job, "writing");
 	(void)job_set_progress(op.job, 0U, op.bytes, true, JOB_PROGRESS_UNIT_BYTES);
 
-	rc = fw_store_chunk_commit(op.upload, now_ms());
-	(void)fw_store_set_active_job(op.upload, NULL);
+	rc = store_commit(&op);
+	store_clear_job(&op);
 	if (rc == 0) {
 		(void)job_set_progress(op.job, op.bytes, op.bytes, true, JOB_PROGRESS_UNIT_BYTES);
 		(void)job_set_state(op.job, JOB_STATE_SUCCEEDED);
@@ -462,36 +643,71 @@ static void verify_progress(void *ctx, uint32_t done, uint32_t total)
 static void run_verify(struct k_work *work)
 {
 	struct fw_work op;
-	struct fw_upload up;
 	int rc;
 
 	take(CONTAINER_OF(work, struct fw_work, work), &op);
-	if (op.abandon) {
-		/* Stops at the first question and puts the upload back to receiving. */
-		(void)fw_store_verify(op.upload, never, NULL, NULL, now_ms());
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (op.stm32) {
+		if (op.abandon) {
+			(void)sys_img_verify(op.upload, never, NULL, NULL, sys_now_ms());
+			(void)sys_img_set_active_job(op.upload, NULL);
+			return;
+		}
+		(void)job_set_state(op.job, JOB_STATE_RUNNING);
+		(void)job_set_phase(op.job, "verifying");
+		rc = sys_img_verify(op.upload, verify_cancelled, verify_progress, op.job,
+				    sys_now_ms());
+		(void)sys_img_set_active_job(op.upload, NULL);
+	} else
+#endif
+	{
+		if (op.abandon) {
+			/* Stops at the first question and puts the upload back to receiving. */
+			(void)fw_store_verify(op.upload, never, NULL, NULL, now_ms());
+			(void)fw_store_set_active_job(op.upload, NULL);
+			return;
+		}
+		/* Refused when the job was cancelled while queued; the check then stops
+		 * at its first question. */
+		(void)job_set_state(op.job, JOB_STATE_RUNNING);
+		(void)job_set_phase(op.job, "verifying");
+		rc = fw_store_verify(op.upload, verify_cancelled, verify_progress, op.job, now_ms());
 		(void)fw_store_set_active_job(op.upload, NULL);
-		return;
 	}
-	/* Refused when the job was cancelled while queued; the check then stops
-	 * at its first question. */
-	(void)job_set_state(op.job, JOB_STATE_RUNNING);
-	(void)job_set_phase(op.job, "verifying");
-
-	rc = fw_store_verify(op.upload, verify_cancelled, verify_progress, op.job, now_ms());
-	(void)fw_store_set_active_job(op.upload, NULL);
 	if (rc == -ECANCELED) {
 		return;
 	}
-	if (rc != 0 || fw_store_get(op.upload, now_ms(), &up) != 0) {
+	/* Not find_upload(): its buffers are the HTTP thread's. The worker's own copy. */
+	bool ready = false;
+	char code[FW_STORE_ERROR_CODE_MAX + 1] = "";
+
+	if (rc == 0) {
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+		if (op.stm32) {
+			struct sys_img_upload sys;
+
+			rc = sys_img_get(op.upload, sys_now_ms(), &sys);
+			ready = rc == 0 && sys.state == SYS_IMG_READY;
+			(void)snprintf(code, sizeof(code), "%s", rc == 0 ? sys.error_code : "");
+		} else
+#endif
+		{
+			struct fw_upload fw;
+
+			rc = fw_store_get(op.upload, now_ms(), &fw);
+			ready = rc == 0 && fw.state == FW_UPLOAD_READY;
+			(void)snprintf(code, sizeof(code), "%s", rc == 0 ? fw.error_code : "");
+		}
+	}
+	if (rc != 0) {
 		LOG_ERR("check of %s: %d", op.upload, rc);
 		(void)job_fail(op.job, "internal_error", true);
 		return;
 	}
-	if (up.state == FW_UPLOAD_READY) {
+	if (ready) {
 		(void)job_set_state(op.job, JOB_STATE_SUCCEEDED);
 	} else {
-		(void)job_fail(op.job, up.error_code[0] != '\0' ? up.error_code : "invalid_image",
-			       false);
+		(void)job_fail(op.job, code[0] != '\0' ? code : "invalid_image", false);
 	}
 }
 
@@ -504,11 +720,15 @@ static void run_delete(struct k_work *work)
 	(void)job_set_state(op.job, JOB_STATE_RUNNING);
 	(void)job_set_phase(op.job, "deleting");
 
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	rc = op.stm32 ? sys_img_delete(op.upload) : fw_store_delete(op.upload);
+#else
 	rc = fw_store_delete(op.upload);
+#endif
 	if (rc == 0 || rc == -ENOENT) {
 		(void)job_set_state(op.job, JOB_STATE_SUCCEEDED);
 	} else {
-		(void)fw_store_set_active_job(op.upload, NULL);
+		store_clear_job(&op);
 		(void)job_fail(op.job, rc == -EBUSY ? "busy" : "internal_error", rc == -EBUSY);
 	}
 }
@@ -519,46 +739,169 @@ static struct fw_work delete_work = {.work = Z_WORK_INITIALIZER(run_delete)};
 
 /* -- handlers ----------------------------------------------------------------------- */
 
+static void parse_digest(const char *text, uint8_t digest[32])
+{
+	for (size_t i = 0; i < 32U; i++) {
+		const char h = text[2 * i];
+		const char l = text[2 * i + 1];
+
+		digest[i] = (uint8_t)(((h <= '9' ? h - '0' : h - 'a' + 10) << 4) |
+				      (l <= '9' ? l - '0' : l - 'a' + 10));
+	}
+}
+
+/*
+ * The other target's store holds an upload that has not failed; its id into @p id.
+ * The id goes into the refusal: the page of one processor does not know the other
+ * page's upload (it may come from another browser), and without the id nobody can
+ * delete it short of its 24-hour expiry.
+ */
+static bool other_target_busy(bool stm32, char *id, size_t cap)
+{
+	if (stm32) {
+		static struct fw_upload fw;
+
+		if (fw_hooks != NULL && fw_store_current(now_ms(), &fw) == 0 &&
+		    fw.state != FW_UPLOAD_FAILED) {
+			(void)snprintf(id, cap, "%s", fw.id);
+			return true;
+		}
+		return false;
+	}
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	static struct sys_img_upload sys;
+
+	if (v1_system() != NULL && sys_img_current(sys_now_ms(), &sys) == 0 &&
+	    sys.state != SYS_IMG_FAILED) {
+		(void)snprintf(id, cap, "%s", sys.id);
+		return true;
+	}
+#endif
+	return false;
+}
+
+static void reply_replayed_upload(struct web_api_call *call, const char *id)
+{
+	struct upload_view view;
+
+	if (find_upload(id, &view)) {
+		reply_upload(call, &view, 201);
+	} else {
+		web_api_reject(call, API_ERR_NOT_FOUND,
+			       "The upload this request created no longer exists");
+	}
+}
+
+static const char MSG_BUSY_UPLOAD[] = "An upload is already staged or installing; delete it first";
+
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+static void create_system_upload(struct web_api_call *call, const struct v1_upload_body *body)
+{
+	static struct sys_img_upload up;
+	struct upload_view view;
+	uint8_t digest[32];
+	int rc;
+
+#if defined(CONFIG_SYSTEM_UPDATER)
+	/* busy (the other store, below), then invalid_state, then 413. */
+	rc = system_updater_check();
+#else
+	rc = 0;
+#endif
+	if (rc == -EACCES) {
+		web_api_reject(call, API_ERR_INVALID_STATE,
+			       "The running firmware is not confirmed yet, or a swap is pending: "
+			       "slot 2 holds the firmware a revert would restore");
+		return;
+	}
+	if (body->size_bytes > (int64_t)v1_system_upload_max_bytes()) {
+		web_api_reject(call, API_ERR_PAYLOAD_TOO_LARGE,
+			       "The image is larger than MCUboot's slot allows");
+		return;
+	}
+	parse_digest(body->sha256, digest);
+
+	rc = sys_img_create(body->filename, (uint32_t)body->size_bytes, digest, sys_now_ms(), &up);
+	switch (rc) {
+	case 0:
+		break;
+	case -EBUSY:
+		web_api_reject(call, API_ERR_BUSY, MSG_BUSY_UPLOAD);
+		return;
+	case -EACCES:
+		web_api_reject(call, API_ERR_INVALID_STATE,
+			       "The running firmware is not confirmed yet, or a swap is pending: "
+			       "slot 2 holds the firmware a revert would restore");
+		return;
+	case -EFBIG:
+		web_api_reject(call, API_ERR_PAYLOAD_TOO_LARGE,
+			       "The image is larger than MCUboot's slot allows");
+		return;
+	case -EINVAL:
+		web_api_reject(call, API_ERR_VALIDATION_FAILED, "The upload request is not acceptable");
+		return;
+	case -EAGAIN:
+		web_api_reject(call, API_ERR_SERVICE_NOT_READY, "The STM32 image store is not ready");
+		return;
+	default:
+		web_api_reject(call, API_ERR_INTERNAL_ERROR, "The upload could not be recorded");
+		return;
+	}
+
+	replay_store(call, up.id);
+	view_of_sys(&up, &view);
+	reply_upload(call, &view, 201);
+}
+#endif
+
 void v1_create_upload(struct web_api_call *call)
 {
 	const struct v1_upload_body *body = call->body;
-	struct fw_upload up;
+	const bool stm32 = strcmp(body->target, "stm32u585") == 0;
+	static struct fw_upload up;
+	struct upload_view view;
 	uint8_t digest[32];
 	char id[FW_STORE_ID_LEN + 1];
 	int rc;
 
-	if (!store_ready(call) || replay_find(call, id, sizeof(id))) {
+	if (stm32 ? !system_store_ready(call) : !store_ready(call)) {
+		return;
+	}
+	if (replay_find(call, id, sizeof(id))) {
 		return;
 	}
 	if (id[0] != '\0') {
-		if (fw_store_get(id, now_ms(), &up) == 0) {
-			reply_upload(call, &up, 201);
-		} else {
-			web_api_reject(call, API_ERR_NOT_FOUND,
-				       "The upload this request created no longer exists");
-		}
+		reply_replayed_upload(call, id);
 		return;
 	}
+	if (other_target_busy(stm32, id, sizeof(id))) {
+		char message[128];
+
+		(void)snprintf(message, sizeof(message),
+			       "Upload %s of the %s is staged; delete it first", id,
+			       stm32 ? "ESP32" : "STM32");
+		web_api_reject(call, API_ERR_BUSY, message);
+		return;
+	}
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (stm32) {
+		create_system_upload(call, body);
+		return;
+	}
+#endif
 	if (body->size_bytes > (int64_t)CONFIG_FIRMWARE_STORE_MAX_BYTES) {
 		web_api_reject(call, API_ERR_PAYLOAD_TOO_LARGE,
 			       "The image is larger than the coprocessor's application slot allows");
 		return;
 	}
-	for (size_t i = 0; i < sizeof(digest); i++) {
-		const char h = body->sha256[2 * i];
-		const char l = body->sha256[2 * i + 1];
-
-		digest[i] = (uint8_t)(((h <= '9' ? h - '0' : h - 'a' + 10) << 4) |
-				      (l <= '9' ? l - '0' : l - 'a' + 10));
-	}
+	parse_digest(body->sha256, digest);
 
 	rc = fw_store_create(body->filename, (uint32_t)body->size_bytes, digest, now_ms(), &up);
 	switch (rc) {
 	case 0:
 		break;
 	case -EBUSY:
-		web_api_reject(call, API_ERR_BUSY,
-			       "An upload is already staged or installing; delete it first");
+		web_api_reject(call, API_ERR_BUSY, MSG_BUSY_UPLOAD);
 		return;
 	case -EFBIG:
 		web_api_reject(call, API_ERR_PAYLOAD_TOO_LARGE,
@@ -580,21 +923,28 @@ void v1_create_upload(struct web_api_call *call)
 	}
 
 	replay_store(call, up.id);
-	reply_upload(call, &up, 201);
+	view_of_fw(&up, &view);
+	reply_upload(call, &view, 201);
+}
+
+/* The upload's store must be open: 503 otherwise, as before an upload exists. */
+static bool upload_store_ready(struct web_api_call *call, const char *upload_id)
+{
+	return is_system_id(upload_id) ? system_store_ready(call) : store_ready(call);
 }
 
 void v1_get_upload(struct web_api_call *call)
 {
-	struct fw_upload up;
+	struct upload_view view;
 
-	if (!store_ready(call)) {
+	if (!upload_store_ready(call, call->params[0])) {
 		return;
 	}
-	if (fw_store_get(call->params[0], now_ms(), &up) != 0) {
+	if (!find_upload(call->params[0], &view)) {
 		web_api_reject(call, API_ERR_NOT_FOUND, "No such upload");
 		return;
 	}
-	reply_upload(call, &up, 200);
+	reply_upload(call, &view, 200);
 }
 
 /* A decimal integer that fits 32 bits: no sign, no spaces, at least one digit. */
@@ -620,6 +970,38 @@ static bool parse_offset(const struct web_api_request *req, uint32_t *out)
 	return true;
 }
 
+static int chunk_accept(const char *upload_id, uint32_t offset, const uint8_t *data, size_t len)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (is_system_id(upload_id)) {
+		return sys_img_chunk_accept(upload_id, offset, data, len, sys_now_ms());
+	}
+#endif
+	return fw_store_chunk_accept(upload_id, offset, data, len, now_ms());
+}
+
+static void chunk_discard(const char *upload_id)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (is_system_id(upload_id)) {
+		sys_img_chunk_discard(upload_id);
+		return;
+	}
+#endif
+	fw_store_chunk_discard(upload_id);
+}
+
+static void set_active_job(const char *upload_id, const char *job_id)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (is_system_id(upload_id)) {
+		(void)sys_img_set_active_job(upload_id, job_id);
+		return;
+	}
+#endif
+	(void)fw_store_set_active_job(upload_id, job_id);
+}
+
 void v1_write_upload_chunk(struct web_api_call *call)
 {
 	const char *upload_id = call->params[0];
@@ -634,7 +1016,7 @@ void v1_write_upload_chunk(struct web_api_call *call)
 	uint32_t offset;
 	int rc;
 
-	if (!store_ready(call)) {
+	if (!upload_store_ready(call, upload_id)) {
 		return;
 	}
 	if (!parse_offset(call->req, &offset)) {
@@ -655,12 +1037,17 @@ void v1_write_upload_chunk(struct web_api_call *call)
 		break;
 	}
 
-	rc = fw_store_chunk_accept(upload_id, offset, call->octets, call->octets_len, now_ms());
+	rc = chunk_accept(upload_id, offset, call->octets, call->octets_len);
 	switch (rc) {
 	case 0:
 		break;
 	case -ENOENT:
 		web_api_reject(call, API_ERR_NOT_FOUND, "No such upload");
+		return;
+	case -EACCES:
+		web_api_reject(call, API_ERR_INVALID_STATE,
+			       "The running firmware is not confirmed yet, or a swap is pending: "
+			       "slot 2 is not free to overwrite");
 		return;
 	case -EINVAL:
 		web_api_reject(call, API_ERR_INVALID_STATE, "This upload takes no more data");
@@ -669,12 +1056,11 @@ void v1_write_upload_chunk(struct web_api_call *call)
 		web_api_reject(call, API_ERR_BUSY, "The previous chunk is still being written");
 		return;
 	case -ERANGE: {
-		struct fw_upload up;
+		struct upload_view view;
 		char message[64];
 
-		(void)fw_store_get(upload_id, now_ms(), &up);
 		(void)snprintf(message, sizeof(message), "The next acceptable offset is %u",
-			       (unsigned int)up.received_bytes);
+			       find_upload(upload_id, &view) ? (unsigned int)view.received_bytes : 0U);
 		web_api_reject(call, API_ERR_OFFSET_MISMATCH, message);
 		return;
 	}
@@ -694,15 +1080,15 @@ void v1_write_upload_chunk(struct web_api_call *call)
 
 	created = job_create(&params, &job);
 	if (created != JOB_CREATE_NEW) {
-		fw_store_chunk_discard(upload_id);
+		chunk_discard(upload_id);
 		reject_job_create(call, created);
 		return;
 	}
-	(void)fw_store_set_active_job(upload_id, job.id);
+	set_active_job(upload_id, job.id);
 	remember_job(job.id, upload_id);
 	if (submit(&chunk_work, job.id, upload_id, call->octets_len, false) < 0) {
-		fw_store_chunk_discard(upload_id);
-		(void)fw_store_set_active_job(upload_id, NULL);
+		chunk_discard(upload_id);
+		set_active_job(upload_id, NULL);
 		(void)job_fail(job.id, "internal_error", true);
 	}
 	reply_accepted_upload(call, job.id, upload_id);
@@ -721,7 +1107,7 @@ void v1_verify_upload(struct web_api_call *call)
 	enum job_create_result created;
 	int rc;
 
-	if (!store_ready(call)) {
+	if (!upload_store_ready(call, upload_id)) {
 		return;
 	}
 	switch (job_find_by_key(call->scoped_key, call->request_hash, &job)) {
@@ -736,7 +1122,12 @@ void v1_verify_upload(struct web_api_call *call)
 		break;
 	}
 
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	rc = is_system_id(upload_id) ? sys_img_verify_begin(upload_id, sys_now_ms())
+				     : fw_store_verify_begin(upload_id, now_ms());
+#else
 	rc = fw_store_verify_begin(upload_id, now_ms());
+#endif
 	switch (rc) {
 	case 0:
 		break;
@@ -760,12 +1151,29 @@ void v1_verify_upload(struct web_api_call *call)
 		reject_job_create(call, created);
 		return;
 	}
-	(void)fw_store_set_active_job(upload_id, job.id);
+	set_active_job(upload_id, job.id);
 	remember_job(job.id, upload_id);
 	if (submit(&verify_work, job.id, upload_id, 0U, false) < 0) {
 		(void)job_fail(job.id, "internal_error", true);
 	}
 	reply_accepted_upload(call, job.id, upload_id);
+}
+
+/* In use: an install holds it, a chunk is pending, or a check runs. */
+static bool upload_in_use(const char *upload_id)
+{
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	if (is_system_id(upload_id)) {
+		static struct sys_img_upload sys;
+
+		return sys_img_get(upload_id, sys_now_ms(), &sys) == 0 &&
+		       (sys.in_use || sys.chunk_pending || sys.state == SYS_IMG_VERIFYING);
+	}
+#endif
+	static struct fw_upload fw;
+
+	return fw_store_get(upload_id, now_ms(), &fw) == 0 &&
+	       (fw.in_use || fw.chunk_pending || fw.state == FW_UPLOAD_VERIFYING);
 }
 
 void v1_delete_upload(struct web_api_call *call)
@@ -778,10 +1186,10 @@ void v1_delete_upload(struct web_api_call *call)
 		.request_hash = call->request_hash,
 	};
 	struct job_snapshot job;
-	struct fw_upload up;
+	struct upload_view view;
 	enum job_create_result created;
 
-	if (!store_ready(call)) {
+	if (!upload_store_ready(call, upload_id)) {
 		return;
 	}
 	switch (job_find_by_key(call->scoped_key, call->request_hash, &job)) {
@@ -795,13 +1203,12 @@ void v1_delete_upload(struct web_api_call *call)
 	default:
 		break;
 	}
-	if (fw_store_get(upload_id, now_ms(), &up) != 0) {
+	if (!find_upload(upload_id, &view)) {
 		web_api_reject(call, API_ERR_NOT_FOUND, "No such upload");
 		return;
 	}
 	/* Refused before a job exists, so a refusal leaves nothing under the key. */
-	if (up.in_use || up.chunk_pending || up.state == FW_UPLOAD_VERIFYING ||
-	    k_work_is_pending(&delete_work.work)) {
+	if (upload_in_use(upload_id) || k_work_is_pending(&delete_work.work)) {
 		web_api_reject(call, API_ERR_BUSY, "The staged image is in use");
 		return;
 	}
@@ -811,9 +1218,9 @@ void v1_delete_upload(struct web_api_call *call)
 		reject_job_create(call, created);
 		return;
 	}
-	(void)fw_store_set_active_job(upload_id, job.id);
+	set_active_job(upload_id, job.id);
 	if (submit(&delete_work, job.id, upload_id, 0U, false) < 0) {
-		(void)fw_store_set_active_job(upload_id, NULL);
+		set_active_job(upload_id, NULL);
 		(void)job_fail(job.id, "internal_error", true);
 	}
 	web_api_reply_accepted(call, job.id, NULL);
@@ -955,12 +1362,20 @@ void v1_start_coprocessor_update(struct web_api_call *call)
 	};
 	struct coprocessor_updater_state st;
 	struct coprocessor_status cp;
-	struct fw_upload up;
+	static struct fw_upload up;
 	enum job_create_result created;
 	int rc;
 
 	if (fw_store_get(body->upload_id, now_ms(), &up) != 0) {
-		web_api_reject(call, API_ERR_NOT_FOUND, "No such upload");
+		struct upload_view view;
+
+		if (is_system_id(body->upload_id) && find_upload(body->upload_id, &view)) {
+			web_api_reject(call, API_ERR_UNSUPPORTED_TARGET,
+				       "This upload is an STM32 image; install it through "
+				       "/system/updates");
+		} else {
+			web_api_reject(call, API_ERR_NOT_FOUND, "No such upload");
+		}
 		return;
 	}
 	coprocessor_updater_get_state(&st);

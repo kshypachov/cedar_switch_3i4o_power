@@ -43,6 +43,7 @@ target_sources(app PRIVATE
     ${V1_DIR}/logs.c
     ${V1_DIR}/coprocessor.c
     ${V1_DIR}/firmware.c
+    ${V1_DIR}/system_update.c
 )
 
 # Two files of the synthetic corpus (tests/fixtures/esp32/firmware) as byte arrays,

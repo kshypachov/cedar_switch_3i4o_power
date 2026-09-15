@@ -134,7 +134,8 @@ class Client:
 
     def _check(self, method: str, path: str, response: Response) -> None:
         operation = self.app.match(method, f"{BASE}{path}")
-        if operation is None:
+        if operation is None or response.status == 0:
+            # Status 0 is no answer at all (the device is restarting): nothing to check.
             return
         self.seen.add((operation.operation_id, response.status))
         assert response.headers.get("X-Request-ID"), "every response carries X-Request-ID"

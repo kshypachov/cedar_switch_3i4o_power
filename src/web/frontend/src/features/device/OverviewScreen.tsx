@@ -10,6 +10,7 @@ import { formatDuration, uptimeSeconds } from '../../components/format';
 import { Body } from '../../components/Polled';
 import { Card, Facts } from '../../components/ui';
 import { type MessageKey, t } from '../../i18n';
+import { hrefOf, navigate } from '../../state/router';
 import { usePolling } from '../../state/usePolling';
 import { notServed, useSessionGuard } from '../../state/useSessionGuard';
 
@@ -80,7 +81,22 @@ export function OverviewScreen() {
                 rows={[
                   ['overview.model', s.model],
                   ['overview.device_id', <code key="id">{s.device_id}</code>],
-                  ['overview.firmware', <code key="fw">{s.firmware_version}</code>],
+                  [
+                    'overview.firmware',
+                    <span key="fw">
+                      <code>{s.firmware_version}</code>{' '}
+                      <a
+                        href={hrefOf('firmware')}
+                        data-testid="overview-firmware-link"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate('firmware');
+                        }}
+                      >
+                        {t('overview.firmware_update')}
+                      </a>
+                    </span>,
+                  ],
                   ['overview.frontend', <code key="ui">{s.frontend_version}</code>],
                   ['overview.uptime', formatDuration(uptimeSeconds(s.uptime_ms))],
                   ['overview.access_address', <code key="addr">{window.location.host}</code>],

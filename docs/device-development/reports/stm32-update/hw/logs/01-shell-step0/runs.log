@@ -1,0 +1,12 @@
+2026-09-15 17:39:57 flash /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/74321da1-5eaf-4706-9da6-9a8349539b9f/scratchpad/images/step0-53b6af18.signed.bin sha256 53b6af1896cd44eb7da1230496badcf19b5a2334f9a5c64e8cb1c5a6a97029e0
+2026-09-15 17:40:51 write rc 0: [39;49m[0m[39;49m
+[39;49m[0m[00;32mDownload verified successfully
+[39;49m[0m[39;49m
+[39;49m[0m[39;49m[0m
+2026-09-15 17:40:52 reset rc 0
+2026-09-15 17:41:40 cmd 'sysupd status'
+2026-09-15 17:42:03 cmd 'sysupd selfcopy'
+2026-09-15 17:44:45 cmd 'sysupd request test'
+2026-09-15 17:45:02 reset rc 0
+2026-09-15 17:46:38 cmd 'sysupd confirm'
+2026-09-15 17:47:05 reset rc 0

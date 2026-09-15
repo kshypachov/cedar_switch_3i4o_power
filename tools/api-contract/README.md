@@ -72,7 +72,7 @@ trustworthy than the one it replaced.
 
 ## What the mock is, at two levels
 
-**Coverage.** All thirty-five declared operations answer with something that
+**Coverage.** All thirty-seven declared operations answer with something that
 validates against their own response schema, at the status the document declares.
 This is the contract test section 12 asks for, and it is why the generated client
 of P2 can be exercised at all.
@@ -88,6 +88,7 @@ because a frontend cannot be debugged against a server that always says yes:
 | wifi scan | `202` and a job, then results under the job id; one scenario fills the 64-record limit and reports `truncated=true` |
 | upload | `received_bytes` advancing only when the chunk's job completes, `409 offset_mismatch`, `verify` reaching `ready`, `capability_unavailable` for OTA |
 | capabilities | `esp32_ota.available=false` with `reason="not_implemented"`, so the UI shows the reason rather than a disabled placeholder |
+| STM32 update | an MCUboot image parsed from the bytes received, `preparing → requesting → rebooting`, a real restart with a dark period for the swap, the new image unconfirmed with a countdown, `succeeded` on expiry, `rolled_back` on a restart before it |
 
 Everything else answers with a fixed, plausible snapshot. Logs are the one
 in-between case: the ring's hard parts belong to `log-store`'s sim suite, but the
@@ -202,6 +203,29 @@ the way an empty coprocessor gets its first firmware:
 | A finished install sets the coprocessor `ready` with the image's version (`failed` when it did not come back) | a C6 that had no firmware now has some |
 | A reboot keeps the file (up to the last flushed chunk; a verification in progress starts over) and the update journal: an install cut short becomes `last_update.state="interrupted"` with `error.code="boot_changed"`, `recovery_required` true once `begin` was reached (and the coprocessor `failed`), no job continues, the file stays `ready` | the contract's reconciliation after a restart: no automatic destructive continuation |
 
+The STM32 update stage (`mock/mcuboot.py`, `mock/system.py`; the device in
+`modules/system-image-store`, `modules/system-updater` and `src/web/api/v1`,
+`reports/stm32-update`) added an upload target and an install that finishes on
+the far side of a restart. The rules, and where the contract left the choice to
+the mock (marked `DECISION` in the code):
+
+| Rule | Why |
+|---|---|
+| `UploadRequest.target` absent is `esp32c6`; `Upload.target` is always present. One upload exists across both targets: another one is `409 busy` | api-contract.md "Обновление STM32" |
+| A `stm32u585` upload: `limits.system_upload_max_bytes` 4128768 (4 MiB less the 64 KiB trailer sector), larger is `413`; no LittleFS space check (`storage_free_bytes` does not apply) | the bytes go into slot 2; only metadata is on LittleFS |
+| `createUpload` for `stm32u585` is `409 invalid_state` while the running image is unconfirmed or a swap is requested. DECISION: order `busy` (another upload), `invalid_state`, then `413` | slot 2 holds the previous firmware until confirmation |
+| Verification parses the bytes (not `verify_result`): declared SHA-256 first (`invalid_image`), then magic (`invalid_image`), header size 0x400 (`unsupported_target`), PIC/encrypted/RAM-load/non-bootable/compressed flags (`invalid_image`), protected and TLV areas where the header says and the file ending with the TLV area (`invalid_image`), the TLV SHA-256 over header + body + protected TLV, where a SHA-256 entry of the wrong length is refused rather than skipped (`invalid_image`), an image body too short for two vector words (`invalid_image`), then the vector table: SP in (0x20000000, 0x200C0000] or (0x70000000, 0x70800000], reset vector odd in [0x02000400, 0x02400000) (`unsupported_target`) | what MCUboot checks, plus what tells an image for another board apart |
+| A verified image: `format="mcuboot_image"`, `kind="app"`, `version` `major.minor.revision+build`, `partition_layout_id`/`host_protocol` `null`, `signature_verified=null`, `allowed_methods=["ota"]`; `firmware_formats` is `["raw_full_flash","mcuboot_image"]` | the contract's FirmwareImage for STM32 |
+| `startCoprocessorUpdate` with a `stm32u585` upload is `422 unsupported_target`, right after the upload is found. DECISION: the contract names this only for the other direction | an STM32 image must not reach the C6 |
+| `startSystemUpdate` refusals in order: unknown upload `404`; not `stm32u585` `422 unsupported_target`; an STM32 or coprocessor install running, or a network transaction `applying`/`awaiting_confirmation`, `409 busy`; running image unconfirmed `409 invalid_state`; upload not `ready` `409 invalid_state`; version lower than running without `acknowledge_downgrade` `422 validation_failed` (the build number counts; the same version is allowed) | api-contract.md order |
+| Job `system_update`, `resource_url=/api/v1/system/firmware`: `queued`, `preparing` (cancellable), `requesting`, `rebooting` (not cancellable); it parks in `rebooting` and never succeeds. `swap_pending` is true from the end of `requesting`. A cancelled install frees the upload and records nothing | the restart ends the job |
+| When `rebooting` ends the device restarts: new `boot_id`, sessions and jobs gone (job `404`), and for `system_swap_ms` every request except `/__mock` gets no response (the HTTP adapter closes the connection). Uptime starts after the swap | a frontend must see the device vanish |
+| After the swap: `running` is the new version and hash, `confirmed=false`, `confirm_remaining_seconds` counts down from `system_confirm_seconds` (rounded down), `last_update` `awaiting_confirmation` with `from_version`/`version`; the upload is gone (`404`); `SystemStatus.firmware_version` follows. On expiry: `confirmed=true`, `succeeded`, remaining `null` | the owner's 20-minute self-confirmation |
+| A restart while unconfirmed (`POST /__mock/reboot`) swaps back after `system_swap_ms`: old version, `rolled_back`, `error.code="boot_changed"` | MCUboot reverts a test image that was not confirmed |
+| `system_swap_result=rejected`: after the dark period the old firmware runs, `failed` with `invalid_image`; `hangs`: dark for twice `system_swap_ms`, `failed` with `internal_error` | MCUboot refusing slot 2; a new image the watchdog resets |
+| A restart before the swap was requested (`queued`/`preparing`/`requesting` not yet done): no dark period, `interrupted` with `boot_changed`, the upload stays `ready` | nothing reached slot 2's trailer |
+| `SystemFirmware.update` and `features.stm32_update` agree: unavailable with `reason="firmware_unconfirmed"` while unconfirmed, `"update_running"` during an install. DECISION: both reason strings | the contract names no reason |
+
 ## The control plane
 
 `/__mock/*` — outside `/api/v1`, which the device never serves, so nothing here
@@ -209,11 +233,11 @@ can be mistaken for the contract:
 
 | Request | Effect |
 |---|---|
-| `GET /__mock/state` | a debugging dump: uptime, revision, scenario, staged transaction, upload |
+| `GET /__mock/state` | a debugging dump: uptime, revision, scenario, staged transaction, upload, the STM32 firmware (`system`), and `unreachable_for_ms` (the rest of a swap's dark period). It answers during the dark period |
 | `POST /__mock/reset` | a fresh device, optionally `{"scenario": {...}}` |
 | `POST /__mock/advance` | `{"seconds": N}` skips time |
 | `POST /__mock/scenario` | change one knob without a reset |
-| `POST /__mock/reboot` | a new boot of the same device: new `boot_id`, uptime from zero, sessions, jobs, log rings and transactions gone; the password, the committed network configuration, the staged firmware file and the update outcome kept (an install in progress becomes `interrupted`) |
+| `POST /__mock/reboot` | a new boot of the same device: new `boot_id`, uptime from zero, sessions, jobs, log rings and transactions gone; the password, the committed network configuration, the staged firmware file and the update outcome kept (an install in progress becomes `interrupted`). For the STM32: a requested swap is performed and an unconfirmed new image is rolled back, each with a dark period of `system_swap_ms` - this is the power cut |
 
 It exists for two things a frontend has to handle that are otherwise unreachable
 in a test: a 120-second confirmation timeout, and the paths only a
@@ -252,7 +276,7 @@ hole.
 
 ## Testing
 
-233 tests. The schema check is not one of them — it is in `Client._check` in
+464 tests. The schema check is not one of them — it is in `Client._check` in
 `tests/conftest.py` and runs on every call in every file, for successes and for
 rejections alike, along with the assertion that a rejection's `request_id`
 matches its `X-Request-ID` header. If only one test validated responses, every
@@ -264,13 +288,14 @@ Layout:
 |---|---|
 | `test_error_body.py` | the transcription against the C source, and the serialiser |
 | `test_document_checks.py` | each check on the real document, and on a copy with one thing broken |
-| `test_mock_coverage.py` | all thirty-five operations reached, at their declared statuses |
+| `test_mock_coverage.py` | all thirty-seven operations reached, at their declared statuses |
 | `test_mock_auth.py` | setup, login, session lifetimes, the password change |
 | `test_mock_jobs.py` | the sequence a poller sees, cancellation, parking |
 | `test_mock_network.py` | the transaction's every edge, and the business rules with their field codes |
 | `test_mock_wifi.py` | the awkward access points, and `truncated` |
 | `test_mock_matter.py` | the window, the codes, the fabric table |
 | `test_mock_firmware.py` | the offset rule, verification outcomes, the install |
+| `test_mock_system.py` | the STM32 upload and image check, the install, the swap, confirmation, rollback, the dark period |
 | `test_mock_logs.py` | filters, the cursor, the export |
 | `test_mock_middleware.py` | the order of the checks, idempotency, bodies, routing |
 | `test_mock_control.py` | `/__mock` |

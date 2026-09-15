@@ -19,20 +19,29 @@ bootloader, partition table, blank otadata and application, written from 0x0.
 That makes every image a `recovery_bundle` that needs `acknowledge_recovery`,
 and it makes an install the way an empty or broken coprocessor gets firmware,
 so the coprocessor's state no longer gates it — only who owns the UART does.
+
+The STM32 update stage gave an upload a `target`. A `stm32u585` upload goes
+straight into MCUboot's slot 2 on the device, so the mock keeps its bytes and
+verification parses them as an MCUboot image (mcuboot.py) instead of reading a
+scenario knob; the install is `system.py`'s. One upload exists at a time, of
+either target.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
-from typing import Any
+import hashlib
+from dataclasses import dataclass, field, replace
+from typing import TYPE_CHECKING, Any
 
 from ..errors import ApiError, error
+from . import mcuboot
 from .clock import Clock
 from .constants import (
     FIRMWARE_DELETE_MS,
     FIRMWARE_VERIFY_MS,
     INSTALL_PHASE_MS,
     QUEUE_MS,
+    SYSTEM_UPLOAD_MAX_BYTES,
     UPLOAD_CHUNK_BYTES,
     UPLOAD_CHUNK_MS,
     UPLOAD_MAX_BYTES,
@@ -40,6 +49,12 @@ from .constants import (
 from .jobs import Job, JobStore, Step
 from .scenario import Scenario
 from .util import deep_copy, detail
+
+if TYPE_CHECKING:
+    from .system import System
+
+STM32 = "stm32u585"
+ESP32 = "esp32c6"
 
 #: The one partition layout the device accepts: nvs, otadata, phy_init and two
 #: application slots of 0x1c0000 (1792 KiB) on 4 MB flash.
@@ -70,10 +85,16 @@ class Upload:
     image: dict[str, Any] | None = None
     error: ApiError | None = None
     installing: bool = False
+    target: str = ESP32
+    #: The bytes on storage, kept for a `stm32u585` upload only (verified by parsing).
+    data: bytearray = field(default_factory=bytearray)
+    #: The MCUboot TLV SHA-256 of a verified `stm32u585` image.
+    image_hash: str | None = None
 
     def to_json(self) -> dict[str, object]:
         return {
             "id": self.id,
+            "target": self.target,
             "filename": self.filename,
             "size_bytes": self.size_bytes,
             "received_bytes": self.received_bytes,
@@ -94,6 +115,8 @@ class Firmware:
         self._scenario = scenario
         self.upload: Upload | None = None
         self._counter = 0
+        #: Set by the device state: what may keep slot 2 from taking an upload.
+        self.system: System | None = None
 
     def find(self, upload_id: str) -> Upload:
         if self.upload is None or self.upload.id != upload_id:
@@ -115,21 +138,36 @@ class Firmware:
                     "busy",
                     f"Upload {self.upload.id} is {self.upload.state!r}; delete it first",
                 )
-        if body["size_bytes"] > UPLOAD_MAX_BYTES:
-            raise error(
-                "payload_too_large",
-                f"The image is larger than the {UPLOAD_MAX_BYTES} byte limit",
-            )
-        if body["size_bytes"] > self._scenario.storage_free_bytes:
-            # Checked before the first byte and held for the whole upload, so
-            # the refusal arrives up front rather than at a failed write.
-            raise error("storage_full", "Not enough free space on the device for this image")
+        target = body.get("target", ESP32)
+        if target == STM32:
+            # DECISION: busy (another upload), then invalid_state (slot 2 not
+            # free), then the size; the contract lists the three without an order.
+            blocked = self.system.upload_blocked() if self.system is not None else None
+            if blocked is not None:
+                raise error("invalid_state", blocked)
+            if body["size_bytes"] > SYSTEM_UPLOAD_MAX_BYTES:
+                raise error(
+                    "payload_too_large",
+                    f"The image is larger than slot 2 can hold ({SYSTEM_UPLOAD_MAX_BYTES} bytes)",
+                )
+            # No space check: on the device only the metadata goes to LittleFS.
+        else:
+            if body["size_bytes"] > UPLOAD_MAX_BYTES:
+                raise error(
+                    "payload_too_large",
+                    f"The image is larger than the {UPLOAD_MAX_BYTES} byte limit",
+                )
+            if body["size_bytes"] > self._scenario.storage_free_bytes:
+                # Checked before the first byte and held for the whole upload, so
+                # the refusal arrives up front rather than at a failed write.
+                raise error("storage_full", "Not enough free space on the device for this image")
         self._counter += 1
         self.upload = Upload(
             id=f"upload_{self._counter:04x}",
             filename=body["filename"],
             size_bytes=body["size_bytes"],
             sha256=body["sha256"],
+            target=target,
         )
         return self.upload
 
@@ -151,8 +189,11 @@ class Firmware:
             raise error("validation_failed", "The chunk runs past the declared size")
 
         written = len(data)
+        chunk = bytes(data)
 
         def flushed() -> None:
+            if upload.target == STM32:
+                upload.data += chunk
             upload.received_bytes += written
             upload.active_job_id = None
 
@@ -176,16 +217,25 @@ class Firmware:
             )
         if upload.active_job_id is not None:
             raise error("busy", "A chunk is still being written")
-        code, message = _VERIFY_OUTCOMES.get(self._scenario.verify_result, (None, None))
-        ok = self._scenario.verify_result == "ok"
-        if not ok and code is None:
-            raise ValueError(f"unknown verify_result {self._scenario.verify_result!r}")
+        image_hash: str | None = None
+        if upload.target == STM32:
+            code, message, image = _check_stm32(upload)
+            ok = image is not None
+            if image is not None:
+                image_hash = image.image_hash
+        else:
+            code, message = _VERIFY_OUTCOMES.get(self._scenario.verify_result, (None, None))
+            ok = self._scenario.verify_result == "ok"
+            if not ok and code is None:
+                raise ValueError(f"unknown verify_result {self._scenario.verify_result!r}")
+            image = None
 
         def verified() -> None:
             upload.active_job_id = None
             if ok:
                 upload.state = "ready"
-                upload.image = _image_json()
+                upload.image = _image_json() if image is None else _stm32_image_json(image)
+                upload.image_hash = image_hash
                 upload.error = None
             else:
                 upload.state = "failed"
@@ -298,6 +348,37 @@ def _image_json() -> dict[str, object]:
     }
 
 
+def _check_stm32(upload: Upload) -> tuple[str | None, str | None, mcuboot.McubootImage | None]:
+    """The declared digest first: damage in transfer explains any structural
+    error too, so it is the one reported (firmware-store's rule)."""
+    if hashlib.sha256(bytes(upload.data)).hexdigest() != upload.sha256:
+        return (
+            "invalid_image",
+            "The file's SHA-256 does not match the one declared when the upload was created",
+            None,
+        )
+    try:
+        return None, None, mcuboot.check(bytes(upload.data))
+    except mcuboot.ImageRejected as rejected:
+        return rejected.code, rejected.message, None
+
+
+def _stm32_image_json(image: mcuboot.McubootImage) -> dict[str, object]:
+    """An application signed by imgtool. `allowed_methods` is `ota`: installed
+    over the network and swapped in by MCUboot. No layout or host protocol."""
+    return {
+        "format": "mcuboot_image",
+        "format_version": None,
+        "target": STM32,
+        "version": image.version,
+        "kind": "app",
+        "partition_layout_id": None,
+        "host_protocol": None,
+        "signature_verified": None,
+        "allowed_methods": ["ota"],
+    }
+
+
 class Coprocessor:
     """C6 status and the UART install job.
 
@@ -394,6 +475,14 @@ class Coprocessor:
                 "A coprocessor update must be requested over Ethernet",
             )
         upload = self._firmware.find(body["upload_id"])
+        if upload.target != ESP32:
+            # DECISION: the contract names the refusal only for the other
+            # direction (a coprocessor file sent to startSystemUpdate); the same
+            # code, right after the upload is found.
+            raise error(
+                "unsupported_target",
+                "This upload is an STM32 image; install it with POST /system/updates",
+            )
         if self.updating():
             raise error("busy", "A coprocessor update is already running")
         if upload.state != "ready":

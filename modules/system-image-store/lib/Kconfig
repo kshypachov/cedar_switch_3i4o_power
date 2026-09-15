@@ -1,0 +1,60 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig SYSTEM_IMAGE_STORE
+	bool "Staged STM32 image in MCUboot's secondary slot"
+	depends on FILE_SYSTEM
+	select CRC
+	help
+	  One upload of the STM32 application (zephyr.signed.bin) written
+	  straight into MCUboot slot 2, with durable metadata on the file
+	  system: chunks that count only once read back from flash, recovery
+	  after a reboot, expiry, and the check of the image itself
+	  (mcuboot_image.h). SHA-256 comes from PSA (PSA_WANT_ALG_SHA_256).
+	  See include/system_image_store/system_image_store.h.
+
+if SYSTEM_IMAGE_STORE
+
+config SYSTEM_IMAGE_STORE_CHUNK_MAX
+	int "Largest chunk, in bytes (the staging buffer)"
+	default 16384
+	range 512 16384
+	help
+	  limits.upload_chunk_bytes. One buffer of this size holds the chunk
+	  between the HTTP thread and the worker that writes it.
+
+config SYSTEM_IMAGE_STORE_EXPIRE_SECONDS
+	int "An upload untouched this long is forgotten, in seconds of uptime"
+	default 86400
+	range 1 2592000
+	help
+	  The contract's 24 hours of uptime without activity. Not while an
+	  install uses the upload, a chunk is pending or a check runs.
+
+config SYSTEM_IMAGE_STORE_READ_BUF
+	int "Read buffer of the check and the read-back, in bytes"
+	default 4096
+	range 512 16384
+
+config SYSTEM_IMAGE_STORE_SECTOR_MAX
+	int "Largest erase sector of the slot, in bytes (the repair buffer)"
+	default 4096
+	range 512 65536
+	help
+	  A chunk that begins in the middle of a sector whose remaining bytes
+	  cannot be programmed to it keeps the sector's accepted prefix in a
+	  buffer of this size while the sector is erased.
+
+config SYSTEM_IMAGE_STORE_TLV_MAX
+	int "Largest protected + unprotected TLV area accepted, in bytes"
+	default 2048
+	range 64 16384
+	help
+	  imgtool without a signature writes a 40-byte TLV area; dependencies
+	  and security counters add protected TLVs. A larger area is refused
+	  as invalid_image.
+
+module = SYSTEM_IMAGE_STORE
+module-str = system_image_store
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # SYSTEM_IMAGE_STORE

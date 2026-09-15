@@ -22,6 +22,7 @@ import type {
   OnboardingCodes,
   ScanResults,
   Session,
+  SystemFirmware,
   SystemStatus,
   Upload,
 } from '../api/types';
@@ -134,11 +135,13 @@ export const capabilities: Capabilities = {
     esp32_logs: { available: false, reason: 'not_implemented' },
     esp32_ota: { available: false, reason: 'not_implemented' },
     esp32_uart: { available: false, reason: 'not_implemented' },
+    stm32_update: { available: false, reason: 'not_implemented' },
   },
   limits: {
     json_body_bytes: 8192,
     upload_chunk_bytes: 16384,
     upload_max_bytes: 1900544,
+    system_upload_max_bytes: 4128768,
     log_page_records: 100,
     scan_records: 64,
     commissioning_min_seconds: 180,
@@ -149,6 +152,72 @@ export const capabilities: Capabilities = {
   wifi_security_modes: ['open', 'wpa2_psk', 'wpa3_sae'],
   firmware_formats: ['raw_full_flash'],
   update_requires_ethernet: true,
+};
+
+/** The STM32 update is served. */
+export const capabilitiesSystemUpdate: Capabilities = {
+  ...capabilities,
+  features: { ...capabilities.features, stm32_update: { available: true, reason: null } },
+  firmware_formats: ['raw_full_flash', 'mcuboot_image'],
+};
+
+const RUNNING_HASH = '0013e3f0a1b2c3d4e5f60718293a4b5c6d7e8f90112233445566778899aabbcc';
+
+export const systemFirmwareConfirmed: SystemFirmware = {
+  running: { version: '1.0.0+0', image_hash: RUNNING_HASH, confirmed: true },
+  confirm_remaining_seconds: null,
+  swap_pending: false,
+  update: { available: true, reason: null },
+  last_update: null,
+};
+
+export const systemFirmwareAwaiting: SystemFirmware = {
+  running: { version: '1.1.0+0', image_hash: 'cebf55bd'.padEnd(64, '0'), confirmed: false },
+  confirm_remaining_seconds: 1140,
+  swap_pending: false,
+  update: { available: true, reason: null },
+  last_update: {
+    job_id: 'job_00000201',
+    state: 'awaiting_confirmation',
+    from_version: '1.0.0+0',
+    version: '1.1.0+0',
+    error: null,
+  },
+};
+
+export const systemFirmwareSucceeded: SystemFirmware = {
+  ...systemFirmwareAwaiting,
+  running: { ...systemFirmwareAwaiting.running, confirmed: true },
+  confirm_remaining_seconds: null,
+  last_update: { ...systemFirmwareAwaiting.last_update!, state: 'succeeded' },
+};
+
+export const systemFirmwareRolledBack: SystemFirmware = {
+  ...systemFirmwareConfirmed,
+  last_update: {
+    job_id: 'job_00000201',
+    state: 'rolled_back',
+    from_version: '1.0.0+0',
+    version: '1.1.0+0',
+    error: {
+      code: 'boot_changed',
+      message: 'The device restarted before the new firmware was confirmed; MCUboot restored the previous one',
+      request_id: 'req_00000201',
+      retryable: false,
+    },
+  },
+};
+
+export const systemImage: FirmwareImage = {
+  format: 'mcuboot_image',
+  format_version: null,
+  target: 'stm32u585',
+  version: '1.1.0+0',
+  kind: 'app',
+  partition_layout_id: null,
+  host_protocol: null,
+  signature_verified: null,
+  allowed_methods: ['ota'],
 };
 
 /** P6: the UART updater is served; OTA stays outside the first version. */
@@ -218,6 +287,7 @@ const SHA = '750cb58e2c3692cae0d8b6abd6d89346765b735316d75d5392e73cae7f82cb77';
 
 export const uploadReceiving: Upload = {
   id: 'upload_0001',
+  target: 'esp32c6',
   filename: 'merged-binary.bin',
   size_bytes: 40000,
   received_bytes: 0,
@@ -305,6 +375,24 @@ export const installFailed: Job = {
     retryable: false,
   },
 };
+
+export const systemUploadReceiving: Upload = {
+  ...uploadReceiving,
+  id: 'upload_0002',
+  target: 'stm32u585',
+  filename: 'zephyr.signed.bin',
+};
+export const systemUploadReady: Upload = { ...systemUploadReceiving, received_bytes: 40000, state: 'ready', image: systemImage };
+
+export const systemInstallRequesting: Job = firmwareJob({
+  id: 'job_00000201',
+  kind: 'system_update',
+  state: 'running',
+  phase: 'requesting',
+  cancellable: false,
+  resource_url: '/api/v1/system/firmware',
+});
+export const systemInstallRebooting: Job = { ...systemInstallRequesting, phase: 'rebooting' };
 
 export const accepted = (jobId: string, resource: string | null): JobAccepted => ({
   job_id: jobId,
@@ -754,4 +842,14 @@ export const all: Record<string, [string, unknown]> = {
   installWriting: ['Job', installWriting],
   installSucceeded: ['Job', installSucceeded],
   installFailed: ['Job', installFailed],
+  capabilitiesSystemUpdate: ['Capabilities', capabilitiesSystemUpdate],
+  systemFirmwareConfirmed: ['SystemFirmware', systemFirmwareConfirmed],
+  systemFirmwareAwaiting: ['SystemFirmware', systemFirmwareAwaiting],
+  systemFirmwareSucceeded: ['SystemFirmware', systemFirmwareSucceeded],
+  systemFirmwareRolledBack: ['SystemFirmware', systemFirmwareRolledBack],
+  systemImage: ['FirmwareImage', systemImage],
+  systemUploadReceiving: ['Upload', systemUploadReceiving],
+  systemUploadReady: ['Upload', systemUploadReady],
+  systemInstallRequesting: ['Job', systemInstallRequesting],
+  systemInstallRebooting: ['Job', systemInstallRebooting],
 };

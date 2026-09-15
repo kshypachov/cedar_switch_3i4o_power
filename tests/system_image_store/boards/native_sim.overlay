@@ -1,0 +1,28 @@
+/*
+ * The sim flash grown to 8 MiB: above everything native_sim already defines, a
+ * 4 MiB partition standing in for MCUboot's slot 2 and a 1 MiB partition for the
+ * metadata's LittleFS volume.
+ */
+
+&flashcontroller0 {
+	reg = <0x00000000 DT_SIZE_K(8192)>;
+};
+
+&flash0 {
+	reg = <0x00000000 DT_SIZE_K(8192)>;
+	ranges = <0x0 0x0 DT_SIZE_K(8192)>;
+
+	partitions {
+		sysimg_slot_partition: partition@200000 {
+			compatible = "zephyr,mapped-partition";
+			label = "sysimg_slot";
+			reg = <0x00200000 0x00400000>;
+		};
+
+		sysimg_lfs_partition: partition@600000 {
+			compatible = "zephyr,mapped-partition";
+			label = "sysimg_lfs";
+			reg = <0x00600000 0x00100000>;
+		};
+	};
+};

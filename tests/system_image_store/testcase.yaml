@@ -1,0 +1,17 @@
+tests:
+  cedar.system_image_store:
+    # system-image-store: chunk/offset, retry and wrong offset, the sector-erase
+    # rule and its repair, the trailer erased on create, the slot lock, the size
+    # limit, recovery after a "reboot" (remount and init) including a crash
+    # between the flash write and the metadata, expiry; the MCUboot image check
+    # on the synthetic corpus (tests/fixtures/stm32). Slot on the sim flash,
+    # metadata on LittleFS. Runs in the Linux container - see
+    # tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - system_image_store
+      - sim
