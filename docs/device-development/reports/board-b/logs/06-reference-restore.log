@@ -1,0 +1,61 @@
+recovery on /dev/cu.usbmodem11201 after 1.2 s
+upload rc=0 in 336 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 0e5eb6ee22533621d8982e1faab3f273125388c56d979cbfdb05c5812602ba92
+Split status: N/A (0)
+
+ <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+uart:~$ [00:00:01.675,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+uart:~$ [00:00:01.777,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+uart:~$ [00:00:01.780,000] <err> net_if: Iface 0x20002e48 device not ready
+uart:~$ [00:00:01.782,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20002d10)
+uart:~$ [00:00:01.782,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+uart:~$ [00:00:01.783,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+uart:~$ [00:00:01.783,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+uart:~$ *** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+uart:~$ [00:00:01.918,000] <inf> shell_telnet: Telnet shell backend initialized
+uart:~$ [00:00:01.919,000] <inf> main_app: Start main app (build: Sep 13 2026 20:09:58) version 8
+uart:~$ [00:00:01.920,000] <inf> main_app: PSRAM @0x701cbe58: write/read 1024 words OK
+uart:~$ [00:00:01.946,000] <inf> settings_registry: 6 keys registered, 0 rejected
+uart:~$ [00:00:01.947,000] <inf> io: Start io init
+uart:~$ [00:00:01.949,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+uart:~$ [00:00:01.949,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+uart:~$ [00:00:01.950,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+uart:~$ [00:00:01.980,000] <wrn> web_server: no administrator yet: setup is open on the web page
+uart:~$ [00:00:01.981,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 0cb7f6047410-dirty, frontend 0.1.0+31cfd0a7c580-dirty, boot_a2a99a360bc7bc29
+uart:~$ [00:00:01.985,000] <inf> io: Start io outputs task
+uart:~$ uart:~$ uart:~$ [00:00:03.281,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+uart:~$ [00:00:03.494,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [00:00:03.497,000] <inf> matter: Init CHIP stack
+uart:~$ uart:~$ uart:~$ [00:00:03.900,000] <inf> chip: [SVR]Initializing session resumption storage...
+uart:~$ [00:00:03.902,000] <inf> chip: [SVR]Server initializing...
+uart:~$ uart:~$ [00:00:03.902,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+uart:~$ [00:00:04.011,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+uart:~$ [00:00:04.196,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
+uart:~$ [00:00:04.212,000] <wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved
+uart:~$ [00:00:04.213,000] <inf> net_dhcpv4: Received: 192.168.88.13
+uart:~$ uart:~$ uart:~$ [00:00:04.378,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ uart:~$ [00:00:04.378,000] <inf> matter: Matter start work already submitted
+uart:~$ uart:~$ [00:00:04.429,000] <inf> chip: [DMG]AccessControl: initializing
+uart:~$ [00:00:04.430,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+uart:~$ [00:00:04.430,000] <inf> chip: [DMG]AccessControl: setting
+uart:~$ [00:00:04.431,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+uart:~$ [00:00:04.431,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+uart:~$ [00:00:04.432,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+uart:~$ [00:00:04.433,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+uart:~$ [00:00:04.436,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+uart:~$ uart:~$ uart:~$ [00:00:04.566,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+uart:~$ [00:00:05.297,000] <inf> chip: [ZCL]Using ZAP configuration...
+uart:~$ [00:00:05.404,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [00:00:05.510,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+uart:~$ uart:~$ uart:~$ [00:00:05.674,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [00:00:05.779,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [00:00:05.906,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [00:00:06.011,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [00:00:06.116,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [00:00:06.221,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [00:00:06.226,000] <dbg> chip.LogV: [DL]Boot reason: 1

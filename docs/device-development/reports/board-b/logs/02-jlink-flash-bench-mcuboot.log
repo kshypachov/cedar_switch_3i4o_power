@@ -1,0 +1,84 @@
+SEGGER J-Link Commander V9.76 (Compiled Sep  9 2026 15:13:15)
+DLL version V9.76, compiled Sep  9 2026 15:11:46
+
+J-Link Commander will now exit on Error
+
+J-Link Command File read successfully.
+Processing script file...
+J-Link>r
+J-Link connection not established yet but required for command.
+Connecting to J-Link ...O.K.
+Firmware: J-Link V11 compiled Apr  1 2025 10:02:30
+Hardware version: V11.00
+J-Link uptime (since boot): 0d 02h 14m 16s
+S/N: 941000024
+License(s): RDI,FlashBP,FlashDL,JFlash,GDB
+USB speed mode: High speed (480 MBit/s)
+VTref=3.264V
+Target connection not established yet but required for command.
+Device "STM32U585AI" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+SWD selected. Executing JTAG -> SWD switching sequence.
+DAP initialized successfully.
+InitTarget() end - Took 8.71ms
+Found SW-DP with ID 0x0BE12477
+DPIDR: 0x0BE12477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[1]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x14770015, ADDR: 0x00000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FE000
+CPUID register: 0x410FD214. Implementer code: 0x41 (ARM)
+Feature set: Mainline
+Cache: No cache
+Found Cortex-M33 r0p4, Little endian.
+FPUnit: 8 code (BP) slots and 0 literal slots
+Security extension: not implemented
+CoreSight components:
+ROMTbl[0] @ E00FE000
+[0][0]: E00FF000 CID B105100D PID 000BB4C9 ROM Table
+ROMTbl[1] @ E00FF000
+[1][0]: E000E000 CID B105900D PID 000BBD21 DEVARCH 47702A04 DEVTYPE 00 Cortex-M33
+[1][1]: E0001000 CID B105900D PID 000BBD21 DEVARCH 47701A02 DEVTYPE 00 DWT
+[1][2]: E0002000 CID B105900D PID 000BBD21 DEVARCH 47701A03 DEVTYPE 00 FPB
+[1][3]: E0000000 CID B105900D PID 000BBD21 DEVARCH 47701A01 DEVTYPE 43 ITM
+[1][5]: E0041000 CID B105900D PID 001BBD21 DEVARCH 47724A13 DEVTYPE 13 ETM
+[1][6]: E0042000 CID B105900D PID 000BBD21 DEVARCH 47701A14 DEVTYPE 14 CSS600-CTI
+[0][1]: E0040000 CID B105900D PID 000BBD21 DEVARCH 00000000 DEVTYPE 11 TPIU
+[0][2]: E0044000 CID B105F00D PID 000A0000 ???
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M33 identified.
+Reset delay: 0 ms
+Reset type: NORMAL (https://kb.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+J-Link>loadfile <build>/mcuboot/zephyr/zephyr.hex
+'loadfile': Performing implicit reset & halt of MCU.
+Reset type: NORMAL (https://kb.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+Downloading file [<build>/mcuboot/zephyr/zephyr.hex]...
+Comparing flash   [000%]000%]050%]050%]060%]060%]075%]075%]090%]090%]100%] Done.
+Erasing flash     [000%]000%]100%] Done.
+Programming flash [000%]000%]005%]005%]010%]010%]020%]020%]025%]025%]035%]035%]040%]040%]050%]050%]055%]055%]060%]060%]070%]070%]075%]075%]085%]085%]090%]090%]100%] Done.
+Verifying flash   [000%]000%]100%] Done.
+J-Link: Flash download: Bank 0 @ 0x08000000: 1 range affected (114688 bytes)
+J-Link: Flash download: Total: 0.971s (Prepare: 0.125s, Compare: 0.210s, Erase: 0.021s, Program: 0.416s, Verify: 0.103s, Restore: 0.093s)
+J-Link: Flash download: Program & Verify speed: 215 KB/s
+O.K.
+J-Link>verifybin <build>/mcuboot/zephyr/zephyr.bin 0x08000000
+Loading binary file <build>/mcuboot/zephyr/zephyr.bin
+Reading 110384 bytes data from target memory @ 0x08000000.
+Verify successful.
+J-Link>q
+
+Script processing completed.
+
+OnDisconnectTarget() start
+OnDisconnectTarget() end - Took 527us

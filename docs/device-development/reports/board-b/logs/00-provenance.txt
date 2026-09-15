@@ -1,0 +1,12 @@
+HEAD 0cb7f60474103ff24b6f1ccd0d234a33043d093f
+Sun Sep 13 20:07:42 EEST 2026
+ M src/diagnostic/storage_bench.c
+?? docs/device-development/NEXT-P3-SESSION.md
+?? docs/device-development/reports/p3/tuning/
+
+reference app zephyr.signed.bin:
+bbbb1d23b35bd86ddf468f46728dbd7550e0873a91ccd59edb85253d15bbea7f  zephyr.signed.bin
+MCUboot TLV image hash on board: 0e5eb6ee22533621d8982e1faab3f273125388c56d979cbfdb05c5812602ba92
+
+board B internal flash before any change (read after reset-halt), first 85872 bytes identical to the project MCUboot, rest 0xFF:
+597cd5b33e9b0af83bc946cf3bbbca5378f0a74778492fdd48c9ff234fcb53aa  board_b_internal_backup_halted.bin

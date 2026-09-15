@@ -1,0 +1,6 @@
+r
+loadfile <build>/mcuboot/zephyr/zephyr.hex
+verifybin <build>/mcuboot/zephyr/zephyr.bin 0x08000000
+r
+g
+q

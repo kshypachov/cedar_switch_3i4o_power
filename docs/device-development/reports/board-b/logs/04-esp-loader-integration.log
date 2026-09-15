@@ -1,0 +1,19 @@
+# Transcribed from the run output (the capture file was later overwritten by the next test).
+# Image: tests/esp_loader_integration, uploaded to slot0 over MCUboot CDC recovery in 10 s,
+# MCUboot image hash 593d36f1034f7bfcb74b65b8b2507fe47df124e01ae385ba913f9f594ca222c1.
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: PSRAM write/read: PASS
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Jumping to the first image slot
+*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[00:00:00.005,000] <inf> esp_loader_check: esp-serial-flasher integration check
+[00:00:00.013,000] <inf> esp_loader_check: connecting: 10 trials, 100 ms sync timeout
+[I] esf: Connected - target: ESP32-C6
+[00:00:00.543,000] <inf> esp_loader_check: connected, target reports: ESP32-C6
+[00:00:00.651,000] <inf> esp_loader_check: target released to normal boot
+[00:00:00.658,000] <inf> esp_loader_check: PASS

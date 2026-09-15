@@ -1,0 +1,32 @@
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 5c 6c 0 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 5c 6c 0 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: 55 55 16 d1 da 55 54 cc 55 4f 56 d5 4 5d 55 55
+I: 57 58 5c dd 45 d5 55 55 57 55 55 5c 55 d5 54 55
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+
+=== line-drive diagnostic ===
+pull-up=1 & pull-down=0 -> line floating, nothing drives it
+pull-up=0              -> something actively holds it low
+
+  C6 running       RX(PC11): pull-up=0 pull-down=1 | TX(PC10) pull-up=1
+  C6 in reset      RX(PC11): pull-up=1 pull-down=0 | TX(PC10) pull-up=1
+  C6 released      RX(PC11): pull-up=0 pull-down=0 | TX(PC10) pull-up=1
+=== done ===
