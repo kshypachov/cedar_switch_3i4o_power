@@ -30,9 +30,11 @@ def test_the_document_passes_every_check(document: Document) -> None:
 def test_the_document_has_the_surface_the_plan_describes(document: Document) -> None:
     """Pinned, so that adding an operation is a deliberate act that updates the
     plan rather than a number nobody notices changing."""
-    assert len(document.operations) == 35
-    assert len(document.raw["paths"]) == 29
-    assert len(document.schemas) == 48
+    # 37 since the STM32 update stage: getSystemFirmware and startSystemUpdate,
+    # with SystemFirmware, SystemUpdateSummary and SystemUpdateRequest.
+    assert len(document.operations) == 37
+    assert len(document.raw["paths"]) == 31
+    assert len(document.schemas) == 51
 
 
 def test_all_five_checks_run() -> None:

@@ -4,7 +4,7 @@
 Stage P1's criterion is "the mock is usable by the frontend". Two levels follow
 from that, and they are deliberately not the same thing:
 
-**Coverage.** All thirty-five declared operations answer with something that
+**Coverage.** All thirty-seven declared operations answer with something that
 validates against their own response schema. This is what the contract test
 asserts, and it is what lets the generated client be exercised at all.
 

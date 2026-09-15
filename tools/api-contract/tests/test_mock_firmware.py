@@ -299,8 +299,13 @@ def test_verification_describes_a_whole_flash_image(harness: Harness) -> None:
     }
 
 
-def test_capabilities_name_the_one_accepted_format(harness: Harness) -> None:
-    assert harness.client.get("/capabilities").json["firmware_formats"] == ["raw_full_flash"]
+def test_capabilities_name_the_accepted_formats(harness: Harness) -> None:
+    """The coprocessor's whole flash image, and since the STM32 update stage the
+    MCUboot image of the STM32 itself."""
+    assert harness.client.get("/capabilities").json["firmware_formats"] == [
+        "raw_full_flash",
+        "mcuboot_image",
+    ]
 
 
 def test_a_failed_verification_leaves_the_reason_on_the_upload(document: Document) -> None:

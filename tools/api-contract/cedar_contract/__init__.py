@@ -5,7 +5,7 @@ Two deliverables of stage P1 live here, and they share a package because they
 share the same two facts: what `openapi.json` says, and what the device's
 rejection looks like.
 
-- `cedar_contract.mock` — a server that answers all thirty-five operations so
+- `cedar_contract.mock` — a server that answers all thirty-seven operations so
   the frontend of stage P2 can be written and tested before the device has a
   single HTTP handler.
 - `cedar_contract.checks` — the checks section 12 of the development plan

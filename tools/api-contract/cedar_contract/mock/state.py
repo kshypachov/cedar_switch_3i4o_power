@@ -29,6 +29,7 @@ from .constants import (
     JSON_BODY_BYTES,
     LOG_PAGE_RECORDS,
     SCAN_RECORDS,
+    SYSTEM_UPLOAD_MAX_BYTES,
     UPLOAD_CHUNK_BYTES,
     UPLOAD_MAX_BYTES,
 )
@@ -38,6 +39,7 @@ from .logs import Logs
 from .matter import Matter
 from .network import Network, Transaction
 from .scenario import Scenario
+from .system import System
 from .wifi import WiFiScans
 
 
@@ -56,6 +58,10 @@ class DeviceState:
         self.matter = Matter(self.clock, self.jobs, self.scenario)
         self.firmware = Firmware(self.clock, self.jobs, self.scenario)
         self.coprocessor = Coprocessor(self.clock, self.jobs, self.scenario, self.firmware)
+        self.system = System(
+            self.clock, self.jobs, self.scenario, self.firmware, self.coprocessor, self.network
+        )
+        self.firmware.system = self.system
         self.logs = Logs(
             self.clock,
             self.boot_id,
@@ -73,6 +79,7 @@ class DeviceState:
         self.network.settle()
         self.matter.settle()
         self.logs.settle()
+        self.system.settle()
         if self.firmware.upload is not None:
             self.firmware._settle(self.firmware.upload)
 
@@ -84,7 +91,8 @@ class DeviceState:
         return {
             "device_id": "cedar-3i4o-0001",
             "model": "cedar_switch_3in4out_power_rev3",
-            "firmware_version": "0.9.0-dev+mock",
+            # The running image's MCUboot version, which an update changes.
+            "firmware_version": self.system.running_version,
             "frontend_version": "0.0.0-mock",
             "boot_id": self.boot_id,
             "uptime_ms": str(self.uptime_ms),
@@ -95,6 +103,7 @@ class DeviceState:
     def capabilities_json(self) -> dict[str, object]:
         logs_available, logs_reason = self.logs.esp32_availability()
         uart_available, uart_reason = self.coprocessor.uart_update_availability()
+        system_available, system_reason = self.system.update_availability()
         return {
             "api_version": "1",
             "features": {
@@ -113,11 +122,14 @@ class DeviceState:
                 # Follows the UART's owner too: an install is how a coprocessor
                 # with no firmware gets some, so its state does not gate it.
                 "esp32_uart": {"available": uart_available, "reason": uart_reason},
+                # The same answer as SystemFirmware.update.
+                "stm32_update": {"available": system_available, "reason": system_reason},
             },
             "limits": {
                 "json_body_bytes": JSON_BODY_BYTES,
                 "upload_chunk_bytes": UPLOAD_CHUNK_BYTES,
                 "upload_max_bytes": UPLOAD_MAX_BYTES,
+                "system_upload_max_bytes": SYSTEM_UPLOAD_MAX_BYTES,
                 "log_page_records": LOG_PAGE_RECORDS,
                 "scan_records": SCAN_RECORDS,
                 "commissioning_min_seconds": 180,
@@ -126,7 +138,7 @@ class DeviceState:
                 "network_confirm_max_seconds": 300,
             },
             "wifi_security_modes": ["open", "wpa2_psk", "wpa3_sae"],
-            "firmware_formats": ["raw_full_flash"],
+            "firmware_formats": ["raw_full_flash", "mcuboot_image"],
             "update_requires_ethernet": True,
         }
 
@@ -145,6 +157,7 @@ class DeviceState:
                 "state": self.network.transaction.state,
             },
             "upload": None if self.firmware.upload is None else self.firmware.upload.to_json(),
+            "system": self.system.status_json(),
             "setup_required": self.auth.setup_required,
         }
 
@@ -159,6 +172,7 @@ __all__ = [
     "Network",
     "Scenario",
     "Session",
+    "System",
     "Transaction",
     "Upload",
     "WiFiScans",

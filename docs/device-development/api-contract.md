@@ -272,10 +272,55 @@ Install phases: `preflight`, `entering_bootloader` (UART), `begin`, `writing`, `
 
 Network apply/scan и firmware install конфликтуют; log GET и status GET — нет. При timeout в протоколе записи повтор произвольного блока не всегда безопасен: политику повтора backend определяет по протоколу, при неопределённости выполняется abort и recovery, а не слепой resend. После перезапуска STM32 не продолжать destructive install автоматически, сначала reconciliation и явный retry.
 
+## Обновление STM32
+
+Этап «Обновление STM32 через веб» (`reports/stm32-update/README.md`, решения владельца 2026-09-14 и 2026-09-15). Образ — `zephyr.signed.bin` приложения (MCUboot, swap using scratch, без подписи). Байты загрузки идут **сразу во вторичный слот MCUboot** (слот 2, SPI NOR), при следующем старте MCUboot меняет слоты местами, новая прошивка подтверждает себя сама через 20 минут работы; сброс до подтверждения возвращает прежнюю.
+
+### Загрузка и проверка
+
+- `POST /firmware/uploads` с `target="stm32u585"` — тот же поток, что у ESP32 (кусок → задача → `received_bytes`), тот же ресурс `Upload` с `target`. Без `target` — `esp32c6`, как до этапа. **Одна активная загрузка на оба target**: пока есть неудачная или незавершённая загрузка другого target — `409 busy`.
+- Размер больше `limits.system_upload_max_bytes` (слот 2 без последнего сектора MCUboot 64 КиБ под трейлер) — `413`. Место в `/lfs` не проверяется: там только метаданные.
+- При создании сервер стирает последние 64 КиБ слота 2 — там magic и флаги прошлого запроса обмена.
+- Создание отказывает `409 invalid_state`, пока **работающая прошивка не подтверждена** или обмен уже запрошен: слот 2 тогда хранит прежнюю прошивку, без неё откат невозможен.
+- Кусок пишется во flash, читается обратно и сверяется; `received_bytes` двигается после этого и записи метаданных. После перезапуска посреди загрузки клиент продолжает с `received_bytes`; повтор уже записанного куска безопасен.
+- `verifyUpload`: SHA-256 файла по слоту против объявленного; заголовок MCUboot (magic, размер заголовка этой сборки, без шифрования, RAM load, сжатия и флага non-bootable), размер `заголовок + тело + TLV` ровно равен размеру файла, TLV SHA-256 совпадает с посчитанным (ту же проверку делает MCUboot), таблица векторов в окне приложения. Размер заголовка или векторы не этой платы — `422 unsupported_target`; остальное — `invalid_image`. `FirmwareImage`: `target="stm32u585"`, `format="mcuboot_image"`, `kind="app"`, `version` — `major.minor.revision+build` заголовка, `partition_layout_id` и `host_protocol` — `null`, `signature_verified=null`, `allowed_methods=["ota"]`.
+
+### Установка
+
+`POST /system/updates {upload_id, acknowledge_downgrade}` → `202 JobAccepted`, задача `system_update`, `resource_url=/api/v1/system/firmware`. Фазы: `preparing` → `requesting` (журнал, запрос обмена) → `rebooting` (перезапуск через ~2 с). Отменяема до `requesting`. Ethernet не требуется (C6 не участвует).
+
+Порядок отказов: неизвестный upload → 404; upload не `stm32u585` → 422 `unsupported_target`; установка STM32 или ESP32 уже идёт, сетевая транзакция в `applying`/`awaiting_confirmation` → 409 `busy`; работающая прошивка не подтверждена → 409 `invalid_state`; upload не `ready` → 409 `invalid_state`; версия образа ниже работающей без `acknowledge_downgrade=true` → 422 `validation_failed`. Та же версия допустима (переустановка).
+
+После перезапуска задача — 404, как у ESP32: итог — `GET /system/firmware`. Обмен образа 1,4 МБ занимает ~34 с, приложение стартует через ~40 с после сброса; клиент ждёт не меньше 60–90 с, прежде чем считать устройство потерянным, и сверяет `SystemStatus.boot_id`.
+
+### Итог и подтверждение
+
+`SystemFirmware`: `running` (версия, TLV SHA-256, `confirmed`), `confirm_remaining_seconds` (до самоподтверждения; `null`, если подтверждена), `swap_pending`, `update` (доступность), `last_update` (`SystemUpdateSummary`).
+
+`last_update.state`:
+- `awaiting_confirmation` — работает новая, не подтверждена. **Сброс до подтверждения (в том числе пропадание питания) возвращает прежнюю прошивку.** Через 20 минут работы без сброса устройство подтверждает её само; консольная команда `sysupd confirm` — немедленно. Кнопки подтверждения в API нет (владелец назвал только консоль);
+- `succeeded` — работает новая и подтверждена;
+- `rolled_back` — новая работала, но до подтверждения был сброс, MCUboot вернул прежнюю;
+- `failed` — после обмена работает прежняя, а новая не дошла до записи журнала (MCUboot отклонил образ, или она не стартовала / зависла, и сторож сбросил плату);
+- `interrupted` — перезапуск до запроса обмена, ничего не менялось.
+
+`SystemStatus.firmware_version` — версия работающего образа (`major.minor.revision+build`).
+
+### Решения этапа там, где контракт молчал (устройство и mock одинаково)
+
+- Порядок отказов `createUpload` с `target="stm32u585"`: есть загрузка любого target → 409 `busy`; работающая прошивка не подтверждена или обмен запрошен → 409 `invalid_state`; размер больше `system_upload_max_bytes` → 413.
+- `startCoprocessorUpdate` с загрузкой `stm32u585` — 422 `unsupported_target` сразу после поиска загрузки; `startSystemUpdate` с загрузкой `esp32c6` — так же.
+- `reason` у `features.stm32_update` и `SystemFirmware.update`: `firmware_unconfirmed` (работающая прошивка не подтверждена или обмен запрошен), `update_running` (идёт установка STM32 или ESP32).
+- После обмена (успешного или отклонённого MCUboot) загрузка STM32 исчезает: `getUpload` → 404 — в слоте 2 теперь другая прошивка. Перезапуск до запроса обмена (`interrupted`) загрузку оставляет `ready`.
+- `error.code` в `last_update`: `boot_changed` у `rolled_back` и `interrupted`, `invalid_image` у отклонённого MCUboot образа, `internal_error` у образа, который не дошёл до записи журнала (завис или упал).
+- Сравнение версий для понижения — `major`, `minor`, `revision`, затем `build`; та же версия допускается без `acknowledge_downgrade`.
+- Порядок проверок `verifyUpload` STM32: объявленный SHA-256 → magic → размер заголовка (`unsupported_target`) → запрещённые флаги → границы TLV и конец файла → TLV SHA-256 (запись неверной длины — `invalid_image`) → длина тела под таблицу векторов → таблица векторов (`unsupported_target`).
+- `confirm_remaining_seconds` отсчитывается от старта приложения после обмена и округляется вниз.
+
 ## Совместимость и проверки контракта
 
 - Source of truth форматов — OpenAPI; бизнес-инварианты, такие как static subnet, active window, UART ownership и подпись пакета, валидируются сервисом, не только JSON schema.
 - Из OpenAPI получать client types и fixtures. Строгое C-генерирование сервера не требуется; route handlers используют общие parser/error helpers.
 - Contract checks: internal `$ref`, required path parameters, unique operationId, valid examples, undocumented route detection (с P2: таблица маршрутов устройства `src/web/api/v1/routes.h` сверяется с документом, включая флаги) и responses при fragment/abort/concurrency (sim-сюита `tests/web_api_http` на настоящем сервере Zephyr).
-- ~~Старые endpoints мигрировать или выключать по feature flag после проверки потребителей.~~ **Решение владельца 2026-09-13: весь legacy HTTP удалён в P2** — сервис на 8080 с `/upload` (запись образа STM32 без авторизации) и все `/api/*` без авторизации (reboot, relays, mqtt, device info, matter control). Их URL отвечают JSON 404. Обновление STM32 по сети недоступно до отдельного этапа; Matter управление реле сохраняется. Проверено на плате: legacy-пути — 404, порт 8080 закрыт.
+- ~~Старые endpoints мигрировать или выключать по feature flag после проверки потребителей.~~ **Решение владельца 2026-09-13: весь legacy HTTP удалён в P2** — сервис на 8080 с `/upload` (запись образа STM32 без авторизации) и все `/api/*` без авторизации (reboot, relays, mqtt, device info, matter control). Их URL отвечают JSON 404. Обновление STM32 по сети недоступно до отдельного этапа (этап начат 2026-09-15 — раздел «Обновление STM32», через API v1 с авторизацией); Matter управление реле сохраняется. Проверено на плате: legacy-пути — 404, порт 8080 закрыт.
 - Event push не входит в v1. Добавление WebSocket позже должно иметь отдельную message schema и cursor recovery, а не менять REST response semantics.

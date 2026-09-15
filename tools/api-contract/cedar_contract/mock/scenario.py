@@ -74,6 +74,25 @@ class Scenario:
     verify_result: str = "ok"
     #: "ok" | "recovery_required"
     install_result: str = "ok"
+    #: The STM32 image running at startup, `major.minor.revision+build`. Read when
+    #: the device state is built (startup or reset); an update changes it after.
+    system_version: str = "1.0.0+0"
+    #: Whether that image is confirmed at startup. False starts the countdown.
+    system_confirmed: bool = True
+    #: How long a new image runs unconfirmed before it confirms itself.
+    system_confirm_seconds: int = 1200
+    #: Duration of each of the `preparing` and `requesting` phases.
+    system_phase_ms: int = 1_500
+    #: Duration of `rebooting`: the device answers the poll, then restarts.
+    system_reboot_delay_ms: int = 2_000
+    #: How long the device answers nothing while MCUboot swaps (the real device:
+    #: ~40 s to the application). A connection gets no response at all.
+    system_swap_ms: int = 5_000
+    #: "ok" | "rejected" | "hangs". "rejected": MCUboot refuses slot 2 and the
+    #: old firmware runs (`failed`). "hangs": the new image hangs, the watchdog
+    #: resets it and MCUboot swaps back - twice the swap time (`failed`).
+    #: `rolled_back` is a restart before confirmation: `POST /__mock/reboot`.
+    system_swap_result: str = "ok"
     #: Host names accepted besides IP literals and localhost, comma-separated;
     #: CONFIG_WEB_API_EXTRA_HOSTS on the device.
     extra_hosts: str = ""

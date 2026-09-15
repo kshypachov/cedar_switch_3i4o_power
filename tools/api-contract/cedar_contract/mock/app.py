@@ -110,16 +110,28 @@ class MockApp:
 
     def reset(self, scenario: Scenario | None = None) -> None:
         self.state = DeviceState(self.clock, scenario or Scenario())
+        self.unreachable_until_ms = None
 
-    def reboot(self) -> None:
+    #: Until this clock time the device answers nothing (MCUboot is swapping).
+    unreachable_until_ms: int | None = None
+
+    def reboot(self, at_ms: int | None = None) -> None:
         """A new boot of the same device: a new `boot_id`, uptime from zero, and
         everything the device keeps in RAM gone - sessions, jobs, the log rings,
         a staged or applied transaction. What it keeps durably stays: the
         administrator password, the committed network configuration, the staged
-        firmware file and the update journal - an install the reboot cut short
-        is `interrupted` and does not continue."""
+        firmware file and the update journals - an install the reboot cut short
+        is `interrupted` and does not continue.
+
+        The STM32 slots come along too (system.py): a pending swap is performed
+        and an unconfirmed new firmware is reverted, and either way the device
+        answers nothing until MCUboot is done. `at_ms` is when the restart
+        happened, if not now - the moment an install's `rebooting` phase ended,
+        however late the next request came."""
         old = self.state
         old.settle()
+        now = self.clock.now_ms()
+        at = now if at_ms is None else min(at_ms, now)
         self.state = DeviceState(self.clock, old.scenario)
         self.state.auth.password = old.auth.password
         self.state.auth.setup_required = old.auth.setup_required
@@ -128,10 +140,34 @@ class MockApp:
         self.state.network.config = old.network.config
         self.state.firmware.survive_reboot(old.firmware)
         self.state.coprocessor.survive_reboot(old.coprocessor)
+        dark_ms, consumed = self.state.system.survive_reboot(old.system, at)
+        upload = self.state.firmware.upload
+        if consumed is not None and upload is not None and upload.id == consumed:
+            self.state.firmware.upload = None
+        self.unreachable_until_ms = at + dark_ms if dark_ms else None
+        # The new boot starts when the application does, after the swap.
+        self.state.boot_ms = at + dark_ms
+
+    def _restart_if_due(self) -> None:
+        """An install whose `rebooting` phase has ended restarts the device."""
+        self.state.settle()
+        system = self.state.system
+        if system.reboot_due:
+            self.reboot(at_ms=system.reboot_at_ms)
+
+    def unreachable(self) -> bool:
+        until = self.unreachable_until_ms
+        return until is not None and self.clock.now_ms() < until
 
     # -- entry point -----------------------------------------------------
 
     def handle(self, request: Request) -> Response:
+        self._restart_if_due()
+        if self.unreachable() and not request.path.startswith("/__mock"):
+            # No answer at all: status 0 tells the HTTP adapter to close the
+            # connection without a response, which is what a browser sees while
+            # the device restarts.
+            return Response(0, b"", {})
         if (
             self.static is not None
             and not (request.path == "/api" or request.path.startswith("/api/"))
@@ -421,7 +457,12 @@ class MockApp:
         """
         path = request.path[len("/__mock") :].strip("/")
         if request.method == "GET" and path == "state":
-            return json_response(200, self.state.to_json())
+            body = self.state.to_json()
+            until = self.unreachable_until_ms
+            body["unreachable_for_ms"] = (
+                max(0, until - self.clock.now_ms()) if until is not None else 0
+            )
+            return json_response(200, body)
         if request.method == "POST" and path == "reset":
             payload = json.loads(request.body) if request.body else {}
             scenario = Scenario()

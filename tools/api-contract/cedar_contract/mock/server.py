@@ -82,6 +82,11 @@ class _Handler(BaseHTTPRequestHandler):
                     body=body,
                 )
             )
+        if response.status == 0:
+            # The device is restarting (system.py): no response, the connection
+            # just goes away, as a browser sees it from the real board.
+            self.close_connection = True
+            return
         self.send_response(response.status)
         for name, value in response.headers.items():
             self.send_header(name, value)

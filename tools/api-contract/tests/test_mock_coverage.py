@@ -4,17 +4,18 @@
 This is the contract test section 12 asks for — "one set of examples is run
 against the mock server of stage P1 and against the firmware at the hardware
 tier; a response that diverges from the schema is a test failure, not a remark".
-The walkthrough below reaches all thirty-five operations in dependency order,
+The walkthrough below reaches all thirty-seven operations in dependency order,
 because half of them need something to exist first: a job to poll, a transaction
 to apply, an upload to verify.
 
 The schema check itself is not here. It is in `Client._check`, which runs on
 every call in every test file, so this module only has to prove that all
-thirty-five were reached.
+thirty-seven were reached.
 """
 
 from __future__ import annotations
 
+import hashlib
 from typing import Any
 
 from cedar_contract.mock.constants import (
@@ -23,13 +24,14 @@ from cedar_contract.mock.constants import (
     UPLOAD_CHUNK_MS,
     WIFI_SCAN_MS,
 )
+from cedar_contract.mock.mcuboot import build_image
 from cedar_contract.openapi import Document
 
 from .conftest import Harness, build
 
 
 def _walk(harness: Harness) -> set[str]:
-    """Call all thirty-five operations, in an order that makes each one legal."""
+    """Call all thirty-seven operations, in an order that makes each one legal."""
     client = harness.client
     seconds = 1 / 1000
 
@@ -103,6 +105,28 @@ def _walk(harness: Harness) -> set[str]:
     )
     harness.advance(30)
     client.delete(f"/firmware/uploads/{upload_id}")
+    harness.advance(1)
+
+    # The STM32 image: upload, verify, install. The install restarts the device
+    # once its phases are over (a little over five seconds), so nothing below
+    # waits that long.
+    image = build_image(b"\x00" * 64)
+    upload = client.post(
+        "/firmware/uploads",
+        {
+            "filename": "zephyr.signed.bin",
+            "size_bytes": len(image),
+            "sha256": hashlib.sha256(image).hexdigest(),
+            "target": "stm32u585",
+        },
+    )
+    upload_id = upload.json["id"]
+    client.put(f"/firmware/uploads/{upload_id}/data?offset=0", raw=image)
+    harness.advance(UPLOAD_CHUNK_MS * seconds + 0.1)
+    client.post(f"/firmware/uploads/{upload_id}/verify", {})
+    harness.advance((QUEUE_MS + FIRMWARE_VERIFY_MS) * seconds + 0.1)
+    client.get("/system/firmware")
+    client.post("/system/updates", {"upload_id": upload_id, "acknowledge_downgrade": False})
 
     # Password change, then the session operations it invalidates: the change
     # revokes every session, so login has to come after it and logout after that.

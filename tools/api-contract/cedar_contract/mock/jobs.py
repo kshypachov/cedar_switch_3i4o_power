@@ -50,6 +50,7 @@ CANCELLABLE_KINDS: dict[str, bool] = {
     "firmware_delete": False,
     "coprocessor_update": True,
     "password_change": False,
+    "system_update": True,
 }
 
 
@@ -107,7 +108,11 @@ class Job:
         however permissive its kind."""
         if not CANCELLABLE_KINDS[self.kind] or self.state in TERMINAL_STATES:
             return False
-        return self._index >= len(self.steps) or self.steps[self._index].cancellable
+        if self._index >= len(self.steps):
+            # Past its steps and not terminal: parked. It stays as cancellable as
+            # its last step was - a system update parked in `rebooting` is not.
+            return self.steps[-1].cancellable if self.steps else True
+        return self.steps[self._index].cancellable
 
     @property
     def is_terminal(self) -> bool:

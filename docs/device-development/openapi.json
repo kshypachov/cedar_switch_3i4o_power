@@ -471,6 +471,144 @@
         }
       }
     },
+    "/system/firmware": {
+      "get": {
+        "operationId": "getSystemFirmware",
+        "tags": [
+          "system"
+        ],
+        "summary": "Read SystemFirmware: the running STM32 image, its confirmation and the last update",
+        "description": "Read SystemFirmware: the running STM32 image, its confirmation and the last update",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemFirmware"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/updates": {
+      "post": {
+        "operationId": "startSystemUpdate",
+        "tags": [
+          "system"
+        ],
+        "summary": "Install a verified stm32u585 upload: request the MCUboot swap and restart the device",
+        "description": "Install a verified stm32u585 upload: request the MCUboot swap and restart the device",
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/api/v1/"
+                },
+                "description": "Job URL"
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[0-9]+$"
+                },
+                "description": "Seconds before next poll"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUpdateRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/capabilities": {
       "get": {
         "operationId": "getCapabilities",
@@ -2889,13 +3027,22 @@
               },
               "esp32_uart": {
                 "$ref": "#/components/schemas/FeatureAvailability"
+              },
+              "stm32_update": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/FeatureAvailability"
+                  }
+                ],
+                "description": "Update of the STM32 application through MCUboot slot 2 (startSystemUpdate)."
               }
             },
             "required": [
               "matter",
               "esp32_logs",
               "esp32_ota",
-              "esp32_uart"
+              "esp32_uart",
+              "stm32_update"
             ],
             "additionalProperties": false
           },
@@ -2941,6 +3088,11 @@
               "network_confirm_max_seconds": {
                 "type": "integer",
                 "minimum": 1
+              },
+              "system_upload_max_bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Largest stm32u585 upload: MCUboot's secondary slot less its trailer sector. upload_max_bytes is the esp32c6 limit."
               }
             },
             "required": [
@@ -2952,7 +3104,8 @@
               "commissioning_min_seconds",
               "commissioning_max_seconds",
               "network_confirm_min_seconds",
-              "network_confirm_max_seconds"
+              "network_confirm_max_seconds",
+              "system_upload_max_bytes"
             ],
             "additionalProperties": false
           },
@@ -2976,15 +3129,17 @@
               "enum": [
                 "raw_app",
                 "raw_full_flash",
-                "cedar_package"
+                "cedar_package",
+                "mcuboot_image"
               ]
             },
             "minItems": 1,
-            "maxItems": 3
+            "maxItems": 4
           },
           "update_requires_ethernet": {
             "const": true,
-            "type": "boolean"
+            "type": "boolean",
+            "description": "The coprocessor install only; the STM32 update is accepted over any interface."
           }
         },
         "required": [
@@ -3090,7 +3245,8 @@
               "firmware_verify",
               "firmware_delete",
               "coprocessor_update",
-              "password_change"
+              "password_change",
+              "system_update"
             ]
           },
           "state": {
@@ -4546,6 +4702,14 @@
           "sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "esp32c6",
+              "stm32u585"
+            ],
+            "description": "Which processor the file is for. It decides where the bytes go - esp32c6: a file in the device's LittleFS volume; stm32u585: straight into MCUboot's secondary slot on the SPI NOR - and which check verifyUpload runs. Absent means esp32c6."
           }
         },
         "required": [
@@ -4570,9 +4734,10 @@
             "enum": [
               "raw_app",
               "raw_full_flash",
-              "cedar_package"
+              "cedar_package",
+              "mcuboot_image"
             ],
-            "description": "raw_full_flash is the file `idf.py merge-bin` produces: bootloader, partition table, blank otadata and application, written to the coprocessor from offset 0x0. It is the only format the first version accepts, with kind recovery_bundle; raw_app and cedar_package stay reserved."
+            "description": "raw_full_flash is the file `idf.py merge-bin` produces: bootloader, partition table, blank otadata and application, written to the coprocessor from offset 0x0. It is the only format the first version accepts, with kind recovery_bundle; raw_app and cedar_package stay reserved. mcuboot_image is the STM32 application signed by imgtool (zephyr.signed.bin): MCUboot header, body and TLV, checked against the TLV SHA-256 and this board's header size and vector table."
           },
           "format_version": {
             "anyOf": [
@@ -4589,11 +4754,13 @@
           "target": {
             "type": "string",
             "enum": [
-              "esp32c6"
+              "esp32c6",
+              "stm32u585"
             ]
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "description": "esp32c6: app_desc.version. stm32u585: the MCUboot header version, major.minor.revision+build."
           },
           "kind": {
             "type": "string",
@@ -4603,10 +4770,26 @@
             ]
           },
           "partition_layout_id": {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coprocessor images only; null for stm32u585."
           },
           "host_protocol": {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Coprocessor images only; null for stm32u585."
           },
           "signature_verified": {
             "anyOf": [
@@ -4629,7 +4812,7 @@
             },
             "minItems": 1,
             "maxItems": 2,
-            "description": "Methods the server would accept for this image. A method listed here can still be unavailable at runtime; capabilities and coprocessor status are authoritative."
+            "description": "Methods the server would accept for this image. A method listed here can still be unavailable at runtime; capabilities and coprocessor status are authoritative. A stm32u585 image lists [\"ota\"]: installed by startSystemUpdate over the network, swapped in by MCUboot."
           }
         },
         "required": [
@@ -4706,10 +4889,18 @@
                 "type": "null"
               }
             ]
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "esp32c6",
+              "stm32u585"
+            ]
           }
         },
         "required": [
           "id",
+          "target",
           "filename",
           "size_bytes",
           "received_bytes",
@@ -4720,7 +4911,7 @@
           "error"
         ],
         "additionalProperties": false,
-        "description": "Staged firmware file. The image is stored as a file in the device LittleFS volume; filename is a display value only and is never used as a filesystem path. received_bytes is the next acceptable offset and advances only after the chunk is flushed to storage."
+        "description": "Staged firmware file. An esp32c6 image is stored as a file in the device LittleFS volume; a stm32u585 image is written straight into MCUboot's secondary slot (slot 2). filename is a display value only and is never used as a filesystem path. received_bytes is the next acceptable offset and advances only after the chunk is on storage (flushed file, or written and read back from flash)."
       },
       "UpdateRequest": {
         "type": "object",
@@ -4753,6 +4944,159 @@
             "upload_id": "upload_ab12",
             "method": "ota",
             "acknowledge_recovery": false
+          }
+        ]
+      },
+      "SystemUpdateSummary": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "awaiting_confirmation",
+              "succeeded",
+              "failed",
+              "rolled_back",
+              "interrupted"
+            ],
+            "description": "awaiting_confirmation: the new firmware runs and is not confirmed yet; a reset before confirmation makes MCUboot revert it. rolled_back: the new firmware ran and MCUboot restored the previous one. failed: the swap did not bring the new firmware up (MCUboot rejected it, or it did not start). interrupted: the device restarted before the swap was requested; nothing changed."
+          },
+          "from_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "job_id",
+          "state",
+          "from_version",
+          "version",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "SystemFirmware": {
+        "type": "object",
+        "properties": {
+          "running": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "image_hash": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The MCUboot TLV SHA-256 of the running image."
+              },
+              "confirmed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "version",
+              "image_hash",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "confirm_remaining_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Seconds until the running image confirms itself, when it is not confirmed; null otherwise."
+          },
+          "swap_pending": {
+            "type": "boolean",
+            "description": "MCUboot will swap slot 2 in at the next reset."
+          },
+          "update": {
+            "$ref": "#/components/schemas/FeatureAvailability"
+          },
+          "last_update": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemUpdateSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "running",
+          "confirm_remaining_seconds",
+          "swap_pending",
+          "update",
+          "last_update"
+        ],
+        "additionalProperties": false
+      },
+      "SystemUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "acknowledge_downgrade": {
+            "type": "boolean",
+            "description": "Must be true when the image's version is lower than the running one; otherwise 422 validation_failed."
+          }
+        },
+        "required": [
+          "upload_id",
+          "acknowledge_downgrade"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "upload_id": "upload_ab12",
+            "acknowledge_downgrade": false
           }
         ]
       }

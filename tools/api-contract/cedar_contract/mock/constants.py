@@ -45,6 +45,9 @@ UPLOAD_CHUNK_BYTES = 16_384
 #: A whole flash image ends before the second application slot (0x1d0000):
 #: bootloader, partition table, otadata and ota_0 fit, anything longer does not.
 UPLOAD_MAX_BYTES = 0x1D0000
+#: A `stm32u585` image: MCUboot's secondary slot (4 MiB) less the last sector of
+#: MCUboot's view of it (64 KiB), which holds the swap trailer.
+SYSTEM_UPLOAD_MAX_BYTES = 4 * 1024 * 1024 - 64 * 1024
 LOG_PAGE_RECORDS = 100
 #: The device builds a log page in its response buffer
 #: (CONFIG_WEB_API_RESPONSE_BODY_MAX); a page stops before the record that
