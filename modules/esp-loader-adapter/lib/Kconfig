@@ -1,0 +1,56 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig ESP_LOADER_ADAPTER
+	bool "Flashing session over esp-serial-flasher for the ESP32-C6"
+	depends on COPROCESSOR_MANAGER
+	help
+	  Takes the C6's UART from coprocessor-manager, connects to the ROM
+	  loader, writes an image from 0x0 with MD5 verification and always
+	  hands the chip (normal boot), the straps and the UART back. See
+	  include/esp_loader_adapter/esp_loader_adapter.h.
+
+if ESP_LOADER_ADAPTER
+
+config ESP_LOADER_ADAPTER_BLOCK_SIZE
+	int "Bytes per FLASH_DATA block"
+	default 1024
+	range 256 16384
+	help
+	  The ROM loader's own write size (esptool's FLASH_WRITE_SIZE for the
+	  ROM is 0x400). A larger block needs the flasher stub, which the first
+	  version does not load.
+
+config ESP_LOADER_ADAPTER_HIGH_BAUD
+	int "Baud rate to switch to after connecting, 0 to stay"
+	default 0
+	help
+	  Owner's decision №7: the first flash through the web runs at the
+	  device's default rate (115200); a higher rate is measured only after
+	  that. 0 keeps the default. The console's configuration is restored
+	  when the session closes either way.
+
+DT_CHOSEN_ZEPHYR_ESP_LOADER := zephyr,esp-loader
+
+config ESP_LOADER_ADAPTER_ZEPHYR
+	bool "Library table over the zephyr,esp-loader device"
+	default y
+	depends on ESP_SERIAL_FLASHER
+	depends on $(dt_chosen_enabled,$(DT_CHOSEN_ZEPHYR_ESP_LOADER))
+	help
+	  esp_loader_adapter_zephyr_fill(): the esp_loader_* calls on the
+	  chosen espressif,esp-loader device. The board adds lines_idle and
+	  console_restore.
+
+config ESP_LOADER_ADAPTER_UPDATER_OPS
+	bool "Loader ops for coprocessor-updater"
+	default y
+	depends on COPROCESSOR_UPDATER
+	help
+	  esp_loader_adapter_updater_loader(): this module's session as
+	  struct coprocessor_updater_loader.
+
+module = ESP_LOADER_ADAPTER
+module-str = esp-loader-adapter
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # ESP_LOADER_ADAPTER

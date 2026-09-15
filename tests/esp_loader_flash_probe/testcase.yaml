@@ -1,0 +1,18 @@
+tests:
+  cedar.coprocessor.esp_loader_flash_probe:
+    # Needs the real board and ESP32-C6. Read-only: no write, erase or begin command.
+    platform_allow:
+      - cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+    tags:
+      - coprocessor
+      - esp_loader
+      - hw
+    harness: console
+    harness_config:
+      type: multi_line
+      ordered: true
+      regex:
+        - "esp32-c6 flash probe \\(read-only\\)"
+        - "REGION partition table"
+        - "target released to normal boot"
+        - "PASS"

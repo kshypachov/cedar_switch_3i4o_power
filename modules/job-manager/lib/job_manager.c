@@ -544,6 +544,26 @@ int job_get(const char *id, struct job_snapshot *out)
 	return ret;
 }
 
+int job_set_cancellable(const char *id, bool cancellable)
+{
+	int ret;
+
+	k_mutex_lock(&lock, K_FOREVER);
+	struct job_record *rec = find_record(id);
+
+	if (rec == NULL) {
+		ret = -ENOENT;
+	} else if (job_state_is_terminal(rec->state)) {
+		ret = -EINVAL;
+	} else {
+		rec->cancellable = cancellable;
+		rec->updated_ms = now_ms();
+		ret = 0;
+	}
+	k_mutex_unlock(&lock);
+	return ret;
+}
+
 int job_cancel(const char *id)
 {
 	int ret;

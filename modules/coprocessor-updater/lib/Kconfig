@@ -1,0 +1,69 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig COPROCESSOR_UPDATER
+	bool "UART install of an ESP32-C6 image as one job"
+	depends on JOB_MANAGER && COPROCESSOR_MANAGER
+	help
+	  The contract's install phases, cancellable until begin, a journal
+	  that turns an install cut by an STM32 restart into `interrupted`,
+	  and a health check that needs a confirmed firmware version. See
+	  include/coprocessor_updater/coprocessor_updater.h.
+
+if COPROCESSOR_UPDATER
+
+config COPROCESSOR_UPDATER_READ_BLOCK
+	int "Bytes read from the staged image at a time"
+	default 4096
+	range 256 16384
+	help
+	  The worker's buffer; progress is published after each block.
+
+config COPROCESSOR_UPDATER_PREFLIGHT_TIMEOUT_MS
+	int "preflight: opening the image and checking the UART, ms"
+	default 5000
+
+config COPROCESSOR_UPDATER_CONNECT_TIMEOUT_MS
+	int "entering_bootloader: straps, SYNC and identification, ms"
+	default 15000
+	help
+	  The device's 10 trials of 100 ms plus the strap sequence take about
+	  two seconds on the board (P0); this is the ceiling, not the budget.
+
+config COPROCESSOR_UPDATER_BEGIN_TIMEOUT_MS
+	int "begin: FLASH_BEGIN, during which the ROM erases, ms"
+	default 60000
+
+config COPROCESSOR_UPDATER_WRITE_TIMEOUT_S
+	int "writing: all blocks, seconds"
+	default 900
+	help
+	  1.5 MB at 115200 is about two and a half minutes of data; the ROM's
+	  per-block acknowledgements and retries come on top.
+
+config COPROCESSOR_UPDATER_VERIFY_TIMEOUT_MS
+	int "verifying: last block and the ROM's MD5, ms"
+	default 30000
+
+config COPROCESSOR_UPDATER_RECONNECT_TIMEOUT_MS
+	int "reconnecting: waiting for the console to show the application start, ms"
+	default 20000
+	help
+	  The first boot after an erase recalibrates the PHY. When this passes
+	  without the evidence, the install goes on to the health check and
+	  records that the console showed nothing: the console is the early
+	  sign, the version is the proof.
+
+config COPROCESSOR_UPDATER_HEALTH_TIMEOUT_MS
+	int "health_check: ESP-Hosted restart and version, ms"
+	default 30000
+
+config COPROCESSOR_UPDATER_POLL_MS
+	int "Interval between two looks at the console evidence, ms"
+	default 200
+	range 10 5000
+
+module = COPROCESSOR_UPDATER
+module-str = coprocessor-updater
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # COPROCESSOR_UPDATER
