@@ -1,0 +1,94 @@
+--- a/dispatch/psa_crypto_driver_wrappers.h
++++ b/dispatch/psa_crypto_driver_wrappers.h
+@@ -50,6 +50,11 @@
+ 
+ #endif
+ 
++/* Headers for the STM32 PKA transparent driver (modules/psa-driver-stm32) */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++#include <stm32_pka_psa.h>
++#endif
++
+ /* Include TF-M builtin key driver */
+ #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+ #ifndef PSA_CRYPTO_DRIVER_PRESENT
+@@ -358,6 +363,12 @@
+                                       signature_length );
+             return( status );
+ #endif /* PSA_CRYPTO_DRIVER_CC3XX */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++            status = stm32_pka_transparent_sign_hash( attributes, key_buffer, key_buffer_size, alg,
++                    hash, hash_length, signature, signature_size, signature_length );
++            if( status != PSA_ERROR_NOT_SUPPORTED )
++                return( status );
++#endif /* CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA */
+ #if defined (MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+             if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
+                 PSA_ALG_IS_RANDOMIZED_ECDSA(alg) &&
+@@ -455,6 +466,12 @@
+                                         signature_length );
+             return( status );
+ #endif /* PSA_CRYPTO_DRIVER_CC3XX */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++            status = stm32_pka_transparent_verify_hash( attributes, key_buffer, key_buffer_size, alg,
++                    hash, hash_length, signature, signature_length );
++            if( status != PSA_ERROR_NOT_SUPPORTED )
++                return( status );
++#endif /* CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA */
+ #if defined (MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+             if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
+                 PSA_ALG_IS_ECDSA(alg) &&
+@@ -832,6 +849,12 @@
+                     key_buffer_length );
+                 break;
+ #endif /* PSA_CRYPTO_DRIVER_CC3XX */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++                status = stm32_pka_transparent_generate_key( attributes, key_buffer, key_buffer_size,
++                        key_buffer_length );
++                if( status != PSA_ERROR_NOT_SUPPORTED )
++                    break;
++#endif /* CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA */
+ #if defined(MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+                 if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
+                     psa_get_key_type(attributes) == PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1) &&
+@@ -3191,6 +3214,13 @@
+                                           alg );
+             return( status );
+ #endif /* PSA_CRYPTO_DRIVER_CC3XX */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++            status = stm32_pka_transparent_key_agreement( attributes, key_buffer, key_buffer_size, alg,
++                    peer_key, peer_key_length, shared_secret, shared_secret_size,
++                    shared_secret_length );
++            if( status != PSA_ERROR_NOT_SUPPORTED )
++                return( status );
++#endif /* CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA */
+ #if defined(MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+             if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
+                 PSA_ALG_IS_ECDH(alg) &&
+--- a/dispatch/psa_crypto_driver_wrappers_no_static.c
++++ b/dispatch/psa_crypto_driver_wrappers_no_static.c
+@@ -45,6 +45,11 @@
+ 
+ #endif
+ 
++/* Headers for the STM32 PKA transparent driver (modules/psa-driver-stm32) */
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++#include <stm32_pka_psa.h>
++#endif
++
+ /* Include TF-M builtin key driver */
+ #if defined(PSA_CRYPTO_DRIVER_TFM_BUILTIN_KEY_LOADER)
+ #ifndef PSA_CRYPTO_DRIVER_PRESENT
+@@ -200,6 +205,12 @@
+             return( status );
+ #endif /* PSA_CRYPTO_DRIVER_CC3XX */
+ 
++#if defined(CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA)
++            status = stm32_pka_transparent_export_public_key( attributes, key_buffer, key_buffer_size,
++                    data, data_size, data_length );
++            if( status != PSA_ERROR_NOT_SUPPORTED )
++                return( status );
++#endif /* CONFIG_PSA_CRYPTO_DRIVER_STM32_PKA */
+ #if (defined(MBEDTLS_PSA_P256M_DRIVER_ENABLED) )
+             status = p256_transparent_export_public_key
+                 (attributes,

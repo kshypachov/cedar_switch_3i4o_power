@@ -1,0 +1,57 @@
+{
+ "name": "prod-zms-shell-p256m",
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/prod-zms-shell-p256m/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "iterations": 10,
+ "started": "2026-09-14 23:30:40",
+ "flash_ok": true,
+ "matter_ready": true,
+ "sent": true,
+ "finished": true,
+ "rows": {
+  "SHA-256 512B": {
+   "total_us": 4884,
+   "avg_us": 488,
+   "iterations": 10
+  },
+  "HMAC-SHA256 512B": {
+   "total_us": 7833,
+   "avg_us": 783,
+   "iterations": 10
+  },
+  "HKDF-SHA256 32B": {
+   "total_us": 11849,
+   "avg_us": 1184,
+   "iterations": 10
+  },
+  "AES-CCM enc 128B": {
+   "total_us": 20854,
+   "avg_us": 2085,
+   "iterations": 10
+  },
+  "AES-CCM dec 128B": {
+   "total_us": 19496,
+   "avg_us": 1949,
+   "iterations": 10
+  },
+  "P-256 keygen": {
+   "total_us": 1371416,
+   "avg_us": 137141,
+   "iterations": 10
+  },
+  "P-256 ECDH": {
+   "total_us": 1120080,
+   "avg_us": 112008,
+   "iterations": 10
+  },
+  "P-256 ECDSA sign": {
+   "total_us": 1700897,
+   "avg_us": 170089,
+   "iterations": 10
+  },
+  "P-256 ECDSA verify": {
+   "total_us": 4302080,
+   "avg_us": 430208,
+   "iterations": 10
+  }
+ }
+}
