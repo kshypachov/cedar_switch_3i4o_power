@@ -1,0 +1,119 @@
+{
+ "name": "pka-b-psa",
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/pka-b-on/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "started": "2026-09-15 02:23:55",
+ "commands": [
+  {
+   "command": "pka kat",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "uart:~$ uart:~$ pka kat",
+    "init                                     PASS (rc 0, 300 us)",
+    "mul d1*G == U (RFC 6979)                 PASS (rc 0, 19700 us)",
+    "point check U on curve                   PASS (rc 0, 200 us)",
+    "point check U' off curve -> -EINVAL      PASS (rc -22, 0 us)",
+    "sign \"sample\" == RFC 6979 r,s            PASS (rc 0, 17400 us)",
+    "verify (valid)                         PASS (rc 0, 18600 us)",
+    "verify (s tampered) -> -EBADMSG        PASS (rc -77, 0 us)",
+    "sign \"test\" == RFC 6979 r,s              PASS (rc 0, 17400 us)",
+    "verify (valid)                         PASS (rc 0, 18500 us)",
+    "verify (s tampered) -> -EBADMSG        PASS (rc -77, 0 us)",
+    "ECDH x(d1*Q2) == shared                  PASS (rc 0, 19600 us)",
+    "ECDH x(d2*U) == shared                   PASS (rc 0, 19500 us)",
+    "pka kat: PASS (0 failed)"
+   ]
+  },
+  {
+   "command": "pka stats reset",
+   "sent": true,
+   "finished": false,
+   "lines": [
+    "uart:~$ pka stats reset",
+    "pka stats reset",
+    "uart:~$ [00:00:20.300,000] <inf> stm32_pka: PKA ready"
+   ]
+  },
+  {
+   "command": "matter crypto_bench 10",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "SHA-256 512B             total=5535 us avg=553 us iter=10",
+    "HMAC-SHA256 512B         total=7483 us avg=748 us iter=10",
+    "HKDF-SHA256 32B          total=8663 us avg=866 us iter=10",
+    "AES-CCM enc 128B         total=3369 us avg=336 us iter=10",
+    "AES-CCM dec 128B         total=2919 us avg=291 us iter=10",
+    "P-256 keygen             total=6973 us avg=697 us iter=10",
+    "P-256 ECDH               total=195464 us avg=19546 us iter=10",
+    "P-256 ECDSA sign         total=178217 us avg=17821 us iter=10",
+    "P-256 ECDSA verify       total=374987 us avg=37498 us iter=10"
+   ]
+  },
+  {
+   "command": "pka stats",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "uart:~$ pka stats",
+    "pka stat mul          calls=21 errors=0 total_us=408100 avg_us=19433 max_us=19900",
+    "pka stat point_check  calls=10 errors=0 total_us=800 avg_us=80 max_us=100",
+    "pka stat sign         calls=10 errors=0 total_us=172900 avg_us=17290 max_us=17400",
+    "pka stat verify       calls=10 errors=0 total_us=179200 avg_us=17920 max_us=18000"
+   ]
+  },
+  {
+   "command": "pka psa off",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "uart:~$ pka psa off",
+    "pka psa: off"
+   ]
+  },
+  {
+   "command": "matter crypto_bench 10",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "SHA-256 512B             total=5127 us avg=512 us iter=10",
+    "HMAC-SHA256 512B         total=7483 us avg=748 us iter=10",
+    "HKDF-SHA256 32B          total=8546 us avg=854 us iter=10",
+    "AES-CCM enc 128B         total=3112 us avg=311 us iter=10",
+    "AES-CCM dec 128B         total=2919 us avg=291 us iter=10",
+    "P-256 keygen             total=1251799 us avg=125179 us iter=10",
+    "P-256 ECDH               total=1239633 us avg=123963 us iter=10",
+    "P-256 ECDSA sign         total=1334212 us avg=133421 us iter=10",
+    "P-256 ECDSA verify       total=3898114 us avg=389811 us iter=10"
+   ]
+  },
+  {
+   "command": "pka psa on",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "uart:~$ pka psa on",
+    "pka psa: on"
+   ]
+  },
+  {
+   "command": "pka stats",
+   "sent": true,
+   "finished": true,
+   "lines": [
+    "uart:~$ pka stats",
+    "pka stat mul          calls=21 errors=0 total_us=408100 avg_us=19433 max_us=19900",
+    "pka stat point_check  calls=10 errors=0 total_us=800 avg_us=80 max_us=100",
+    "pka stat sign         calls=10 errors=0 total_us=172900 avg_us=17290 max_us=17400",
+    "pka stat verify       calls=10 errors=0 total_us=179200 avg_us=17920 max_us=18000"
+   ]
+  }
+ ],
+ "flash_ok": true,
+ "matter_ready": true,
+ "boot_lines": [
+  "uart:~$ uart:~$ [00:00:00.846,000] <err> mb85rsxx: invalid device ID: 04 7F 03 02",
+  "uart:~$ uart:~$ [00:00:00.846,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)",
+  "uart:~$ uart:~$ [00:00:01.443,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20009b28)"
+ ]
+}

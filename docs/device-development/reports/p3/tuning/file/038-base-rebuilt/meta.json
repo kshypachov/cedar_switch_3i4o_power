@@ -1,0 +1,9 @@
+{
+ "backend": "file",
+ "trial": "038-base-rebuilt",
+ "kind": "trial",
+ "change": "base rebuilt on 09-14 sources (eth_w5500.c MMB + rx resync)",
+ "cycles": 5,
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/file-base3/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "started": "2026-09-14 11:08:20"
+}

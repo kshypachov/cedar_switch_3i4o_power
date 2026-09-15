@@ -1,0 +1,47 @@
+uart:~$ uart:~$ net iface
+Hostname: zephyr000000000000
+Default interface: 1
+
+
+Interface eth0 (0x20002d10) (Ethernet) [1]
+===================================
+Link addr : 80:34:28:10:12:73
+MTU       : 1500
+Flags     : AUTO_START,IPv4,IPv6
+Device    : ETH_W5500 (0x20ec100)
+Status    : oper=UP, admin=UP, carrier=ON
+Ethernet capabilities supported:
+	10 Mbits
+	100 Mbits
+Ethernet PHY device: ETH_W5500_phy (0x20ec120)
+Ethernet link speed: 100 Mbits full-duplex
+IPv6 unicast addresses (max 2):
+	fe80::8234:28ff:fe10:1273 autoconf preferred infinite
+	fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273 autoconf preferred
+IPv6 multicast addresses (max 14):
+	ff02::1
+	ff02::1:ff10:1273
+	ff02::fb
+IPv6 prefixes (max 2):
+	fd27:e0cb:e5e8:8374::/64
+IPv6 hop limit           : 64
+IPv6 base reachable time : 30000
+IPv6 reachable time      : 40035
+IPv6 retransmit timer    : 0
+DHCPv6 state             : disabled
+IPv4 unicast addresses (max 1):
+	192.168.88.14/255.255.255.0 DHCP preferred
+IPv4 multicast addresses (max 1):
+	<none>
+IPv4 gateway : 192.168.88.1
+DHCPv4 lease time : 600
+DHCPv4 renew time : 300
+DHCPv4 server     : 192.168.88.1
+DHCPv4 requested  : 192.168.88.14
+DHCPv4 state      : bound
+DHCPv4 attempts   : 1
+DHCPv4 state      : bound
+
+Interface wlan0 (0x20002e48) (WiFi) [2]
+===============================
+Interface is down.

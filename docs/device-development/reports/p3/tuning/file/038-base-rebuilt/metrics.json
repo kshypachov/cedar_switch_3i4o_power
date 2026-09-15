@@ -1,0 +1,178 @@
+{
+ "meta": {
+  "backend": "file",
+  "trial": "038-base-rebuilt",
+  "kind": "trial",
+  "change": "base rebuilt on 09-14 sources (eth_w5500.c MMB + rx resync)",
+  "cycles": 5,
+  "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/file-base3/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+  "started": "2026-09-14 11:08:20"
+ },
+ "aborted": null,
+ "score": 52.842,
+ "score_parts": {
+  "init_with_fabric": 20.463,
+  "remove": 29.44,
+  "commit": 2.939
+ },
+ "slope_with_fabric_s_per_cycle": 3.327,
+ "slope_before_s_per_cycle": 1.276,
+ "median_init_before_s": 8.944,
+ "median_window_open_s": 2.64,
+ "commissioning_ok": 5,
+ "commissioning_total": 5,
+ "phase_medians": {
+  "pase": 9.908,
+  "attestation": 3.088,
+  "csr": 3.533,
+  "noc_to_done": 34.057,
+  "commit": 2.939
+ },
+ "clean_boot_init_s": 1.864,
+ "wipe": "storage_wipe: offset 0xa00000 size 5242880 erased rc=0 in 16246 ms",
+ "read_back_ok": true,
+ "persistence_ok": true,
+ "persistence": "13 counted / 13 boots",
+ "boot_failures": 0,
+ "unexpected_boots": 0,
+ "storage_warnings": [
+  "uart:~$ [00:00:01.362,000] <err> littlefs: WEST_TOPDIR/modules/fs/littlefs/lfs.c:1386: Corrupted dir pair at {0x0, 0x1}",
+  "uart:~$ [00:00:01.362,000] <wrn> littlefs: can't mount (LFS -84); formatting"
+ ],
+ "bench": {
+  "open+close": {
+   "best_us": 6900,
+   "mean_us": 7033,
+   "result": null
+  },
+  "read 32 +seek": {
+   "best_us": 16200,
+   "mean_us": 16366,
+   "result": null
+  },
+  "read 32": {
+   "best_us": 11900,
+   "mean_us": 11966,
+   "result": null
+  },
+  "read 1024": {
+   "best_us": 8800,
+   "mean_us": 9533,
+   "result": null
+  },
+  "scan (no match)": {
+   "best_us": 297200,
+   "mean_us": 297466,
+   "result": null
+  },
+  "scan (all)": {
+   "best_us": 297100,
+   "mean_us": 297400,
+   "result": null
+  },
+  "load_one (hit)": {
+   "best_us": 297300,
+   "mean_us": 298166,
+   "result": 16
+  },
+  "load_one (miss)": {
+   "best_us": 297200,
+   "mean_us": 298166,
+   "result": 0
+  },
+  "val_len (hit)": {
+   "best_us": 297200,
+   "mean_us": 300033,
+   "result": 16
+  },
+  "val_len (miss)": {
+   "best_us": 297200,
+   "mean_us": 297533,
+   "result": 0
+  }
+ },
+ "cycles": [
+  {
+   "cycle": 1,
+   "init_before_s": 2.775,
+   "window_open_s": 1.53,
+   "commission_ok": true,
+   "commission_s": 50.8,
+   "init_with_fabric_s": 7.666,
+   "remove_s": 13.6
+  },
+  {
+   "cycle": 2,
+   "init_before_s": 8.944,
+   "window_open_s": 2.64,
+   "commission_ok": true,
+   "commission_s": 56.9,
+   "init_with_fabric_s": 20.463,
+   "remove_s": 29.44
+  },
+  {
+   "cycle": 3,
+   "init_before_s": 18.455,
+   "window_open_s": 4.64,
+   "commission_ok": true,
+   "commission_s": 66.9,
+   "init_with_fabric_s": 47.929,
+   "remove_s": 60.08
+  },
+  {
+   "cycle": 4,
+   "init_before_s": 39.42,
+   "window_open_s": 10.0,
+   "commission_ok": true,
+   "commission_s": 74.4,
+   "init_with_fabric_s": 6.88,
+   "remove_s": 13.61
+  },
+  {
+   "cycle": 5,
+   "init_before_s": 7.881,
+   "window_open_s": 2.61,
+   "commission_ok": true,
+   "commission_s": 57.6,
+   "init_with_fabric_s": 20.972,
+   "remove_s": 30.19
+  }
+ ],
+ "phases": [
+  {
+   "pase": 9.908,
+   "attestation": 3.078,
+   "csr": 3.529,
+   "noc_to_done": 29.78,
+   "commit": 1.757
+  },
+  {
+   "pase": 9.824,
+   "attestation": 3.088,
+   "csr": 3.531,
+   "noc_to_done": 33.691,
+   "commit": 2.939
+  },
+  {
+   "pase": 10.198,
+   "attestation": 3.178,
+   "csr": 3.562,
+   "noc_to_done": 39.359,
+   "commit": 3.239
+  },
+  {
+   "pase": 10.361,
+   "attestation": 3.42,
+   "csr": 3.542,
+   "noc_to_done": 43.313,
+   "commit": 1.849
+  },
+  {
+   "pase": 9.858,
+   "attestation": 3.085,
+   "csr": 3.533,
+   "noc_to_done": 34.057,
+   "commit": 3.329
+  }
+ ]
+}

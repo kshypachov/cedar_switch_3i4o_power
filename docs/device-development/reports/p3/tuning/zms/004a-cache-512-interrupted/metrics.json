@@ -1,0 +1,110 @@
+{
+ "meta": {
+  "backend": "zms",
+  "trial": "004-cache-512",
+  "kind": "trial",
+  "change": "CONFIG_ZMS_LOOKUP_CACHE_SIZE=512",
+  "cycles": 5,
+  "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/zms-cache-512/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+  "started": "2026-09-13 19:32:32"
+ },
+ "aborted": "interrupted: Claude Code session ended at ~19:38 during cycle 3, queue runner killed",
+ "score": 3.301,
+ "score_parts": {
+  "init_with_fabric": 1.541,
+  "remove": 1.6,
+  "commit": 0.16
+ },
+ "slope_with_fabric_s_per_cycle": null,
+ "slope_before_s_per_cycle": null,
+ "median_init_before_s": 1.101,
+ "median_window_open_s": 2.66,
+ "commissioning_ok": 3,
+ "commissioning_total": 3,
+ "phase_medians": {
+  "pase": 10.262,
+  "attestation": 3.49,
+  "csr": 3.7,
+  "noc_to_done": 28.637,
+  "commit": 0.16
+ },
+ "clean_boot_init_s": 0.647,
+ "wipe": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19043 ms",
+ "read_back_ok": true,
+ "persistence_ok": null,
+ "persistence": null,
+ "boot_failures": 0,
+ "unexpected_boots": 6,
+ "storage_warnings": [],
+ "bench": {},
+ "cycles": [
+  {
+   "cycle": 1,
+   "init_before_s": 0.629,
+   "window_open_s": 1.39,
+   "commission_ok": true,
+   "commission_s": 48.3,
+   "init_with_fabric_s": 1.341,
+   "remove_s": 1.55
+  },
+  {
+   "cycle": 2,
+   "init_before_s": 1.101,
+   "window_open_s": 2.66,
+   "commission_ok": true,
+   "commission_s": 49.1,
+   "init_with_fabric_s": 1.741,
+   "remove_s": 1.65
+  },
+  {
+   "cycle": 3,
+   "init_before_s": 1.751,
+   "window_open_s": 4.16,
+   "commission_ok": true,
+   "commission_s": 50.8,
+   "init_with_fabric_s": null,
+   "remove_s": null
+  },
+  {
+   "cycle": 4,
+   "init_before_s": null,
+   "window_open_s": null,
+   "commission_ok": null,
+   "commission_s": null,
+   "init_with_fabric_s": null,
+   "remove_s": null
+  },
+  {
+   "cycle": 5,
+   "init_before_s": null,
+   "window_open_s": null,
+   "commission_ok": null,
+   "commission_s": null,
+   "init_with_fabric_s": null,
+   "remove_s": null
+  }
+ ],
+ "phases": [
+  {
+   "pase": 10.262,
+   "attestation": 3.251,
+   "csr": 3.721,
+   "noc_to_done": 28.42,
+   "commit": 0.16
+  },
+  {
+   "pase": 10.175,
+   "attestation": 3.726,
+   "csr": 3.7,
+   "noc_to_done": 28.651,
+   "commit": 0.097
+  },
+  {
+   "pase": 10.567,
+   "attestation": 3.49,
+   "csr": 3.692,
+   "noc_to_done": 28.637,
+   "commit": 0.267
+  }
+ ]
+}

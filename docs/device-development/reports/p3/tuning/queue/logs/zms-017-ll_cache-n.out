@@ -1,0 +1,32 @@
+{"ok": true, "attempts": 1, "event": "flash", "host_time": "21:59:21"}
+{"result": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19049 ms", "host_s": 19.1, "event": "wipe", "host_time": "21:59:52"}
+{"label": "clean partition", "boots_since_wipe": 1, "main_host_s": 2.71, "matter_start_uptime_s": 3.95, "matter_ready_uptime_s": 4.619, "matter_init_s": 0.669, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:00:02"}
+{"reboot_count": 1, "unique_id": "33 44 31 30 37 35 34 39", "event": "structure_created", "host_time": "22:00:06"}
+{"label": "restart after creation", "boots_since_wipe": 2, "main_host_s": 2.64, "matter_start_uptime_s": 2.383, "matter_ready_uptime_s": 2.967, "matter_init_s": 0.584, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:00:13"}
+{"reboot_count_before": 1, "reboot_count_after": 2, "unique_id_same": true, "counter_advanced": true, "event": "structure_read_back", "host_time": "22:00:17"}
+{"label": "cycle 1: before commissioning", "boots_since_wipe": 3, "main_host_s": 2.62, "matter_start_uptime_s": 2.698, "matter_ready_uptime_s": 3.323, "matter_init_s": 0.625, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:00:25"}
+{"node": 101, "ok": true, "window_open_s": 1.38, "commission_s": 47.1, "failed": null, "event": "commission", "host_time": "22:01:13"}
+{"label": "cycle 1: with fabric", "boots_since_wipe": 4, "main_host_s": 2.92, "matter_start_uptime_s": 3.91, "matter_ready_uptime_s": 5.088, "matter_init_s": 1.178, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:01:22"}
+{"ok": true, "remove_s": 1.58, "after": "0", "event": "remove_fabrics", "host_time": "22:01:24"}
+{"label": "cycle 2: before commissioning", "boots_since_wipe": 5, "main_host_s": 2.92, "matter_start_uptime_s": 2.916, "matter_ready_uptime_s": 3.9539999999999997, "matter_init_s": 1.038, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:01:32"}
+{"node": 102, "ok": true, "window_open_s": 2.99, "commission_s": 47.9, "failed": null, "event": "commission", "host_time": "22:02:38"}
+{"label": "cycle 2: with fabric", "boots_since_wipe": 6, "main_host_s": 3.15, "matter_start_uptime_s": 2.882, "matter_ready_uptime_s": 4.641, "matter_init_s": 1.759, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:02:46"}
+{"ok": true, "remove_s": 1.57, "after": "0", "event": "remove_fabrics", "host_time": "22:02:48"}
+{"label": "cycle 3: before commissioning", "boots_since_wipe": 7, "main_host_s": 3.23, "matter_start_uptime_s": 3.918, "matter_ready_uptime_s": 5.307, "matter_init_s": 1.389, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:02:57"}
+{"node": 103, "ok": true, "window_open_s": 4.76, "commission_s": 50.0, "failed": null, "event": "commission", "host_time": "22:03:52"}
+{"label": "cycle 3: with fabric", "boots_since_wipe": 8, "main_host_s": 3.67, "matter_start_uptime_s": 2.73, "matter_ready_uptime_s": 5.264, "matter_init_s": 2.534, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:04:01"}
+{"ok": true, "remove_s": 1.52, "after": "0", "event": "remove_fabrics", "host_time": "22:04:03"}
+{"label": "cycle 4: before commissioning", "boots_since_wipe": 9, "main_host_s": 3.62, "matter_start_uptime_s": 2.908, "matter_ready_uptime_s": 4.97, "matter_init_s": 2.062, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:04:12"}
+{"node": 104, "ok": true, "window_open_s": 7.5, "commission_s": 53.6, "failed": null, "event": "commission", "host_time": "22:05:13"}
+{"label": "cycle 4: with fabric", "boots_since_wipe": 10, "main_host_s": 4.02, "matter_start_uptime_s": 3.909, "matter_ready_uptime_s": 6.955, "matter_init_s": 3.046, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:05:24"}
+{"ok": true, "remove_s": 3.02, "after": "0", "event": "remove_fabrics", "host_time": "22:05:27"}
+{"label": "cycle 5: before commissioning", "boots_since_wipe": 11, "main_host_s": 4.06, "matter_start_uptime_s": 3.002, "matter_ready_uptime_s": 5.923, "matter_init_s": 2.921, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:05:37"}
+{"node": 105, "ok": true, "window_open_s": 11.38, "commission_s": 56.4, "failed": null, "event": "commission", "host_time": "22:06:45"}
+{"label": "cycle 5: with fabric", "boots_since_wipe": 12, "main_host_s": 4.53, "matter_start_uptime_s": 3.475, "matter_ready_uptime_s": 7.308, "matter_init_s": 3.833, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:06:56"}
+{"ok": true, "remove_s": 4.14, "after": "0", "event": "remove_fabrics", "host_time": "22:07:00"}
+{"cycles": 5, "event": "cycles_done", "host_time": "22:07:00"}
+{"ok": true, "key": "mt/cfg/unique-id", "text": ["settings backend: 11 entries, 3 rounds (best / mean, us)", "scan (no match)    838700 /   841433", "scan (all)         702300 /   706733", "load_one (hit)     129200 /   131966  -> 16", "load_one (miss)     74000 /    74033  -> 0", "val_len (hit)      129100 /   129800  -> 16", "val_len (miss)      74000 /    74033  -> 0"], "event": "bench", "host_time": "22:07:07"}
+{"label": "after cycles", "boots_since_wipe": 13, "main_host_s": 4.53, "matter_start_uptime_s": 3.909, "matter_ready_uptime_s": 7.269, "matter_init_s": 3.36, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:07:19"}
+{"reboot_count": 13, "boots_since_wipe": 13, "ok": true, "note": "Matter counts every boot in mt/ctr/reboot-count; equal counts mean every boot read and wrote it back", "event": "persistence", "host_time": "22:07:26"}
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/017-ll_cache-n: score 4.453 {'init_with_fabric': 2.534, 'remove': 1.58, 'commit': 0.339} slope 0.664 comm 5/5 phases {'pase': 10.364, 'attestation': 3.267, 'csr': 3.585, 'noc_to_done': 28.164, 'commit': 0.339} persistence 13 counted / 13 boots aborted None
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 20 trials, reference 4.38, noise 0.23

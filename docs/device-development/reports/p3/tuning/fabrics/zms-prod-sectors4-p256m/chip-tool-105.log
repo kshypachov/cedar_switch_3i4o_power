@@ -1,0 +1,1171 @@
+[0;32m[1789418350.428] [65528:15665856:main] [DL] KVS will be written to: file:///private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/work/chip-tool-fabrics-zms-prod-sectors4-p256m/chip_tool_kvs[0m
+[0;34m[1789418350.437] [65528:15665856:main] [DL] Initializing BLE Manager[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] UDP::Init bind&listen port=0[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] UDP::Init bound to port=50055[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] UDP::Init bind&listen port=0[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] UDP::Init bound to port=55087[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] BLEBase::Init - setting/overriding transport[0m
+[0;34m[1789418350.438] [65528:15665856:main] [IN] TransportMgr initialized[0m
+[0;34m[1789418350.438] [65528:15665856:main] [FP] Initializing FabricTable from persistent storage[0m
+[0;32m[1789418350.438] [65528:15665856:main] [TS] Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418350.438] [65528:15665856:main] [FP] Fabric index 0x1 was retrieved from storage. Compressed FabricId 0xCDFA0C5780CECC44, FabricId 0x0000000000000001, NodeId 0x000000000001B669, VendorId 0xFFF1[0m
+[0;32m[1789418350.438] [65528:15665856:main] [FP] Fabric index 0x2 was retrieved from storage. Compressed FabricId 0xC821F3959BD24735, FabricId 0x0000000000000002, NodeId 0x000000000001B669, VendorId 0xFFF1[0m
+[0;32m[1789418350.438] [65528:15665856:main] [FP] Fabric index 0x3 was retrieved from storage. Compressed FabricId 0xA4B94C60A2E53999, FabricId 0x0000000000000003, NodeId 0x000000000001B669, VendorId 0xFFF1[0m
+[0;32m[1789418350.439] [65528:15665856:main] [FP] Fabric index 0x4 was retrieved from storage. Compressed FabricId 0x85B98AD829081088, FabricId 0x0000000000000004, NodeId 0x000000000001B669, VendorId 0xFFF1[0m
+[0;32m[1789418350.440] [65528:15665856:main] [DMG] Ember attribute persistence requires setting up[0m
+[0;32m[1789418350.440] [65528:15665856:main] [ZCL] Using ZAP configuration...[0m
+[0;34m[1789418350.440] [65528:15665856:main] [CTL] System State Initialized...[0m
+[0;32m[1789418350.495] [65528:15665856:main] [CTL] Setting attestation nonce to random value[0m
+[0;32m[1789418350.495] [65528:15665856:main] [CTL] Setting CSR nonce to random value[0m
+[0;34m[1789418350.495] [65528:15665856:main] [IN] UDP::Init bind&listen port=5550[0m
+[0;34m[1789418350.495] [65528:15665856:main] [IN] UDP::Init bound to port=5550[0m
+[0;34m[1789418350.495] [65528:15665856:main] [IN] UDP::Init bind&listen port=5550[0m
+[0;34m[1789418350.495] [65528:15665856:main] [IN] UDP::Init bound to port=5550[0m
+[0;34m[1789418350.495] [65528:15665856:main] [IN] TransportMgr initialized[0m
+[0;34m[1789418350.495] [65528:15665862:chip] [DL] _OnPlatformEvent[0m
+[0;32m[1789418350.495] [65528:15665862:chip] [CTL] Setting attestation nonce to random value[0m
+[0;32m[1789418350.495] [65528:15665862:chip] [CTL] Setting CSR nonce to random value[0m
+[0;32m[1789418350.495] [65528:15665862:chip] [CTL] Couldn't get ExampleOpCredsCAKey from storage: src/controller/ExamplePersistentStorage.cpp:112: CHIP Error 0x000000A0: Value not found in the persisted storage[0m
+[0;32m[1789418350.496] [65528:15665862:chip] [CTL] Couldn't get ExampleOpCredsICAKey from storage: src/controller/ExamplePersistentStorage.cpp:112: CHIP Error 0x000000A0: Value not found in the persisted storage[0m
+[0;32m[1789418350.499] [65528:15665862:chip] [CTL] Generating RCAC[0m
+[0;32m[1789418350.500] [65528:15665862:chip] [CTL] Generating ICAC[0m
+[0;32m[1789418350.501] [65528:15665862:chip] [CTL] Generating NOC[0m
+[0;32m[1789418350.503] [65528:15665862:chip] [FP] Validating NOC chain[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [FP] NOC chain validation successful[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [FP] Added new fabric at index: 0x5[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [FP] Assigned compressed fabric ID: 0x91E3D9A7D6565ADA, node ID: 0x000000000001B669[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [TS] Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [TS] New proposed Last Known Good Time: 2021-01-01T00:00:00[0m
+[0;32m[1789418350.509] [65528:15665862:chip] [TS] Retaining current Last Known Good Time[0m
+[0;32m[1789418350.510] [65528:15665862:chip] [FP] Metadata for Fabric 0x5 persisted to storage.[0m
+[0;32m[1789418350.511] [65528:15665862:chip] [TS] Committing Last Known Good Time to storage: 2023-10-14T01:16:48[0m
+[0;32m[1789418350.512] [65528:15665862:chip] [CTL] Joined the fabric at index 5. Fabric ID is 0x0000000000000005 (Compressed Fabric ID: 91E3D9A7D6565ADA)[0m
+[0;34m[1789418350.512] [65528:15665862:chip] [IN] UDP::Init bind&listen port=5555[0m
+[0;34m[1789418350.512] [65528:15665862:chip] [IN] UDP::Init bound to port=5555[0m
+[0;34m[1789418350.512] [65528:15665862:chip] [IN] UDP::Init bind&listen port=5555[0m
+[0;34m[1789418350.512] [65528:15665862:chip] [IN] UDP::Init bound to port=5555[0m
+[0;34m[1789418350.512] [65528:15665862:chip] [IN] TransportMgr initialized[0m
+[0;32m[1789418350.527] [65528:15665862:chip] [DIS] Browsing for: _matterc._udp,_L3840 on local domain[0m
+[0;32m[1789418350.530] [65528:15665862:chip] [DIS] Browsing for: _matterc._udp,_L3840 on default.service.arpa. domain[0m
+[0;32m[1789418350.531] [65528:15665862:chip] [DIS] Mdns: OnBrowseAdd  name: 7225C0505FFA671C, type: _matterc._udp., domain: local., interface: 23[0m
+[0;32m[1789418350.531] [65528:15665862:chip] [DIS] Mdns: OnBrowseAdd  name: 7225C0505FFA671C, type: _matterc._udp., domain: local., interface: 14[0m
+[0;32m[1789418350.531] [65528:15665862:chip] [DIS] Resolve type=_matterc._udp name=7225C0505FFA671C domain=local. interface=23[0m
+[0;32m[1789418350.532] [65528:15665862:chip] [DIS] Resolve type=_matterc._udp name=7225C0505FFA671C domain=local. interface=14[0m
+[0;32m[1789418350.533] [65528:15665862:chip] [DIS] Mdns: OnResolve flags: 0, interface: 23, fullname: 7225C0505FFA671C._matterc._udp.local., hostname: 803428101273.local., port: 5540, err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418350.533] [65528:15665862:chip] [DIS] Mdns : OnNewInterface hostname:803428101273.local. fullname:7225C0505FFA671C._matterc._udp.local. interface: 23 port: 5540 TXT:"VP=65521+32769,D=3840,CM=1,PH=36"[0m
+[0;32m[1789418350.534] [65528:15665862:chip] [DIS] Mdns: OnResolve flags: 0, interface: 14, fullname: 7225C0505FFA671C._matterc._udp.local., hostname: 803428101273.local., port: 5540, err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418350.534] [65528:15665862:chip] [DIS] Mdns : OnNewInterface hostname:803428101273.local. fullname:7225C0505FFA671C._matterc._udp.local. interface: 14 port: 5540 TXT:"VP=65521+32769,D=3840,CM=1,PH=36"[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: OnGetAddrInfo flags: 1073741827, interface: 23, hostname: 803428101273.local., err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: OnNewAddress instance: 7225C0505FFA671C interface: 23 ip: fe80::8234:28ff:fe10:1273[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: OnGetAddrInfo flags: 1073741826, interface: 23, hostname: 803428101273.local., err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: OnNewAddress instance: 7225C0505FFA671C interface: 23 ip: fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: Resolve success on interface 23[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] Discovered commissionable/commissioner node:[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Hostname: 803428101273[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	IP Address #1: fe80::8234:28ff:fe10:1273[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	IP Address #2: fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Port: 5540[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Mrp Interval idle: not present[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Mrp Interval active: not present[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Mrp Active Threshold: not present[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	TCP Client Supported: 0[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	TCP Server Supported: 0[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	ICD: not present[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Vendor ID: 65521[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Product ID: 32769[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Long Discriminator: 3840[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Pairing Hint: 36[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Instance Name: 7225C0505FFA671C[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Commissioning Mode: 1[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [DIS] 	Supports Commissioner Generated Passcode: false[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [TOO] Discovered Device: fe80::8234:28ff:fe10:1273:5540[0m
+[1;31m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: Resolve failure (src/platform/Darwin/dnssd/DnssdImpl.cpp:490: CHIP Error 0x00000074: The operation has been cancelled)[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [DIS] Mdns: Browse canceled[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [IN] SecureSession[0x10781bce0]: Allocated Type:1 LSID:44239[0m
+[0;34m[1789418350.536] [65528:15665862:chip] [SC] Assigned local session key ID 44239[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [EM] <<< [E:62482i S:0 M:11976184] (U) Msg TX from 66929350E64EAD28 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:20 (SecureChannel:PBKDFParamRequest) (B:98)[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [EM] ??1 [E:62482i S:0 M:11976184] (U) Msg Retransmission to 0:0000000000000000 scheduled for 406ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418350.536] [65528:15665862:chip] [SC] Sent PBKDF param request [II:500ms AI:300ms AT:4000ms)[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [CTL] Setting attestation nonce to random value[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [CTL] Setting CSR nonce to random value[0m
+[0;32m[1789418350.536] [65528:15665862:chip] [CTL] Commission called for node ID 0x0000000000000069[0m
+[0;32m[1789418350.561] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657165 (Ack:11976184)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418350.561] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418350.561] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11976184 from Retrans Table on exchange 62482i[0m
+[0;32m[1789418350.777] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657166 (Ack:11976184)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:21 (SecureChannel:PBKDFParamResponse) (B:158)[0m
+[0;34m[1789418350.777] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418350.777] [65528:15665862:chip] [EM] CHIP MessageCounter:11976184 not in RetransTable on exchange 62482i[0m
+[0;34m[1789418350.777] [65528:15665862:chip] [SC] Received PBKDF param response[0m
+[0;34m[1789418350.777] [65528:15665862:chip] [SC] Peer assigned session ID 16099[0m
+[0;34m[1789418350.777] [65528:15665862:chip] [SC] Found MRP parameters in the message[0m
+[0;32m[1789418350.790] [65528:15665862:chip] [EM] <<< [E:62482i S:0 M:11976185 (Ack:21657166)] (U) Msg TX from 66929350E64EAD28 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:22 (SecureChannel:PASE_Pake1) (B:96)[0m
+[0;32m[1789418350.790] [65528:15665862:chip] [EM] ??1 [E:62482i S:0 M:11976185] (U) Msg Retransmission to 0:0000000000000000 scheduled for 360ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418350.790] [65528:15665862:chip] [SC] Sent spake2p msg1[0m
+[0;32m[1789418350.815] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657167 (Ack:11976185)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418350.815] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418350.815] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11976185 from Retrans Table on exchange 62482i[0m
+[0;32m[1789418360.044] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657168 (Ack:11976185)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:23 (SecureChannel:PASE_Pake2) (B:131)[0m
+[0;34m[1789418360.044] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418360.044] [65528:15665862:chip] [EM] CHIP MessageCounter:11976185 not in RetransTable on exchange 62482i[0m
+[0;34m[1789418360.044] [65528:15665862:chip] [SC] Received spake2p msg2[0m
+[0;32m[1789418360.061] [65528:15665862:chip] [EM] <<< [E:62482i S:0 M:11976186 (Ack:21657168)] (U) Msg TX from 66929350E64EAD28 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:24 (SecureChannel:PASE_Pake3) (B:63)[0m
+[0;32m[1789418360.062] [65528:15665862:chip] [EM] ??1 [E:62482i S:0 M:11976186] (U) Msg Retransmission to 0:0000000000000000 scheduled for 356ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418360.062] [65528:15665862:chip] [SC] Sent spake2p msg3[0m
+[0;32m[1789418360.086] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657169 (Ack:11976186)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418360.086] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418360.086] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11976186 from Retrans Table on exchange 62482i[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [EM] >>> [E:62482i S:0 M:21657170 (Ack:11976186)] (U) Msg RX from 0:0000000000000000 [0000] to 66929350E64EAD28 --- Type 0000:40 (SecureChannel:StatusReport) (B:34)[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [EM] Found matching exchange: 62482i, Delegate: 0x99ae8a060[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [EM] CHIP MessageCounter:11976186 not in RetransTable on exchange 62482i[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [SC] SecureSession[0x10781bce0, LSID:44239]: State change 'kEstablishing' --> 'kActive'[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [IN] SecureSession[0x10781bce0]: Activated - Type:1 LSID:44239[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [IN] New secure session activated for device <FFFFFFFB00000000, 0>, LSID:44239 PSID:16099![0m
+[0;34m[1789418360.322] [65528:15665862:chip] [CTL] Remote device completed SPAKE2+ handshake[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [TOO] Pairing Success[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [TOO] PASE establishment successful[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [CTL] Commissioning stage next step: 'SecurePairing' -> 'ReadCommissioningInfo'[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [CTL] Performing next commissioning step 'ReadCommissioningInfo'[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [TOO] Starting commissioning stage 'ReadCommissioningInfo'[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [CTL] Sending read requests for commissioning information[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [DMG] SendReadRequest ReadClient[0x99e8e0000]: Sending Read Request[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [DMG] 0 data version filters provided, 0 not relevant, 0 encoded, 0 skipped due to lack of space[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [EM] <<< [E:62483i S:44239 M:11754669] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:02 (IM:ReadRequest) (B:136)[0m
+[0;32m[1789418360.322] [65528:15665862:chip] [EM] ??1 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 383ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418360.322] [65528:15665862:chip] [DMG] MoveToState ReadClient[0x99e8e0000]: Moving to [AwaitingIn][0m
+[0;32m[1789418360.322] [65528:15665862:chip] [EM] <<< [E:62482i S:0 M:11976187 (Ack:21657170)] (U) Msg TX from 66929350E64EAD28 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [EM] Flushed pending ack for MessageCounter:21657170 on exchange 62482i[0m
+[0;34m[1789418360.322] [65528:15665862:chip] [DL] _OnPlatformEvent[0m
+[0;32m[1789418360.707] [65528:15666074:chip] [EM] <<1 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418360.707] [65528:15666074:chip] [EM] ??2 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 375ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418361.083] [65528:15665862:chip] [EM] <<2 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418361.084] [65528:15665862:chip] [EM] ??3 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 580ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418361.666] [65528:15666074:chip] [EM] <<3 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418361.666] [65528:15666074:chip] [EM] ??4 [E:62483i S:44239 M:11754669] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 911ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418361.815] [65528:15665862:chip] [IN] Received unknown unsecure packet for initiator 0x66929350E64EAD28[0m
+[0;32m[1789418362.053] [65528:15665862:chip] [EM] >>> [E:62483i S:44239 M:101216025 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418362.053] [65528:15665862:chip] [EM] Found matching exchange: 62483i, Delegate: 0x99e8e0010[0m
+[0;34m[1789418362.053] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11754669 from Retrans Table on exchange 62483i[0m
+[0;32m[1789418362.655] [65528:15665862:chip] [EM] >>> [E:62483i S:44239 M:101216026 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:05 (IM:ReportData) (B:257)[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [EM] Found matching exchange: 62483i, Delegate: 0x99e8e0010[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [EM] CHIP MessageCounter:11754669 not in RetransTable on exchange 62483i[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] ReportDataMessage =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] {[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	AttributeReportIBs =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	[[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0xd38f69a8,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x28,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0004,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = 32769 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0xd38f69a8,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x28,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0002,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = 65521 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeStatusIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_000C,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				StatusIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					status = 0x86 (UNSUPPORTED_ATTRIBUTE),[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0x9d45b796,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0003,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = 0 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0x9d45b796,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0002,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = 0 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0x9d45b796,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0001,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					0x0 = 60 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					0x1 = 900 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0x9d45b796,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0000,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = 0 (unsigned), [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				DataVersion = 0x9d45b796,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Cluster = 0x30,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					Attribute = 0x0000_0004,[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				}[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 					[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 				Data = true, [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	],[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	SuppressResponse = true, [0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] }[0m
+[0;34m[1789418362.655] [65528:15665862:chip] [DMG] SendReadRequest ReadClient[0x99e8e0000]: Sending Read Request[0m
+[0;32m[1789418362.655] [65528:15665862:chip] [DMG] 0 data version filters provided, 0 not relevant, 0 encoded, 0 skipped due to lack of space[0m
+[0;32m[1789418362.656] [65528:15665862:chip] [EM] <<< [E:62484i S:44239 M:11754670] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:02 (IM:ReadRequest) (B:57)[0m
+[0;32m[1789418362.656] [65528:15665862:chip] [EM] ??1 [E:62484i S:44239 M:11754670] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 407ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418362.656] [65528:15665862:chip] [DMG] MoveToState ReadClient[0x99e8e0000]: Moving to [AwaitingIn][0m
+[0;32m[1789418362.656] [65528:15665862:chip] [EM] <<< [E:62483i S:44239 M:11754671 (Ack:101216026)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418362.656] [65528:15665862:chip] [EM] Flushed pending ack for MessageCounter:101216026 on exchange 62483i[0m
+[0;32m[1789418362.904] [65528:15666074:chip] [EM] >>> [E:62483i S:44239 M:101216027 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418362.927] [65528:15666074:chip] [EM] >>> [E:62483i S:44239 M:101216028 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418363.064] [65528:15666074:chip] [EM] <<1 [E:62484i S:44239 M:11754670] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418363.064] [65528:15666074:chip] [EM] ??2 [E:62484i S:44239 M:11754670] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418363.184] [65528:15665862:chip] [EM] >>> [E:62483i S:44239 M:101216029 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418363.196] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216026 on exchange 62483i[0m
+[0;32m[1789418363.196] [65528:15665862:chip] [EM] >>> [E:62483i S:44239 M:101216026 (Ack:11754669)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:05 (IM:ReportData) (B:257)[0m
+[0;34m[1789418363.196] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62483i[0m
+[0;34m[1789418363.196] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216026 on exchange 62483i[0m
+[0;32m[1789418363.196] [65528:15665862:chip] [EM] <<< [E:62483i S:44239 M:11754672 (Ack:101216026)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418363.394] [65528:15665862:chip] [EM] <<2 [E:62484i S:44239 M:11754670] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418363.394] [65528:15665862:chip] [EM] ??3 [E:62484i S:44239 M:11754670] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 618ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418363.445] [65528:15666074:chip] [EM] >>> [E:62484i S:44239 M:101216030 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418363.445] [65528:15666074:chip] [EM] Found matching exchange: 62484i, Delegate: 0x99e8e0010[0m
+[0;34m[1789418363.445] [65528:15666074:chip] [EM] Rxd Ack; Removing MessageCounter:11754670 from Retrans Table on exchange 62484i[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [EM] >>> [E:62484i S:44239 M:101216031 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:05 (IM:ReportData) (B:71)[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [EM] Found matching exchange: 62484i, Delegate: 0x99e8e0010[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [EM] CHIP MessageCounter:11754670 not in RetransTable on exchange 62484i[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] ReportDataMessage =[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	AttributeReportIBs =[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 		AttributeReportIB =[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 			AttributeDataIB =[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 				DataVersion = 0x6d928147,[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 				AttributePathIB =[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 					Endpoint = 0x0,[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 					Cluster = 0x31,[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 					Attribute = 0x0000_FFFC,[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 				}[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 					[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 				Data = 4 (unsigned), [0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	SuppressResponse = true, [0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] }[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [CTL] NetworkCommissioning Features: has Ethernet. endpointid = 0[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [SVR] OnReadCommissioningInfo - vendorId=0xFFF1 productId=0x8001[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [SVR] OnReadCommissioningInfo ICD - IdleModeDuration=0 activeModeDuration=0 activeModeThreshold=0[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'ReadCommissioningInfo'[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [CTL] Commissioning stage next step: 'ReadCommissioningInfo' -> 'ArmFailSafe'[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [CTL] Performing next commissioning step 'ArmFailSafe'[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [TOO] Starting commissioning stage 'ArmFailSafe'[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [CTL] Arming failsafe (60 seconds)[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418363.518] [65528:15666074:chip] [EM] <<< [E:62485i S:44239 M:11754673] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:65)[0m
+[0;32m[1789418363.518] [65528:15666074:chip] [EM] ??1 [E:62485i S:44239 M:11754673] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 355ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418363.518] [65528:15666074:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;32m[1789418363.518] [65528:15666074:chip] [EM] <<< [E:62484i S:44239 M:11754674 (Ack:101216031)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418363.518] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216031 on exchange 62484i[0m
+[0;32m[1789418363.777] [65528:15666074:chip] [EM] >>> [E:62484i S:44239 M:101216032 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418363.874] [65528:15666074:chip] [EM] <<1 [E:62485i S:44239 M:11754673] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418363.874] [65528:15666074:chip] [EM] ??2 [E:62485i S:44239 M:11754673] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 383ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418364.022] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216031 on exchange 62484i[0m
+[0;32m[1789418364.022] [65528:15665862:chip] [EM] >>> [E:62484i S:44239 M:101216031 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:05 (IM:ReportData) (B:71)[0m
+[0;34m[1789418364.022] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62484i[0m
+[0;34m[1789418364.022] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216031 on exchange 62484i[0m
+[0;32m[1789418364.022] [65528:15665862:chip] [EM] <<< [E:62484i S:44239 M:11754675 (Ack:101216031)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418364.047] [65528:15665862:chip] [EM] >>> [E:62484i S:44239 M:101216033 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418364.259] [65528:15665862:chip] [EM] <<2 [E:62485i S:44239 M:11754673] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418364.259] [65528:15665862:chip] [EM] ??3 [E:62485i S:44239 M:11754673] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 542ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418364.312] [65528:15666074:chip] [EM] >>> [E:62485i S:44239 M:101216034 (Ack:11754673)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [EM] Found matching exchange: 62485i, Delegate: 0x99e8e0008[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [EM] Rxd Ack; Removing MessageCounter:11754673 from Retrans Table on exchange 62485i[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 					ClusterId = 0x30,[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 					CommandId = 0x1,[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 					0x0 = 0 (unsigned), [0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 					0x1 = "" (0 chars), [0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418364.312] [65528:15666074:chip] [DMG] },[0m
+[0;32m[1789418364.312] [65528:15666074:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0001[0m
+[0;32m[1789418364.312] [65528:15666074:chip] [CTL] Received ArmFailSafe response errorCode=0[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'ArmFailSafe'[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [CTL] Commissioning stage next step: 'ArmFailSafe' -> 'ConfigRegulatory'[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [CTL] Performing next commissioning step 'ConfigRegulatory'[0m
+[0;34m[1789418364.313] [65528:15666074:chip] [TOO] Starting commissioning stage 'ConfigRegulatory'[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [CTL] Setting Regulatory Config[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [CTL] Device does not support configurable regulatory location[0m
+[0;34m[1789418364.313] [65528:15666074:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418364.313] [65528:15666074:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418364.313] [65528:15666074:chip] [EM] <<< [E:62486i S:44239 M:11754676] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:70)[0m
+[0;32m[1789418364.313] [65528:15666074:chip] [EM] ??1 [E:62486i S:44239 M:11754676] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 394ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418364.313] [65528:15666074:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;34m[1789418364.313] [65528:15666074:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418364.313] [65528:15666074:chip] [EM] <<< [E:62485i S:44239 M:11754677 (Ack:101216034)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418364.313] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216034 on exchange 62485i[0m
+[0;34m[1789418364.522] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216031 on exchange 62484i[0m
+[0;32m[1789418364.522] [65528:15666074:chip] [EM] >>> [E:62484i S:44239 M:101216031 (Ack:11754670)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:05 (IM:ReportData) (B:71)[0m
+[0;34m[1789418364.522] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62484i[0m
+[0;34m[1789418364.522] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216031 on exchange 62484i[0m
+[0;32m[1789418364.522] [65528:15666074:chip] [EM] <<< [E:62484i S:44239 M:11754678 (Ack:101216031)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418364.707] [65528:15666074:chip] [EM] <<1 [E:62486i S:44239 M:11754676] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418364.708] [65528:15666074:chip] [EM] ??2 [E:62486i S:44239 M:11754676] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 364ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418364.770] [65528:15665862:chip] [EM] >>> [E:62485i S:44239 M:101216035 (Ack:11754673)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418364.780] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216034 on exchange 62485i[0m
+[0;32m[1789418364.780] [65528:15665862:chip] [EM] >>> [E:62485i S:44239 M:101216034 (Ack:11754673)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418364.780] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62485i[0m
+[0;34m[1789418364.780] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216034 on exchange 62485i[0m
+[0;32m[1789418364.780] [65528:15665862:chip] [EM] <<< [E:62485i S:44239 M:11754679 (Ack:101216034)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418364.813] [65528:15665862:chip] [EM] >>> [E:62485i S:44239 M:101216036 (Ack:11754673)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418365.074] [65528:15665862:chip] [EM] <<2 [E:62486i S:44239 M:11754676] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418365.074] [65528:15665862:chip] [EM] ??3 [E:62486i S:44239 M:11754676] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 643ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418365.293] [65528:15665862:chip] [EM] >>> [E:62486i S:44239 M:101216037 (Ack:11754676)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [EM] Found matching exchange: 62486i, Delegate: 0x99e8e0188[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11754676 from Retrans Table on exchange 62486i[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] {[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	[[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 					ClusterId = 0x30,[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 					CommandId = 0x3,[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 					0x0 = 0 (unsigned), [0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 					0x1 = "" (0 chars), [0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	],[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] },[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0003[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Received SetRegulatoryConfig response errorCode=0[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'ConfigRegulatory'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Commissioning stage next step: 'ConfigRegulatory' -> 'ConfigureTCAcknowledgments'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Performing next commissioning step 'ConfigureTCAcknowledgments'[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [TOO] Starting commissioning stage 'ConfigureTCAcknowledgments'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Setting Terms and Conditions[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Setting Terms and Conditions: Skipped[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'ConfigureTCAcknowledgments'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Commissioning stage next step: 'ConfigureTCAcknowledgments' -> 'SendPAICertificateRequest'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Performing next commissioning step 'SendPAICertificateRequest'[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [TOO] Starting commissioning stage 'SendPAICertificateRequest'[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [CTL] Sending request for PAI certificate[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [CTL] Sending Certificate Chain request to 0x99ae8a000 device[0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418365.293] [65528:15665862:chip] [EM] <<< [E:62487i S:44239 M:11754680] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)[0m
+[0;32m[1789418365.293] [65528:15665862:chip] [EM] ??1 [E:62487i S:44239 M:11754680] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 409ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;34m[1789418365.293] [65528:15665862:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418365.294] [65528:15665862:chip] [EM] <<< [E:62486i S:44239 M:11754681 (Ack:101216037)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418365.294] [65528:15665862:chip] [EM] Flushed pending ack for MessageCounter:101216037 on exchange 62486i[0m
+[0;34m[1789418365.311] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216034 on exchange 62485i[0m
+[0;32m[1789418365.311] [65528:15665862:chip] [EM] >>> [E:62485i S:44239 M:101216034 (Ack:11754673)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418365.311] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62485i[0m
+[0;34m[1789418365.311] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216034 on exchange 62485i[0m
+[0;32m[1789418365.311] [65528:15665862:chip] [EM] <<< [E:62485i S:44239 M:11754682 (Ack:101216034)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418365.581] [65528:15665862:chip] [EM] >>> [E:62486i S:44239 M:101216038 (Ack:11754676)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418365.610] [65528:15665862:chip] [EM] >>> [E:62486i S:44239 M:101216039 (Ack:11754676)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418365.705] [65528:15665862:chip] [EM] <<1 [E:62487i S:44239 M:11754680] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418365.705] [65528:15665862:chip] [EM] ??2 [E:62487i S:44239 M:11754680] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 373ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418366.073] [65528:15666074:chip] [EM] >>> [E:62487i S:44239 M:101216040 (Ack:11754680)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:531)[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [EM] Found matching exchange: 62487i, Delegate: 0x99e8e0008[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [EM] Rxd Ack; Removing MessageCounter:11754680 from Retrans Table on exchange 62487i[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 					CommandId = 0x3,[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 					0x0 = [[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 							0x30, 0x82, 0x01, 0xcb, 0x30, 0x82, 0x01, 0x71, 0xa0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x08, 0x56, 0xad, 0x82, 0x22, 0xad, 0x94, 0x5b, 0x64, 0x30, 0x0a, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02, 0x30, 0x30, 0x31, 0x18, 0x30, 0x16, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0c, 0x0f, 0x4d, 0x61, 0x74, 0x74, 0x65, 0x72, 0x20, 0x54, 0x65, 0x73, 0x74, 0x20, 0x50, 0x41, 0x41, 0x31, 0x14, 0x30, 0x12, 0x06, 0x0a, 0x2b, 0x06, 0x01, 0x04, 0x01, 0x82, 0xa2, 0x7c, 0x02, 0x01, 0x0c, 0x04, 0x46, 0x46, 0x46, 0x31, 0x30, 0x20, 0x17, 0x0d, 0x32, 0x32, 0x30, 0x32, 0x30, 0x35, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x5a, 0x18, 0x0f, 0x39, 0x39, 0x39, 0x39, 0x31, 0x32, 0x33, 0x31, 0x32, 0x33, 0x35, 0x39, 0x35, 0x39, 0x5a, 0x30, 0x3d, 0x31, 0x25, 0x30, 0x23, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0c, 0x1c, 0x4d, 0x61, 0x74, 0x74, 0x65, 0x72, 0x20, 0x44, 0x65, 0x76, 0x20, 0x50, 0x41, 0x49, 0x20, 0x30, 0x78, 0x46, 0x46, 0x46, 0x31, 0x20, 0x6e, 0x6f, 0x20, 0x50, 0x49, 0x44, 0x31, 0x14, 0x30, 0x12, 0x06, 0x0a, 0x2b, 0x06, 0x01, 0x04, 0x01, 0x82, 0xa2, 0x7c, 0x02, 0x01, 0x0c, 0x04, 0x46, 0x46, 0x46, 0x31, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0x41, 0x9a, 0x93, 0x15, 0xc2, 0x17, 0x3e, 0x0c, 0x8c, 0x87, 0x6d, 0x03, 0xcc, 0xfc, 0x94, 0x48, 0x52, 0x64, 0x7f, 0x7f, 0xec, 0x5e, 0x50, 0x82, 0xf4, 0x05, 0x99, 0x28, 0xec, 0xa8, 0x94, 0xc5, 0x94, 0x15, 0x13, 0x09, 0xac, 0x63, 0x1e, 0x4c, 0xb0, 0x33, 0x92, 0xaf, 0x68, 0x4b, 0x0b, 0xaf, 0xb7, 0xe6, 0x5b, 0x3b, 0x81, 0x62, 0xc2, 0xf5, 0x2b, 0xf9, 0x31, 0xb8, 0xe7, 0x7a, 0xaa, 0x82, 0xa3, 0x66, 0x30, 0x64, 0x30, 0x12, 0x06, 0x03, 0x55, 0x1d, 0x[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 					] (463 bytes)[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [DMG] },[0m
+[0;32m[1789418366.073] [65528:15666074:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_003E Command=0x0000_0003[0m
+[0;32m[1789418366.073] [65528:15666074:chip] [CTL] Received certificate chain from the device[0m
+[0;32m[1789418366.073] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'SendPAICertificateRequest'[0m
+[0;32m[1789418366.073] [65528:15666074:chip] [CTL] Commissioning stage next step: 'SendPAICertificateRequest' -> 'SendDACCertificateRequest'[0m
+[0;32m[1789418366.073] [65528:15666074:chip] [CTL] Performing next commissioning step 'SendDACCertificateRequest'[0m
+[0;34m[1789418366.073] [65528:15666074:chip] [TOO] Starting commissioning stage 'SendDACCertificateRequest'[0m
+[0;32m[1789418366.074] [65528:15666074:chip] [CTL] Sending request for DAC certificate[0m
+[0;34m[1789418366.074] [65528:15666074:chip] [CTL] Sending Certificate Chain request to 0x99ae8a000 device[0m
+[0;34m[1789418366.074] [65528:15666074:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418366.074] [65528:15666074:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418366.074] [65528:15666074:chip] [EM] <<< [E:62488i S:44239 M:11754683] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:62)[0m
+[0;32m[1789418366.074] [65528:15666074:chip] [EM] ??1 [E:62488i S:44239 M:11754683] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 396ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418366.074] [65528:15666074:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;34m[1789418366.074] [65528:15666074:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418366.074] [65528:15666074:chip] [EM] <<< [E:62487i S:44239 M:11754684 (Ack:101216040)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418366.074] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216040 on exchange 62487i[0m
+[0;34m[1789418366.091] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216037 on exchange 62486i[0m
+[0;32m[1789418366.091] [65528:15666074:chip] [EM] >>> [E:62486i S:44239 M:101216037 (Ack:11754676)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418366.091] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62486i[0m
+[0;34m[1789418366.091] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216037 on exchange 62486i[0m
+[0;32m[1789418366.091] [65528:15666074:chip] [EM] <<< [E:62486i S:44239 M:11754685 (Ack:101216037)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418366.368] [65528:15666074:chip] [EM] >>> [E:62487i S:44239 M:101216041 (Ack:11754680)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418366.471] [65528:15666074:chip] [EM] <<1 [E:62488i S:44239 M:11754683] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418366.471] [65528:15666074:chip] [EM] ??2 [E:62488i S:44239 M:11754683] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 330ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418366.630] [65528:15665862:chip] [EM] >>> [E:62488i S:44239 M:101216042 (Ack:11754683)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:559)[0m
+[0;34m[1789418366.630] [65528:15665862:chip] [EM] Found matching exchange: 62488i, Delegate: 0x99e8e0188[0m
+[0;34m[1789418366.630] [65528:15665862:chip] [EM] Rxd Ack; Removing MessageCounter:11754683 from Retrans Table on exchange 62488i[0m
+[0;34m[1789418366.630] [65528:15665862:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418366.630] [65528:15665862:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418366.630] [65528:15665862:chip] [DMG] {[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 	[[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 					CommandId = 0x3,[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 					0x0 = [[0m
+[0;34m[1789418366.634] [65528:15665862:chip] [DMG] 							0x30, 0x82, 0x01, 0xe7, 0x30, 0x82, 0x01, 0x8e, 0xa0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x08, 0x69, 0xcd, 0xf1, 0x0d, 0xe9, 0xe5, 0x4e, 0xd1, 0x30, 0x0a, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02, 0x30, 0x3d, 0x31, 0x25, 0x30, 0x23, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0c, 0x1c, 0x4d, 0x61, 0x74, 0x74, 0x65, 0x72, 0x20, 0x44, 0x65, 0x76, 0x20, 0x50, 0x41, 0x49, 0x20, 0x30, 0x78, 0x46, 0x46, 0x46, 0x31, 0x20, 0x6e, 0x6f, 0x20, 0x50, 0x49, 0x44, 0x31, 0x14, 0x30, 0x12, 0x06, 0x0a, 0x2b, 0x06, 0x01, 0x04, 0x01, 0x82, 0xa2, 0x7c, 0x02, 0x01, 0x0c, 0x04, 0x46, 0x46, 0x46, 0x31, 0x30, 0x20, 0x17, 0x0d, 0x32, 0x32, 0x30, 0x32, 0x30, 0x35, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x5a, 0x18, 0x0f, 0x39, 0x39, 0x39, 0x39, 0x31, 0x32, 0x33, 0x31, 0x32, 0x33, 0x35, 0x39, 0x35, 0x39, 0x5a, 0x30, 0x53, 0x31, 0x25, 0x30, 0x23, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0c, 0x1c, 0x4d, 0x61, 0x74, 0x74, 0x65, 0x72, 0x20, 0x44, 0x65, 0x76, 0x20, 0x44, 0x41, 0x43, 0x20, 0x30, 0x78, 0x46, 0x46, 0x46, 0x31, 0x2f, 0x30, 0x78, 0x38, 0x30, 0x30, 0x31, 0x31, 0x14, 0x30, 0x12, 0x06, 0x0a, 0x2b, 0x06, 0x01, 0x04, 0x01, 0x82, 0xa2, 0x7c, 0x02, 0x01, 0x0c, 0x04, 0x46, 0x46, 0x46, 0x31, 0x31, 0x14, 0x30, 0x12, 0x06, 0x0a, 0x2b, 0x06, 0x01, 0x04, 0x01, 0x82, 0xa2, 0x7c, 0x02, 0x02, 0x0c, 0x04, 0x38, 0x30, 0x30, 0x31, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0x46, 0x3a, 0xc6, 0x93, 0x42, 0x91, 0x0a, 0x0e, 0x55, 0x88, 0xfc, 0x6f, 0xf5, 0x6b, 0xb6, 0x3e, 0x62, 0xec, 0xce, 0xcb, 0x14, 0x8f, 0x7d, 0x4e, 0xb0, 0x3e, 0xe5, 0x52, 0x60, 0x14, 0x15, 0x76, 0x7d, 0x16, 0xa5, 0xc6, 0x63, 0xf7, 0x93, 0x[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 					] (491 bytes)[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 	],[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 	[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418366.635] [65528:15665862:chip] [DMG] },[0m
+[0;32m[1789418366.635] [65528:15665862:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_003E Command=0x0000_0003[0m
+[0;32m[1789418366.635] [65528:15665862:chip] [CTL] Received certificate chain from the device[0m
+[0;32m[1789418366.635] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'SendDACCertificateRequest'[0m
+[0;32m[1789418366.638] [65528:15665862:chip] [CTL] Commissioning stage next step: 'SendDACCertificateRequest' -> 'SendAttestationRequest'[0m
+[0;32m[1789418366.638] [65528:15665862:chip] [CTL] Performing next commissioning step 'SendAttestationRequest'[0m
+[0;34m[1789418366.638] [65528:15665862:chip] [TOO] Starting commissioning stage 'SendAttestationRequest'[0m
+[0;32m[1789418366.638] [65528:15665862:chip] [CTL] Sending Attestation Request to the device.[0m
+[0;34m[1789418366.638] [65528:15665862:chip] [CTL] Sending Attestation request to 0x99ae8a000 device[0m
+[0;34m[1789418366.638] [65528:15665862:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418366.638] [65528:15665862:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418366.638] [65528:15665862:chip] [EM] <<< [E:62489i S:44239 M:11754686] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)[0m
+[0;32m[1789418366.638] [65528:15665862:chip] [EM] ??1 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 374ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418366.638] [65528:15665862:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;34m[1789418366.638] [65528:15665862:chip] [CTL] Sent Attestation request, waiting for the Attestation Information[0m
+[0;34m[1789418366.638] [65528:15665862:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418366.638] [65528:15665862:chip] [EM] <<< [E:62488i S:44239 M:11754687 (Ack:101216042)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418366.638] [65528:15665862:chip] [EM] Flushed pending ack for MessageCounter:101216042 on exchange 62488i[0m
+[0;34m[1789418366.651] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216040 on exchange 62487i[0m
+[0;32m[1789418366.651] [65528:15665862:chip] [EM] >>> [E:62487i S:44239 M:101216040 (Ack:11754680)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:531)[0m
+[0;34m[1789418366.651] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62487i[0m
+[0;34m[1789418366.651] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216040 on exchange 62487i[0m
+[0;32m[1789418366.651] [65528:15665862:chip] [EM] <<< [E:62487i S:44239 M:11754688 (Ack:101216040)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418366.900] [65528:15665862:chip] [EM] >>> [E:62488i S:44239 M:101216043 (Ack:11754683)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418367.012] [65528:15665862:chip] [EM] <<1 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418367.012] [65528:15665862:chip] [EM] ??2 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 410ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418367.424] [65528:15666074:chip] [EM] <<2 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418367.424] [65528:15666074:chip] [EM] ??3 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 575ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418368.000] [65528:15665862:chip] [EM] <<3 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418368.000] [65528:15665862:chip] [EM] ??4 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 1001ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418369.002] [65528:15666074:chip] [EM] <<4 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418369.003] [65528:15666074:chip] [EM] ??5 [E:62489i S:44239 M:11754686] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 1373ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418369.063] [65528:15666074:chip] [EM] >>> [E:62489i S:44239 M:101216044 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:718)[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [EM] Found matching exchange: 62489i, Delegate: 0x99e8e0008[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [EM] Rxd Ack; Removing MessageCounter:11754686 from Retrans Table on exchange 62489i[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 					CommandId = 0x1,[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 					0x0 = [[0m
+[0;34m[1789418369.063] [65528:15666074:chip] [DMG] 							0x15, 0x31, 0x01, 0x1b, 0x02, 0x30, 0x82, 0x02, 0x17, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x02, 0xa0, 0x82, 0x02, 0x08, 0x30, 0x82, 0x02, 0x04, 0x02, 0x01, 0x03, 0x31, 0x0d, 0x30, 0x0b, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x30, 0x82, 0x01, 0x70, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x01, 0xa0, 0x82, 0x01, 0x61, 0x04, 0x82, 0x01, 0x5d, 0x15, 0x24, 0x00, 0x01, 0x25, 0x01, 0xf1, 0xff, 0x36, 0x02, 0x05, 0x00, 0x80, 0x05, 0x01, 0x80, 0x05, 0x02, 0x80, 0x05, 0x03, 0x80, 0x05, 0x04, 0x80, 0x05, 0x05, 0x80, 0x05, 0x06, 0x80, 0x05, 0x07, 0x80, 0x05, 0x08, 0x80, 0x05, 0x09, 0x80, 0x05, 0x0a, 0x80, 0x05, 0x0b, 0x80, 0x05, 0x0c, 0x80, 0x05, 0x0d, 0x80, 0x05, 0x0e, 0x80, 0x05, 0x0f, 0x80, 0x05, 0x10, 0x80, 0x05, 0x11, 0x80, 0x05, 0x12, 0x80, 0x05, 0x13, 0x80, 0x05, 0x14, 0x80, 0x05, 0x15, 0x80, 0x05, 0x16, 0x80, 0x05, 0x17, 0x80, 0x05, 0x18, 0x80, 0x05, 0x19, 0x80, 0x05, 0x1a, 0x80, 0x05, 0x1b, 0x80, 0x05, 0x1c, 0x80, 0x05, 0x1d, 0x80, 0x05, 0x1e, 0x80, 0x05, 0x1f, 0x80, 0x05, 0x20, 0x80, 0x05, 0x21, 0x80, 0x05, 0x22, 0x80, 0x05, 0x23, 0x80, 0x05, 0x24, 0x80, 0x05, 0x25, 0x80, 0x05, 0x26, 0x80, 0x05, 0x27, 0x80, 0x05, 0x28, 0x80, 0x05, 0x29, 0x80, 0x05, 0x2a, 0x80, 0x05, 0x2b, 0x80, 0x05, 0x2c, 0x80, 0x05, 0x2d, 0x80, 0x05, 0x2e, 0x80, 0x05, 0x2f, 0x80, 0x05, 0x30, 0x80, 0x05, 0x31, 0x80, 0x05, 0x32, 0x80, 0x05, 0x33, 0x80, 0x05, 0x34, 0x80, 0x05, 0x35, 0x80, 0x05, 0x36, 0x80, 0x05, 0x37, 0x80, 0x05, 0x38, 0x80, 0x05, 0x39, 0x80, 0x05, 0x3a, 0x80, 0x05, 0x3b, 0x80, 0x05, 0x3c, 0x80, 0x05, 0x3d, 0x80, 0x05, 0x3e, 0x80, 0x05, 0x3f, 0x80, 0x05, 0x40, 0x80, 0x05, 0x41, 0x80, 0x05, 0x42, 0x80, 0x05, 0x43, 0x80, 0x[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 					] (583 bytes)[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 					0x1 = [[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 							0x31, 0x24, 0xb1, 0x6a, 0x4d, 0x6d, 0x2b, 0x59, 0xe4, 0xed, 0x9f, 0x03, 0x6c, 0x4e, 0x7e, 0x4c, 0x69, 0xa9, 0x1c, 0xe7, 0x2a, 0xe4, 0x57, 0x8b, 0x2a, 0x26, 0x16, 0x94, 0xd2, 0x58, 0xf0, 0xc5, 0x62, 0x7f, 0x6f, 0xcf, 0x13, 0x20, 0x34, 0xb7, 0x3f, 0xb0, 0x88, 0x60, 0x3d, 0xe9, 0x2f, 0xa6, 0xd4, 0xee, 0x14, 0xc0, 0x36, 0x12, 0x6e, 0xdb, 0x90, 0x74, 0x08, 0xcf, 0x54, 0xd3, 0x2c, 0xc8, [0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 					] (64 bytes)[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [DMG] },[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_003E Command=0x0000_0001[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [CTL] Received Attestation Information from the device[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'SendAttestationRequest'[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [CTL] AutoCommissioner setting attestationElements buffer size 583/583[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [CTL] Commissioning stage next step: 'SendAttestationRequest' -> 'AttestationVerification'[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [CTL] Performing next commissioning step 'AttestationVerification'[0m
+[0;34m[1789418369.064] [65528:15666074:chip] [TOO] Starting commissioning stage 'AttestationVerification'[0m
+[0;32m[1789418369.064] [65528:15666074:chip] [CTL] Verifying Device Attestation information received from the device[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] Device candidate DAC chain details:[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] --> DAC's VID: 0xFFF1, PID: 0x8001[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] ==== DAC certificate considered (491 bytes) ====[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] -----BEGIN CERTIFICATE-----[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] MIIB5zCCAY6gAwIBAgIIac3xDenlTtEwCgYIKoZIzj0EAwIwPTElMCMGA1UEAwwc[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] TWF0dGVyIERldiBQQUkgMHhGRkYxIG5vIFBJRDEUMBIGCisGAQQBgqJ8AgEMBEZG[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] RjEwIBcNMjIwMjA1MDAwMDAwWhgPOTk5OTEyMzEyMzU5NTlaMFMxJTAjBgNVBAMM[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] HE1hdHRlciBEZXYgREFDIDB4RkZGMS8weDgwMDExFDASBgorBgEEAYKifAIBDARG[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] RkYxMRQwEgYKKwYBBAGConwCAgwEODAwMTBZMBMGByqGSM49AgEGCCqGSM49AwEH[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] A0IABEY6xpNCkQoOVYj8b/Vrtj5i7M7LFI99TrA+5VJgFBV2fRalxmP3k+SRIyYL[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] gpenzX58/HsxaznZjpDSk3dzjoKjYDBeMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] BAQDAgeAMB0GA1UdDgQWBBSI3eezADgpMs/3NMBGJIEPRBaKbzAfBgNVHSMEGDAW[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] gBRjVA5H9kscONE4hKRi0WwZXY/7PDAKBggqhkjOPQQDAgNHADBEAiABJ6J7S0Rh[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] DuL83E0reIVWNmC8D3bxchntagjfsrPBzQIga1ngr0Xz6yqFuRnTVzFSjGAoxBUj[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] lUXhCOTlTnCXE1M=[0m
+[0;32m[1789418369.065] [65528:15666074:chip] [-] -----END CERTIFICATE-----[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] --> DAC certificate SKID: 88:DD:E7:B3:00:38:29:32:CF:F7:34:C0:46:24:81:0F:44:16:8A:6F[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] --> DAC certificate AKID: 63:54:0E:47:F6:4B:1C:38:D1:38:84:A4:62:D1:6C:19:5D:8F:FB:3C[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] ==== PAI certificate considered (463 bytes) ====[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] -----BEGIN CERTIFICATE-----[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] MIIByzCCAXGgAwIBAgIIVq2CIq2UW2QwCgYIKoZIzj0EAwIwMDEYMBYGA1UEAwwP[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] TWF0dGVyIFRlc3QgUEFBMRQwEgYKKwYBBAGConwCAQwERkZGMTAgFw0yMjAyMDUw[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] MDAwMDBaGA85OTk5MTIzMTIzNTk1OVowPTElMCMGA1UEAwwcTWF0dGVyIERldiBQ[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] QUkgMHhGRkYxIG5vIFBJRDEUMBIGCisGAQQBgqJ8AgEMBEZGRjEwWTATBgcqhkjO[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] PQIBBggqhkjOPQMBBwNCAARBmpMVwhc+DIyHbQPM/JRIUmR/f+xeUIL0BZko7KiU[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] xZQVEwmsYx5MsDOSr2hLC6+35ls7gWLC9Sv5MbjneqqCo2YwZDASBgNVHRMBAf8E[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] CDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUY1QOR/ZLHDjROISk[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] YtFsGV2P+zwwHwYDVR0jBBgwFoAUav0idx9RH+y/FkGXZxDc3DGhcX4wCgYIKoZI[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] zj0EAwIDSAAwRQIhALLvJ/Sa6bUPuR7qyUxNC9u415KcbLiPrOUpNo0SBUwMAiBl[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] Xckrhr2QmIKmxiF3uCXX0F7b58Ivn+pxIg5+pwP4kQ==[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] -----END CERTIFICATE-----[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] --> PAI certificate SKID: 63:54:0E:47:F6:4B:1C:38:D1:38:84:A4:62:D1:6C:19:5D:8F:FB:3C[0m
+[0;32m[1789418369.066] [65528:15666074:chip] [-] --> PAI certificate AKID: 6A:FD:22:77:1F:51:1F:EC:BF:16:41:97:67:10:DC:DC:31:A1:71:7E[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] ==== PAA certificate considered (449 bytes) ====[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] -----BEGIN CERTIFICATE-----[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] MIIBvTCCAWSgAwIBAgIITqjoMYLUHBwwCgYIKoZIzj0EAwIwMDEYMBYGA1UEAwwP[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] TWF0dGVyIFRlc3QgUEFBMRQwEgYKKwYBBAGConwCAQwERkZGMTAgFw0yMTA2Mjgx[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] NDIzNDNaGA85OTk5MTIzMTIzNTk1OVowMDEYMBYGA1UEAwwPTWF0dGVyIFRlc3Qg[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] UEFBMRQwEgYKKwYBBAGConwCAQwERkZGMTBZMBMGByqGSM49AgEGCCqGSM49AwEH[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] A0IABLbLY3KIfyko9brIGqnZOuJDHK2p154kL2UXfvnO2TKijs0Duq9qj8oYShpQ[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] NUKWDUU/MD8fGUIddR6Pjxqam3WjZjBkMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYD[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] VR0PAQH/BAQDAgEGMB0GA1UdDgQWBBRq/SJ3H1Ef7L8WQZdnENzcMaFxfjAfBgNV[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] HSMEGDAWgBRq/SJ3H1Ef7L8WQZdnENzcMaFxfjAKBggqhkjOPQQDAgNHADBEAiBQ[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] qoAC9NkyqaAFOPZTaK0P/8jvu8m+t9pWmDXPmqdRDgIgI7rI/g8j51RFtlM5CBpH[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] mUkpxyqvChVI1A0DTVFLJd4=[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] -----END CERTIFICATE-----[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] --> PAA certificate SKID: 6A:FD:22:77:1F:51:1F:EC:BF:16:41:97:67:10:DC:DC:31:A1:71:7E[0m
+[0;32m[1789418369.076] [65528:15666074:chip] [-] --> PAA certificate AKID: 6A:FD:22:77:1F:51:1F:EC:BF:16:41:97:67:10:DC:DC:31:A1:71:7E[0m
+[0;32m[1789418369.086] [65528:15666074:chip] [-] CD signing key identifier: FE:34:3F:95:99:47:76:3B:61:EE:45:39:13:13:38:49:4F:E6:7D:8E[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] Certification type 0[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] Device certification declaration details:[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] --> VID: 0xFFF1[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] --> Device type ID: 0x0000_0016[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] --> Certification type: 0 (Development and testing)[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'AttestationVerification'[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Commissioning stage next step: 'AttestationVerification' -> 'AttestationRevocationCheck'[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Performing next commissioning step 'AttestationRevocationCheck'[0m
+[0;34m[1789418369.091] [65528:15666074:chip] [TOO] Starting commissioning stage 'AttestationRevocationCheck'[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Verifying the device's DAC chain revocation status[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [-] WARNING: No revocation delegate available. Revocation checks will be skipped![0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Successfully validated 'Attestation Information' command received from the device.[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'AttestationRevocationCheck'[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Commissioning stage next step: 'AttestationRevocationCheck' -> 'SendOpCertSigningRequest'[0m
+[0;32m[1789418369.091] [65528:15666074:chip] [CTL] Performing next commissioning step 'SendOpCertSigningRequest'[0m
+[0;34m[1789418369.091] [65528:15666074:chip] [TOO] Starting commissioning stage 'SendOpCertSigningRequest'[0m
+[0;34m[1789418369.091] [65528:15666074:chip] [CTL] Sending CSR request to 0x99ae8a000 device[0m
+[0;34m[1789418369.091] [65528:15666074:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418369.091] [65528:15666074:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418369.091] [65528:15666074:chip] [EM] <<< [E:62490i S:44239 M:11754689] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:94)[0m
+[0;32m[1789418369.092] [65528:15666074:chip] [EM] ??1 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 349ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418369.092] [65528:15666074:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;34m[1789418369.092] [65528:15666074:chip] [CTL] Sent CSR request, waiting for the CSR[0m
+[0;34m[1789418369.092] [65528:15666074:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418369.092] [65528:15666074:chip] [EM] <<< [E:62489i S:44239 M:11754690 (Ack:101216044)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418369.092] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216044 on exchange 62489i[0m
+[0;34m[1789418369.275] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216042 on exchange 62488i[0m
+[0;32m[1789418369.275] [65528:15666074:chip] [EM] >>> [E:62488i S:44239 M:101216042 (Ack:11754683)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:559)[0m
+[0;34m[1789418369.275] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62488i[0m
+[0;34m[1789418369.275] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216042 on exchange 62488i[0m
+[0;32m[1789418369.275] [65528:15666074:chip] [EM] <<< [E:62488i S:44239 M:11754691 (Ack:101216042)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418369.442] [65528:15666074:chip] [EM] <<1 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418369.443] [65528:15666074:chip] [EM] ??2 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 393ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418369.540] [65528:15666074:chip] [EM] >>> [E:62489i S:44239 M:101216045 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418369.555] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216044 on exchange 62489i[0m
+[0;32m[1789418369.555] [65528:15666074:chip] [EM] >>> [E:62489i S:44239 M:101216044 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:718)[0m
+[0;34m[1789418369.555] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62489i[0m
+[0;34m[1789418369.555] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216044 on exchange 62489i[0m
+[0;32m[1789418369.555] [65528:15666074:chip] [EM] <<< [E:62489i S:44239 M:11754692 (Ack:101216044)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418369.581] [65528:15666074:chip] [EM] >>> [E:62489i S:44239 M:101216046 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418369.837] [65528:15666074:chip] [EM] <<2 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418369.837] [65528:15666074:chip] [EM] ??3 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 579ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418369.843] [65528:15665862:chip] [EM] >>> [E:62489i S:44239 M:101216047 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418369.866] [65528:15665862:chip] [EM] >>> [E:62489i S:44239 M:101216048 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418370.418] [65528:15665862:chip] [EM] <<3 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418370.418] [65528:15665862:chip] [EM] ??4 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 871ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418371.292] [65528:15666074:chip] [EM] <<4 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418371.292] [65528:15666074:chip] [EM] ??5 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 1472ms from now [State:Active II:500 AI:300 AT:4000][0m
+[1;31m[1789418372.765] [65528:15665862:chip] [EM] <<5 [E:62490i S:44239 M:11754689] (S) Msg Retransmission to 0:FFFFFFFB00000000 failure (max retries:4)[0m
+[0;32m[1789418376.971] [65528:15665862:chip] [EM] >>> [E:62490i S:44239 M:101216049 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:396)[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [EM] Found matching exchange: 62490i, Delegate: 0x99e8e0188[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [EM] CHIP MessageCounter:11754689 not in RetransTable on exchange 62490i[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] {[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 	[[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 		{[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 			{[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 					CommandId = 0x5,[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				[0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418376.971] [65528:15665862:chip] [DMG] 				{[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 					0x0 = [[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 							0x15, 0x30, 0x01, 0xdd, 0x30, 0x81, 0xda, 0x30, 0x81, 0x81, 0x02, 0x01, 0x00, 0x30, 0x0e, 0x31, 0x0c, 0x30, 0x0a, 0x06, 0x03, 0x55, 0x04, 0x0b, 0x0c, 0x03, 0x43, 0x53, 0x41, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0xcf, 0x29, 0xbf, 0x1c, 0xe4, 0xd9, 0xa7, 0x18, 0x78, 0x5e, 0x98, 0x56, 0x5e, 0x8b, 0x20, 0x5f, 0x56, 0x2d, 0x0d, 0x22, 0x7c, 0x1e, 0x2b, 0x14, 0xa4, 0x27, 0x81, 0x7f, 0x30, 0x78, 0xbe, 0x1e, 0xf2, 0x89, 0x0f, 0x60, 0x4a, 0x5e, 0x9b, 0x12, 0xa2, 0xd7, 0xb2, 0x61, 0x5d, 0x39, 0x52, 0xc2, 0xbb, 0xb5, 0x12, 0xbb, 0xf3, 0x04, 0x88, 0x5f, 0x3f, 0x11, 0x3c, 0x5c, 0x48, 0xbe, 0xa8, 0x13, 0xa0, 0x11, 0x30, 0x0f, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x0e, 0x31, 0x02, 0x30, 0x00, 0x30, 0x0a, 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02, 0x03, 0x48, 0x00, 0x30, 0x45, 0x02, 0x20, 0x37, 0x54, 0x12, 0x32, 0xa8, 0xb7, 0x81, 0x95, 0xf0, 0x84, 0xb9, 0x9f, 0x57, 0x80, 0xe7, 0x9e, 0x60, 0x45, 0x93, 0x02, 0x5d, 0xe9, 0xd6, 0xc5, 0x71, 0x71, 0x26, 0x39, 0xcc, 0xc9, 0xd2, 0xd9, 0x02, 0x21, 0x00, 0xb5, 0x95, 0xd3, 0x27, 0xe4, 0x58, 0x7a, 0x09, 0x1a, 0x9a, 0xf4, 0x53, 0x03, 0x33, 0x6d, 0x40, 0x4b, 0x3c, 0x27, 0x03, 0x4b, 0x93, 0xb6, 0xed, 0x2b, 0x74, 0xe9, 0x22, 0x33, 0xef, 0xa0, 0x1c, 0x30, 0x02, 0x20, 0xd9, 0xc7, 0xe6, 0x7c, 0x5f, 0x0e, 0x9a, 0xd7, 0xde, 0xd3, 0x87, 0x88, 0xf6, 0xed, 0xbb, 0x5c, 0xc0, 0x43, 0x24, 0x8f, 0x7d, 0xa4, 0xfa, 0x6a, 0x3b, 0x47, 0xfc, 0x90, 0x88, 0x26, 0x41, 0x10, 0x18, [0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 					] (261 bytes)[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 					0x1 = [[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 							0x59, 0x57, 0x14, 0x9e, 0x34, 0xa9, 0x9d, 0x95, 0x1c, 0xc5, 0x96, 0x94, 0xa8, 0x92, 0x0d, 0x1d, 0x4b, 0x92, 0xdd, 0x61, 0x33, 0x30, 0x0e, 0x14, 0x28, 0x2e, 0x8f, 0xd1, 0x3f, 0xdd, 0xbe, 0xf3, 0x09, 0xad, 0xb8, 0xa2, 0xcb, 0xac, 0xb4, 0xc4, 0xf6, 0xf4, 0xa9, 0x67, 0x1d, 0x82, 0x76, 0x76, 0xae, 0x52, 0x19, 0x8b, 0xe6, 0xd8, 0xd4, 0x70, 0x93, 0xff, 0x58, 0xd8, 0xed, 0xf9, 0xdc, 0xdb, [0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 					] (64 bytes)[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 				},[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 			},[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 			[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 		},[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 		[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 	],[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 	[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [DMG] },[0m
+[0;32m[1789418376.972] [65528:15665862:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_003E Command=0x0000_0005[0m
+[0;32m[1789418376.972] [65528:15665862:chip] [CTL] Received certificate signing request from the device[0m
+[0;32m[1789418376.972] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'SendOpCertSigningRequest'[0m
+[0;32m[1789418376.972] [65528:15665862:chip] [CTL] Commissioning stage next step: 'SendOpCertSigningRequest' -> 'ValidateCSR'[0m
+[0;32m[1789418376.972] [65528:15665862:chip] [CTL] Performing next commissioning step 'ValidateCSR'[0m
+[0;34m[1789418376.972] [65528:15665862:chip] [TOO] Starting commissioning stage 'ValidateCSR'[0m
+[0;32m[1789418376.976] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'ValidateCSR'[0m
+[0;32m[1789418376.976] [65528:15665862:chip] [CTL] Commissioning stage next step: 'ValidateCSR' -> 'GenerateNOCChain'[0m
+[0;32m[1789418376.976] [65528:15665862:chip] [CTL] Performing next commissioning step 'GenerateNOCChain'[0m
+[0;34m[1789418376.976] [65528:15665862:chip] [TOO] Starting commissioning stage 'GenerateNOCChain'[0m
+[0;32m[1789418376.976] [65528:15665862:chip] [CTL] Getting certificate chain for the device from the issuer[0m
+[0;32m[1789418376.977] [65528:15665862:chip] [CTL] Verifying Certificate Signing Request[0m
+[0;32m[1789418376.981] [65528:15665862:chip] [CTL] Generating NOC[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Providing certificate chain to the commissioner[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Received callback from the CA for NOC Chain generation. Status: Success[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Successfully finished commissioning step 'GenerateNOCChain'[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Performing next commissioning step 'SendTrustedRootCert'[0m
+[0;34m[1789418376.983] [65528:15665862:chip] [TOO] Starting commissioning stage 'SendTrustedRootCert'[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Sending root certificate to the device[0m
+[0;34m[1789418376.983] [65528:15665862:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418376.983] [65528:15665862:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418376.983] [65528:15665862:chip] [EM] <<< [E:62491i S:44239 M:11754693] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:293)[0m
+[0;32m[1789418376.983] [65528:15665862:chip] [EM] ??1 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 355ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418376.983] [65528:15665862:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;32m[1789418376.983] [65528:15665862:chip] [CTL] Sent root certificate to the device[0m
+[0;34m[1789418376.983] [65528:15665862:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418376.983] [65528:15665862:chip] [EM] <<< [E:62490i S:44239 M:11754694 (Ack:101216049)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418376.983] [65528:15665862:chip] [EM] Flushed pending ack for MessageCounter:101216049 on exchange 62490i[0m
+[0;34m[1789418377.192] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216044 on exchange 62489i[0m
+[0;32m[1789418377.192] [65528:15666074:chip] [EM] >>> [E:62489i S:44239 M:101216044 (Ack:11754686)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:718)[0m
+[0;34m[1789418377.192] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62489i[0m
+[0;34m[1789418377.192] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216044 on exchange 62489i[0m
+[0;32m[1789418377.192] [65528:15666074:chip] [EM] <<< [E:62489i S:44239 M:11754695 (Ack:101216044)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418377.340] [65528:15666074:chip] [EM] <<1 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418377.341] [65528:15666074:chip] [EM] ??2 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 356ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418377.478] [65528:15666074:chip] [EM] >>> [E:62490i S:44239 M:101216050 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418377.523] [65528:15666074:chip] [EM] >>> [E:62490i S:44239 M:101216051 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418377.699] [65528:15666074:chip] [EM] <<2 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418377.699] [65528:15666074:chip] [EM] ??3 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 643ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418377.799] [65528:15665862:chip] [EM] >>> [E:62490i S:44239 M:101216052 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418377.814] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216049 on exchange 62490i[0m
+[0;32m[1789418377.814] [65528:15665862:chip] [EM] >>> [E:62490i S:44239 M:101216049 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:396)[0m
+[0;34m[1789418377.814] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62490i[0m
+[0;34m[1789418377.814] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216049 on exchange 62490i[0m
+[0;32m[1789418377.814] [65528:15665862:chip] [EM] <<< [E:62490i S:44239 M:11754696 (Ack:101216049)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418378.077] [65528:15665862:chip] [EM] >>> [E:62490i S:44239 M:101216053 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418378.343] [65528:15666074:chip] [EM] <<3 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418378.343] [65528:15666074:chip] [EM] ??4 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 953ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418379.297] [65528:15665862:chip] [EM] <<4 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418379.297] [65528:15665862:chip] [EM] ??5 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 1493ms from now [State:Active II:500 AI:300 AT:4000][0m
+[1;31m[1789418380.792] [65528:15666074:chip] [EM] <<5 [E:62491i S:44239 M:11754693] (S) Msg Retransmission to 0:FFFFFFFB00000000 failure (max retries:4)[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216054 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:67)[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [EM] Found matching exchange: 62491i, Delegate: 0x99e8e0008[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [EM] CHIP MessageCounter:11754693 not in RetransTable on exchange 62491i[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 			CommandStatusIB =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 					CommandId = 0xb,[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				StatusIB =[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 					status = 0x00 (SUCCESS),[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] },[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [DMG] Received Command Response Status for Endpoint=0 Cluster=0x0000_003E Command=0x0000_000B Status=0x0[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [CTL] Device confirmed that it has received the root certificate[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'SendTrustedRootCert'[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [CTL] Commissioning stage next step: 'SendTrustedRootCert' -> 'SendNOC'[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [CTL] Performing next commissioning step 'SendNOC'[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [TOO] Starting commissioning stage 'SendNOC'[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418381.748] [65528:15666074:chip] [EM] <<< [E:62492i S:44239 M:11754697] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:566)[0m
+[0;32m[1789418381.748] [65528:15666074:chip] [EM] ??1 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 334ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;32m[1789418381.748] [65528:15666074:chip] [CTL] Sent operational certificate to the device[0m
+[0;34m[1789418381.748] [65528:15666074:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418381.748] [65528:15666074:chip] [EM] <<< [E:62491i S:44239 M:11754698 (Ack:101216054)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418381.749] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216054 on exchange 62491i[0m
+[0;34m[1789418381.979] [65528:15665862:chip] [IN] Received a duplicate message with MessageCounter:101216049 on exchange 62490i[0m
+[0;32m[1789418381.979] [65528:15665862:chip] [EM] >>> [E:62490i S:44239 M:101216049 (Ack:11754689)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:396)[0m
+[0;34m[1789418381.979] [65528:15665862:chip] [EM] Generating StandaloneAck via exchange: 62490i[0m
+[0;34m[1789418381.979] [65528:15665862:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216049 on exchange 62490i[0m
+[0;32m[1789418381.979] [65528:15665862:chip] [EM] <<< [E:62490i S:44239 M:11754699 (Ack:101216049)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418382.085] [65528:15665862:chip] [EM] <<1 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418382.085] [65528:15665862:chip] [EM] ??2 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 395ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418382.268] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216055 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418382.291] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418382.291] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216054 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:67)[0m
+[0;34m[1789418382.291] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62491i[0m
+[0;34m[1789418382.291] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418382.291] [65528:15666074:chip] [EM] <<< [E:62491i S:44239 M:11754700 (Ack:101216054)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418382.321] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216056 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418382.480] [65528:15666074:chip] [EM] <<2 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418382.481] [65528:15666074:chip] [EM] ??3 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 550ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418382.615] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216057 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418382.881] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216058 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418382.900] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418382.900] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216054 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:67)[0m
+[0;34m[1789418382.900] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62491i[0m
+[0;34m[1789418382.900] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418382.900] [65528:15666074:chip] [EM] <<< [E:62491i S:44239 M:11754701 (Ack:101216054)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418383.032] [65528:15666074:chip] [EM] <<3 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418383.032] [65528:15666074:chip] [EM] ??4 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 943ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418383.977] [65528:15665862:chip] [EM] <<4 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000[0m
+[0;32m[1789418383.978] [65528:15665862:chip] [EM] ??5 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 scheduled for 1383ms from now [State:Active II:500 AI:300 AT:4000][0m
+[1;31m[1789418385.362] [65528:15666074:chip] [EM] <<5 [E:62492i S:44239 M:11754697] (S) Msg Retransmission to 0:FFFFFFFB00000000 failure (max retries:4)[0m
+[0;32m[1789418391.644] [65528:15666074:chip] [EM] >>> [E:62492i S:44239 M:101216059 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [EM] Found matching exchange: 62492i, Delegate: 0x99e8e0188[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [EM] CHIP MessageCounter:11754697 not in RetransTable on exchange 62492i[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] {[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	[[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 		{[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 			{[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 					ClusterId = 0x3e,[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 					CommandId = 0x8,[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				{[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 					0x0 = 0 (unsigned), [0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 					0x1 = 5 (unsigned), [0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 				},[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 			},[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 			[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 		},[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 		[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	],[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DMG] },[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_003E Command=0x0000_0008[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Device returned status 0 on receiving the NOC[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Operational credentials provisioned on device 0x99ae8a000[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [TOO] Secure Pairing Success[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [TOO] CASE establishment successful[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'SendNOC'[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Commissioning stage next step: 'SendNOC' -> 'EvictPreviousCaseSessions'[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Performing next commissioning step 'EvictPreviousCaseSessions'[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [TOO] Starting commissioning stage 'EvictPreviousCaseSessions'[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [IN] Expiring all sessions for node <0000000000000069, 5>!![0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Successfully finished commissioning step 'EvictPreviousCaseSessions'[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Commissioning stage next step: 'EvictPreviousCaseSessions' -> 'FindOperationalForStayActive'[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [CTL] Performing next commissioning step 'FindOperationalForStayActive'[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [TOO] Starting commissioning stage 'FindOperationalForStayActive'[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [CSM] FindOrEstablishSession: PeerId = [5:0000000000000069][0m
+[0;34m[1789418391.645] [65528:15666074:chip] [CSM] FindOrEstablishSession: No existing OperationalSessionSetup instance found[0m
+[0;34m[1789418391.645] [65528:15666074:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: State change 1 --> 2[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [DIS] Resolving 91E3D9A7D6565ADA:0000000000000069 ...[0m
+[0;32m[1789418391.645] [65528:15666074:chip] [DIS] Resolve type=_matter._tcp name=91E3D9A7D6565ADA-0000000000000069 domain=(null) interface=0[0m
+[0;32m[1789418391.648] [65528:15666074:chip] [DIS] Lookup started for 91E3D9A7D6565ADA-0000000000000069[0m
+[0;34m[1789418391.648] [65528:15666074:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418391.648] [65528:15666074:chip] [EM] <<< [E:62492i S:44239 M:11754702 (Ack:101216059)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418391.648] [65528:15666074:chip] [EM] Flushed pending ack for MessageCounter:101216059 on exchange 62492i[0m
+[0;32m[1789418391.648] [65528:15666074:chip] [DIS] Mdns: OnResolve flags: 1, interface: 14, fullname: 91E3D9A7D6565ADA-0000000000000069._matter._tcp.local., hostname: 803428101273.local., port: 5540, err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418391.648] [65528:15666074:chip] [DIS] Mdns : OnNewInterface hostname:803428101273.local. fullname:91E3D9A7D6565ADA-0000000000000069._matter._tcp.local. interface: 14 port: 5540 TXT:"="[0m
+[0;32m[1789418391.648] [65528:15666074:chip] [DIS] Mdns: OnResolve flags: 0, interface: 14, fullname: 91E3D9A7D6565ADA-0000000000000069._matter._tcp.local., hostname: 803428101273.local., port: 5540, err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418391.648] [65528:15666074:chip] [DIS] Mdns : OnNewInterface hostname:803428101273.local. fullname:91E3D9A7D6565ADA-0000000000000069._matter._tcp.local. interface: 14 port: 5540 TXT:"="[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Mdns: OnGetAddrInfo flags: 1073741827, interface: 14, hostname: 803428101273.local., err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Mdns: OnNewAddress instance: 91E3D9A7D6565ADA-0000000000000069 interface: 14 ip: fe80::8234:28ff:fe10:1273[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Mdns: OnGetAddrInfo flags: 1073741826, interface: 14, hostname: 803428101273.local., err: 0 (kDNSServiceErr_NoError)[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Mdns: OnNewAddress instance: 91E3D9A7D6565ADA-0000000000000069 interface: 14 ip: fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Mdns: Resolve success on interface 14[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Node ID resolved for 91E3D9A7D6565ADA-0000000000000069[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	Hostname: 803428101273[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	IP Address #1: fe80::8234:28ff:fe10:1273[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	IP Address #2: fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	Port: 5540[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	Mrp Interval idle: not present[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	Mrp Interval active: not present[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	Mrp Active Threshold: not present[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	TCP Client Supported: 0[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	TCP Server Supported: 0[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] 	ICD: not present[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] UDP:[fe80::8234:28ff:fe10:1273%en0]:5540: new best score: 7 (for 91E3D9A7D6565ADA-0000000000000069)[0m
+[0;34m[1789418391.649] [65528:15666074:chip] [DIS] Lookup clearing interface for non LL address[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] UDP:[fd27:e0cb:e5e8:8374:8234:28ff:fe10:1273%en0]:5540: new best score: 5 (for 91E3D9A7D6565ADA-0000000000000069)[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Checking node lookup status for 91E3D9A7D6565ADA-0000000000000069 after 4 ms[0m
+[0;32m[1789418391.649] [65528:15666074:chip] [DIS] Keeping DNSSD lookup active[0m
+[0;34m[1789418391.666] [65528:15666074:chip] [IN] Received a duplicate message with MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418391.666] [65528:15666074:chip] [EM] >>> [E:62491i S:44239 M:101216054 (Ack:11754693)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:67)[0m
+[0;34m[1789418391.666] [65528:15666074:chip] [EM] Generating StandaloneAck via exchange: 62491i[0m
+[0;34m[1789418391.666] [65528:15666074:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216054 on exchange 62491i[0m
+[0;32m[1789418391.667] [65528:15666074:chip] [EM] <<< [E:62491i S:44239 M:11754703 (Ack:101216054)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418391.846] [65528:15666074:chip] [DIS] Checking node lookup status for 91E3D9A7D6565ADA-0000000000000069 after 201 ms[0m
+[0;32m[1789418391.846] [65528:15666074:chip] [DIS] No longer need resolve for 91E3D9A7D6565ADA-0000000000000069[0m
+[0;34m[1789418391.846] [65528:15666074:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: Updating device address to UDP:[fe80::8234:28ff:fe10:1273%en0]:5540 while in state 2[0m
+[0;34m[1789418391.846] [65528:15666074:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: State change 2 --> 3[0m
+[0;34m[1789418391.846] [65528:15666074:chip] [IN] SecureSession[0x99e200000]: Allocated Type:2 LSID:44240[0m
+[0;32m[1789418391.846] [65528:15666074:chip] [SC] Initiating session on local FabricIndex 5 from 0x000000000001B669 -> 0x0000000000000069[0m
+[0;32m[1789418391.848] [65528:15666074:chip] [EM] <<< [E:62493i S:0 M:11976188] (U) Msg TX from F701EA63F0C14023 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en0]:5540] --- Type 0000:30 (SecureChannel:CASE_Sigma1) (B:196)[0m
+[0;32m[1789418391.848] [65528:15666074:chip] [EM] ??1 [E:62493i S:0 M:11976188] (U) Msg Retransmission to 0:0000000000000000 scheduled for 588ms from now [State:Idle II:500 AI:300 AT:4000][0m
+[0;32m[1789418391.848] [65528:15666074:chip] [SC] Sent Sigma1 msg to <0000000000000069, 5> [II:500ms AI:300ms AT:4000ms][0m
+[0;34m[1789418391.848] [65528:15666074:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: State change 3 --> 4[0m
+[0;32m[1789418391.969] [65528:15670385:chip] [EM] >>> [E:62492i S:44239 M:101216060 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418392.248] [65528:15670385:chip] [EM] >>> [E:62492i S:44239 M:101216061 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418392.289] [65528:15670385:chip] [IN] Received a duplicate message with MessageCounter:101216059 on exchange 62492i[0m
+[0;32m[1789418392.289] [65528:15670385:chip] [EM] >>> [E:62492i S:44239 M:101216059 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418392.289] [65528:15670385:chip] [EM] Generating StandaloneAck via exchange: 62492i[0m
+[0;34m[1789418392.289] [65528:15670385:chip] [EM] Forcing tx of solitary ack for duplicate MessageCounter:101216059 on exchange 62492i[0m
+[0;32m[1789418392.289] [65528:15670385:chip] [EM] <<< [E:62492i S:44239 M:11754704 (Ack:101216059)] (S) Msg TX from 0000000000000000 to 0:FFFFFFFB00000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en7]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418392.325] [65528:15670385:chip] [EM] >>> [E:62492i S:44239 M:101216062 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418392.437] [65528:15670385:chip] [EM] <<1 [E:62493i S:0 M:11976188] (U) Msg Retransmission to 0:0000000000000000[0m
+[0;32m[1789418392.437] [65528:15670385:chip] [EM] ??2 [E:62493i S:0 M:11976188] (U) Msg Retransmission to 0:0000000000000000 scheduled for 663ms from now [State:Idle II:500 AI:300 AT:4000][0m
+[0;32m[1789418392.619] [65528:15670385:chip] [EM] >>> [E:62492i S:44239 M:101216063 (Ack:11754697)] (S) Msg RX from 0:FFFFFFFB00000000 [0000] to 0000000000000000 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;32m[1789418392.987] [65528:15670385:chip] [EM] >>> [E:62493i S:0 M:21657171 (Ack:11976188)] (U) Msg RX from 0:0000000000000000 [0000] to F701EA63F0C14023 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418392.987] [65528:15670385:chip] [EM] Found matching exchange: 62493i, Delegate: 0x99e8e8008[0m
+[0;34m[1789418392.987] [65528:15670385:chip] [EM] Rxd Ack; Removing MessageCounter:11976188 from Retrans Table on exchange 62493i[0m
+[0;32m[1789418399.939] [65528:15670385:chip] [EM] >>> [E:62493i S:0 M:21657172 (Ack:11976188)] (U) Msg RX from 0:0000000000000000 [0000] to F701EA63F0C14023 --- Type 0000:31 (SecureChannel:CASE_Sigma2) (B:751)[0m
+[0;34m[1789418399.939] [65528:15670385:chip] [EM] Found matching exchange: 62493i, Delegate: 0x99e8e8008[0m
+[0;34m[1789418399.939] [65528:15670385:chip] [EM] CHIP MessageCounter:11976188 not in RetransTable on exchange 62493i[0m
+[0;32m[1789418399.939] [65528:15670385:chip] [SC] Received Sigma2 msg[0m
+[0;34m[1789418399.939] [65528:15670385:chip] [SC] Found MRP parameters in the message[0m
+[0;34m[1789418399.952] [65528:15670385:chip] [SC] Peer <0000000000000069, 5> assigned session ID 16098[0m
+[0;34m[1789418399.952] [65528:15670385:chip] [SC] Sending Sigma3[0m
+[0;32m[1789418399.954] [65528:15670385:chip] [EM] <<< [E:62493i S:0 M:11976189 (Ack:21657172)] (U) Msg TX from F701EA63F0C14023 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en0]:5540] --- Type 0000:32 (SecureChannel:CASE_Sigma3) (B:598)[0m
+[0;32m[1789418399.954] [65528:15670385:chip] [EM] ??1 [E:62493i S:0 M:11976189] (U) Msg Retransmission to 0:0000000000000000 scheduled for 371ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418399.954] [65528:15670385:chip] [SC] Sent Sigma3 msg[0m
+[0;32m[1789418400.097] [65528:15670385:chip] [EM] >>> [E:62493i S:0 M:21657173 (Ack:11976188)] (U) Msg RX from 0:0000000000000000 [0000] to F701EA63F0C14023 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418400.097] [65528:15670385:chip] [EM] Found matching exchange: 62493i, Delegate: 0x99e8e8008[0m
+[0;34m[1789418400.097] [65528:15670385:chip] [EM] CHIP MessageCounter:11976188 not in RetransTable on exchange 62493i[0m
+[0;32m[1789418400.116] [65528:15670385:chip] [EM] >>> [E:62493i S:0 M:21657174 (Ack:11976189)] (U) Msg RX from 0:0000000000000000 [0000] to F701EA63F0C14023 --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418400.116] [65528:15670385:chip] [EM] Found matching exchange: 62493i, Delegate: 0x99e8e8008[0m
+[0;34m[1789418400.116] [65528:15670385:chip] [EM] Rxd Ack; Removing MessageCounter:11976189 from Retrans Table on exchange 62493i[0m
+[0;32m[1789418410.896] [65528:15670610:chip] [EM] >>> [E:62493i S:0 M:21657175 (Ack:11976189)] (U) Msg RX from 0:0000000000000000 [0000] to F701EA63F0C14023 --- Type 0000:40 (SecureChannel:StatusReport) (B:34)[0m
+[0;34m[1789418410.896] [65528:15670610:chip] [EM] Found matching exchange: 62493i, Delegate: 0x99e8e8008[0m
+[0;34m[1789418410.896] [65528:15670610:chip] [EM] CHIP MessageCounter:11976189 not in RetransTable on exchange 62493i[0m
+[0;32m[1789418410.896] [65528:15670610:chip] [SC] Success status report received. Session was established[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [SC] SecureSession[0x99e200000, LSID:44240]: State change 'kEstablishing' --> 'kActive'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [IN] SecureSession[0x99e200000]: Activated - Type:2 LSID:44240[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [IN] New secure session activated for device <0000000000000069, 5>, LSID:44240 PSID:16098![0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: State change 4 --> 5[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Successfully finished commissioning step 'FindOperationalForStayActive'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Commissioning stage next step: 'FindOperationalForStayActive' -> 'ICDSendStayActive'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Performing next commissioning step 'ICDSendStayActive'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [TOO] Starting commissioning stage 'ICDSendStayActive'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Skipping kICDSendStayActive[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Successfully finished commissioning step 'ICDSendStayActive'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Commissioning stage next step: 'ICDSendStayActive' -> 'FindOperationalForCommissioningComplete'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Performing next commissioning step 'FindOperationalForCommissioningComplete'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [TOO] Starting commissioning stage 'FindOperationalForCommissioningComplete'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [CSM] FindOrEstablishSession: PeerId = [5:0000000000000069][0m
+[0;34m[1789418410.898] [65528:15670610:chip] [CSM] FindOrEstablishSession: No existing OperationalSessionSetup instance found[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [DIS] Found an existing secure session to [5:0000000000000069]![0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DIS] OperationalSessionSetup[5:0000000000000069]: State change 1 --> 5[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Successfully finished commissioning step 'FindOperationalForCommissioningComplete'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Commissioning stage next step: 'FindOperationalForCommissioningComplete' -> 'SendComplete'[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [CTL] Performing next commissioning step 'SendComplete'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [TOO] Starting commissioning stage 'SendComplete'[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DMG] ICR moving to [AddingComm][0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DMG] ICR moving to [AddedComma][0m
+[0;32m[1789418410.898] [65528:15670610:chip] [EM] <<< [E:62494i S:44240 M:94694336] (S) Msg TX from 000000000001B669 to 5:0000000000000069 [5ADA] [UDP:[fe80::8234:28ff:fe10:1273%en0]:5540] --- Type 0001:08 (IM:InvokeCommandRequest) (B:59)[0m
+[0;32m[1789418410.898] [65528:15670610:chip] [EM] ??1 [E:62494i S:44240 M:94694336] (S) Msg Retransmission to 5:0000000000000069 scheduled for 407ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DMG] ICR moving to [AwaitingRe][0m
+[0;32m[1789418410.898] [65528:15670610:chip] [EM] <<< [E:62493i S:0 M:11976190 (Ack:21657175)] (U) Msg TX from F701EA63F0C14023 to 0:0000000000000000 [0000] [UDP:[fe80::8234:28ff:fe10:1273%en0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:26)[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [EM] Flushed pending ack for MessageCounter:21657175 on exchange 62493i[0m
+[0;34m[1789418410.898] [65528:15670610:chip] [DL] _OnPlatformEvent[0m
+[0;32m[1789418411.306] [65528:15670927:chip] [EM] <<1 [E:62494i S:44240 M:94694336] (S) Msg Retransmission to 5:0000000000000069[0m
+[0;32m[1789418411.307] [65528:15670927:chip] [EM] ??2 [E:62494i S:44240 M:94694336] (S) Msg Retransmission to 5:0000000000000069 scheduled for 365ms from now [State:Active II:500 AI:300 AT:4000][0m
+[0;32m[1789418411.386] [65528:15670927:chip] [EM] >>> [E:62494i S:44240 M:40493055 (Ack:94694336)] (S) Msg RX from 5:0000000000000069 [5ADA] to 000000000001B669 --- Type 0001:09 (IM:InvokeCommandResponse) (B:70)[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [EM] Found matching exchange: 62494i, Delegate: 0x99e8e0008[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [EM] Rxd Ack; Removing MessageCounter:94694336 from Retrans Table on exchange 62494i[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] ICR moving to [ResponseRe][0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] InvokeResponseMessage =[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] {[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	suppressResponse = false, [0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	InvokeResponseIBs =[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	[[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 		InvokeResponseIB =[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 		{[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 			CommandDataIB =[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 			{[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				CommandPathIB =[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				{[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 					EndpointId = 0x0,[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 					ClusterId = 0x30,[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 					CommandId = 0x5,[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				},[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				CommandFields = [0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				{[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 					0x0 = 0 (unsigned), [0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 					0x1 = "" (0 chars), [0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 				},[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 			},[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 			[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 		},[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 		[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	],[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] 	InteractionModelRevision = 12[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] },[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [DMG] Received Command Response Data, Endpoint=0 Cluster=0x0000_0030 Command=0x0000_0005[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Received CommissioningComplete response, errorCode=0[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Successfully finished commissioning step 'SendComplete'[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Commissioning stage next step: 'SendComplete' -> 'Cleanup'[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Performing next commissioning step 'Cleanup'[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [TOO] Starting commissioning stage 'Cleanup'[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Successfully finished commissioning step 'Cleanup'[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [IN] SecureSession[0x10781bce0]: MarkForEviction Type:1 LSID:44239[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [SC] SecureSession[0x10781bce0, LSID:44239]: State change 'kActive' --> 'kPendingEviction'[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [IN] SecureSession[0x10781bce0]: Released - Type:1 LSID:44239[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [CTL] Commissioning complete for node ID 0x0000000000000069: success[0m
+[0;32m[1789418411.386] [65528:15670927:chip] [TOO] Device commissioning completed with success[0m
+[0;34m[1789418411.386] [65528:15670927:chip] [DMG] ICR moving to [AwaitingDe][0m
+[0;32m[1789418411.386] [65528:15670927:chip] [EM] <<< [E:62494i S:44240 M:94694337 (Ack:40493055)] (S) Msg TX from 000000000001B669 to 5:0000000000000069 [5ADA] [UDP:[fe80::8234:28ff:fe10:1273%en0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)[0m
+[0;34m[1789418411.387] [65528:15670927:chip] [EM] Flushed pending ack for MessageCounter:40493055 on exchange 62494i[0m
+[0;34m[1789418411.387] [65528:15665856:main] [CTL] Shutting down the commissioner[0m
+[0;34m[1789418411.387] [65528:15665856:main] [CTL] Shutting down the controller[0m
+[0;34m[1789418411.387] [65528:15665856:main] [IN] Expiring all sessions for fabric 0x5!![0m
+[0;34m[1789418411.387] [65528:15665856:main] [IN] SecureSession[0x99e200000]: MarkForEviction Type:2 LSID:44240[0m
+[0;32m[1789418411.387] [65528:15665856:main] [SC] SecureSession[0x99e200000, LSID:44240]: State change 'kActive' --> 'kPendingEviction'[0m
+[0;34m[1789418411.387] [65528:15665856:main] [IN] SecureSession[0x99e200000]: Released - Type:2 LSID:44240[0m
+[0;32m[1789418411.387] [65528:15665856:main] [FP] Forgetting fabric 0x5[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Pending Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Previous Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Reverted Last Known Good Time to previous value[0m
+[0;34m[1789418411.387] [65528:15665856:main] [CTL] Shutting down the commissioner[0m
+[0;34m[1789418411.387] [65528:15665856:main] [CTL] Shutting down the controller[0m
+[0;34m[1789418411.387] [65528:15665856:main] [CTL] Shutting down the System State, this will teardown the CHIP Stack[0m
+[0;34m[1789418411.387] [65528:15665856:main] [DMG] All ReadHandler-s are clean, clear GlobalDirtySet[0m
+[0;32m[1789418411.387] [65528:15665856:main] [IM] Shutting down data model provider 0x1052119d8[0m
+[0;32m[1789418411.387] [65528:15665856:main] [DMG] CodegenDataModelProvider::Shutdown() complete[0m
+[0;32m[1789418411.387] [65528:15665856:main] [BLE] ConnectionDelegate CancelConnection[0m
+[0;32m[1789418411.387] [65528:15665856:main] [FP] Shutting down FabricTable[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Pending Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Previous Last Known Good Time: 2023-10-14T01:16:48[0m
+[0;32m[1789418411.387] [65528:15665856:main] [TS] Reverted Last Known Good Time to previous value[0m
+[0;32m[1789418411.387] [65528:15665856:main] [DL] Inet Layer shutdown[0m
+[0;32m[1789418411.387] [65528:15665856:main] [DL] BLE Layer shutdown[0m
+[0;32m[1789418411.387] [65528:15665856:main] [DL] System Layer shutdown[0m

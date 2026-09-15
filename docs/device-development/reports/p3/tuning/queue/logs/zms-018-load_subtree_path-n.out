@@ -1,0 +1,32 @@
+{"ok": true, "attempts": 1, "event": "flash", "host_time": "22:08:17"}
+{"result": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19486 ms", "host_s": 19.5, "event": "wipe", "host_time": "22:08:48"}
+{"label": "clean partition", "boots_since_wipe": 1, "main_host_s": 2.63, "matter_start_uptime_s": 2.867, "matter_ready_uptime_s": 3.535, "matter_init_s": 0.668, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:08:56"}
+{"reboot_count": 1, "unique_id": "30 41 45 41 31 31 35 43", "event": "structure_created", "host_time": "22:09:01"}
+{"label": "restart after creation", "boots_since_wipe": 2, "main_host_s": 2.63, "matter_start_uptime_s": 3.9050000000000002, "matter_ready_uptime_s": 4.562, "matter_init_s": 0.657, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:09:09"}
+{"reboot_count_before": 1, "reboot_count_after": 2, "unique_id_same": true, "counter_advanced": true, "event": "structure_read_back", "host_time": "22:09:13"}
+{"label": "cycle 1: before commissioning", "boots_since_wipe": 3, "main_host_s": 2.72, "matter_start_uptime_s": 2.495, "matter_ready_uptime_s": 3.153, "matter_init_s": 0.658, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:09:21"}
+{"node": 101, "ok": true, "window_open_s": 1.27, "commission_s": 47.6, "failed": null, "event": "commission", "host_time": "22:10:09"}
+{"label": "cycle 1: with fabric", "boots_since_wipe": 4, "main_host_s": 2.82, "matter_start_uptime_s": 2.871, "matter_ready_uptime_s": 4.307, "matter_init_s": 1.436, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:10:18"}
+{"ok": true, "remove_s": 1.59, "after": "0", "event": "remove_fabrics", "host_time": "22:10:19"}
+{"label": "cycle 2: before commissioning", "boots_since_wipe": 5, "main_host_s": 2.83, "matter_start_uptime_s": 3.894, "matter_ready_uptime_s": 5.196, "matter_init_s": 1.302, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:10:29"}
+{"node": 102, "ok": true, "window_open_s": 2.2, "commission_s": 48.6, "failed": null, "event": "commission", "host_time": "22:11:19"}
+{"label": "cycle 2: with fabric", "boots_since_wipe": 6, "main_host_s": 2.98, "matter_start_uptime_s": 2.8970000000000002, "matter_ready_uptime_s": 4.828, "matter_init_s": 1.931, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:11:28"}
+{"ok": true, "remove_s": 1.54, "after": "0", "event": "remove_fabrics", "host_time": "22:11:30"}
+{"label": "cycle 3: before commissioning", "boots_since_wipe": 7, "main_host_s": 3.04, "matter_start_uptime_s": 2.3689999999999998, "matter_ready_uptime_s": 4.091, "matter_init_s": 1.722, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:11:38"}
+{"node": 103, "ok": true, "window_open_s": 3.29, "commission_s": 49.6, "failed": null, "event": "commission", "host_time": "22:12:31"}
+{"label": "cycle 3: with fabric", "boots_since_wipe": 8, "main_host_s": 18.28, "matter_start_uptime_s": 3.896, "matter_ready_uptime_s": 6.636, "matter_init_s": 2.74, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:12:57"}
+{"ok": true, "remove_s": 1.71, "after": "0", "event": "remove_fabrics", "host_time": "22:12:58"}
+{"label": "cycle 4: before commissioning", "boots_since_wipe": 9, "main_host_s": 3.29, "matter_start_uptime_s": 2.898, "matter_ready_uptime_s": 5.32, "matter_init_s": 2.422, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:13:08"}
+{"node": 104, "ok": true, "window_open_s": 4.1, "commission_s": 51.4, "failed": null, "event": "commission", "host_time": "22:14:03"}
+{"label": "cycle 4: with fabric", "boots_since_wipe": 10, "main_host_s": 3.74, "matter_start_uptime_s": 2.691, "matter_ready_uptime_s": 6.675, "matter_init_s": 3.984, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:14:14"}
+{"ok": true, "remove_s": 1.54, "after": "0", "event": "remove_fabrics", "host_time": "22:14:16"}
+{"label": "cycle 5: before commissioning", "boots_since_wipe": 11, "main_host_s": 3.61, "matter_start_uptime_s": 3.87, "matter_ready_uptime_s": 7.256, "matter_init_s": 3.386, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:14:27"}
+{"node": 105, "ok": true, "window_open_s": 5.97, "commission_s": 54.2, "failed": null, "event": "commission", "host_time": "22:15:27"}
+{"label": "cycle 5: with fabric", "boots_since_wipe": 12, "main_host_s": 3.9, "matter_start_uptime_s": 2.9210000000000003, "matter_ready_uptime_s": 7.493, "matter_init_s": 4.572, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:15:39"}
+{"ok": true, "remove_s": 1.78, "after": "0", "event": "remove_fabrics", "host_time": "22:15:40"}
+{"cycles": 5, "event": "cycles_done", "host_time": "22:15:40"}
+{"ok": true, "key": "mt/cfg/unique-id", "text": ["settings backend: 11 entries, 3 rounds (best / mean, us)", "scan (no match)    433900 /   541766", "scan (all)         433600 /   437066", "load_one (hit)     133800 /   133866  -> 16", "load_one (miss)     76800 /    79233  -> 0", "val_len (hit)      133700 /   136266  -> 16", "val_len (miss)      76800 /    76800  -> 0"], "event": "bench", "host_time": "22:15:46"}
+{"label": "after cycles", "boots_since_wipe": 13, "main_host_s": 3.96, "matter_start_uptime_s": 2.979, "matter_ready_uptime_s": 7.332, "matter_init_s": 4.353, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "22:15:57"}
+{"reboot_count": 13, "boots_since_wipe": 13, "ok": true, "note": "Matter counts every boot in mt/ctr/reboot-count; equal counts mean every boot read and wrote it back", "event": "persistence", "host_time": "22:16:02"}
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/018-load_subtree_path-n: score 4.528 {'init_with_fabric': 2.74, 'remove': 1.59, 'commit': 0.198} slope 0.784 comm 5/5 phases {'pase': 10.231, 'attestation': 3.387, 'csr': 3.682, 'noc_to_done': 28.647, 'commit': 0.198} persistence 13 counted / 13 boots aborted None
+/Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 21 trials, reference 4.38, noise 0.23

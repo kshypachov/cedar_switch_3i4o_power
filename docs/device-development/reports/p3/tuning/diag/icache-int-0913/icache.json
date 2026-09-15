@@ -1,0 +1,9 @@
+{
+ "name": "int-0913",
+ "image": "builds/file-spi_interrupt-y (09-13 19:12)",
+ "aborted": "12:17 BUS FAULT: the console dropped a byte of 'devmem 40030400 32 0xf0001' (CR monitor reset) and the shell wrote to 0x4003040; system halted, run stopped 12:27",
+ "cr_at_start": "0x1",
+ "way_mode": "1-way (direct), WAYSEL=0, as CONFIG_CACHE_STM32_ICACHE_DIRECT_MAPPING",
+ "idle_10s": {"hits": 1833999, "misses": 65535, "seconds": 13.1, "miss_saturated": true, "miss_percent_lower_bound": 3.45},
+ "conclusion": "MMONR is 16-bit and saturates within 10 s even at idle (>6.5k misses/s at least); shell-driven windows (~1.5 s per devmem) cannot compare images. Method dropped; int-0914 not measured."
+}

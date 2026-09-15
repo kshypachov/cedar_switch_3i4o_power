@@ -1,0 +1,3 @@
+&lfs0 {
+	block-cycles = <(-1)>;
+};

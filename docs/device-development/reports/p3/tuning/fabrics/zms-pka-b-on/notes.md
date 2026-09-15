@@ -1,0 +1,1 @@
+То же, PSA-драйвер PKA включён (ECDSA, ECDH, keygen на PKA), 02:34–02:42. Commissioning (chip-tool): 10 шт., медиана 15.9 с (мин 15.0, макс 17.3). Итог обвязки: `comm 10/10 max fabrics 5 init5 2.722 remove 5.32 score 8.04 usable True storage errors 0 persistence 14 / 14 aborted None`. Драйвер PKA, методика и разбор по шагам — `../../../crypto/pka/README.md`.

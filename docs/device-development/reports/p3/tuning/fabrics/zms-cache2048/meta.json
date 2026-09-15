@@ -1,0 +1,8 @@
+{
+ "backend": "zms",
+ "name": "cache2048",
+ "change": "cache 2048, 32 sectors, polled SPI",
+ "rounds": 2,
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/fab2-zms-cache2048/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "started": "2026-09-14 13:39:04"
+}

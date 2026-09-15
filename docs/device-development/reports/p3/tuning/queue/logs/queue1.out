@@ -1,0 +1,299 @@
+=== 19:15:08 zms 002-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 2 trials, reference 4.38, noise —
+=== 19:23:53 zms 003-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 3 trials, reference 4.44, noise 0.23
+=== 19:32:32 zms 004-cache-512
+=== 19:50:30 zms 004-cache-512
+=== 20:00:05 zms 005-cache-1024
+=== 20:06:47 zms 004-cache-512
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 7 trials, reference 4.44, noise 0.23
+=== 20:15:44 zms 005-cache-1024
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 8 trials, reference 4.44, noise 0.23
+=== 20:23:44 zms 006-cache-2048
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 9 trials, reference 4.44, noise 0.23
+=== 20:31:20 zms 007-cache-4096
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 10 trials, reference 4.44, noise 0.23
+=== 20:39:07 zms 008-cache-128
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 11 trials, reference 4.44, noise 0.23
+=== 20:48:04 zms 009-sectors-16
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 12 trials, reference 4.44, noise 0.23
+=== 20:56:36 zms 010-sectors-8
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 13 trials, reference 4.44, noise 0.23
+=== 21:05:32 zms 011-sectors-4
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 14 trials, reference 4.44, noise 0.23
+=== 21:13:43 zms 012-sectors-64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 15 trials, reference 4.44, noise 0.23
+=== 21:22:32 zms 013-no_ll_delete-y
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 16 trials, reference 4.44, noise 0.23
+=== 21:31:24 zms 014-lookup_cache-n
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 17 trials, reference 4.44, noise 0.23
+=== 21:42:04 zms 015-cache_for_settings-n
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 18 trials, reference 4.44, noise 0.23
+=== 21:49:58 zms 016-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 19 trials, reference 4.38, noise 0.23
+=== 21:58:30 zms 017-ll_cache-n
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 20 trials, reference 4.38, noise 0.23
+=== 22:07:26 zms 018-load_subtree_path-n
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 21 trials, reference 4.38, noise 0.23
+=== 22:16:02 zms 019-sector_mult-2
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 22 trials, reference 4.38, noise 0.23
+=== 22:24:45 zms 020-collision_bits-2
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 23 trials, reference 4.38, noise 0.23
+=== 22:32:54 zms 021-block_size-64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 24 trials, reference 4.38, noise 0.23
+=== 22:41:43 zms 022-block_size-256
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 25 trials, reference 4.38, noise 0.23
+=== 22:50:05 zms 023-no_double_write-y
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 26 trials, reference 4.38, noise 0.23
+=== 22:58:55 zms 024-spi_freq-40M
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 27 trials, reference 4.38, noise 0.23
+=== 23:07:41 zms 025-fast_read-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 28 trials, reference 4.38, noise 0.23
+=== 23:15:54 zms 026-spi_interrupt-y
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 29 trials, reference 4.38, noise 0.23
+=== 23:24:06 zms 027-nor_sleep_wait-n
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 30 trials, reference 4.38, noise 0.23
+=== 23:32:40 zms 028-nor_sleep_erase-5
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 31 trials, reference 4.38, noise 0.23
+=== 23:41:45 zms 029-base
+=== 00:01:23 zms 030-comboA
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 33 trials, reference 4.42, noise 0.23
+=== 00:08:46 zms 031-cache-1536
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 34 trials, reference 4.42, noise 0.23
+=== 00:16:31 zms 032-cache2048-fsn
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 35 trials, reference 4.42, noise 0.23
+=== 00:24:20 zms 033-cache1024-fsn
+=== 00:25:27 zms_finish: waiting for trial pid 2559
+=== 00:31:58 zms 034-comboA-sectors4
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 37 trials, reference 4.42, noise 0.23
+=== 00:39:23 zms 035-comboA-nolldel
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 38 trials, reference 4.42, noise 0.23
+=== 00:46:59 queue finished
+=== 00:46:59 building zms-comboB
+rc=0 seconds=124
+=== 00:49:03 zms 036-comboB
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 39 trials, reference 4.42, noise 0.23
+=== 00:56:21 file 001-base
+=== 01:11:36 file 002-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 2 trials, reference 53.54, noise —
+=== 01:26:34 file 003-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 3 trials, reference 53.33, noise 0.60
+=== 01:41:49 zms 037-comboA-confirm5
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 40 trials, reference 4.42, noise 0.23
+=== 01:49:28 zms 038-comboA-confirm10
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 41 trials, reference 4.42, noise 0.23
+=== 02:02:25 zms 039-comboA-sectors4-confirm10
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 42 trials, reference 4.42, noise 0.23
+=== 02:15:41 file 004-max_lines-64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 4 trials, reference 53.33, noise 0.60
+=== 02:27:13 file 005-max_lines-96
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 5 trials, reference 53.33, noise 0.60
+=== 02:39:52 file 006-max_lines-48
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 6 trials, reference 53.33, noise 0.60
+=== 02:50:28 file 007-max_lines-256
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 7 trials, reference 53.33, noise 0.60
+=== 03:09:35 file 008-read_size-16
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 8 trials, reference 53.33, noise 0.60
+=== 03:24:08 file 009-read_size-32
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 9 trials, reference 53.33, noise 0.60
+=== 03:38:48 file 010-read_size-64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 10 trials, reference 53.33, noise 0.60
+=== 03:53:19 file 011-read_size-1024
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 11 trials, reference 53.33, noise 0.60
+=== 04:10:52 file 012-prog_size-16
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 12 trials, reference 53.33, noise 0.60
+=== 04:26:08 file 013-prog_size-64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 13 trials, reference 53.33, noise 0.60
+=== 04:41:33 file 014-cache_size-256
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 14 trials, reference 53.33, noise 0.60
+=== 05:02:48 file 015-cache_size-512
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 15 trials, reference 53.33, noise 0.60
+=== 05:21:07 file 016-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 16 trials, reference 53.31, noise 0.60
+=== 05:36:02 file 017-cache_size-4096
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 17 trials, reference 53.31, noise 0.60
+=== 05:51:29 file 018-lookahead-32
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 18 trials, reference 53.31, noise 0.60
+=== 06:06:37 file 019-lookahead-1024
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 19 trials, reference 53.31, noise 0.60
+=== 06:22:05 file 020-block_cycles-100
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 20 trials, reference 53.31, noise 0.60
+=== 06:37:44 file 021-block_cycles-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 21 trials, reference 53.31, noise 0.60
+=== 06:52:56 file 022-partition-1M
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 22 trials, reference 53.31, noise 0.60
+=== 07:07:55 file 023-fc_heap-16384
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 23 trials, reference 53.31, noise 0.60
+=== 07:22:48 file 024-num_files-4
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 24 trials, reference 53.31, noise 0.60
+=== 07:37:56 file 025-spi_freq-40M
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 25 trials, reference 53.31, noise 0.60
+=== 07:52:55 file 026-fast_read-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 26 trials, reference 53.31, noise 0.60
+=== 08:10:24 file 027-spi_interrupt-y
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 27 trials, reference 53.31, noise 0.60
+=== 08:24:04 file 028-nor_sleep_wait-n
+=== 08:25:16 file_finish: waiting for runner pid 10976
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 28 trials, reference 53.31, noise 0.60
+=== 08:38:43 file 029-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 29 trials, reference 53.30, noise 0.60
+=== 08:53:54 file 030-nor_sleep_erase-5
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 30 trials, reference 53.30, noise 0.60
+=== 09:09:08 file 031-base
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 31 trials, reference 53.30, noise 0.60
+=== 09:24:26 queue finished
+=== 09:24:34 building file-comboA
+rc=0 seconds=124
+=== 09:26:38 file 032-comboA
+=== 09:33:18 fabrics_chain: waiting for file_finish pid 47509
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 32 trials, reference 53.30, noise 0.60
+=== 09:42:32 file 033-comboA-confirm5
+=== 09:44:38 032-comboA worse than base (+5.88): run_queue3 (034 confirm10) and the old fabrics_chain stopped; 033 left running as the repeat
+=== 09:44:38 fabrics_chain: waiting for the running trial
+=== 09:59:21 building file-comboB and five-fabric candidates
+file-spi_interrupt-ml96: rc=0 seconds=315 
+zms-comboA-sectors8: rc=0 seconds=317 
+file-comboB: rc=0 seconds=317 
+file-spi_interrupt-ml64: rc=0 seconds=114 
+batch done
+=== 10:06:30 file 035-comboB
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 34 trials, reference 53.30, noise 0.60
+=== 10:24:25 file 036-spi_interrupt-confirm5
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 35 trials, reference 53.30, noise 0.60
+=== 10:38:06 queue finished
+=== 10:38:06 File 10-cycle confirmation: spi_interrupt
+=== 10:38:06 file 037-spi_interrupt-confirm10
+=== 10:40:33 stopped fabrics_chain and run_queue3: images after 09-13 23:55 contain a changed eth_w5500.c (MMB + rx resync), comparisons mixed; 037 (old image) left running
+=== 10:41:31 rebuild_chain: waiting for the running trial
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 36 trials, reference 53.30, noise 0.60
+=== 11:03:40 queue finished
+=== 11:03:44 rebuilding bases and interrupt-only on current sources
+file-base3: rc=0 seconds=275 
+zms-base3: rc=0 seconds=275 
+file-spi_interrupt-y3: rc=0 seconds=276 
+batch done
+=== 11:08:20 file 038-base-rebuilt
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 37 trials, reference 53.30, noise 0.60
+=== 11:22:56 file 039-spi_interrupt-rebuilt
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/file/results.md: 38 trials, reference 53.30, noise 0.60
+=== 11:40:34 zms 040-base-rebuilt
+=== 11:41:50 rebuild_chain stopped before five fabrics: 039 interrupt rebuilt on current sources 59.65 (old image 43.5) - SPI interrupt no longer helps File; 040 left running
+=== 11:44:29 diag_chain: waiting for the running trial
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/zms/results.md: 43 trials, reference 4.42, noise 0.23
+=== 11:49:07 queue finished
+=== 11:49:09 diag int-0913 (file-spi_interrupt-y)
+rc=0 {"name": "int-0913", "flash_ok": true, "matter_ready": true, "window_s": 63.6, "share_percent": {"idle": 91.98, "shell_uart": 4.13, "CHIP": 1.59, "eth_w5500": 1.29, "rx_q[0]": 1.0, "main": 0.01, "io_to_matter_stream": 0.0, "web_v1_jobs": 0.0, "io_outputs_task": 0.0, "reg_notify_wq": 0.0, "input": 0.
+=== 11:53:08 diag int-0914 (file-spi_interrupt-y3)
+rc=0 {"name": "int-0914", "flash_ok": true, "matter_ready": true, "window_s": 63.6, "share_percent": {"idle": 93.85, "shell_uart": 4.34, "eth_w5500": 0.81, "CHIP": 0.63, "rx_q[0]": 0.35, "main": 0.01, "net_mgmt": 0.0, "sysworkq": 0.0, "io_to_matter_stream": 0.0, "web_v1_jobs": 0.0, "io_outputs_task": 0.0
+=== 11:57:16 diag base-0913 (file-base2)
+=== 12:01:09 icache_chain: waiting for diag_chain
+rc=0 {"name": "base-0913", "flash_ok": true, "matter_ready": true, "window_s": 63.6, "share_percent": {"idle": 93.2, "shell_uart": 3.51, "CHIP": 1.46, "eth_w5500": 0.92, "rx_q[0]": 0.88, "main": 0.01, "net_mgmt": 0.01, "sysworkq": 0.0, "io_to_matter_stream": 0.0, "web_v1_jobs": 0.0, "io_outputs_task": 0.
+=== 12:01:17 diag base-0914 (file-base3)
+=== 12:12:24 net_chain: waiting for icache_chain
+rc=0 {"name": "base-0914", "flash_ok": true, "matter_ready": true, "window_s": 63.1, "share_percent": {}, "log_lines_in_30s_idle": 0}
+=== 12:15:13 diag finished
+=== 12:15:27 icache int-0913 (file-spi_interrupt-y)
+=== 12:27:22 icache_chain stopped: dropped console byte turned 'devmem 40030400 32 0xf0001' into a write to 0x4003040 -> BUS FAULT (12:17); MMONR saturates in <10 s idle, method unusable
+=== 12:27:31 netoff int-0914 (file-spi_interrupt-y3)
+rc=0 {"name": "int-0914", "interfaces": [{"index": 1, "name": "eth0", "type": "Ethernet"}, {"index": 2, "name": "wlan0", "type": "WiFi"}], "A_all_up": {"ok": true, "mean_ms": {"open+close": 17.5, "read 32 +seek": 37.4, "read 32": 30.5, "read 1024": 25.8, "scan (all)": 623.9, "load_one (hit)": 625.6}}, "B_eth_down": {"ok": true, "mean_ms": {"open+close": 17.5, "read 32 +seek": 37.4, "read 32": 30.7, "read 1024": 25.8, "scan (all)": 622.4, "load_one (hit)": 622.6}}, "C_eth_wifi_down": {"ok": true, "mea
+=== 12:31:18 netoff int-0913 (file-spi_interrupt-y)
+rc=0 {"name": "int-0913", "interfaces": [{"index": 1, "name": "eth0", "type": "Ethernet"}, {"index": 2, "name": "wlan0", "type": "WiFi"}], "A_all_up": {"ok": true, "mean_ms": {"open+close": 15.4, "read 32 +seek": 28.9, "read 32": 22.9, "read 1024": 18.4, "scan (all)": 752.9, "load_one (hit)": 749.4}}, "B_eth_down": {"ok": true, "mean_ms": {"open+close": 15.4, "read 32 +seek": 28.9, "read 32": 23.0, "read 1024": 18.4, "scan (all)": 748.4, "load_one (hit)": 748.5}}, "C_eth_wifi_down": {"ok": true, "mea
+=== 12:35:11 net diag finished
+=== 13:26:04 fabrics_polled_chain: building six images
+fab2-zms-cache2048: rc=0 seconds=360 
+fab2-zms-cache2048-sectors4: rc=0 seconds=360 
+fab2-zms-cache2048-sectors8: rc=0 seconds=360 
+fab2-file-ml128: rc=0 seconds=346 
+fab2-file-ml64: rc=0 seconds=348 
+fab2-file-ml96: rc=0 seconds=348 
+batch done
+=== 13:37:53 fab2-file-ml128 driver code differs from the first image (2743be89c9e5 vs 5321d3772c19)
+=== 13:39:04 fabrics_polled_chain restarted: driver signature check per backend (esp_hosted_mcu changed 13:33-13:34 between ZMS and File builds)
+=== 13:39:04 fabrics_polled_chain: building six images
+batch done
+=== 13:39:04 six images ok (driver signature zms 5321d3772c19, file 2743be89c9e5)
+=== 13:39:04 fabrics zms-cache2048
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-cache2048: comm 10/10 max fabrics 5 init5 3.757 remove 11.37 score 15.13 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 13:53:44 fabrics zms-cache2048-sectors8
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-cache2048-sectors8: comm 10/10 max fabrics 5 init5 3.269 remove 13.56 score 16.83 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 14:08:42 fabrics zms-cache2048-sectors4
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-cache2048-sectors4: comm 10/10 max fabrics 5 init5 2.763 remove 10.33 score 13.09 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 14:22:55 fabrics file-ml128
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/file-ml128: comm 6/10 max fabrics 3 init5 None remove 340.62 score None usable False storage errors 0 persistence 14 / 14 aborted None
+=== 15:04:58 fabrics file-ml96
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/file-ml96: comm 6/10 max fabrics 3 init5 None remove 290.54 score None usable False storage errors 0 persistence 14 / 14 aborted None
+=== 15:44:26 fabrics file-ml64
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/file-ml64: comm 6/10 max fabrics 3 init5 None remove 146.01 score None usable False storage errors 0 persistence 14 / 14 aborted None
+=== 16:17:49 fabrics queue finished
+=== 16:29:42 prod boot check (prod-zms, as shipped)
+rc=0 2 lines
+=== 16:30:49 fabrics zms-prod-sectors4 (prod-zms-shell)
+=== 16:44:53 prod_interrupt_chain: waiting for the polled production run
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-prod-sectors4: comm 10/10 max fabrics 5 init5 2.813 remove 9.47 score 12.28 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 16:45:03 prod verification finished
+=== 16:45:08 building prod-zms-shell-int
+=== .config diff vs prod-zms-shell: > CONFIG_SPI_STM32_INTERRUPT=y
+=== driver signature: polled 634ffb5b67d2, interrupt 634ffb5b67d2
+=== 16:47:10 fabrics zms-prod-sectors4-spi_interrupt
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-prod-sectors4-spi_interrupt: comm 10/10 max fabrics 5 init5 2.625 remove 8.69 score 11.31 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 17:01:29 prod interrupt check finished
+=== 23:28:27 p256m_chain: crypto_bench baseline (prod-zms-shell)
+rc=0 {"name": "prod-zms-shell", "matter_ready": true, "finished": true, "rows": {"SHA-256 512B": {"total_us": 8336, "avg_us": 833, "iterations": 10}, "HMAC-SHA256 512B": {"total_us": 12491, "avg_us": 1249, "iterations": 10}, "HKDF-SHA256 32B": {"total_us": 14200, "avg_us": 1420, "iterations": 10}, "AES-CCM enc 128B": {"total_us": 23953, "avg_us": 2395, "iterations": 10}, "AES-CCM dec 128B": {"total_us"
+=== 23:30:39 crypto_bench p256-m (prod-zms-shell-p256m)
+rc=0 {"name": "prod-zms-shell-p256m", "matter_ready": true, "finished": true, "rows": {"SHA-256 512B": {"total_us": 4884, "avg_us": 488, "iterations": 10}, "HMAC-SHA256 512B": {"total_us": 7833, "avg_us": 783, "iterations": 10}, "HKDF-SHA256 32B": {"total_us": 11849, "avg_us": 1184, "iterations": 10}, "AES-CCM enc 128B": {"total_us": 20854, "avg_us": 2085, "iterations": 10}, "AES-CCM dec 128B": {"total
+=== 23:32:06 fabrics zms-prod-sectors4-p256m
+=== 23:39:52 apple_after_p256m: waiting for p256m_chain
+=== 23:40:58 p256m_chain stopped by owner's Apple Home attempt (round 1 partial kept in fabrics/zms-prod-sectors4-p256m/run.jsonl)
+=== 23:41:02 apple home session (prod-zms)
+=== 23:42:36 QR_READY /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/apple-home/20260914-2341/qr.png MT:-24J0AFN00KA0648G00 manual 34970112332
+=== 00:07:05 apple home session finished
+=== 00:09:26 boardb_chain: waiting for the upload
+recovery on /dev/cu.usbmodem11201 after 15.0 s
+upload rc=0 in 282 s
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.867,000] [0m<inf> eth_w5500: ETH_W5500: interrupt mode[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.876,000] [0m<inf> eth_w5500: W5500 Initialized[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.098,000] [0m<inf> fs_zms: 4 Sectors of 4096 bytes[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:02.211,000] [0m<inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.170,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.309,000] [0m<inf> matter: Matter stack initialized[0m
+=== 00:14:18 fabrics zms-boardb-prod-sectors4-w5500up
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-boardb-prod-sectors4-w5500up: comm 10/10 max fabrics 5 init5 2.975 remove 11.64 score 14.62 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 00:30:09 boardb run finished
+=== 00:51:16 fabrics zms-sram-c0
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-sram-c0: comm 10/10 max fabrics 5 init5 2.917 remove 10.6 score 13.52 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 01:05:59 fabrics zms-sram-s1
+=== 01:11:25 sram chain killed by the host (low memory) during zms-sram-s1 round 1 k=3; restarting from s1
+=== 01:11:25 fabrics zms-sram-s1
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-sram-s1: comm 10/10 max fabrics 5 init5 2.872 remove 6.98 score 9.85 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 01:24:27 fabrics zms-sram-s2
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-sram-s2: comm 10/10 max fabrics 5 init5 2.706 remove 4.73 score 7.44 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 01:35:25 fabrics zms-sram-s3
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-sram-s3: comm 10/10 max fabrics 5 init5 2.528 remove 4.86 score 7.39 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 01:43:28 fabrics zms-sram-s3-p256m
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-sram-s3-p256m: comm 10/10 max fabrics 5 init5 2.677 remove 5.1 score 7.78 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 01:51:21 sram chain finished
+=== 02:23:54 pka-b psa check
+rc=0 pka-b-psa
+=== 02:25:51 fabrics zms-pka-b-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-b-off: comm 10/10 max fabrics 5 init5 2.864 remove 5.34 score 8.2 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 02:34:06 fabrics zms-pka-b-on
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-b-on: comm 10/10 max fabrics 5 init5 2.722 remove 5.32 score 8.04 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 02:41:53 pka chain finished
+=== 02:53:39 pka-c ecp check
+rc=0 pka-c-ecp pka kat: PASS 
+=== check failed, no commissioning with the ECP hook
+=== 02:56:12 pka chain2 restarted after the harness fix (pka ecp check end marker)
+=== 02:56:12 pka-c ecp check
+rc=0 pka-c-ecp pka kat: PASS pka ecp check: PASS 
+=== 02:57:43 fabrics zms-pka-c-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-c-off: comm 10/10 max fabrics 5 init5 3.074 remove 6.31 score 9.38 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 03:06:22 fabrics zms-pka-c-on
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-c-on: comm 10/10 max fabrics 5 init5 3.303 remove 6.86 score 10.16 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 03:14:06 pka chain2 finished
+=== 03:19:09 pka chain2 repeat pair (SERIES=2, fabrics only, host load 7.61 7.83 12.14)
+=== 03:19:09 fabrics zms-pka-c2-off
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-c2-off: comm 10/10 max fabrics 5 init5 3.065 remove 6.29 score 9.36 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 03:27:44 fabrics zms-pka-c2-on
+rc=0 /Volumes/Programming/Zephyr/zephyr_latest/cedar_switch_3in4out_power/docs/device-development/reports/p3/tuning/fabrics/zms-pka-c2-on: comm 10/10 max fabrics 5 init5 3.095 remove 5.98 score 9.08 usable True storage errors 0 persistence 14 / 14 aborted None
+=== 03:35:47 pka chain2 finished

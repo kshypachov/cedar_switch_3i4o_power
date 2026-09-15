@@ -1,0 +1,3 @@
+&lfs0 {
+	lookahead-size = <1024>;
+};

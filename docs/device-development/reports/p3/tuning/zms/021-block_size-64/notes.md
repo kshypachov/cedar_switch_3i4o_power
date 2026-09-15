@@ -1,0 +1,1 @@
+В пределах шума, bench совпадает с базой (130/74 мс, скан 419). По zms.c ZMS_BLOCK_SIZE — только стековый буфер для zms_flash_block_cmp/move (GC, NO_DOUBLE_WRITE) и проверка write_block_size при монтировании; чтение идёт через flash_read целиком. GC за 5 циклов не наступает — влиять нечему.

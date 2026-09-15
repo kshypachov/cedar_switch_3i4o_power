@@ -1,0 +1,5 @@
+/ {
+	chosen {
+		zephyr,settings-partition = &storage_lfs_partition;
+	};
+};

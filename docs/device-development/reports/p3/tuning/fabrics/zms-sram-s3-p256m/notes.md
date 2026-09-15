@@ -1,0 +1,1 @@
+s3 + p256-m (`trials/crypto/p256m.conf`), 01:43–01:51. Commissioning (chip-tool): 10 шт., медиана 17.1 с (мин 16.1, макс 18.7). Итог обвязки: `comm 10/10 max fabrics 5 init5 2.677 remove 5.1 score 7.78 usable True storage errors 0 persistence 14 / 14 aborted None`. Перенос горячих данных/кода/кучи в SRAM, методика и разбор по шагам — `../../sram/README.md`.

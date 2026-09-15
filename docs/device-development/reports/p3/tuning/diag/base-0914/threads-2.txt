@@ -1,0 +1,8 @@
+uart:~$ kernel thread lit
+thread - Kernel threads.
+Subcommands:
+  kill     : kernel thread kill <thread_id>
+  list     : List kernel threads.
+  resume   : kernel thread resume <thread_id>
+  stacks   : List threads stack usage.
+  suspend  : kernel thread suspend <thread_id>

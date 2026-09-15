@@ -1,0 +1,30 @@
+{"ok": true, "attempts": 1, "event": "flash", "host_time": "17:42:48"}
+{"result": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19190 ms", "host_s": 19.2, "event": "wipe", "host_time": "17:43:15"}
+{"label": "clean partition", "boots_since_wipe": 1, "main_host_s": 2.62, "matter_start_uptime_s": 3.892, "matter_ready_uptime_s": 4.519, "matter_init_s": 0.627, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:43:25"}
+{"reboot_count": 1, "unique_id": "33 37 30 38 33 43 45 34", "event": "structure_created", "host_time": "17:43:29"}
+{"label": "restart after creation", "boots_since_wipe": 2, "main_host_s": 2.62, "matter_start_uptime_s": 2.368, "matter_ready_uptime_s": 2.941, "matter_init_s": 0.573, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:43:36"}
+{"reboot_count_before": 1, "reboot_count_after": 2, "unique_id_same": true, "counter_advanced": true, "event": "structure_read_back", "host_time": "17:43:40"}
+{"label": "cycle 1: before commissioning", "boots_since_wipe": 3, "main_host_s": 2.62, "matter_start_uptime_s": 2.368, "matter_ready_uptime_s": 2.941, "matter_init_s": 0.573, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:43:47"}
+{"node": 101, "ok": true, "window_open_s": 1.37, "commission_s": 47.2, "failed": null, "event": "commission", "host_time": "17:44:36"}
+{"label": "cycle 1: with fabric", "boots_since_wipe": 4, "main_host_s": 2.8, "matter_start_uptime_s": 3.894, "matter_ready_uptime_s": 5.202, "matter_init_s": 1.308, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:44:45"}
+{"ok": true, "remove_s": 1.6, "after": "0", "event": "remove_fabrics", "host_time": "17:44:47"}
+{"label": "cycle 2: before commissioning", "boots_since_wipe": 5, "main_host_s": 2.82, "matter_start_uptime_s": 2.513, "matter_ready_uptime_s": 3.652, "matter_init_s": 1.139, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:44:55"}
+{"node": 102, "ok": true, "window_open_s": 17.42, "commission_s": 47.8, "failed": null, "event": "commission", "host_time": "17:46:00"}
+{"label": "cycle 2: with fabric", "boots_since_wipe": 6, "main_host_s": 2.97, "matter_start_uptime_s": 2.872, "matter_ready_uptime_s": 4.787, "matter_init_s": 1.915, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:46:09"}
+{"ok": true, "remove_s": 1.5, "after": "0", "event": "remove_fabrics", "host_time": "17:46:10"}
+{"label": "cycle 3: before commissioning", "boots_since_wipe": 7, "main_host_s": 3.02, "matter_start_uptime_s": 3.895, "matter_ready_uptime_s": 5.57, "matter_init_s": 1.675, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:46:20"}
+{"node": 103, "ok": true, "window_open_s": 3.43, "commission_s": 49.0, "failed": null, "event": "commission", "host_time": "17:47:12"}
+{"label": "cycle 3: with fabric", "boots_since_wipe": 8, "main_host_s": 3.26, "matter_start_uptime_s": 2.894, "matter_ready_uptime_s": 5.492, "matter_init_s": 2.598, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:47:22"}
+{"ok": true, "remove_s": 1.8, "after": "0", "event": "remove_fabrics", "host_time": "17:47:24"}
+{"label": "cycle 4: before commissioning", "boots_since_wipe": 9, "main_host_s": 3.26, "matter_start_uptime_s": 2.4050000000000002, "matter_ready_uptime_s": 4.753, "matter_init_s": 2.348, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:47:32"}
+{"node": 104, "ok": true, "window_open_s": 4.96, "commission_s": 51.4, "failed": null, "event": "commission", "host_time": "17:48:29"}
+{"label": "cycle 4: with fabric", "boots_since_wipe": 10, "main_host_s": 3.57, "matter_start_uptime_s": 3.895, "matter_ready_uptime_s": 7.182, "matter_init_s": 3.287, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:48:40"}
+{"ok": true, "remove_s": 1.57, "after": "0", "event": "remove_fabrics", "host_time": "17:48:41"}
+{"label": "cycle 5: before commissioning", "boots_since_wipe": 11, "main_host_s": 3.58, "matter_start_uptime_s": 2.896, "matter_ready_uptime_s": 5.9, "matter_init_s": 3.004, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:48:51"}
+{"node": 105, "ok": true, "window_open_s": 7.02, "commission_s": 53.6, "failed": null, "event": "commission", "host_time": "17:49:52"}
+{"label": "cycle 5: with fabric", "boots_since_wipe": 12, "main_host_s": 3.99, "matter_start_uptime_s": 2.98, "matter_ready_uptime_s": 6.923, "matter_init_s": 3.943, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:50:03"}
+{"ok": true, "remove_s": 2.23, "after": "0", "event": "remove_fabrics", "host_time": "17:50:05"}
+{"cycles": 5, "event": "cycles_done", "host_time": "17:50:05"}
+{"ok": true, "key": "mt/cfg/unique-id", "text": ["settings backend: 11 entries, 3 rounds (best / mean, us)", "scan (no match)    553600 /   652600", "scan (all)         416200 /   418000", "load_one (hit)     129800 /   132333  -> 16", "load_one (miss)     74300 /    74333  -> 0", "val_len (hit)      129700 /   129700  -> 16", "val_len (miss)      74400 /    77000  -> 0"], "event": "bench", "host_time": "17:50:11"}
+{"label": "after cycles", "boots_since_wipe": 13, "main_host_s": 3.94, "matter_start_uptime_s": 3.894, "matter_ready_uptime_s": 7.423, "matter_init_s": 3.529, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "17:50:22"}
+{"reboot_count": 13, "boots_since_wipe": 13, "ok": true, "note": "Matter counts every boot in mt/ctr/reboot-count; equal counts mean every boot read and wrote it back", "event": "persistence", "host_time": "17:50:26"}

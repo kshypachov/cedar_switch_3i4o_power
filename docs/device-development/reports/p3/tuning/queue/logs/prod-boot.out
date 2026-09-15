@@ -1,0 +1,2 @@
+boot_after_flash {"matter": "~$ [00:00:03.909,000] <inf> matter: Matter stack initialized", "zms": ["4 Sectors of 4096 bytes", "alloc wra: 2, e20", "data wra: 2, 18"], "storage_err": [], "fabric_lines": []}
+boot_after_reboot {"matter": "~$ [00:00:04.129,000] <inf> matter: Matter stack initialized", "zms": ["4 Sectors of 4096 bytes", "alloc wra: 2, de0", "data wra: 2, 18"], "storage_err": [], "fabric_lines": []}

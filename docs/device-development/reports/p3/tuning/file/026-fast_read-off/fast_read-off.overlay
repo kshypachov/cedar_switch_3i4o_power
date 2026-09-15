@@ -1,0 +1,3 @@
+&spi_flash {
+	/delete-property/ use-fast-read;
+};

@@ -1,0 +1,9 @@
+{
+ "backend": "zms",
+ "trial": "025-fast_read-off",
+ "kind": "trial",
+ "change": "/delete-property/ use-fast-read",
+ "cycles": 5,
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/zms-fast_read-off/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "started": "2026-09-13 23:07:41"
+}

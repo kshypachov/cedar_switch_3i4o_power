@@ -1,0 +1,393 @@
+{
+ "meta": {
+  "backend": "zms",
+  "name": "cache2048-sectors8",
+  "change": "cache 2048, 8 sectors, polled SPI",
+  "rounds": 2,
+  "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/fab2-zms-cache2048-sectors8/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+  "started": "2026-09-14 13:53:44"
+ },
+ "aborted": null,
+ "commissioning_ok": 10,
+ "commissioning_total": 10,
+ "max_fabrics": 5,
+ "max_init_with_5_s": 3.269,
+ "max_remove_s": 13.56,
+ "score": 16.83,
+ "usable": true,
+ "read_back_ok": true,
+ "persistence_ok": true,
+ "persistence": "14 / 14",
+ "unexpected_boots": 0,
+ "boot_failures": 0,
+ "init": {
+  "r1_k1": {
+   "fabrics": 1,
+   "init_s": 1.176,
+   "zms": [
+    "alloc wra: 0, 980"
+   ]
+  },
+  "r1_k2": {
+   "fabrics": 2,
+   "init_s": 1.63,
+   "zms": [
+    "alloc wra: 1, e90"
+   ]
+  },
+  "r1_k3": {
+   "fabrics": 3,
+   "init_s": 2.056,
+   "zms": [
+    "alloc wra: 1, ae0"
+   ]
+  },
+  "r1_k4": {
+   "fabrics": 4,
+   "init_s": 2.36,
+   "zms": [
+    "alloc wra: 2, e20"
+   ]
+  },
+  "r1_k5": {
+   "fabrics": 5,
+   "init_s": 2.727,
+   "zms": [
+    "alloc wra: 2, a70"
+   ]
+  },
+  "r1_k0": {
+   "fabrics": 0,
+   "init_s": 1.194,
+   "zms": [
+    "alloc wra: 4, f70"
+   ]
+  },
+  "r2_k1": {
+   "fabrics": 1,
+   "init_s": 1.424,
+   "zms": [
+    "alloc wra: 4, bc0"
+   ]
+  },
+  "r2_k2": {
+   "fabrics": 2,
+   "init_s": 1.956,
+   "zms": [
+    "alloc wra: 5, f10"
+   ]
+  },
+  "r2_k3": {
+   "fabrics": 3,
+   "init_s": 2.653,
+   "zms": [
+    "alloc wra: 5, b60"
+   ]
+  },
+  "r2_k4": {
+   "fabrics": 4,
+   "init_s": 2.803,
+   "zms": [
+    "alloc wra: 6, ed0"
+   ]
+  },
+  "r2_k5": {
+   "fabrics": 5,
+   "init_s": 3.269,
+   "zms": [
+    "alloc wra: 6, b20"
+   ]
+  },
+  "r2_k0": {
+   "fabrics": 0,
+   "init_s": 3.139,
+   "zms": [
+    "alloc wra: 7, 180"
+   ]
+  }
+ },
+ "commissions": [
+  {
+   "round": 1,
+   "k": 1,
+   "commissioner": "alpha",
+   "ok": true,
+   "window_open_s": 0.55,
+   "commission_s": 52.8,
+   "failed": null,
+   "phases": {
+    "pase": 10.079,
+    "attestation": 4.359,
+    "csr": 3.89,
+    "noc_to_done": 29.261,
+    "commit": 0.065
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:14.974,000] <err> chip: [DL]Long dispatch time: 565 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:25.913,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:55.063,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:05.085,000] <err> chip: [DL]Long dispatch time: 10021 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:05.391,000] <err> chip: [DL]Long dispatch time: 304 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:06.207,000] <err> chip: [DL]Long dispatch time: 276 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 1,
+   "k": 2,
+   "commissioner": "beta",
+   "ok": true,
+   "window_open_s": 1.59,
+   "commission_s": 53.8,
+   "failed": null,
+   "phases": {
+    "pase": 10.095,
+    "attestation": 4.49,
+    "csr": 3.861,
+    "noc_to_done": 29.421,
+    "commit": 0.405
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:10.579,000] <err> chip: [DL]Long dispatch time: 1621 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:22.055,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:51.341,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:01.374,000] <err> chip: [DL]Long dispatch time: 10031 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:01.659,000] <err> chip: [DL]Long dispatch time: 284 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:03.082,000] <err> chip: [DL]Long dispatch time: 552 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 1,
+   "k": 3,
+   "commissioner": "gamma",
+   "ok": true,
+   "window_open_s": 2.07,
+   "commission_s": 54.6,
+   "failed": null,
+   "phases": {
+    "pase": 10.077,
+    "attestation": 4.363,
+    "csr": 3.891,
+    "noc_to_done": 30.008,
+    "commit": 0.073
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:11.406,000] <err> chip: [DL]Long dispatch time: 1937 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:23.175,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:53.331,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:03.384,000] <err> chip: [DL]Long dispatch time: 10008 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:03.742,000] <err> chip: [DL]Long dispatch time: 357 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:05.183,000] <err> chip: [DL]Long dispatch time: 860 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 1,
+   "k": 4,
+   "commissioner": "4",
+   "ok": true,
+   "window_open_s": 3.09,
+   "commission_s": 55.7,
+   "failed": null,
+   "phases": {
+    "pase": 10.176,
+    "attestation": 4.499,
+    "csr": 3.902,
+    "noc_to_done": 30.215,
+    "commit": 0.404
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:14.685,000] <err> chip: [DL]Long dispatch time: 3225 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:26.622,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:57.212,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:07.257,000] <err> chip: [DL]Long dispatch time: 10042 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:07.543,000] <err> chip: [DL]Long dispatch time: 285 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:09.645,000] <err> chip: [DL]Long dispatch time: 1227 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 1,
+   "k": 5,
+   "commissioner": "5",
+   "ok": true,
+   "window_open_s": 3.97,
+   "commission_s": 57.0,
+   "failed": null,
+   "phases": {
+    "pase": 10.286,
+    "attestation": 4.409,
+    "csr": 3.864,
+    "noc_to_done": 30.702,
+    "commit": 0.29
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:14.911,000] <err> chip: [DL]Long dispatch time: 4675 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:27.300,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:58.235,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:08.300,000] <err> chip: [DL]Long dispatch time: 10063 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:08.587,000] <err> chip: [DL]Long dispatch time: 286 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:10.944,000] <err> chip: [DL]Long dispatch time: 1596 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 2,
+   "k": 1,
+   "commissioner": "alpha",
+   "ok": true,
+   "window_open_s": 3.3,
+   "commission_s": 54.5,
+   "failed": null,
+   "phases": {
+    "pase": 10.389,
+    "attestation": 4.339,
+    "csr": 3.905,
+    "noc_to_done": 29.245,
+    "commit": 0.322
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:14.839,000] <err> chip: [DL]Long dispatch time: 4290 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:25.893,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:55.356,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:05.407,000] <err> chip: [DL]Long dispatch time: 10049 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:05.690,000] <err> chip: [DL]Long dispatch time: 282 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:06.784,000] <err> chip: [DL]Long dispatch time: 283 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 2,
+   "k": 2,
+   "commissioner": "beta",
+   "ok": true,
+   "window_open_s": 3.02,
+   "commission_s": 55.0,
+   "failed": null,
+   "phases": {
+    "pase": 10.149,
+    "attestation": 4.528,
+    "csr": 3.86,
+    "noc_to_done": 30.176,
+    "commit": 0.495
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:12.845,000] <err> chip: [DL]Long dispatch time: 3522 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:24.184,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:53.878,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:03.898,000] <err> chip: [DL]Long dispatch time: 10013 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:04.521,000] <err> chip: [DL]Long dispatch time: 622 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:06.036,000] <err> chip: [DL]Long dispatch time: 550 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 2,
+   "k": 3,
+   "commissioner": "gamma",
+   "ok": true,
+   "window_open_s": 3.39,
+   "commission_s": 55.9,
+   "failed": null,
+   "phases": {
+    "pase": 10.264,
+    "attestation": 4.286,
+    "csr": 3.865,
+    "noc_to_done": 29.993,
+    "commit": 0.785
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:13.917,000] <err> chip: [DL]Long dispatch time: 4065 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:25.549,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:55.695,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:05.710,000] <err> chip: [DL]Long dispatch time: 10012 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:05.995,000] <err> chip: [DL]Long dispatch time: 284 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:08.111,000] <err> chip: [DL]Long dispatch time: 858 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 2,
+   "k": 4,
+   "commissioner": "4",
+   "ok": true,
+   "window_open_s": 3.79,
+   "commission_s": 56.4,
+   "failed": null,
+   "phases": {
+    "pase": 10.26,
+    "attestation": 4.384,
+    "csr": 3.876,
+    "noc_to_done": 30.195,
+    "commit": 0.496
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:16.658,000] <err> chip: [DL]Long dispatch time: 4616 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:28.617,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:00:59.019,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:09.055,000] <err> chip: [DL]Long dispatch time: 10034 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:09.340,000] <err> chip: [DL]Long dispatch time: 284 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:11.528,000] <err> chip: [DL]Long dispatch time: 1225 ms, for event type 32783"
+   ]
+  },
+  {
+   "round": 2,
+   "k": 5,
+   "commissioner": "5",
+   "ok": true,
+   "window_open_s": 4.24,
+   "commission_s": 59.7,
+   "failed": null,
+   "phases": {
+    "pase": 10.409,
+    "attestation": 4.433,
+    "csr": 3.906,
+    "noc_to_done": 31.703,
+    "commit": 1.296
+   },
+   "device_errors": [
+    "uart:~$ uart:~$ [00:00:16.511,000] <err> chip: [DL]Long dispatch time: 5247 ms, for event type 2",
+    "t:~$ uart:~$ [00:00:29.120,000] <err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: 0x0000_0030, attributeId: 0x0000_000Cerr = 586",
+    "uart:~$ uart:~$ [00:01:01.289,000] <err> chip: [SC]The device does not support GetClock_RealTimeMS() API: 3.  Falling back to Last Known Good UTC Time",
+    "uart:~$ uart:~$ [00:01:11.302,000] <err> chip: [DL]Long dispatch time: 10011 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:11.589,000] <err> chip: [DL]Long dispatch time: 286 ms, for event type 2",
+    "uart:~$ uart:~$ [00:01:14.790,000] <err> chip: [DL]Long dispatch time: 1657 ms, for event type 32783"
+   ]
+  }
+ ],
+ "removals": [
+  {
+   "round": 1,
+   "attempt": 1,
+   "before": 5,
+   "after": 0,
+   "remove_s": 9.51
+  },
+  {
+   "round": 2,
+   "attempt": 1,
+   "before": 5,
+   "after": 0,
+   "remove_s": 13.56
+  }
+ ],
+ "bench": {
+  "round 1: five fabrics": {
+   "scan (all)": 191833,
+   "load_one (hit)": 1200,
+   "bytes": null,
+   "entries": 61
+  },
+  "round 2: five fabrics": {
+   "scan (all)": 170233,
+   "load_one (hit)": 1200,
+   "bytes": null,
+   "entries": 61
+  }
+ },
+ "storage_errors": {},
+ "other_warnings": {
+  "<err> chip: [DL]Long dispatch time: # ms, for event type #": 65,
+  "<wrn> net_dhcpv4: DHCP server provided more DNS servers than can be saved": 26,
+  "<err> mb85rsxx: invalid device ID: # 7F # #": 13,
+  "<err> mb85rsxx: Failed to initialize device, RDID check failed (err -#)": 13,
+  "<err> net_ethernet: Invalid MAC address for iface # (#)": 13,
+  "<wrn> web_server: no administrator yet: setup is open on the web page": 13,
+  "<err> chip: [DMG]Fail to retrieve data, roll back and encode status on clusterId: #_0030, attributeId: #_000Cerr = #": 10,
+  "<err> chip: [SC]The device does not support GetClock_RealTimeMS() API: #.  Falling back to Last Known Good UTC Time": 10,
+  "<wrn> matter_service_chip: generating the onboarding codes took # ms on the Matter thread": 8
+ }
+}

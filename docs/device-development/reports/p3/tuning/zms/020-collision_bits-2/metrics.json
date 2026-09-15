@@ -1,0 +1,155 @@
+{
+ "meta": {
+  "backend": "zms",
+  "trial": "020-collision_bits-2",
+  "kind": "trial",
+  "change": "CONFIG_SETTINGS_ZMS_MAX_COLLISIONS_BITS=2",
+  "cycles": 5,
+  "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/zms-collision_bits-2/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+  "started": "2026-09-13 22:24:45"
+ },
+ "aborted": null,
+ "score": 4.559,
+ "score_parts": {
+  "init_with_fabric": 2.877,
+  "remove": 1.43,
+  "commit": 0.252
+ },
+ "slope_with_fabric_s_per_cycle": 0.542,
+ "slope_before_s_per_cycle": 0.573,
+ "median_init_before_s": 1.776,
+ "median_window_open_s": 3.43,
+ "commissioning_ok": 5,
+ "commissioning_total": 5,
+ "phase_medians": {
+  "pase": 10.299,
+  "attestation": 3.201,
+  "csr": 3.642,
+  "noc_to_done": 28.752,
+  "commit": 0.252
+ },
+ "clean_boot_init_s": 0.66,
+ "wipe": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19191 ms",
+ "read_back_ok": true,
+ "persistence_ok": true,
+ "persistence": "13 counted / 13 boots",
+ "boot_failures": 0,
+ "unexpected_boots": 0,
+ "storage_warnings": [],
+ "bench": {
+  "scan (no match)": {
+   "best_us": 372900,
+   "mean_us": 431466,
+   "result": null
+  },
+  "scan (all)": {
+   "best_us": 236100,
+   "mean_us": 236266,
+   "result": null
+  },
+  "load_one (hit)": {
+   "best_us": 56400,
+   "mean_us": 56466,
+   "result": 16
+  },
+  "load_one (miss)": {
+   "best_us": 57600,
+   "mean_us": 57666,
+   "result": 0
+  },
+  "val_len (hit)": {
+   "best_us": 56300,
+   "mean_us": 58000,
+   "result": 16
+  },
+  "val_len (miss)": {
+   "best_us": 57700,
+   "mean_us": 57700,
+   "result": 0
+  }
+ },
+ "cycles": [
+  {
+   "cycle": 1,
+   "init_before_s": 0.639,
+   "window_open_s": 1.4,
+   "commission_ok": true,
+   "commission_s": 49.7,
+   "init_with_fabric_s": 1.195,
+   "remove_s": 1.82
+  },
+  {
+   "cycle": 2,
+   "init_before_s": 1.058,
+   "window_open_s": 2.31,
+   "commission_ok": true,
+   "commission_s": 47.6,
+   "init_with_fabric_s": 1.933,
+   "remove_s": 1.51
+  },
+  {
+   "cycle": 3,
+   "init_before_s": 1.776,
+   "window_open_s": 3.43,
+   "commission_ok": true,
+   "commission_s": 48.7,
+   "init_with_fabric_s": 2.877,
+   "remove_s": 1.3
+  },
+  {
+   "cycle": 4,
+   "init_before_s": 2.563,
+   "window_open_s": 5.0,
+   "commission_ok": true,
+   "commission_s": 51.5,
+   "init_with_fabric_s": 3.213,
+   "remove_s": 1.4
+  },
+  {
+   "cycle": 5,
+   "init_before_s": 2.929,
+   "window_open_s": 5.55,
+   "commission_ok": true,
+   "commission_s": 51.6,
+   "init_with_fabric_s": 3.363,
+   "remove_s": 1.43
+  }
+ ],
+ "phases": [
+  {
+   "pase": 10.229,
+   "attestation": 3.02,
+   "csr": 3.645,
+   "noc_to_done": 30.352,
+   "commit": 0.076
+  },
+  {
+   "pase": 10.132,
+   "attestation": 3.201,
+   "csr": 3.643,
+   "noc_to_done": 28.372,
+   "commit": 0.06
+  },
+  {
+   "pase": 10.299,
+   "attestation": 3.219,
+   "csr": 3.642,
+   "noc_to_done": 28.069,
+   "commit": 0.387
+  },
+  {
+   "pase": 10.637,
+   "attestation": 3.207,
+   "csr": 3.641,
+   "noc_to_done": 29.147,
+   "commit": 0.252
+  },
+  {
+   "pase": 10.698,
+   "attestation": 3.183,
+   "csr": 3.642,
+   "noc_to_done": 28.752,
+   "commit": 0.467
+  }
+ ]
+}

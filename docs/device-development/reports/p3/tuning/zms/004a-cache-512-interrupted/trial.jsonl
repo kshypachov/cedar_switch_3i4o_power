@@ -1,0 +1,17 @@
+{"ok": true, "attempts": 1, "event": "flash", "host_time": "19:33:23"}
+{"result": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19043 ms", "host_s": 19.1, "event": "wipe", "host_time": "19:33:55"}
+{"label": "clean partition", "boots_since_wipe": 1, "main_host_s": 2.89, "matter_start_uptime_s": 3.977, "matter_ready_uptime_s": 4.624, "matter_init_s": 0.647, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:34:05"}
+{"reboot_count": 1, "unique_id": "36 39 44 46 31 33 37 37", "event": "structure_created", "host_time": "19:34:09"}
+{"label": "restart after creation", "boots_since_wipe": 2, "main_host_s": 2.87, "matter_start_uptime_s": 2.512, "matter_ready_uptime_s": 3.155, "matter_init_s": 0.643, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:34:16"}
+{"reboot_count_before": 1, "reboot_count_after": 2, "unique_id_same": true, "counter_advanced": true, "event": "structure_read_back", "host_time": "19:34:20"}
+{"label": "cycle 1: before commissioning", "boots_since_wipe": 3, "main_host_s": 2.88, "matter_start_uptime_s": 2.557, "matter_ready_uptime_s": 3.186, "matter_init_s": 0.629, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:34:27"}
+{"node": 101, "ok": true, "window_open_s": 1.39, "commission_s": 48.3, "failed": null, "event": "commission", "host_time": "19:35:17"}
+{"label": "cycle 1: with fabric", "boots_since_wipe": 4, "main_host_s": 8.25, "matter_start_uptime_s": 2.581, "matter_ready_uptime_s": 3.922, "matter_init_s": 1.341, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:35:30"}
+{"ok": true, "remove_s": 1.55, "after": "0", "event": "remove_fabrics", "host_time": "19:35:32"}
+{"label": "cycle 2: before commissioning", "boots_since_wipe": 5, "main_host_s": 8.25, "matter_start_uptime_s": 4.084, "matter_ready_uptime_s": 5.185, "matter_init_s": 1.101, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:35:46"}
+{"node": 102, "ok": true, "window_open_s": 2.66, "commission_s": 49.1, "failed": null, "event": "commission", "host_time": "19:36:38"}
+{"label": "cycle 2: with fabric", "boots_since_wipe": 6, "main_host_s": 13.55, "matter_start_uptime_s": 4.083, "matter_ready_uptime_s": 5.824, "matter_init_s": 1.741, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:36:58"}
+{"ok": true, "remove_s": 1.65, "after": "0", "event": "remove_fabrics", "host_time": "19:36:59"}
+{"label": "cycle 3: before commissioning", "boots_since_wipe": 7, "main_host_s": 8.75, "matter_start_uptime_s": 2.678, "matter_ready_uptime_s": 4.429, "matter_init_s": 1.751, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "19:37:13"}
+{"node": 103, "ok": true, "window_open_s": 4.16, "commission_s": 50.8, "failed": null, "event": "commission", "host_time": "19:38:08"}
+{"event": "aborted", "reason": "interrupted: Claude Code session ended at ~19:38 during cycle 3, queue runner killed", "host_time": "19:50:30"}

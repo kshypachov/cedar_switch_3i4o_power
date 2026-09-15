@@ -1,0 +1,30 @@
+{"ok": true, "attempts": 1, "event": "flash", "host_time": "21:32:15"}
+{"result": "storage_wipe: offset 0x0 size 6291456 erased rc=0 in 19409 ms", "host_s": 19.4, "event": "wipe", "host_time": "21:33:18"}
+{"label": "clean partition", "boots_since_wipe": 1, "main_host_s": 2.98, "matter_start_uptime_s": 4.152, "matter_ready_uptime_s": 5.103, "matter_init_s": 0.951, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:33:28"}
+{"reboot_count": 1, "unique_id": "34 31 42 45 36 31 42 38", "event": "structure_created", "host_time": "21:33:32"}
+{"label": "restart after creation", "boots_since_wipe": 2, "main_host_s": 3.06, "matter_start_uptime_s": 2.649, "matter_ready_uptime_s": 3.656, "matter_init_s": 1.007, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:33:40"}
+{"reboot_count_before": 1, "reboot_count_after": 2, "unique_id_same": true, "counter_advanced": true, "event": "structure_read_back", "host_time": "21:33:44"}
+{"label": "cycle 1: before commissioning", "boots_since_wipe": 3, "main_host_s": 3.06, "matter_start_uptime_s": 2.64, "matter_ready_uptime_s": 3.711, "matter_init_s": 1.071, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:33:52"}
+{"node": 101, "ok": true, "window_open_s": 2.03, "commission_s": 49.0, "failed": null, "event": "commission", "host_time": "21:34:43"}
+{"label": "cycle 1: with fabric", "boots_since_wipe": 4, "main_host_s": 4.34, "matter_start_uptime_s": 4.154, "matter_ready_uptime_s": 7.151, "matter_init_s": 2.997, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:34:54"}
+{"ok": true, "remove_s": 5.02, "after": "0", "event": "remove_fabrics", "host_time": "21:35:14"}
+{"label": "cycle 2: before commissioning", "boots_since_wipe": 5, "main_host_s": 4.48, "matter_start_uptime_s": 3.413, "matter_ready_uptime_s": 7.014, "matter_init_s": 3.601, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:35:25"}
+{"node": 102, "ok": true, "window_open_s": 7.87, "commission_s": 56.6, "failed": null, "event": "commission", "host_time": "21:36:30"}
+{"label": "cycle 2: with fabric", "boots_since_wipe": 6, "main_host_s": 5.35, "matter_start_uptime_s": 4.248, "matter_ready_uptime_s": 9.392, "matter_init_s": 5.144, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:36:43"}
+{"ok": true, "remove_s": 5.45, "after": "0", "event": "remove_fabrics", "host_time": "21:37:04"}
+{"label": "cycle 3: before commissioning", "boots_since_wipe": 7, "main_host_s": 5.6, "matter_start_uptime_s": 4.525, "matter_ready_uptime_s": 9.981, "matter_init_s": 5.456, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:37:18"}
+{"node": 103, "ok": true, "window_open_s": 13.75, "commission_s": 62.1, "failed": null, "event": "commission", "host_time": "21:38:34"}
+{"label": "cycle 3: with fabric", "boots_since_wipe": 8, "main_host_s": 6.54, "matter_start_uptime_s": 5.456, "matter_ready_uptime_s": 12.463, "matter_init_s": 7.007, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:38:50"}
+{"ok": true, "remove_s": 10.77, "after": "0", "event": "remove_fabrics", "host_time": "21:39:01"}
+{"label": "cycle 4: before commissioning", "boots_since_wipe": 9, "main_host_s": 6.71, "matter_start_uptime_s": 5.642, "matter_ready_uptime_s": 12.863, "matter_init_s": 7.221, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:39:18"}
+{"node": 104, "ok": false, "window_open_s": 20.11, "commission_s": 10.7, "failed": "[1789324789.220] [25548:12515106:chip] [TOO] Pairing Failure: src/protocols/secure_channel/PASESession.cpp:312: CHIP Error 0x00000032: Timeout", "event": "commission", "host_time": "21:39:49"}
+{"label": "cycle 4: with fabric", "boots_since_wipe": 10, "main_host_s": 6.63, "matter_start_uptime_s": 5.552, "matter_ready_uptime_s": 12.557, "matter_init_s": 7.005, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:40:05"}
+{"ok": true, "remove_s": 1.06, "after": "0", "event": "remove_fabrics", "host_time": "21:40:21"}
+{"label": "cycle 5: before commissioning", "boots_since_wipe": 11, "main_host_s": 6.75, "matter_start_uptime_s": 5.68, "matter_ready_uptime_s": 12.778, "matter_init_s": 7.098, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:40:38"}
+{"node": 105, "ok": false, "window_open_s": 20.57, "commission_s": 10.7, "failed": "[1789324870.055] [25625:12516822:chip] [TOO] Pairing Failure: src/protocols/secure_channel/PASESession.cpp:312: CHIP Error 0x00000032: Timeout", "event": "commission", "host_time": "21:41:10"}
+{"label": "cycle 5: with fabric", "boots_since_wipe": 12, "main_host_s": 6.73, "matter_start_uptime_s": 5.675, "matter_ready_uptime_s": 12.902, "matter_init_s": 7.227, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:41:27"}
+{"ok": true, "remove_s": 5.77, "after": "0", "event": "remove_fabrics", "host_time": "21:41:32"}
+{"cycles": 5, "event": "cycles_done", "host_time": "21:41:32"}
+{"ok": true, "key": "mt/cfg/unique-id", "text": ["settings backend: 11 entries, 3 rounds (best / mean, us)", "scan (no match)   1400800 /  1402733", "scan (all)        1203000 /  1203233", "load_one (hit)     195600 /   195800  -> 16", "load_one (miss)     98700 /   102600  -> 0", "val_len (hit)      195400 /   197166  -> 16", "val_len (miss)      98700 /    98733  -> 0"], "event": "bench", "host_time": "21:41:43"}
+{"label": "after cycles", "boots_since_wipe": 13, "main_host_s": 6.74, "matter_start_uptime_s": 5.659, "matter_ready_uptime_s": 12.835, "matter_init_s": 7.176, "matter_ok": true, "storage_warnings": [], "event": "boot", "host_time": "21:42:00"}
+{"reboot_count": 13, "boots_since_wipe": 13, "ok": true, "note": "Matter counts every boot in mt/ctr/reboot-count; equal counts mean every boot read and wrote it back", "event": "persistence", "host_time": "21:42:03"}

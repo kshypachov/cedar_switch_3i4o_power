@@ -1,0 +1,82 @@
+{
+ "name": "int-0913",
+ "image": "/private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/cb63d62f-514a-4642-ade5-91d00007b397/scratchpad/tuning/builds/file-spi_interrupt-y/cedar_switch_3in4out_power/zephyr/zephyr.signed.bin",
+ "started": "2026-09-14 12:31:19",
+ "flash_ok": true,
+ "matter_ready": true,
+ "interfaces": [
+  {
+   "index": 1,
+   "name": "eth0",
+   "type": "Ethernet"
+  },
+  {
+   "index": 2,
+   "name": "wlan0",
+   "type": "WiFi"
+  }
+ ],
+ "A_all_up": {
+  "ok": true,
+  "mean_ms": {
+   "open+close": 15.4,
+   "read 32 +seek": 28.9,
+   "read 32": 22.9,
+   "read 1024": 18.4,
+   "scan (all)": 752.9,
+   "load_one (hit)": 749.4
+  }
+ },
+ "eth_down": [
+  "uart:~$ net iface down 1",
+  "Interface 1 is down"
+ ],
+ "B_eth_down": {
+  "ok": true,
+  "mean_ms": {
+   "open+close": 15.4,
+   "read 32 +seek": 28.9,
+   "read 32": 23.0,
+   "read 1024": 18.4,
+   "scan (all)": 748.4,
+   "load_one (hit)": 748.5
+  }
+ },
+ "wifi_down": [
+  "uart:~$ net iface down 2",
+  "Interface 2 is down"
+ ],
+ "C_eth_wifi_down": {
+  "ok": true,
+  "mean_ms": {
+   "open+close": 15.4,
+   "read 32 +seek": 29.0,
+   "read 32": 22.9,
+   "read 1024": 18.4,
+   "scan (all)": 748.5,
+   "load_one (hit)": 748.5
+  }
+ },
+ "up_again": [
+  [
+   "uart:~$ [00:02:29.948,000] <inf> matter: Matter start work already submitted",
+   "uart:~$ uart:~$ uart:~$ [00:02:31.217,000] <inf> matter: IPv6 address added, starting Matter",
+   "uart:~$ [00:02:31.217,000] <inf> matter: Matter start work already submitted"
+  ],
+  [
+   "uart:~$ uart:~$ uart:~$ net iface up 2",
+   "Interface 2 is up"
+  ]
+ ],
+ "D_all_up_again": {
+  "ok": true,
+  "mean_ms": {
+   "open+close": 15.4,
+   "read 32 +seek": 30.4,
+   "read 32": 22.9,
+   "read 1024": 18.4,
+   "scan (all)": 749.9,
+   "load_one (hit)": 750.0
+  }
+ }
+}

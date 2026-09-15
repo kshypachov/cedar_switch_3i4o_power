@@ -1,0 +1,1 @@
+idle_10s {'cr': '0x1', 'hits': 1833999, 'misses': 65535, 'seconds': 13.1, 'miss_saturated': True, 'miss_percent': 3.45}
