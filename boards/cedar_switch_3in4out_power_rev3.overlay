@@ -1,3 +1,23 @@
+/*
+ * Relay outputs are active high (ULN2003 inputs, high = coil on); the board's
+ * common DTS says GPIO_ACTIVE_LOW. Same override as the ext_flash_app overlay.
+ */
+&relay_ac1 {
+	gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac2 {
+	gpios = <&gpioc 4 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac3 {
+	gpios = <&gpioc 5 GPIO_ACTIVE_HIGH>;
+};
+
+&relay_ac4 {
+	gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+};
+
 &clk_msis {
 	status = "disabled";
 	msi-range = <4>;
