@@ -128,3 +128,29 @@ patches:
       Applied to the shared zephyr checkout on 2026-09-14 ~13:40 +0300 after a
       reverse git apply --check against the tree and an application build; the
       owner allowed driver patches to be applied after verification (P6 №2).
+
+  - path: zephyr/flash_stm32_ospi-xip-safe-program-erase.patch
+    sha256sum: 57dba3e1b09255a65ec6fbdb4bcd354eb5a1b0915e03cd8d49a30f185c292dc1
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-06
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      FLASH_STM32_OSPI_XIP: program and erase the OCTOSPI NOR while the firmware
+      executes from it (ESP-IDF spi_flash guard model). Each page or sector runs
+      from .ramfunc with interrupts masked and the controller briefly out of
+      memory-mapped mode, restoring the configuration MCUboot left; SysTick
+      wraps counted meanwhile are reported through the new
+      sys_clock_systick_wraps_observed() in cortex_m_systick.c. Written by the
+      owner on 2026-09-06 and present in the shared zephyr checkout since then
+      (flash_stm32_ospi_xip.{c,h} staged, the other files modified); not
+      recorded until the STM32 web update needed it to write image_ok into
+      slot 1 (owner's decision 2026-09-15, reports/stm32-update). Recorded on
+      2026-09-15 from `git diff HEAD` of these seven paths at zephyr b6a5e6e8aa9;
+      a reverse git apply --check against the tree passes, and the tree was not
+      changed. Nothing changes unless an application sets
+      CONFIG_FLASH_STM32_OSPI_XIP. The same checkout carries separate,
+      unrelated edits to drivers/timer/esp32_sys_timer.c and Kconfig.esp32 that
+      are not part of this entry.
