@@ -33,7 +33,8 @@ src/i18n/       ru.ts - every string - and t()
 src/components/ layout, cards, fields, error display, formatting
 src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics),
                 network (status, forms, Wi-Fi scan, the apply transaction),
-                logs (live tail, filters, pause, export, sources)
+                logs (live tail, filters, pause, export, sources),
+                coprocessor-update (ESP32 status, merged file, chunked upload, verify, UART write)
 e2e/            Playwright, against the mock or the board
 ```
 
@@ -115,7 +116,33 @@ Decisions that are easy to undo by accident:
 - **The export is a plain link** with the current filters: the browser downloads
   the attachment with the session cookie; nothing is buffered by the page.
 - **Why ESP32 logs stop** comes from `logs/sources` (`reason`) and the UART's
-  owner from `coprocessor/status.uart_mode`; the ESP32 screen itself is P6.
+  owner from `coprocessor/status.uart_mode`.
+- **The ESP32 screen takes one kind of file** (`features/coprocessor-update`, P6):
+  the merged `idf.py merge-bin` image, written from 0x0, which erases the
+  C6's NVS - the screen says so before the file and asks again before the write.
+  The install always sends `acknowledge_recovery: true`, and only after the
+  checkbox that names what is replaced. OTA is shown as unavailable with the
+  device's reason, never as a switch.
+- **SHA-256 is computed here, in plain TypeScript** (`sha256.ts`): `crypto.subtle`
+  exists only in a secure context, and the device is plain HTTP. The file is
+  hashed in 256 KiB slices with a yield between them, so the page stays usable.
+- **The next chunk goes only after the previous chunk's job succeeded**, and the
+  offset is always the device's `received_bytes`. After a lost answer,
+  `offset_mismatch` or `busy` the upload is read again; a retry of the same
+  offset keeps its Idempotency-Key, a new offset gets a new one. Eight lost
+  answers in a row stop the upload (`uploader.ts`).
+- **An upload and an install survive a reload**: their ids are kept in
+  `localStorage` (guarded; without storage nothing resumes and nothing breaks),
+  the device is asked where they stand, and an id it no longer knows is dropped.
+  Choosing the same file again (same size and SHA-256) continues the upload; a
+  different file left on the device is never overwritten - it is offered for
+  deletion.
+- **Install phases are a list, not a percentage**: each phase is done, current,
+  pending or stopped, and progress is shown for the current phase only, as the
+  contract resets it per phase. Cancel is offered while the job says
+  `cancellable`; a refused cancel (`invalid_state`) says the erase has begun.
+  Polling carries on through lost answers and says the device is not answering;
+  a job the device no longer knows (a reboot) points at `last_update`.
 
 ## Commands
 
@@ -175,6 +202,20 @@ origin and console checks. It never touches the mock's control plane.
   sending nothing, the USB-bridge reason, export links, 404 and 401; e2e against
   the mock (source filter, pause, both exports' headers) and a reboot answer
   injected with `page.route`, since the mock cannot reboot.
+- **ESP32 update**: SHA-256 on the NIST vectors, a million "a", every padding
+  boundary and a 1.4 MB input against Node, split inputs, slicing and abort; the
+  chunk loop on a scripted device (order, keys, resume, a waiting job, lost
+  answer, offset_mismatch, busy with and without a running job, a failed job,
+  a refusal, the bounded and the in-a-row loss count); phases; storage without
+  storage. The screen on OpenAPI fixtures: status and OTA reason, interrupted
+  with recovery, bridge busy, 404, the local size refusal, the whole upload
+  with raw chunk bodies checked against the file, resume, a vanished upload, a
+  foreign file and its deletion, busy, a failed verification, the install with
+  the acknowledgement and every phase, cancel refused, a failed write,
+  ethernet_required, lost answers, a job gone after a reboot, 401, text as text.
+  e2e against the mock: upload → verify → write → running module, bare app
+  refused, Wi-Fi refused, USB bridge, a reboot mid-write, a reload mid-upload
+  and deletion.
 - **End-to-end** (Playwright, against the mock): setup from the page, the
   policy refusal, sign in / reload / sign out with the cookie's flags, the
   password change, two browsers at once; the network change applied and

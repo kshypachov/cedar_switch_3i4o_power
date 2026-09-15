@@ -4,6 +4,7 @@ import { Loading } from './components/ui';
 import { AccessScreen } from './features/auth/AccessScreen';
 import { LoginScreen } from './features/auth/LoginScreen';
 import { SetupScreen } from './features/auth/SetupScreen';
+import { CoprocessorUpdateScreen } from './features/coprocessor-update/CoprocessorUpdateScreen';
 import { OverviewScreen } from './features/device/OverviewScreen';
 import { LogsScreen } from './features/logs/LogsScreen';
 import { MatterScreen } from './features/matter/MatterScreen';
@@ -50,6 +51,8 @@ function Shell() {
             <NetworkScreen session={view.session} />
           ) : route === 'logs' ? (
             <LogsScreen />
+          ) : route === 'coprocessor' ? (
+            <CoprocessorUpdateScreen session={view.session} />
           ) : (
             <OverviewScreen />
           )}

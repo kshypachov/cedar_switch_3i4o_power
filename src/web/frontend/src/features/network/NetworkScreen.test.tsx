@@ -91,6 +91,7 @@ describe('network: state and form', () => {
       t('nav.matter'),
       t('nav.network'),
       t('nav.logs'),
+      t('nav.coprocessor'),
       t('nav.access'),
     ]);
 
