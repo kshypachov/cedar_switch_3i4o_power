@@ -1,0 +1,23 @@
+   0.415 I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+   0.415 I: PSRAM initialised in QPI mode, 8192 KB
+   0.415 *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+   0.415 I: Starting bootloader
+   0.415 [m
+   0.466 [1;32muart:~$ [mI: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+   0.466 I: 0x90000000..0x9000001F:
+   0.466 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.466 I: 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0
+   0.466 I: Alias[0x02000000..0x0200001F]:
+   0.466 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.466 I: 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0
+   0.466 I: PSRAM 0x70000000..0x7000001F:
+   0.466 I: 50 62 12 2 a0 10 2 70 b0 4a 12 2 ac 10 0 70
+   0.466 I: 14 4a 12 2 98 4a 12 2 0 0 0 0 c0 9d 14 2
+   0.466 I: PSRAM write/read: PASS
+   0.466 I: Primary image: magic=good, swap_type=0x2, copy_done=0x1, image_ok=0x3
+   0.466 I: Scratch: magic=bad, swap_type=0x0, copy_done=0x2, image_ok=0x2
+   0.466 I: Boot source: none
+   0.527 I: Image index: 0, Swap type: revert
+   3.397 I: Starting swap using scratch algorithm.
+  17.569 ## image list:
+recovery did not answer

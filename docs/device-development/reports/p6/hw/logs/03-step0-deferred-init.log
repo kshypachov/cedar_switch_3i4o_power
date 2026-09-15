@@ -1,0 +1,409 @@
+# 2026-09-14 ~10:31-10:40, board B. Step 0 image with zephyr,deferred-init on esp_loader0 (+ CONFIG_ESP_SERIAL_FLASHER, CONFIG_CONSOLE_GETCHAR; esp_hosted_mcu restart patch in the tree, not called).
+# zephyr.signed.bin sha256 d20d63215bd02502d05a10b8b3661300ee53c1d6dfe4068d644eb7313141619e; uploaded over CDC recovery in 356 s.
+## flash.out
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/build-step0/cedar_p6/zephyr/zephyr.signed.bin sha256 d20d63215bd02502d05a10b8b3661300ee53c1d6dfe4068d644eb7313141619e
+J-Link reset rc=0
+recovery on /dev/cu.usbmodem11201 after 2.6 s
+upload rc=0 in 356 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 218b2d17a1044bd09fbcd197d249059237bba13b9be1ce9bd6ef8a463aafcb7f
+Split status: N/A (0)
+
+## boot console
+# image sha256 d20d63215bd02502d05a10b8b3661300ee53c1d6dfe4068d644eb7313141619e
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+uart:~$ I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 e8 cf 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 e8 cf 14 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: b0 c8 11 2 0 0 0 0 10 b1 11 2 0 0 0 0
+I: 74 b0 11 2 f8 b0 11 2 0 0 0 0 d4 e2 13 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+uart:~$ [8D[J[00:00:01.664,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+uart:~$ [8D[J[00:00:01.664,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+uart:~$ [8D[J[00:00:01.664,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+uart:~$ [8D[J[00:00:01.665,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+uart:~$ [8D[J[00:00:01.673,000] <inf> eth_w5500: W5500 Initialized
+uart:~$ [8D[J[00:00:01.674,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+uart:~$ [8D[J[00:00:01.674,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+uart:~$ [8D[J[00:00:01.674,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+uart:~$ [8D[J[00:00:01.776,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+uart:~$ [8D[J[00:00:01.780,000] <err> net_if: Iface 0x20003470 device not ready
+uart:~$ [8D[J[00:00:01.781,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x20003338)
+uart:~$ [8D[J[00:00:01.782,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+uart:~$ [8D[J[00:00:01.783,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+uart:~$ [8D[J[00:00:01.783,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+uart:~$ [8D[J*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+uart:~$ [8D[Juart:~$ [8D[Juart:~$ [8D[J[00:00:01.927,000] <inf> shell_telnet: Telnet shell backend initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.928,000] <inf> main_app: Start main app (build: Sep 14 2026 10:31:05) version 8
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.928,000] <inf> main_app: PSRAM @0x702656d8: write/read 1024 words OK
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.125,000] <inf> settings_registry: 10 keys registered, 0 rejected
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.125,000] <inf> io: Start io init
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.132,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.133,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.134,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.160,000] <inf> io: Start io outputs task
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.281,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.505,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.863,000] <inf> device_config_store: configuration loaded, revision 8
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.863,000] <inf> network_service: network configuration revision 8: clean (1683 ms)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.864,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.118,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.119,000] <inf> network_service: worker stack: 4936 of 8192 bytes never used
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.605,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4e5b8a42deba-dirty, frontend 0.1.0+4e5b8a42deba, boot_d13ceb855408294e
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.615,000] <inf> net_adapter: ethernet: DHCP
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.713,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.713,000] <inf> matter: Matter start work already submitted
+uart:~$ [8D[Juart:~$ [8D[J[00:00:05.177,000] <inf> matter: Init CHIP stack
+uart:~$ [8D[Juart:~$ [8D[J[00:00:08.968,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:09.169,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:09.370,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:10.220,000] <inf> chip: [SVR]Initializing session resumption storage...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:10.226,000] <inf> chip: [SVR]Server initializing...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:10.227,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.550,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.704,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.905,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:12.107,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:12.308,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.134,000] <inf> chip: [DMG]AccessControl: initializing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.135,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.136,000] <inf> chip: [DMG]AccessControl: setting
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.137,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.138,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.139,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.140,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.147,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.147,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.679,000] <inf> net_dhcpv4: Received: 192.168.88.13
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.686,000] <inf> network_manager: default route via ethernet
+uart:~$ [8D[Juart:~$ [8D[J[00:00:21.660,000] <inf> chip: [ZCL]Using ZAP configuration...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:23.050,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:24.479,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:25.849,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:27.234,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:28.600,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:29.986,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:31.367,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.750,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.763,000] <dbg> chip.LogV: [DL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.769,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.770,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.773,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.774,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.779,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.780,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.787,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.788,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.014,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000140000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x0000000000005900
+uart:~$ [8D[Juart:~$ [8D[J[00:00:35.994,000] <inf> chip: [DMG]AccessControlCluster: initializing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:35.997,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.013,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.019,000] <inf> chip: [IN]CASE Server enabling CASE session setups
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.021,000] <dbg> chip.LogV: [IN]SecureSession[0x70001730]: Allocated Type:2 LSID:51539
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.023,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x70001730) - waiting for Sigma1 msg
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.023,000] <inf> chip: [SVR]Joining Multicast groups
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.025,000] <dbg> chip.LogV: [ZCL]Emitting StartUp event
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.033,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000140001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000064C7
+uart:~$ [8D[Juart:~$ [8D[J[00:00:36.034,000] <inf> chip: [SVR]Server initialization complete
+uart:~$ [8D[Juart:~$ ## step0_b.py json
+{
+ "steps": [
+  {
+   "t": 0.47,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.86,
+   "step": "login",
+   "ms": 2389
+  },
+  {
+   "t": 3.02,
+   "step": "/coprocessor/status",
+   "status": 200,
+   "ms": 161,
+   "schema": [],
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 60,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "last_update": null
+   }
+  },
+  {
+   "t": 3.17,
+   "step": "/logs/sources",
+   "status": 200,
+   "ms": 150,
+   "schema": [],
+   "body": {
+    "items": [
+     {
+      "id": "stm32",
+      "available": true,
+      "reason": null,
+      "generation": 0,
+      "dropped_count": "0"
+     },
+     {
+      "id": "esp32",
+      "available": true,
+      "reason": null,
+      "generation": 60,
+      "dropped_count": "2"
+     }
+    ]
+   }
+  },
+  {
+   "t": 3.36,
+   "step": "/capabilities",
+   "status": 200,
+   "ms": 184,
+   "schema": [],
+   "body": {
+    "api_version": "1",
+    "features": {
+     "matter": {
+      "available": false,
+      "reason": "starting"
+     },
+     "esp32_logs": {
+      "available": true,
+      "reason": null
+     },
+     "esp32_ota": {
+      "available": false,
+      "reason": "not_implemented"
+     },
+     "esp32_uart": {
+      "available": false,
+      "reason": "not_implemented"
+     }
+    },
+    "limits": {
+     "json_body_bytes": 8192,
+     "upload_chunk_bytes": 16384,
+     "upload_max_bytes": 1900544,
+     "log_page_records": 100,
+     "scan_records": 64,
+     "commissioning_min_seconds": 180,
+     "commissioning_max_seconds": 900,
+     "network_confirm_min_seconds": 60,
+     "network_confirm_max_seconds": 300
+    },
+    "wifi_security_modes": [
+     "open",
+     "wpa2_psk",
+     "wpa3_sae"
+    ],
+    "firmware_formats": [
+     "raw_full_flash"
+    ],
+    "update_requires_ethernet": true
+   }
+  },
+  {
+   "t": 4.33,
+   "step": "esp32 page",
+   "status": 200,
+   "ms": 971,
+   "items": 69,
+   "last": {
+    "source": "esp32",
+    "boot_id": "boot_d13ceb855408294e",
+    "source_generation": 60,
+    "seq": "14846",
+    "uptime_ms": "39363",
+    "wall_time": null,
+    "level": "unknown",
+    "module": null,
+    "message": "invalid header: 0xffffffff",
+    "truncated": false,
+    "kind": "message"
+   }
+  },
+  {
+   "t": 10.2,
+   "step": "esp32 after 5 s",
+   "status": 200,
+   "items": 69,
+   "gap": false
+  },
+  {
+   "t": 15.35,
+   "step": "coproc status",
+   "line": "uart_mode console, generation 78, transport down, dtr follow on"
+  },
+  {
+   "t": 15.58,
+   "step": "wifi_ctrl reset",
+   "line": "\u001b[1;32muart:~$ \u001b[mwifictrl reset"
+  },
+  {
+   "t": 19.71,
+   "step": "generation",
+   "before": 78,
+   "after": 86,
+   "uart_mode": "console"
+  },
+  {
+   "t": 79.21,
+   "step": "markers since start",
+   "markers": [
+    {
+     "source": "esp32",
+     "boot_id": "boot_d13ceb855408294e",
+     "source_generation": 86,
+     "seq": "21357",
+     "uptime_ms": "56242",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_d13ceb855408294e",
+     "source_generation": 86,
+     "seq": "21358",
+     "uptime_ms": "56242",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_d13ceb855408294e",
+     "source_generation": 86,
+     "seq": "21359",
+     "uptime_ms": "56242",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_d13ceb855408294e",
+     "source_generation": 86,
+     "seq": "21360",
+     "uptime_ms": "56242",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    },
+    {
+     "source": "esp32",
+     "boot_id": "boot_d13ceb855408294e",
+     "source_generation": 86,
+     "seq": "21361",
+     "uptime_ms": "56243",
+     "wall_time": null,
+     "level": "unknown",
+     "module": null,
+     "message": "invalid header: 0xffffffff",
+     "truncated": false,
+     "kind": "message"
+    }
+   ]
+  },
+  {
+   "t": 80.19,
+   "step": "esp32 after reset",
+   "status": 200,
+   "last": {
+    "source": "esp32",
+    "boot_id": "boot_d13ceb855408294e",
+    "source_generation": 86,
+    "seq": "21330",
+    "uptime_ms": "56173",
+    "wall_time": null,
+    "level": "unknown",
+    "module": null,
+    "message": "invalid header: 0xffffffff",
+    "truncated": false,
+    "kind": "message"
+   }
+  }
+ ],
+ "image_sha256": "d20d63215bd02502d05a10b8b3661300ee53c1d6dfe4068d644eb7313141619e"
+}
+## step0_b.py console
+[+    0.47] ==== host: http up
+[+    2.86] ==== host: login
+[+    3.02] ==== host: /coprocessor/status
+[+    3.17] ==== host: /logs/sources
+[+    3.36] ==== host: /capabilities
+[+    4.33] ==== host: esp32 page
+[+    4.48] [8D[J[00:00:36.257,000] <inf> chip: [SVR]Server Listening...
+[+    4.58] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.257,000] <inf> matter: Matter stack initialized
+[+    4.58] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.262,000] <inf> matter: Matter event loop started
+[+    4.58] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.262,000] <inf> matter_event_loop: Init io_to_matter_stream
+[+    4.58] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.263,000] <inf> matter_event_loop: Start io_to_matter_stream
+[+    4.58] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.265,000] <inf> chip: [DL]CHIP task running
+[+    4.69] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.268,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+[+    4.69] uart:~$ [8D[Juart:~$ [8D[J[00:00:36.279,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+[+    7.68] uart:~$ [8D[Juart:~$ [8D[J[00:00:43.244,000] <wrn> matter_service_chip: generating the onboarding codes took 6955 ms on the Matter thread
+[+    7.68] uart:~$ [8D[Juart:~$ [8D[J[00:00:43.246,000] <err> chip: [DL]Long dispatch time: 6958 ms, for event type 2
+[+   10.20] ==== host: esp32 after 5 s
+[+   10.25] uart:~$ [8D[Juart:~$ cproc status
+[+   10.25] cproc: command not found
+[+   15.32] uart:~$ coproc status
+[+   15.32] uart_mode console, generation 78, transport down, dtr follow on
+[+   15.32] switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 77)
+[+   15.32] rx bytes 566067, rx activity 566064, console ring overflows 4 (27781 bytes lost, 0 pending)
+[+   15.32] bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0
+[+   15.32] lines 19403, truncated 3, replacements 78, escapes 0, idle flushes 0, overflows 4
+[+   15.35] ==== host: coproc status
+[+   15.53] uart:~$ wifictrl reset
+[+   15.53] wifictrl: command not found
+[+   15.58] ==== host: wifi_ctrl reset
+[+   19.71] ==== host: generation
+[+   79.21] ==== host: markers since start
+[+   80.19] ==== host: esp32 after reset

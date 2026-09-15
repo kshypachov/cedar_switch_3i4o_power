@@ -1,0 +1,120 @@
+   0.173 ## reset, recording 120 s
+   0.374 I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+   0.374 I: PSRAM initialised in QPI mode, 8192 KB
+   0.374 *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+   0.374 I: Starting bootloader
+   0.374 [m
+   0.424 [1;32muart:~$ [mI: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+   0.424 I: 0x90000000..0x9000001F:
+   0.424 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.424 I: 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0
+   0.424 I: Alias[0x02000000..0x0200001F]:
+   0.424 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.424 I: 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0
+   0.424 I: PSRAM 0x70000000..0x7000001F:
+   0.424 I: 50 62 12 2 a0 10 2 70 b0 4a 12 2 ac 10 0 70
+   0.424 I: 14 4a 12 2 98 4a 12 2 0 0 0 0 c0 9d 14 2
+   0.424 I: PSRAM write/read: PASS
+   0.479 I: Primary image: magic=good, swap_type=0x2, copy_done=0x1, image_ok=0x3
+   0.479 I: Scratch: magic=bad, swap_type=0x0, copy_done=0x2, image_ok=0x2
+   0.479 I: Boot source: none
+   0.479 I: Image index: 0, Swap type: revert
+   3.373 I: Starting swap using scratch algorithm.
+  37.860 I: Bootloader chainload address offset: 0x0
+  37.860 I: Image version: v0.0.0
+  37.860 I: Jumping to the first image slot
+  39.296 [m
+  39.779 [1;32muart:~$ [m[8D[J[00:00:00.841,000] [0m<inf> esp_hosted_mcu_core: coprocessor priv event 34[0m
+  39.779 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.847,000] [0m<inf> esp_hosted_mcu_core: coprocessor firmware v3.0.6[0m
+  39.829 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.847,000] [1;31m<err> mb85rsxx: invalid device ID: 00 00 00 00[0m
+  39.829 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.847,000] [1;31m<err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)[0m
+  39.829 [1;32muart:~$ [m[8D[J[00:00:00.847,000] [0m<inf> eth_w5500: ETH_W5500: interrupt mode[0m
+  39.829 [1;32muart:~$ [m[8D[J[00:00:00.856,000] [0m<inf> eth_w5500: W5500 Initialized[0m
+  39.880 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.856,000] [0m<inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH[0m
+  39.880 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.856,000] [0m<inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80[0m
+  39.880 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:00.857,000] [0m<inf> spi_nor: SPI_FLASH: 16 MiBy flash[0m
+  39.930 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.387,000] [1;31m<err> net_ethernet: Invalid MAC address for iface 1 (0x20004fb0)[0m
+  39.930 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.387,000] [0m<inf> littlefs: LittleFS version 2.11, disk version 2.1[0m
+  39.930 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.388,000] [0m<inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle[0m
+  39.930 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.388,000] [0m<inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256[0m
+  39.980 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+  39.980 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.460,000] [0m<inf> shell_telnet: Telnet shell backend initialized[0m
+  39.980 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.461,000] [0m<inf> main_app: Start main app (build: Sep 14 2026 17:51:21) version 8[0m
+  40.030 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.461,000] [0m<inf> main_app: PSRAM @0x7027c898: write/read 1024 words OK[0m
+  40.030 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.512,000] [0m<inf> settings_registry: 10 keys registered, 0 rejected[0m
+  40.030 [1;32muart:~$ [m[8D[J[00:00:01.512,000] [0m<inf> io: Start io init[0m
+  40.030 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.525,000] [1;31m<err> fs: failed to create directory (-17)[0m
+  40.080 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.556,000] [1;31m<err> fs: file open error (-2)[0m
+  40.080 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.572,000] [1;31m<err> fs: failed to unlink path (-2)[0m
+  40.080 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.589,000] [1;31m<err> fs: file open error (-2)[0m
+  40.080 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.594,000] [0m<inf> io: Start io outputs task[0m
+  40.130 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.591,000] [0m<inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d[0m
+  40.130 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.592,000] [0m<inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d[0m
+  40.130 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.592,000] [0m<inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d[0m
+  40.181 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.762,000] [0m<inf> device_config_store: no stored configuration, factory defaults in force[0m
+  40.181 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.762,000] [0m<inf> network_service: network configuration revision 0: no stored configuration, factory defaults (168 ms)[0m
+  40.181 [1;32muart:~$ [m[8D[J[00:00:01.762,000] [0m<inf> net_adapter: Ethernet found, Wi-Fi coprocessor ready[0m
+  40.231 [1;32muart:~$ [m[8D[J[00:00:01.799,000] [0m<inf> network_service: boot 1 of 5 in a row shorter than 30 s[0m
+  40.231 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.799,000] [0m<inf> network_service: worker stack: 4952 of 8192 bytes never used[0m
+  40.231 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:01.864,000] [0m<inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4e5b8a42deba-dirty, frontend 0.1.0+4e5b8a42deba-dirty, boot_501ca16a01200db4[0m
+  40.282 [1;32muart:~$ [m[8D[J[00:00:01.868,000] [0m<inf> net_adapter: ethernet: DHCP[0m
+  40.282 [1;32muart:~$ [m[8D[J[00:00:01.868,000] [0m<inf> net_adapter: wifi disabled[0m
+  42.820 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.887,000] [0m<inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex[0m
+  42.820 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.907,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+  42.820 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.936,000] [0m<inf> net_dhcpv4: Received: 192.168.88.13[0m
+  42.820 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:03.941,000] [0m<inf> network_manager: default route via ethernet[0m
+  42.870 [1;32muart:~$ [m[8D[J[00:00:03.943,000] [0m<inf> matter: Init CHIP stack[0m
+  42.870 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.774,000] [0m<inf> chip: [SVR]Initializing session resumption storage...[0m
+  42.870 [1;32muart:~$ [m[8D[J[00:00:04.776,000] [0m<inf> chip: [SVR]Server initializing...[0m
+  42.921 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:04.776,000] [0m<dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage[0m
+  43.345 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.060,000] [0m<inf> chip: [TS]Last Known Good Time: 2026-09-14T15:01:11[0m
+  43.345 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.399,000] [0m<inf> matter: IPv6 address added, starting Matter[0m
+  43.345 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.399,000] [0m<inf> matter: Matter start work already submitted[0m
+  43.395 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.419,000] [0m<inf> chip: [DMG]AccessControl: initializing[0m
+  43.395 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.419,000] [0m<inf> chip: [DMG]Examples::AccessControlDelegate::Init[0m
+  43.395 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.420,000] [0m<inf> chip: [DMG]AccessControl: setting[0m
+  43.395 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.420,000] [0m<inf> chip: [DMG]DefaultAclStorage: initializing[0m
+  43.446 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.421,000] [0m<inf> chip: [DMG]DefaultAclStorage: 0 entries loaded[0m
+  43.446 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.421,000] [0m<inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null[0m
+  43.446 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.422,000] [0m<dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540[0m
+  44.462 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.567,000] [0m<dbg> chip.LogV: [IN]UDP::Init bound to port=5540[0m
+  44.516 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:05.568,000] [0m<dbg> chip.LogV: [IN]TransportMgr initialized[0m
+  45.737 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:06.828,000] [0m<inf> chip: [ZCL]Using ZAP configuration...[0m
+  45.737 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:07.011,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0[0m
+  45.788 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:07.191,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0[0m
+  45.788 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:07.371,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0[0m
+  45.788 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:07.552,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0[0m
+  45.840 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:07.732,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0[0m
+  46.312 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.016,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0[0m
+  46.312 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.197,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0[0m
+  46.362 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.377,000] [0m<dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0[0m
+  46.362 [1;32muart:~$ [m[8D[J[00:00:08.382,000] [0m<dbg> chip.LogV: [DL]Boot reason: 1[0m
+  46.362 [1;32muart:~$ [m[8D[J[00:00:08.385,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+  46.362 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.386,000] [0m<inf> chip: [ZCL]Endpoint 1 On/off already set to new value[0m
+  46.362 [1;32muart:~$ [m[8D[J[00:00:08.388,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+  46.413 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.389,000] [0m<inf> chip: [ZCL]Endpoint 2 On/off already set to new value[0m
+  46.413 [1;32muart:~$ [m[8D[J[00:00:08.391,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+  46.413 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.392,000] [0m<inf> chip: [ZCL]Endpoint 3 On/off already set to new value[0m
+  46.842 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.539,000] [0m<inf> chip: [ZCL]Boot reason: 1[0m
+  46.842 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.540,000] [0m<inf> chip: [ZCL]Endpoint 4 On/off already set to new value[0m
+  46.893 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.554,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000030000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x0000000000000EBF[0m
+  46.893 [1;32muart:~$ [m[8D[J[00:00:08.919,000] [0m<inf> chip: [DMG]AccessControlCluster: initializing[0m
+  46.893 [1;32muart:~$ [m[8D[J[00:00:08.921,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+  46.893 [1;32muart:~$ [m[8D[J[00:00:08.926,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+  46.943 [1;32muart:~$ [m[8D[J[00:00:08.930,000] [0m<inf> chip: [IN]CASE Server enabling CASE session setups[0m
+  46.943 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.931,000] [0m<dbg> chip.LogV: [IN]SecureSession[0x700018f0]: Allocated Type:2 LSID:47382[0m
+  46.943 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:08.932,000] [0m<dbg> chip.LogV: [SC]Allocated SecureSession (0x700018f0) - waiting for Sigma1 msg[0m
+  46.993 [1;32muart:~$ [m[8D[J[00:00:08.933,000] [0m<inf> chip: [SVR]Joining Multicast groups[0m
+  46.993 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.076,000] [0m<dbg> chip.LogV: [ZCL]Emitting StartUp event[0m
+  47.043 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.089,000] [0m<dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000030001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000010CD[0m
+  47.043 [1;32muart:~$ [m[8D[J[00:00:09.090,000] [0m<inf> chip: [SVR]Server initialization complete[0m
+  47.043 [1;32muart:~$ [m[8D[J[00:00:09.091,000] [0m<inf> chip: [SVR]Server Listening...[0m
+  47.043 [1;32muart:~$ [m[8D[J[00:00:09.091,000] [0m<inf> matter: Matter stack initialized[0m
+  47.093 [1;32muart:~$ [m[8D[J[00:00:09.092,000] [0m<inf> matter: Matter event loop started[0m
+  47.093 [1;32muart:~$ [m[8D[J[00:00:09.092,000] [0m<inf> matter_event_loop: Init io_to_matter_stream[0m
+  47.093 [1;32muart:~$ [m[8D[J[00:00:09.093,000] [0m<inf> matter_event_loop: Start io_to_matter_stream[0m
+  47.093 [1;32muart:~$ [m[8D[J[00:00:09.093,000] [0m<inf> chip: [DL]CHIP task running[0m
+  47.148 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.095,000] [0m<inf> chip: [DIS]Updating services using commissioning mode 0[0m
+  48.157 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.233,000] [0m<inf> chip: [DIS]CHIP minimal mDNS started advertising.[0m
+  48.157 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.237,000] [1;31m<err> chip: [DL]Long dispatch time: 141 ms, for event type 32786[0m
+  48.157 [1;32muart:~$ [m[8D[J[1;32muart:~$ [m[8D[J[00:00:09.608,000] [1;31m<err> chip: [DL]Long dispatch time: 371 ms, for event type 2[0m

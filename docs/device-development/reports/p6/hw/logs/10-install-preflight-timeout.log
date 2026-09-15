@@ -1,0 +1,370 @@
+# 2026-09-14 13:35-13:49, board B, image 11bf091dec8bac19b29664af390a6ad3ad981560fce1fff9f55e9121d3a5fe1d (ESP-Hosted suspend patch + board glue), CDC recovery 381 s.
+# coproc updater gave upload_e2a1b4bc0b1a072f; loader check ok; install started from the bench (owner's permission) ~55 s after boot:
+# job_00000001 failed 'preflight took longer than 5000 ms', no hang, recovery_required=false.
+## chain output
+build rc=0
+sha 11bf091dec8bac19b29664af390a6ad3ad981560fce1fff9f55e9121d3a5fe1d
+flash rc=0
+19:upload rc=0 in 381 s
+http up 4.1
+[00:00:35.209,000] <wrn> net_if: iface 1 pkt 0x7017bf0c send failure status -5
+updater: active no, phase entering_bootloader, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 interrupted, version -, recovery_required no, error internal_error: The STM32 restarted during entering_bootloader; the install was not continued
+upload id: upload_e2a1b4bc0b1a072f
+loader rc=0
+coproc loader: ESP32-C6 in its ROM loader after 832 ms
+coproc loader: close 0 after 952 ms
+coproc loader: uart_mode console, generation 61, session closed
+install rc=0
+{"t": 0.42, "step": "http up", "seconds": 0.1}
+{"t": 4.67, "step": "login", "ms": 4246}
+{"t": 4.91, "step": "upload", "status": 200, "ms": 240, "state": "ready", "image": {"format": "raw_full_flash", "format_version": null, "target": "esp32c6", "version": "1", "kind": "recovery_bundle", "partition_layout_id": "cedar-c6-ota-4m-2x1792k", "host_protocol": "esp-hosted-mcu-3", "signature_verified": null, "allowed_methods": ["uart"]}}
+{"t": 5.26, "step": "status before", "status": 200, "body": {"state": "failed", "chip": "esp32c6", "firmware_version": null, "host_protocol": null, "partition_layout_id": null, "transport_ready": false, "uart_mode": "console", "generation": 75, "ota": {"available": false, "reason": "not_implemented"}, "uart_update": {"available": true, "reason": null}, "last_update": {"job_id": "job_00000001", "state": "interrupted", "method": "uart", "version": null, "recovery_required": false, "error": {"code"
+{"t": 7.28, "step": "startCoprocessorUpdate", "status": 202, "ms": 2018, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/coprocessor/status"}}
+{"t": 7.41, "step": "job", "elapsed_s": 0.1, "ms": 131, "state": "queued", "phase": "", "progress": null, "cancellable": true, "error": null}
+{"t": 7.56, "step": "status", "elapsed_s": 0.3, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "interrupted", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "The STM32 restarted during entering_bootloader; the install was not continued", "request_id": "req_48da1ecf", "retryable": true}}}
+{"t": 11.2, "step": "job", "elapsed_s": 3.9, "ms": 1171, "state": "running", "phase": "preflight", "progress": null, "cancellable": true, "error": null}
+{"t": 11.37, "step": "status", "elapsed_s": 4.1, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "interrupted", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "The STM32 restarted during entering_bootloader; the install was not continued", "request_id": "req_48da1eda", "retryable": true}}}
+{"t": 14.07, "step": "status", "elapsed_s": 6.8, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "interrupted", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "The STM32 restarted during entering_bootloader; the install was not continued", "request_id": "req_48da1ee1", "retryable": true}}}
+{"t": 16.96, "step": "status", "elapsed_s": 9.7, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "interrupted", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "The STM32 restarted during entering_bootloader; the install was not continued", "request_id": "req_48da1ee8", "retryable": true}}}
+{"t": 19.34, "step": "job", "elapsed_s": 12.1, "ms": 107, "state": "failed", "phase": "preflight", "progress": null, "cancellable": false, "error": {"code": "internal_error", "message": "The operation failed", "request_id": "req_48da1eea", "retryable": true}}
+{"t": 19.48, "step": "status", "elapsed_s": 12.2, "state": "failed", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_48da1eeb", "retryable": true}}}
+{"t": 19.74, "step": "finished", "elapsed_s": 12.5, "state": "failed"}
+
+[exited with code 0]
+## boot console
+# image sha256 11bf091dec8bac19b29664af390a6ad3ad981560fce1fff9f55e9121d3a5fe1d
+## coproc updater
+[00:00:35.209,000] <wrn> net_if: iface 1 pkt 0x7017bf0c send failure status -5
+updater: active no, phase entering_bootloader, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 interrupted, version -, recovery_required no, error internal_error: The STM32 restarted during entering_bootloader; the install was not continued
+## loader_b.py check
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 5.16,
+   "step": "login",
+   "ms": 4735
+  },
+  {
+   "t": 6.04,
+   "step": "coproc status",
+   "lines": [
+    "uart_mode console, generation 60, transport down, dtr follow on",
+    "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 59)",
+    "rx bytes 455722, rx activity 455722, console ring overflows 3 (56863 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 14356, truncated 2, replacements 61, escapes 0, idle flushes 0, overflows 3"
+   ]
+  },
+  {
+   "t": 11.43,
+   "step": "loader",
+   "before": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 60,
+    "transport_ready": false
+   },
+   "lines": [
+    "coproc loader: ESP32-C6 in its ROM loader after 832 ms",
+    "coproc loader: close 0 after 952 ms",
+    "coproc loader: uart_mode console, generation 61, session closed"
+   ],
+   "after": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 61,
+    "transport_ready": false
+   },
+   "esp32_records_3s_after": 69,
+   "faults": []
+  },
+  {
+   "t": 11.92,
+   "step": "coproc status after",
+   "lines": [
+    "[00:00:47.007,000] <inf> chip: [ZCL]Using ZAP configuration...",
+    "uart_mode console, generation 66, transport down, dtr follow on",
+    "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 64)",
+    "rx bytes 511417, rx activity 511416, console ring overflows 4 (62023 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 16177, truncated 3, replacements 70, escapes 0, idle flushes 0, overflows 4"
+   ]
+  }
+ ],
+ "image_sha256": "11bf091dec8bac19b29664af390a6ad3ad981560fce1fff9f55e9121d3a5fe1d"
+}
+## install_b.py json
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 4.67,
+   "step": "login",
+   "ms": 4246
+  },
+  {
+   "t": 4.91,
+   "step": "upload",
+   "status": 200,
+   "ms": 240,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 5.26,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 75,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "interrupted",
+     "method": "uart",
+     "version": null,
+     "recovery_required": false,
+     "error": {
+      "code": "internal_error",
+      "message": "The STM32 restarted during entering_bootloader; the install was not continued",
+      "request_id": "req_48da1ecb",
+      "retryable": true
+     }
+    }
+   }
+  },
+  {
+   "t": 7.28,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 2018,
+   "body": {
+    "job_id": "job_00000001",
+    "job_url": "/api/v1/jobs/job_00000001",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 7.41,
+   "step": "job",
+   "elapsed_s": 0.1,
+   "ms": 131,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 7.56,
+   "step": "status",
+   "elapsed_s": 0.3,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "interrupted",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "The STM32 restarted during entering_bootloader; the install was not continued",
+     "request_id": "req_48da1ecf",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 8.01,
+   "step": "w5500 events",
+   "new": 6,
+   "total": 6
+  },
+  {
+   "t": 11.2,
+   "step": "job",
+   "elapsed_s": 3.9,
+   "ms": 1171,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 11.37,
+   "step": "status",
+   "elapsed_s": 4.1,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "interrupted",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "The STM32 restarted during entering_bootloader; the install was not continued",
+     "request_id": "req_48da1eda",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 14.07,
+   "step": "status",
+   "elapsed_s": 6.8,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "interrupted",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "The STM32 restarted during entering_bootloader; the install was not continued",
+     "request_id": "req_48da1ee1",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 16.96,
+   "step": "status",
+   "elapsed_s": 9.7,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "interrupted",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "The STM32 restarted during entering_bootloader; the install was not continued",
+     "request_id": "req_48da1ee8",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 19.34,
+   "step": "job",
+   "elapsed_s": 12.1,
+   "ms": 107,
+   "state": "failed",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": false,
+   "error": {
+    "code": "internal_error",
+    "message": "The operation failed",
+    "request_id": "req_48da1eea",
+    "retryable": true
+   }
+  },
+  {
+   "t": 19.48,
+   "step": "status",
+   "elapsed_s": 12.2,
+   "state": "failed",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_48da1eeb",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 19.74,
+   "step": "finished",
+   "elapsed_s": 12.5,
+   "state": "failed"
+  }
+ ],
+ "image_sha256": "11bf091dec8bac19b29664af390a6ad3ad981560fce1fff9f55e9121d3a5fe1d"
+}
+## install console
+[+    0.42] ==== host: http up
+[+    4.67] ==== host: login
+[+    4.91] ==== host: upload
+[+    5.26] ==== host: status before
+[+    7.28] ==== host: startCoprocessorUpdate
+[+    7.41] ==== host: job
+[+    7.56] ==== host: status
+[+    8.01] ==== host: w5500 events
+[+   11.20] ==== host: job
+[+   11.37] ==== host: status
+[+   14.07] ==== host: status
+[+   16.96] ==== host: status
+[+   19.34] ==== host: job
+[+   19.48] ==== host: status
+[+   19.74] ==== host: finished
+[+   27.39] [8D[J[00:01:15.442,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+[+   30.74] uart:~$ [8D[Juart:~$ [8D[J[00:01:18.735,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+[+   37.05] uart:~$ [8D[Juart:~$ [8D[J[00:01:25.082,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+[+   37.05] uart:~$ [8D[Juart:~$ [8D[J[00:01:25.401,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened

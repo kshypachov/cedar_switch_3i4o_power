@@ -1,0 +1,15 @@
+== /dev/cu.usbmodem11203
+Error: NMP timeout
+== /dev/cu.usbmodem11201
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 0013e3f05d2f3ecffd022c4db89f900aacaea3eaf783da5613940b5028cba091
+ image=0 slot=1
+    version: 0.0.1.1
+    bootable: true
+    flags: 
+    hash: cebf55bdaa1b5ca260d4f645155b0ecbefc02de15e2862542d6144753e362d33
+Split status: N/A (0)

@@ -1,0 +1,453 @@
+# 2026-09-14 13:18-13:32, board B, image 9fefcc2ba473ca30f147a4210ad600da28ea4d444930b17160bf0d9d5f75c0c5 (quiet C6 around the loader port).
+# Owner's install attempt 2 from the web UI (job_00000001) stuck in entering_bootloader; ping answered (up to 1 s), HTTP did not.
+# Two J-Link halts 3 s apart without reset: esp_hosted_mcu_event_task in spi_stm32 transfers (IPSR 0). J-Link reset ~13:32.
+## loader_b.py check before the attempt
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.43,
+   "step": "login",
+   "ms": 3004
+  },
+  {
+   "t": 4.88,
+   "step": "coproc status",
+   "lines": [
+    "uart_mode console, generation 63, transport down, dtr follow on",
+    "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 62)",
+    "rx bytes 444595, rx activity 444595, console ring overflows 3 (26294 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 15079, truncated 2, replacements 64, escapes 0, idle flushes 0, overflows 3"
+   ]
+  },
+  {
+   "t": 11.37,
+   "step": "loader",
+   "before": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 63,
+    "transport_ready": false
+   },
+   "lines": [
+    "[00:00:40.899,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "~$ ~$ [00:00:41.100,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "~$ ~$ [00:00:41.301,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "coproc loader: ESP32-C6 in its ROM loader after 834 ms",
+    "coproc loader: close 0 after 947 ms",
+    "coproc loader: uart_mode console, generation 65, session closed",
+    "~$ [00:00:42.683,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0",
+    "~$ ~$ [00:00:43.115,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM loader",
+    "~$ ~$ [00:00:43.357,000] <wrn> net_if: Skipped 2 messages",
+    "~$ ~$ [00:00:43.357,000] <wrn> net_if: iface 1 pkt 0x7017bf0c send failure status -5"
+   ],
+   "after": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 65,
+    "transport_ready": false
+   },
+   "esp32_records_3s_after": 69,
+   "faults": []
+  },
+  {
+   "t": 12.1,
+   "step": "coproc status after",
+   "lines": [
+    "ute (3, 0x0000_0006, 0x0000_0000: a0",
+    "uart_mode console, generation 71, transport down, dtr follow on",
+    "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 69)",
+    "rx bytes 515933, rx activity 515933, console ring overflows 4 (32555 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 17420, truncated 3, replacements 72, escapes 0, idle flushes 0, overflows 4"
+   ]
+  }
+ ],
+ "image_sha256": "9fefcc2ba473ca30f147a4210ad600da28ea4d444930b17160bf0d9d5f75c0c5"
+}
+## watch.json
+
+## watch console
+## J-Link halt 1
+# J-Link halt without reset, board B
+## regs
+ty extension: not implemented
+CoreSight components:
+ROMTbl[0] @ E00FE000
+[0][0]: E00FF000 CID B105100D PID 000BB4C9 ROM Table
+ROMTbl[1] @ E00FF000
+[1][0]: E000E000 CID B105900D PID 000BBD21 DEVARCH 47702A04 DEVTYPE 00 Cortex-M33
+[1][1]: E0001000 CID B105900D PID 000BBD21 DEVARCH 47701A02 DEVTYPE 00 DWT
+[1][2]: E0002000 CID B105900D PID 000BBD21 DEVARCH 47701A03 DEVTYPE 00 FPB
+[1][3]: E0000000 CID B105900D PID 000BBD21 DEVARCH 47701A01 DEVTYPE 43 ITM
+[1][5]: E0041000 CID B105900D PID 001BBD21 DEVARCH 47724A13 DEVTYPE 13 ETM
+[1][6]: E0042000 CID B105900D PID 000BBD21 DEVARCH 47701A14 DEVTYPE 14 CSS600-CTI
+[0][1]: E0040000 CID B105900D PID 000BBD21 DEVARCH 00000000 DEVTYPE 11 TPIU
+[0][2]: E0044000 CID B105F00D PID 000A0000 ???
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M33 identified.
+PC = 020D2B66, CycleCnt = 00D7DBB1
+R0 = 00000001, R1 = 7019FA5B, R2 = 7019FA5C, R3 = 00000001
+R4 = 00000001, R5 = 200025C4, R6 = 40003800, R7 = 02144A98
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D890, MSP= 2000D490, PSP= 7026D890, R14(LR) = 020657ED
+XPSR = 21000000: APSR = nzCvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>regs
+PC = 020D2B66, CycleCnt = 00D7DBB1
+R0 = 00000001, R1 = 7019FA5B, R2 = 7019FA5C, R3 = 00000001
+R4 = 00000001, R5 = 200025C4, R6 = 40003800, R7 = 02144A98
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D890, MSP= 2000D490, PSP= 7026D890, R14(LR) = 020657ED
+XPSR = 21000000: APSR = nzCvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>q
+
+Script processing completed.
+
+OnDisconnectTarget() start
+OnDisconnectTarget() end - Took 1.57ms
+
+## PC 0x020d2b66: spi_stm32_read_fifo /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:690
+## LR 0x00000000: ?? ??:0
+## stack at 0x7026d890
+t established yet but required for command.
+Device "STM32U585AI" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+SWD selected. Executing JTAG -> SWD switching sequence.
+DAP initialized successfully.
+InitTarget() end - Took 84.6ms
+Found SW-DP with ID 0x0BE12477
+DPIDR: 0x0BE12477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[1]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x14770015, ADDR: 0x00000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FE000
+CPUID register: 0x410FD214. Implementer code: 0x41 (ARM)
+Feature set: Mainline
+Cache: No cache
+Found Cortex-M33 r0p4, Little endian.
+FPUnit: 8 code (BP) slots and 0 literal slots
+Security extension: not implemented
+CoreSight components:
+ROMTbl[0] @ E00FE000
+[0][0]: E00FF000 CID B105100D PID 000BB4C9 ROM Table
+ROMTbl[1] @ E00FF000
+[1][0]: E000E000 CID B105900D PID 000BBD21 DEVARCH 47702A04 DEVTYPE 00 Cortex-M33
+[1][1]: E0001000 CID B105900D PID 000BBD21 DEVARCH 47701A02 DEVTYPE 00 DWT
+[1][2]: E0002000 CID B105900D PID 000BBD21 DEVARCH 47701A03 DEVTYPE 00 FPB
+[1][3]: E0000000 CID B105900D PID 000BBD21 DEVARCH 47701A01 DEVTYPE 43 ITM
+[1][5]: E0041000 CID B105900D PID 001BBD21 DEVARCH 47724A13 DEVTYPE 13 ETM
+[1][6]: E0042000 CID B105900D PID 000BBD21 DEVARCH 47701A14 DEVTYPE 14 CSS600-CTI
+[0][1]: E0040000 CID B105900D PID 000BBD21 DEVARCH 00000000 DEVTYPE 11 TPIU
+[0][2]: E0044000 CID B105F00D PID 000A0000 ???
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M33 identified.
+PC = 020657E4, CycleCnt = 0190CAC3
+R0 = 40003800, R1 = 200025C4, R2 = 00000001, R3 = 00000060
+R4 = 200025C4, R5 = 00000001, R6 = 40003800, R7 = 02144A98
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D880, MSP= 2000D490, PSP= 7026D880, R14(LR) = 020D2B67
+XPSR = 61000000: APSR = nZCvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>mem32 7026D890 64
+7026D890 = 200025C4 40003800 00000000 020D2BE3 
+7026D8A0 = 00000106 40003800 020FF478 020D2C17 
+7026D8B0 = 00000106 020D2C33 200025C4 02065E03 
+7026D8C0 = 02144A98 2000842C 00000000 7026D920 
+7026D8D0 = 00000000 00000000 00000001 7019F8B0 
+7026D8E0 = 020FF3B8 002FB4DE 00000000 00000000 
+7026D8F0 = 00000000 020D2C53 00000000 00000000 
+7026D900 = 00000000 020565CB 020D2C43 0205662F 
+7026D910 = 02144A94 02056A75 002FB4DE 00000000 
+7026D920 = 7026D928 00000001 7019F8B0 00000640 
+7026D930 = 7026D938 00000001 00000000 00000640 
+7026D940 = 701A9B90 02056935 701A9B90 00000000 
+7026D950 = 020FF3B8 02144A70 00000000 02055B8B 
+7026D960 = 02055B11 020FF3B8 00000000 00000000 
+7026D970 = 00000000 00000000 00000000 0201F2D5 
+7026D980 = 00000000 AAAAAAAA AAAAAAAA AAAAAAAA 
+7026D990 = AAAAAAAA 00000001 00000000 701A67C0 
+7026D9A0 = 00000000 00000000 00000000 00000000 
+7026D9B0 = 00000000 00000000 00000000 00000000 
+7026D9C0 = 00000000 00000019 000B24C7 00080000 
+7026D9D0 = 00000000 00000000 00000000 00000000 
+7026D9E0 = 00000000 00000000 00000000 00000000 
+7026D9F0 = 00000000 00000000 00000000 00000000 
+7026DA00 = 00000000 00000000 00000000 00000000 
+7026DA10 = 00000000 00000000 00000000 0000000C 
+J-Link>g
+Memory map 'after startup completion point' is active
+J-Link>q
+
+Script processing completed.
+
+OnDisconnectTarget() start
+OnDisconnectTarget() end - Took 3.95ms
+
+## code addresses on the stack
+0x02000000 __rom_start_address :?
+0x0201f2d5 z_thread_entry /Volumes/Programming/Zephyr/zephyr_latest/zephyr/kernel/sys/thread_entry.c:62
+0x02055b11 esp_hosted_mcu_event_task /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:536
+0x02055b8b esp_hosted_mcu_event_task /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:592
+0x020565cb z_impl_gpio_pin_get /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/gpio.h:1737
+0x0205662f z_impl_spi_transceive /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/spi.h:1042
+0x02056935 esp_hosted_mcu_spi_transfer /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:255
+0x02056a75 esp_hosted_mcu_spi_transfer /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:364 (discriminator 1)
+0x020657e4 spi_stm32_read_next_frame /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:607
+0x02065e03 transceive /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2019
+0x020d2b67 spi_stm32_read_fifo /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:690
+0x020d2be3 spi_stm32_shift_fifo /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:706
+0x020d2c17 spi_stm32_shift_m /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:765
+0x020d2c33 spi_stm32_shift_frames /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:796
+0x020d2c43 spi_stm32_transceive_sync /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2050
+0x020d2c53 spi_stm32_transceive_sync /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2052
+0x020ff3b8 _device_list_start /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:990
+0x020ff478 _device_list_start /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2321
+0x02144a70 ?? ??:0
+0x02144a94 ?? /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:87
+0x02144a98 ?? ??:0
+0x0214906c ?? ??:0
+## J-Link halt 2
+# J-Link halt without reset, board B
+## regs
+ity extension: not implemented
+CoreSight components:
+ROMTbl[0] @ E00FE000
+[0][0]: E00FF000 CID B105100D PID 000BB4C9 ROM Table
+ROMTbl[1] @ E00FF000
+[1][0]: E000E000 CID B105900D PID 000BBD21 DEVARCH 47702A04 DEVTYPE 00 Cortex-M33
+[1][1]: E0001000 CID B105900D PID 000BBD21 DEVARCH 47701A02 DEVTYPE 00 DWT
+[1][2]: E0002000 CID B105900D PID 000BBD21 DEVARCH 47701A03 DEVTYPE 00 FPB
+[1][3]: E0000000 CID B105900D PID 000BBD21 DEVARCH 47701A01 DEVTYPE 43 ITM
+[1][5]: E0041000 CID B105900D PID 001BBD21 DEVARCH 47724A13 DEVTYPE 13 ETM
+[1][6]: E0042000 CID B105900D PID 000BBD21 DEVARCH 47701A14 DEVTYPE 14 CSS600-CTI
+[0][1]: E0040000 CID B105900D PID 000BBD21 DEVARCH 00000000 DEVTYPE 11 TPIU
+[0][2]: E0044000 CID B105F00D PID 000A0000 ???
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M33 identified.
+PC = 020656F8, CycleCnt = 020E32D3
+R0 = 40003800, R1 = 200025C4, R2 = 00000001, R3 = 00000000
+R4 = 200025C4, R5 = 00000001, R6 = 40003800, R7 = 02144A98
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D880, MSP= 2000D490, PSP= 7026D880, R14(LR) = 020D2B3F
+XPSR = 01000000: APSR = nzcvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>regs
+PC = 020656F8, CycleCnt = 020E32D3
+R0 = 40003800, R1 = 200025C4, R2 = 00000001, R3 = 00000000
+R4 = 200025C4, R5 = 00000001, R6 = 40003800, R7 = 02144A98
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D880, MSP= 2000D490, PSP= 7026D880, R14(LR) = 020D2B3F
+XPSR = 01000000: APSR = nzcvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>q
+
+Script processing completed.
+
+OnDisconnectTarget() start
+OnDisconnectTarget() end - Took 831us
+
+## PC 0x020656f8: spi_stm32_send_next_frame /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:565
+## LR 0x00000000: ?? ??:0
+## stack at 0x7026d880
+t established yet but required for command.
+Device "STM32U585AI" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+SWD selected. Executing JTAG -> SWD switching sequence.
+DAP initialized successfully.
+InitTarget() end - Took 21.5ms
+Found SW-DP with ID 0x0BE12477
+DPIDR: 0x0BE12477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[1]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x14770015, ADDR: 0x00000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FE000
+CPUID register: 0x410FD214. Implementer code: 0x41 (ARM)
+Feature set: Mainline
+Cache: No cache
+Found Cortex-M33 r0p4, Little endian.
+FPUnit: 8 code (BP) slots and 0 literal slots
+Security extension: not implemented
+CoreSight components:
+ROMTbl[0] @ E00FE000
+[0][0]: E00FF000 CID B105100D PID 000BB4C9 ROM Table
+ROMTbl[1] @ E00FF000
+[1][0]: E000E000 CID B105900D PID 000BBD21 DEVARCH 47702A04 DEVTYPE 00 Cortex-M33
+[1][1]: E0001000 CID B105900D PID 000BBD21 DEVARCH 47701A02 DEVTYPE 00 DWT
+[1][2]: E0002000 CID B105900D PID 000BBD21 DEVARCH 47701A03 DEVTYPE 00 FPB
+[1][3]: E0000000 CID B105900D PID 000BBD21 DEVARCH 47701A01 DEVTYPE 43 ITM
+[1][5]: E0041000 CID B105900D PID 001BBD21 DEVARCH 47724A13 DEVTYPE 13 ETM
+[1][6]: E0042000 CID B105900D PID 000BBD21 DEVARCH 47701A14 DEVTYPE 14 CSS600-CTI
+[0][1]: E0040000 CID B105900D PID 000BBD21 DEVARCH 00000000 DEVTYPE 11 TPIU
+[0][2]: E0044000 CID B105F00D PID 000A0000 ???
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M33 identified.
+PC = 02065318, CycleCnt = 02C475C7
+R0 = 020FF218, R1 = 0000000C, R2 = 00000000, R3 = 00001000
+R4 = 0000FFFF, R5 = 20007178, R6 = 020FF478, R7 = 00000000
+R8 = 40003800, R9 = 7026D930, R10= 00000000, R11= 0214906C
+R12= 7026D920
+SP(R13)= 7026D880, MSP= 2000D490, PSP= 7026D880, R14(LR) = 020D2A49
+XPSR = 01000000: APSR = nzcvq, EPSR = 01000000, IPSR = 000 (NoException)
+CFBP = 02000000, CONTROL = 02, FAULTMASK = 00, BASEPRI = 00, PRIMASK = 00
+MSPLIM = 2000CC90
+PSPLIM = 7026C9C0
+
+FPS0 = 00000000, FPS1 = 00000000, FPS2 = 00000000, FPS3 = 00000000
+FPS4 = 00000000, FPS5 = 00000000, FPS6 = 00000000, FPS7 = 00000000
+FPS8 = 00000000, FPS9 = 00000000, FPS10= 00000000, FPS11= 00000000
+FPS12= 00000000, FPS13= 00000000, FPS14= 00000000, FPS15= 00000000
+FPS16= 00000000, FPS17= 00000000, FPS18= 00000000, FPS19= 00000000
+FPS20= 00000000, FPS21= 00000000, FPS22= 00000000, FPS23= 00000000
+FPS24= 00000000, FPS25= 00000000, FPS26= 00000000, FPS27= 00000000
+FPS28= 00000000, FPS29= 00000000, FPS30= 00000000, FPS31= 00000000
+FPSCR= 00000000
+J-Link>mem32 7026D880 64
+7026D880 = 02144AA0 200025C4 200025C4 020D2A49 
+7026D890 = 00000106 020D2A73 40003800 020D2A91 
+7026D8A0 = 00000640 02065597 00000000 200025C4 
+7026D8B0 = 020FF478 00000000 02144A98 02065E35 
+7026D8C0 = 02144A98 020846A1 02065D68 7026D920 
+7026D8D0 = 00000000 00000000 00000001 7019F8B0 
+7026D8E0 = 020FF3B8 0030B520 00000000 00000000 
+7026D8F0 = 00000000 020D2C53 00000000 00000000 
+7026D900 = 00000000 020565CB 020D2C43 0205662F 
+7026D910 = 02144A94 02056A75 0030B520 00000000 
+7026D920 = 7026D928 00000001 7019F8B0 00000640 
+7026D930 = 7026D938 00000001 00000000 00000640 
+7026D940 = 701A9B90 02056935 701A9B90 00000000 
+7026D950 = 020FF3B8 02144A70 00000000 02055B8B 
+7026D960 = 02055B11 020FF3B8 00000000 00000000 
+7026D970 = 00000000 00000000 00000000 0201F2D5 
+7026D980 = 00000000 AAAAAAAA AAAAAAAA AAAAAAAA 
+7026D990 = AAAAAAAA 00000001 00000000 701A67C0 
+7026D9A0 = 00000000 00000000 00000000 00000000 
+7026D9B0 = 00000000 00000000 00000000 00000000 
+7026D9C0 = 00000000 00000019 000B24C7 00080000 
+7026D9D0 = 00000000 00000000 00000000 00000000 
+7026D9E0 = 00000000 00000000 00000000 00000000 
+7026D9F0 = 00000000 00000000 00000000 00000000 
+7026DA00 = 00000000 00000000 00000000 00000000 
+J-Link>g
+Memory map 'after startup completion point' is active
+J-Link>q
+
+Script processing completed.
+
+OnDisconnectTarget() start
+OnDisconnectTarget() end - Took 1.60ms
+
+## code addresses on the stack
+0x02000000 __rom_start_address :?
+0x0201f2d5 z_thread_entry /Volumes/Programming/Zephyr/zephyr_latest/zephyr/kernel/sys/thread_entry.c:62
+0x02055b11 esp_hosted_mcu_event_task /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:536
+0x02055b8b esp_hosted_mcu_event_task /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:592
+0x020565cb z_impl_gpio_pin_get /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/gpio.h:1737
+0x0205662f z_impl_spi_transceive /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/spi.h:1042
+0x02056935 esp_hosted_mcu_spi_transfer /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:255
+0x02056a75 esp_hosted_mcu_spi_transfer /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:364 (discriminator 1)
+0x02065318 z_impl_gpio_pin_set /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/gpio.h:1826 (discriminator 1)
+0x02065597 LL_SPI_IsActiveFlag_MODF /Volumes/Programming/Zephyr/zephyr_latest/modules/hal/stm32/stm32cube/stm32u5xx/drivers/include/stm32u5xx_ll_spi.h:1800
+0x02065d68 transceive /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2044
+0x02065e35 transceive /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2025
+0x020846a1 k_spin_unlock /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/spinlock.h:317 (discriminator 1)
+0x020d2a49 gpio_pin_set_dt /Volumes/Programming/Zephyr/zephyr_latest/zephyr/include/zephyr/drivers/gpio.h:1850
+0x020d2a73 _spi_context_cs_control /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_context.h:414
+0x020d2a91 spi_stm32_cs_control /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:823
+0x020d2c43 spi_stm32_transceive_sync /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2050
+0x020d2c53 spi_stm32_transceive_sync /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2052
+0x020ff218 _device_list_start /Volumes/Programming/Zephyr/zephyr_latest/zephyr/soc/st/stm32/common/gpioport_mgr.c:401
+0x020ff3b8 _device_list_start /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c:990
+0x020ff478 _device_list_start /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/spi/spi_stm32.c:2321
+0x02144a70 ?? ??:0
+0x02144a94 ?? /Volumes/Programming/Zephyr/zephyr_latest/zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu_spi.c:87
+0x02144a98 ?? ??:0
+0x02144aa0 ?? ??:0
+0x0214906c ?? ??:0

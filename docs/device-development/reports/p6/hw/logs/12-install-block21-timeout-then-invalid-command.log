@@ -1,0 +1,652 @@
+# 2026-09-14 ~14:30, board B, image 7f350d782c8687375e25480d8b024ebaa2b88feafc4d069a48999071a5382c89 (tty ring 4096, library timing in 'coproc updater').
+# Install from the bench: preflight 2.2 s, entering_bootloader + begin 15 s (connect 522 ms, flash_start 6096 ms), writing: 20 blocks of 1024 B written, block 21 failed:
+# attempt 1 silent (port timeout, no ROM error), attempts 2-3 ROM INVALID_COMMAND; library rc 9 INVALID_RESPONSE, recovery_required=true.
+## chain output
+build rc=0
+217:CONFIG_ESP_SERIAL_FLASHER_UART_BUFSIZE=4096
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       85872 B       128 KB     65.52%
+             RAM:       44736 B       768 KB      5.69%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:           0 B         8 MB      0.00%
+        IDT_LIST:           0 B        32 KB      0.00%
+Generating files from /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/build-accept/mcuboot/zephyr/zephyr.elf for board: cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+sha 7f350d782c8687375e25480d8b024ebaa2b88feafc4d069a48999071a5382c89
+flash rc=0
+19:upload rc=0 in 384 s
+http up 1.1
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 0 ms, flash_start 0 in 0 ms, writes 0 (last 0 in 0 ms, max 0 ms), finish 0 in 0 ms
+upload id: upload_e2a1b4bc0b1a072f
+loader rc=0
+coproc loader: ESP32-C6 in its ROM loader after 831 ms
+coproc loader: close 0 after 952 ms
+coproc loader: uart_mode console, generation 64, session closed
+install rc=0
+{"t": 76.58, "step": "startCoprocessorUpdate", "status": 202, "ms": 908, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/coprocessor/status"}}
+{"t": 76.66, "step": "job", "elapsed_s": 0.1, "ms": 82, "state": "queued", "phase": "", "progress": null, "cancellable": true, "error": null}
+{"t": 79.34, "step": "job", "elapsed_s": 2.8, "ms": 67, "state": "running", "phase": "preflight", "progress": null, "cancellable": true, "error": null}
+{"t": 84.93, "step": "job", "elapsed_s": 8.3, "ms": 312, "state": "running", "phase": "entering_bootloader", "progress": null, "cancellable": true, "error": null}
+{"t": 88.18, "step": "job", "elapsed_s": 11.6, "ms": 329, "state": "running", "phase": "begin", "progress": null, "cancellable": false, "error": null}
+{"t": 96.78, "step": "job", "elapsed_s": 20.2, "ms": 191, "state": "running", "phase": "writing", "progress": null, "cancellable": false, "error": null}
+{"t": 102.52, "step": "job", "elapsed_s": 25.9, "ms": 208, "state": "running", "phase": "writing", "progress": {"completed": 4096, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 105.38, "step": "job", "elapsed_s": 28.8, "ms": 192, "state": "running", "phase": "writing", "progress": {"completed": 12288, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 108.26, "step": "job", "elapsed_s": 31.7, "ms": 212, "state": "running", "phase": "writing", "progress": {"completed": 20480, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 111.07, "step": "job", "elapsed_s": 34.5, "ms": 137, "state": "failed", "phase": "writing", "progress": {"completed": 20480, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": {"code": "internal_error", "message": "The operation failed", "request_id": "req_2d3f1188", "retryable": true}}
+{"t": 111.74, "step": "finished", "elapsed_s": 35.2, "state": "failed"}
+{"t": 111.15, "step": "status", "elapsed_s": 34.6, "state": "failed", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": true, "error": {"code": "internal_error", "message": "A block of the image was not written", "request_id": "req_2d3f1189", "retryable": true}}}
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 522 ms, flash_start 0 in 6096 ms, writes 21 (last 9 in 1900 ms, max 1900 ms), finish 0 in 0 ms
+
+[exited with code 0]
+## install.json
+{
+ "steps": [
+  {
+   "t": 0.39,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 2.83,
+   "step": "login",
+   "ms": 2433
+  },
+  {
+   "t": 3.0,
+   "step": "upload",
+   "status": 200,
+   "ms": 175,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 75.58,
+   "step": "board settled",
+   "uptime_ms": 122605
+  },
+  {
+   "t": 75.68,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 199,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "failed",
+     "method": "uart",
+     "version": null,
+     "recovery_required": true,
+     "error": {
+      "code": "internal_error",
+      "message": "A block of the image was not written",
+      "request_id": "req_2d3f1133",
+      "retryable": true
+     }
+    }
+   }
+  },
+  {
+   "t": 76.58,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 908,
+   "body": {
+    "job_id": "job_00000001",
+    "job_url": "/api/v1/jobs/job_00000001",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 76.66,
+   "step": "job",
+   "elapsed_s": 0.1,
+   "ms": 82,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 76.75,
+   "step": "status",
+   "elapsed_s": 0.2,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1136",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 77.26,
+   "step": "w5500 events",
+   "new": 44,
+   "total": 44
+  },
+  {
+   "t": 79.34,
+   "step": "job",
+   "elapsed_s": 2.8,
+   "ms": 67,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 79.43,
+   "step": "status",
+   "elapsed_s": 2.8,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f113d",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 82.1,
+   "step": "status",
+   "elapsed_s": 5.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1144",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 82.62,
+   "step": "w5500 events",
+   "new": 2,
+   "total": 46
+  },
+  {
+   "t": 84.93,
+   "step": "job",
+   "elapsed_s": 8.3,
+   "ms": 312,
+   "state": "running",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 85.33,
+   "step": "status",
+   "elapsed_s": 8.7,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f114b",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 88.18,
+   "step": "job",
+   "elapsed_s": 11.6,
+   "ms": 329,
+   "state": "running",
+   "phase": "begin",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 88.28,
+   "step": "status",
+   "elapsed_s": 11.7,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1152",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 88.86,
+   "step": "w5500 events",
+   "new": 6,
+   "total": 52
+  },
+  {
+   "t": 91.15,
+   "step": "status",
+   "elapsed_s": 14.6,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1159",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 94.02,
+   "step": "status",
+   "elapsed_s": 17.4,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1160",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 96.78,
+   "step": "job",
+   "elapsed_s": 20.2,
+   "ms": 191,
+   "state": "running",
+   "phase": "writing",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 96.88,
+   "step": "status",
+   "elapsed_s": 20.3,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1167",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 99.74,
+   "step": "status",
+   "elapsed_s": 23.2,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f116e",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 102.52,
+   "step": "job",
+   "elapsed_s": 25.9,
+   "ms": 208,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 4096,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 102.61,
+   "step": "status",
+   "elapsed_s": 26.0,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1175",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 105.38,
+   "step": "job",
+   "elapsed_s": 28.8,
+   "ms": 192,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 12288,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 105.48,
+   "step": "status",
+   "elapsed_s": 28.9,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f117c",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 108.26,
+   "step": "job",
+   "elapsed_s": 31.7,
+   "ms": 212,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 20480,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 108.35,
+   "step": "status",
+   "elapsed_s": 31.8,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1183",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 111.07,
+   "step": "job",
+   "elapsed_s": 34.5,
+   "ms": 137,
+   "state": "failed",
+   "phase": "writing",
+   "progress": {
+    "completed": 20480,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": {
+    "code": "internal_error",
+    "message": "The operation failed",
+    "request_id": "req_2d3f1188",
+    "retryable": true
+   }
+  },
+  {
+   "t": 111.15,
+   "step": "status",
+   "elapsed_s": 34.6,
+   "state": "failed",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_2d3f1189",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 111.74,
+   "step": "finished",
+   "elapsed_s": 35.2,
+   "state": "failed"
+  }
+ ],
+ "image_sha256": "7f350d782c8687375e25480d8b024ebaa2b88feafc4d069a48999071a5382c89"
+}## updater.out
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 0 ms, flash_start 0 in 0 ms, writes 0 (last 0 in 0 ms, max 0 ms), finish 0 in 0 ms
+## updater-after.out
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 522 ms, flash_start 0 in 6096 ms, writes 21 (last 9 in 1900 ms, max 1900 ms), finish 0 in 0 ms
+## loader.out
+{"t": 4.44, "step": "http up", "seconds": 4.1}
+{"t": 6.86, "step": "login", "ms": 2415}
+{"t": 7.73, "step": "coproc status", "lines": ["uart_mode console, generation 62, transport down, dtr follow on", "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 61)", "rx bytes 13221, rx activity 13221, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 553, truncated 0, replacements 1, escapes 0, idle flushes 0, overflows 0"]}
+{"t": 12.67, "step": "loader", "before": {"state": "failed", "uart_mode": "console", "generation": 63, "transport_ready": false}, "lines": ["coproc loader: ESP32-C6 in its ROM loader after 831 ms", "coproc loader: close 0 after 952 ms", "coproc loader: uart_mode console, generation 64, session closed", "~$ [00:00:41.067,000] <inf> chip: [SVR]Server Listening...\u001b[0m", "~$ [00:00:41.067,000] <inf> matter: Matter stack initialized", "~$ [00:00:41.068,000] <inf> matter: Matter event loop starte
+{"t": 12.99, "step": "coproc status after", "lines": ["uart_mode console, generation 70, transport down, dtr follow on", "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 68)", "rx bytes 14740, rx activity 14740, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 617, truncated 0, replacements 2, escapes 0, idle flushes 0, overflows 0"]}
+## install.console.log (ANSI stripped)
+[+    0.39] ==== host: http up
+[+    2.83] ==== host: login
+[+    3.00] ==== host: upload
+[+    8.76] [00:00:54.831,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   17.77] uart:~$ uart:~$ [00:01:03.359,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   17.77] uart:~$ uart:~$ [00:01:03.559,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   17.77] uart:~$ uart:~$ [00:01:03.760,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   26.42] uart:~$ uart:~$ [00:01:12.042,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   26.53] uart:~$ uart:~$ [00:01:12.243,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   26.53] uart:~$ uart:~$ [00:01:12.443,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   31.95] uart:~$ uart:~$ [00:01:18.008,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   31.95] uart:~$ uart:~$ [00:01:18.208,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   52.30] uart:~$ uart:~$ [00:01:38.384,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   52.30] uart:~$ uart:~$ [00:01:38.585,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   55.91] uart:~$ uart:~$ [00:01:41.311,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   55.91] uart:~$ uart:~$ [00:01:41.511,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   75.58] ==== host: board settled
+[+   75.68] ==== host: status before
+[+   76.58] ==== host: startCoprocessorUpdate
+[+   76.66] ==== host: job
+[+   76.75] ==== host: status
+[+   77.26] ==== host: w5500 events
+[+   79.34] ==== host: job
+[+   79.43] ==== host: status
+[+   82.10] ==== host: status
+[+   82.62] ==== host: w5500 events
+[+   84.93] ==== host: job
+[+   85.33] ==== host: status
+[+   86.11] uart:~$ uart:~$ [00:02:07.204,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.11] uart:~$ uart:~$ [00:02:07.485,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.11] uart:~$ uart:~$ [00:02:07.685,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.11] uart:~$ uart:~$ [00:02:10.321,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.22] uart:~$ uart:~$ [00:02:10.521,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.22] uart:~$ uart:~$ [00:02:10.722,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   86.22] uart:~$ uart:~$ [00:02:10.942,000] <inf> coprocessor_updater: install job_00000001: preflight
+[+   86.22] uart:~$ uart:~$ [00:02:13.150,000] <inf> coprocessor_updater: install job_00000001: entering_bootloader
+[+   88.18] ==== host: job
+[+   88.28] ==== host: status
+[+   88.86] ==== host: w5500 events
+[+   91.15] ==== host: status
+[+   94.02] ==== host: status
+[+   96.78] ==== host: job
+[+   96.88] ==== host: status
+[+   99.74] ==== host: status
+[+  102.52] ==== host: job
+[+  102.61] ==== host: status
+[+  103.36] uart:~$ uart:~$ [00:02:28.167,000] <inf> coprocessor_updater: install job_00000001: writing
+[+  105.38] ==== host: job
+[+  105.48] ==== host: status
+[+  108.26] ==== host: job
+[+  108.35] ==== host: status
+[+  109.20] uart:~$ uart:~$ [W] esf: uart:~$ uart:~$ Flash write failed (attempt 1/3), retryinguart:~$ uart:~$ 
+[+  109.30] uart:~$ uart:~$ [E] esf: uart:~$ uart:~$ Protocol error: INVALID_COMMANDuart:~$ uart:~$ 
+[+  109.30] uart:~$ uart:~$ [W] esf: uart:~$ uart:~$ Flash write failed (attempt 2/3), retryinguart:~$ uart:~$ 
+[+  109.30] uart:~$ uart:~$ [E] esf: uart:~$ uart:~$ Protocol error: INVALID_COMMANDuart:~$ uart:~$ 
+[+  109.41] uart:~$ uart:~$ [00:02:36.317,000] <wrn> esp_loader_adapter: A block of the image was not written (internal_error, cause 9)
+[+  109.94] uart:~$ uart:~$ [00:02:36.980,000] <err> coprocessor_updater: install job_00000001 failed in writing: A block of the image was not written (recovery required)
+[+  111.07] ==== host: job
+[+  111.15] ==== host: status
+[+  111.74] ==== host: finished
+[+  117.61] uart:~$ uart:~$ [00:02:42.890,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  123.14] uart:~$ uart:~$ [00:02:48.414,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  123.14] uart:~$ uart:~$ [00:02:48.614,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened

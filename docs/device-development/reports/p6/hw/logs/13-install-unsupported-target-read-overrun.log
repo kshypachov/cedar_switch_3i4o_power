@@ -1,0 +1,410 @@
+# 2026-09-14 ~15:10, board B, image 88809ae5bb3a2279367670f07bd2b662f8ce65a8c65c7243081666cd99ff66a0 (timed port read/write, per-thread CPU over writing).
+# Install from the bench: preflight 2.7 s, entering_bootloader: connect 0 in 1152 ms, then get_target != ESP32-C6 -> unsupported_target,
+# recovery_required=false, C6 not written. Port: 557 reads, a read given 88 ms took 715 ms (132 bytes since the last write). Updater/adapter log lines lost.
+## chain output
+build rc=0
+sha 88809ae5bb3a2279367670f07bd2b662f8ce65a8c65c7243081666cd99ff66a0
+flash rc=0
+19:upload rc=0 in 373 s
+http up 0.1
+[00:00:31.197,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+~$ ~$ [00:00:32.183,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:00:32.384,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:00:32.584,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 0 ms, flash_start 0 in 0 ms, writes 0 (last 0 in 0 ms, max 0 ms), finish 0 in 0 ms
+library: writes over 250 ms 0, over 500 ms 0
+port: reads 0 in 0 ms (max 0, last failure 0 after 0 of 0 ms, 0 bytes since write), writes 0 in 0 ms (max 0, last failure 0 after 0 of 0 ms)
+cpu: window 0 ms, idle 0 ms, 0 threads
+upload id: upload_e2a1b4bc0b1a072f
+loader rc=0
+coproc loader: ESP32-C6 in its ROM loader after 1183 ms
+coproc loader: close 0 after 1304 ms
+coproc loader: uart_mode console, generation 55, session closed
+install rc=0
+{"t": 78.48, "step": "startCoprocessorUpdate", "status": 202, "ms": 754, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/coprocessor/status"}}
+{"t": 78.57, "step": "job", "elapsed_s": 0.1, "ms": 85, "state": "queued", "phase": "", "progress": null, "cancellable": true, "error": null}
+{"t": 81.23, "step": "job", "elapsed_s": 2.7, "ms": 67, "state": "running", "phase": "preflight", "progress": null, "cancellable": true, "error": null}
+{"t": 86.57, "step": "job", "elapsed_s": 8.1, "ms": 67, "state": "running", "phase": "entering_bootloader", "progress": null, "cancellable": true, "error": null}
+{"t": 89.22, "step": "job", "elapsed_s": 10.7, "ms": 68, "state": "failed", "phase": "entering_bootloader", "progress": null, "cancellable": false, "error": {"code": "unsupported_target", "message": "The operation failed", "request_id": "req_3154ae0c", "retryable": false}}
+{"t": 89.8, "step": "finished", "elapsed_s": 11.3, "state": "failed"}
+{"t": 89.3, "step": "status", "elapsed_s": 10.8, "state": "failed", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "unsupported_target", "message": "The coprocessor is not an ESP32-C6", "request_id": "req_3154ae0d", "retryable": false}}}
+TIMEOUT
+updater: active no, phase entering_bootloader, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required no, error unsupported_target: The coprocessor is not an ESP32-C6
+library: connect 0 in 1152 ms, flash_start 0 in 0 ms, writes 0 (last 0 in 0 ms, max 0 ms), finish 0 in 0 ms
+library: writes over 250 ms 0, over 500 ms 0
+port: reads 557 in 849 ms (max 715, last failure 2 after 715 of 88 ms, 132 bytes since write), writes 18 in 1 ms (max 0, last failure 0 after 0 of 0 ms)
+cpu: window 0 ms, idle 0 ms, 0 threads
+~$ [00:02:37.072,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.273,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.473,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.674,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:40.485,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.013,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.214,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.414,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:45.837,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.037,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.238,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.439,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:48.871,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:49.071,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:49.272,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ 
+
+[exited with code 0]
+## install.json
+{
+ "steps": [
+  {
+   "t": 0.74,
+   "step": "http up",
+   "seconds": 0.4
+  },
+  {
+   "t": 2.09,
+   "step": "login",
+   "ms": 1351
+  },
+  {
+   "t": 2.26,
+   "step": "upload",
+   "status": 200,
+   "ms": 161,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 77.36,
+   "step": "board settled",
+   "uptime_ms": 123386
+  },
+  {
+   "t": 77.73,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 192,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "failed",
+     "method": "uart",
+     "version": null,
+     "recovery_required": true,
+     "error": {
+      "code": "internal_error",
+      "message": "A block of the image was not written",
+      "request_id": "req_3154adef",
+      "retryable": true
+     }
+    }
+   }
+  },
+  {
+   "t": 78.48,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 754,
+   "body": {
+    "job_id": "job_00000001",
+    "job_url": "/api/v1/jobs/job_00000001",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 78.57,
+   "step": "job",
+   "elapsed_s": 0.1,
+   "ms": 85,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 78.66,
+   "step": "status",
+   "elapsed_s": 0.2,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_3154adf2",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 79.16,
+   "step": "w5500 events",
+   "new": 55,
+   "total": 55
+  },
+  {
+   "t": 81.23,
+   "step": "job",
+   "elapsed_s": 2.7,
+   "ms": 67,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 81.32,
+   "step": "status",
+   "elapsed_s": 2.8,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_3154adf9",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 83.98,
+   "step": "status",
+   "elapsed_s": 5.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_3154ae00",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 86.57,
+   "step": "job",
+   "elapsed_s": 8.1,
+   "ms": 67,
+   "state": "running",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 86.66,
+   "step": "status",
+   "elapsed_s": 8.2,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_3154ae07",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 89.22,
+   "step": "job",
+   "elapsed_s": 10.7,
+   "ms": 68,
+   "state": "failed",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": false,
+   "error": {
+    "code": "unsupported_target",
+    "message": "The operation failed",
+    "request_id": "req_3154ae0c",
+    "retryable": false
+   }
+  },
+  {
+   "t": 89.3,
+   "step": "status",
+   "elapsed_s": 10.8,
+   "state": "failed",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_3154ae0d",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 89.8,
+   "step": "finished",
+   "elapsed_s": 11.3,
+   "state": "failed"
+  }
+ ],
+ "image_sha256": "88809ae5bb3a2279367670f07bd2b662f8ce65a8c65c7243081666cd99ff66a0"
+}## updater-after.out
+TIMEOUT
+updater: active no, phase entering_bootloader, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required no, error unsupported_target: The coprocessor is not an ESP32-C6
+library: connect 0 in 1152 ms, flash_start 0 in 0 ms, writes 0 (last 0 in 0 ms, max 0 ms), finish 0 in 0 ms
+library: writes over 250 ms 0, over 500 ms 0
+port: reads 557 in 849 ms (max 715, last failure 2 after 715 of 88 ms, 132 bytes since write), writes 18 in 1 ms (max 0, last failure 0 after 0 of 0 ms)
+cpu: window 0 ms, idle 0 ms, 0 threads
+~$ [00:02:37.072,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.273,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.473,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:37.674,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:40.485,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.013,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.214,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:43.414,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:45.837,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.037,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.238,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:46.439,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:48.871,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:49.071,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:02:49.272,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ 
+## loader.out
+{"t": 0.4, "step": "http up", "seconds": 0.1}
+{"t": 3.81, "step": "login", "ms": 3406}
+{"t": 5.25, "step": "coproc status", "lines": ["uart_mode console, generation 54, transport down, dtr follow on", "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 53)", "rx bytes 18760, rx activity 18760, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 711, truncated 0, replacements 1, escapes 0, idle flushes 0, overflows 0"]}
+{"t": 11.94, "step": "loader", "before": {"state": "failed", "uart_mode": "console", "generation": 54, "transport_ready": false}, "lines": ["coproc loader: ESP32-C6 in its ROM loader after 1183 ms", "coproc loader: close 0 after 1304 ms", "coproc loader: uart_mode console, generation 55, session closed", "~$ [00:00:38.778,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0", "~$ ~$ [00:00:40.357,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM 
+{"t": 12.26, "step": "coproc status after", "lines": ["uart_mode console, generation 63, transport down, dtr follow on", "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 61)", "rx bytes 21390, rx activity 21390, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 811, truncated 0, replacements 2, escapes 0, idle flushes 0, overflows 0"]}
+## install.console.log (ANSI stripped)
+[+    0.74] ==== host: http up
+[+    2.09] ==== host: login
+[+    2.26] ==== host: upload
+[+    6.70] [00:00:52.179,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.80] uart:~$ uart:~$ [00:00:52.380,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.80] uart:~$ uart:~$ [00:00:52.580,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.80] uart:~$ uart:~$ [00:00:52.781,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+    6.80] uart:~$ uart:~$ [00:00:52.930,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+[+    6.80] uart:~$ uart:~$ [00:00:52.935,000] <dbg> chip.LogV: [DL]Boot reason: 1
+[+    6.90] uart:~$ uart:~$ [00:00:52.938,000] <inf> chip: [ZCL]Boot reason: 1
+[+    6.90] uart:~$ uart:~$ [00:00:52.938,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
+[+    6.90] uart:~$ uart:~$ [00:00:52.940,000] <inf> chip: [ZCL]Boot reason: 1
+[+    6.90] uart:~$ uart:~$ [00:00:52.941,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
+[+    7.93] uart:~$ uart:~$ [00:00:53.138,000] <inf> chip: [ZCL]Boot reason: 1
+[+    7.93] uart:~$ uart:~$ [00:00:53.139,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
+[+    7.93] uart:~$ uart:~$ [00:00:53.141,000] <inf> chip: [ZCL]Boot reason: 1
+[+    7.93] uart:~$ uart:~$ [00:00:53.142,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
+[+    8.04] uart:~$ uart:~$ [00:00:53.154,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000001D0000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x000000000000A356
+[+   11.76] uart:~$ uart:~$ [00:00:57.956,000] <inf> chip: [DMG]AccessControlCluster: initializing
+[+   15.97] uart:~$ uart:~$ [[00:01:01.201,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   16.07] uart:~$ uart:~$ [00:01:01.402,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   18.96] uart:~$ uart:~$ [00:01:03.503,000] <wrn> matter_service_chip: generating the onboarding codes took 3993 ms on the Matter thread
+[+   18.96] uart:~$ uart:~$ [00:01:03.505,000] <err> chip: [DL]Long dispatch time: 3994 ms, for event type 2
+[+   18.96] uart:~$ uart:~$ [00:01:04.102,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   18.96] uart:~$ uart:~$ [00:01:04.303,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.71] uart:~$ uart:~$ [00:01:15.927,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   45.39] uart:~$ uart:~$ [00:01:30.442,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   45.50] uart:~$ uart:~$ [00:01:30.642,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   77.36] ==== host: board settled
+[+   77.73] ==== host: status before
+[+   78.48] ==== host: startCoprocessorUpdate
+[+   78.57] ==== host: job
+[+   78.66] ==== host: status
+[+   79.16] ==== host: w5500 events
+[+   81.23] ==== host: job
+[+   81.32] ==== host: status
+[+   82.21] uart:~$ uart:~$ [00:02:02.329,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   82.21] uart:~$ uart:~$ [00:02:02.530,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   83.98] ==== host: status
+[+   86.57] ==== host: job
+[+   86.66] ==== host: status
+[+   89.22] ==== host: job
+[+   89.30] ==== host: status
+[+   89.80] ==== host: finished
+[+   91.72] uart:~$ uart:~$ [00:02:16.849,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   91.72] uart:~$ uart:~$ [00:02:17.049,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   97.23] uart:~$ uart:~$ [00:02:22.461,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   97.23] uart:~$ uart:~$ [00:02:22.661,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   97.33] uart:~$ uart:~$ [00:02:22.862,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  103.49] uart:~$ uart:~$ [00:02:23.062,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buf[00:02:28.684,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  103.49] uart:~$ uart:~$ [00:02:28.885,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  105.96] uart:~$ uart:~$ [00:02:31.219,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  106.06] uart:~$ uart:~$ [00:02:31.419,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  106.06] uart:~$ uart:~$ [00:02:31.620,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  106.06] uart:~$ uart:~$ [00:02:31.820,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  108.95] uart:~$ uart:~$ [00:02:34.138,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  109.68] uart:~$ uart:~$ [00:02:34.339,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  109.68] uart:~$ uart:~$ [00:02:34.539,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  109.68] uart:~$ uart:~$ [00:02:34.740,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
