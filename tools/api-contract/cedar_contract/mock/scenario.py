@@ -40,13 +40,21 @@ class Scenario:
     fabrics: int = 0
     #: "not_ready" | "starting" | "ready" | "failed"
     matter_state: str = "ready"
-    #: "offline" | "starting" | "ready" | "updating" | "recovering" | "failed"
+    #: "offline" | "starting" | "ready" | "updating" | "recovering" | "failed".
+    #: It does not gate an install (P6): writing a whole image is how an offline
+    #: or failed coprocessor gets firmware. A finished install sets it to "ready",
+    #: or "failed" when the chip did not come back or a reboot cut the write short.
     coprocessor_state: str = "ready"
     #: "console" | "usb_bridge" | "flashing" | "unavailable": who owns the C6's
-    #: UART. `esp32_logs` follows it, not the ESP-Hosted transport (board B's C6
-    #: has no firmware and its ROM output is still logged). An install job
-    #: reports "flashing" while it runs whatever this says.
+    #: UART. `esp32_logs` and `uart_update` follow it, not the ESP-Hosted
+    #: transport (board B's C6 has no firmware and its ROM output is still
+    #: logged). An install job reports "flashing" while it runs whatever this says.
     uart_mode: str = "console"
+    #: The firmware version the C6 reports over ESP-Hosted while its transport
+    #: is up (`CoprocessorStatus.firmware_version`); `host_protocol` is derived
+    #: from its major. Not the image's `app_desc.version`, which is another
+    #: number entirely ("1" for the current CP build).
+    hosted_version: str = "v3.0.6"
     #: Log records appended per second of clock time; 0 keeps the rings still.
     log_rate_per_s: float = 0
     #: Records each ring (STM32, ESP32) keeps before it overwrites the oldest.
@@ -60,7 +68,9 @@ class Scenario:
     #: `ethernet_required` precondition, which the mock cannot observe for real.
     install_transport: str = "ethernet"
     storage_free_bytes: int = 8 * 1024 * 1024
-    #: "ok" | "invalid_image" | "unsupported_target" | "incompatible_firmware"
+    #: "ok" | "invalid_image" | "bare_app" | "unsupported_target" |
+    #: "incompatible_firmware". "bare_app" is `invalid_image` with the message the
+    #: device gives an application .bin sent instead of the merged file.
     verify_result: str = "ok"
     #: "ok" | "recovery_required"
     install_result: str = "ok"

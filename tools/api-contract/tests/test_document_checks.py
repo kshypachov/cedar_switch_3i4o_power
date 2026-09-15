@@ -232,6 +232,38 @@ def _replace_once(old: str, new: str) -> Any:
     return edit
 
 
+def _upload_chunk_route(flags: str) -> str:
+    return (f'WEB_API_V1_ROUTE(writeUploadChunk, PUT, "/firmware/uploads/{{upload_id}}/data", {flags}, '
+            "V1_NO_BODY, NULL, v1_upload_chunk_query, v1_write_upload_chunk)\n")
+
+
+def test_a_raw_body_route_matches_an_octet_stream_body(document: Document, tmp_path: Any) -> None:
+    raw = "WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED | WEB_API_BODY_OCTETS"
+    messages = _route_findings(document, tmp_path, lambda t: t + _upload_chunk_route(raw))
+    assert not any(m.startswith("writeUploadChunk:") for m in messages), messages
+
+    without = "WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED"
+    messages = _route_findings(document, tmp_path, lambda t: t + _upload_chunk_route(without))
+    assert "writeUploadChunk: declares no body schema, but the document has a request body" in messages
+
+
+def test_a_body_of_the_wrong_media_type_is_found(document: Document, tmp_path: Any) -> None:
+    messages = _route_findings(
+        document, tmp_path,
+        _replace_once("WEB_API_PUBLIC | WEB_API_ORIGIN | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_login_body)",
+                      "WEB_API_PUBLIC | WEB_API_ORIGIN | WEB_API_BODY_REQUIRED | WEB_API_BODY_OCTETS, "
+                      "V1_BODY(struct v1_login_body)"),
+    )
+    assert ("login: routed as a raw application/octet-stream body, "
+            "the document's request body is application/json") in messages, messages
+    json_chunk = ('WEB_API_V1_ROUTE(writeUploadChunk, PUT, "/firmware/uploads/{upload_id}/data", '
+                  "WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), "
+                  "&v1_empty_schema, v1_upload_chunk_query, v1_write_upload_chunk)\n")
+    messages = _route_findings(document, tmp_path, lambda t: t + json_chunk)
+    assert ("writeUploadChunk: routed as a JSON body, "
+            "the document's request body is application/octet-stream") in messages, messages
+
+
 def test_the_route_table_is_read(document: Document) -> None:
     routes, problems = checks.parse_routes(checks.ROUTES_FILE.read_text())
     assert problems == []
@@ -299,5 +331,5 @@ def test_unreadable_duplicate_and_resource_problems_are_found(document: Document
                                lambda r: r.replace('WEB_API_V1_RESOURCE(web_api_06_jobs, "/api/v1/jobs/*")\n', ""))
     assert "no server resource for /api/v1/jobs/*" in messages
     messages = _route_findings(document, tmp_path, lambda t: t,
-                               lambda r: r + 'WEB_API_V1_RESOURCE(web_api_99, "/api/v1/firmware/uploads")\n')
-    assert "resource /api/v1/firmware/uploads has no route" in messages
+                               lambda r: r + 'WEB_API_V1_RESOURCE(web_api_99, "/api/v1/unrouted")\n')
+    assert "resource /api/v1/unrouted has no route" in messages

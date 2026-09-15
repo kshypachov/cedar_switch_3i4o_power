@@ -102,6 +102,8 @@ def test_a_scenario_can_be_changed_without_a_reset(harness: Harness) -> None:
     starting over and logging in again."""
     _control(harness, "POST", "scenario", b'{"coprocessor_state": "offline"}')
     assert harness.client.get("/coprocessor/status").json["state"] == "offline"
+    # An offline coprocessor is still installable (P6); the UART's owner decides.
+    _control(harness, "POST", "scenario", b'{"uart_mode": "usb_bridge"}')
     assert harness.client.get("/capabilities").json["features"]["esp32_uart"]["available"] is False
 
 
