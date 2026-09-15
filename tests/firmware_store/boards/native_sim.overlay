@@ -1,0 +1,21 @@
+/*
+ * The sim flash doubled to 4 MiB, with a 1 MiB partition for the store's
+ * LittleFS volume above everything native_sim already defines.
+ */
+
+&flashcontroller0 {
+	reg = <0x00000000 DT_SIZE_K(4096)>;
+};
+
+&flash0 {
+	reg = <0x00000000 DT_SIZE_K(4096)>;
+	ranges = <0x0 0x0 DT_SIZE_K(4096)>;
+
+	partitions {
+		fw_test_partition: partition@200000 {
+			compatible = "zephyr,mapped-partition";
+			label = "fw_test";
+			reg = <0x00200000 0x00100000>;
+		};
+	};
+};

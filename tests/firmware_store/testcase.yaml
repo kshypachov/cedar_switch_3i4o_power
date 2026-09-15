@@ -1,0 +1,15 @@
+tests:
+  cedar.firmware_store:
+    # Section 12's firmware-store row: chunk/offset/SHA-256, retry and wrong
+    # offset, storage_full, leftovers, recovery after a "reboot" (remount),
+    # expiry; the full-flash image check on the synthetic corpus
+    # (tests/fixtures/esp32/firmware); MD5 vectors. LittleFS over the sim
+    # flash. Runs in the Linux container - see tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - firmware_store
+      - sim

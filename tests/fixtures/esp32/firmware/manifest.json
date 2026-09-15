@@ -1,0 +1,102 @@
+{
+ "valid.bin": {
+  "size": 66576,
+  "sha256": "f604f3c33024b0eafc13ce50e9c86eddab220f1bb67e4349258c1f03ca26e1bc",
+  "expected": null,
+  "message": null,
+  "exercises": "bootloader, table, blank otadata and app at their offsets",
+  "image": {
+   "version": "1.2.3-synthetic",
+   "project_name": "eh_cp_c6_cedar",
+   "idf_version": "v5.5.5-synthetic",
+   "layout_id": "cedar-c6-ota-4m-2x1792k",
+   "bootloader_bytes": 336,
+   "app_bytes": 1040
+  }
+ },
+ "valid_16_segments.bin": {
+  "size": 66368,
+  "sha256": "1d997a8d87592f446acd89c896a569465c7c931962aab0339ff385f783afd7a7",
+  "expected": null,
+  "message": null,
+  "exercises": "an application with the most segments an ESP image allows",
+  "image": {
+   "version": "1.2.3-synthetic",
+   "project_name": "eh_cp_c6_cedar",
+   "idf_version": "v5.5.5-synthetic",
+   "layout_id": "cedar-c6-ota-4m-2x1792k",
+   "bootloader_bytes": 336,
+   "app_bytes": 832
+  }
+ },
+ "truncated.bin": {
+  "size": 66476,
+  "sha256": "4d5ac12197cdfac56a4f6a64f2559e1f6fd109a284f489684a056bde84709f43",
+  "expected": "invalid_image",
+  "message": "An application segment runs past the end of the file",
+  "exercises": "the last 100 bytes of the application missing"
+ },
+ "bootloader_wrong_chip.bin": {
+  "size": 66576,
+  "sha256": "f41379be5e629f2049a8b8fac3afc1050e5e13ff775fa86701236ec8eff4374c",
+  "expected": "unsupported_target",
+  "message": "The bootloader is built for another chip",
+  "exercises": "bootloader header names chip 5 (ESP32-C3)"
+ },
+ "app_wrong_chip.bin": {
+  "size": 66576,
+  "sha256": "30525c1a0d1c9e813c6529c291a27657d640ee5f3938587c80872eb454f36c19",
+  "expected": "unsupported_target",
+  "message": "The application is built for another chip",
+  "exercises": "application header names chip 5"
+ },
+ "bare_app.bin": {
+  "size": 1040,
+  "sha256": "74ee5b6c8cf626ecefa9852f71138d4ed7c61f896175853c54f64f0dec4098d3",
+  "expected": "invalid_image",
+  "message": "This is an application image, not the full-flash file (idf.py merge-bin)",
+  "exercises": "an application .bin instead of the merged file"
+ },
+ "other_layout.bin": {
+  "size": 66576,
+  "sha256": "d590ba07de9807a00a3f58f27b9c2499599a2283b61a94c8ad2cb68b16fde4a2",
+  "expected": "incompatible_firmware",
+  "message": "The partition table's layout is not one this device supports",
+  "exercises": "a well-formed table with a 1 MiB ota_0"
+ },
+ "bad_table_md5.bin": {
+  "size": 66576,
+  "sha256": "33971ed11a42d993727f421da2d9e5a7040ceb3f4ccab67f7cb0377e09e01075",
+  "expected": "invalid_image",
+  "message": "The partition table's MD5 record does not match",
+  "exercises": "the table's MD5 record off by one bit"
+ },
+ "bad_app_sha.bin": {
+  "size": 66576,
+  "sha256": "86ad7fd3537ef58fe52fea4a7aa0f06e4779796fb7e8b4c44f7c5b5c49ed19cc",
+  "expected": "invalid_image",
+  "message": "The application's SHA-256 does not match its contents",
+  "exercises": "the application's appended SHA-256 altered"
+ },
+ "junk_in_nvs.bin": {
+  "size": 66576,
+  "sha256": "7c04b915f51c753ebd5cbfc0524b4cf69a81d22ba01622ce1beb7fbebba9ec2f",
+  "expected": "invalid_image",
+  "message": "NVS, otadata and phy_init (0x9000-0x10000) are not erased",
+  "exercises": "one byte of NVS not erased"
+ },
+ "no_app_desc.bin": {
+  "size": 66576,
+  "sha256": "4dacf0c3e6ce404f909276fb2b425b426d572a67cca6e2d3e6aa774eaf5187d7",
+  "expected": "invalid_image",
+  "message": "The application at 0x10000 has no application description",
+  "exercises": "application without esp_app_desc_t"
+ },
+ "no_bootloader_desc.bin": {
+  "size": 66576,
+  "sha256": "0fd02fc36995d429db1d26959234772d7af89d5d41f930e13ce8b478fd44c46e",
+  "expected": "invalid_image",
+  "message": "The bootloader at 0x0 has no bootloader description",
+  "exercises": "bootloader without esp_bootloader_desc_t"
+ }
+}
