@@ -9,6 +9,7 @@ const CHUNK = 4;
 function upload(over: Partial<Upload> = {}): Upload {
   return {
     id: 'upload_0001',
+    target: 'esp32c6',
     filename: 'merged.bin',
     size_bytes: 10,
     received_bytes: 0,

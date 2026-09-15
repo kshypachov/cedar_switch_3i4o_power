@@ -437,8 +437,8 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
                   rows={[
                     ['update.image_format', t(`update.format.${upload.image.format}`)],
                     ['update.image_version', <code key="version" data-testid="image-version">{upload.image.version}</code>],
-                    ['update.layout', upload.image.partition_layout_id],
-                    ['update.host_protocol', upload.image.host_protocol],
+                    ['update.layout', upload.image.partition_layout_id ?? t('value.none')],
+                    ['update.host_protocol', upload.image.host_protocol ?? t('value.none')],
                   ]}
                 />
               </>

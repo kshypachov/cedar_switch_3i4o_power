@@ -34,7 +34,9 @@ src/components/ layout, cards, fields, error display, formatting
 src/features/   auth (setup, login, access), device (overview), matter (window, codes, fabrics),
                 network (status, forms, Wi-Fi scan, the apply transaction),
                 logs (live tail, filters, pause, export, sources),
-                coprocessor-update (ESP32 status, merged file, chunked upload, verify, UART write)
+                coprocessor-update (ESP32 status, merged file, chunked upload, verify, UART write),
+                system-update (STM32: running image and confirmation, MCUboot image upload,
+                version comparison, install across the device's restart)
 e2e/            Playwright, against the mock or the board
 ```
 
@@ -143,6 +145,22 @@ Decisions that are easy to undo by accident:
   `cancellable`; a refused cancel (`invalid_state`) says the erase has begun.
   Polling carries on through lost answers and says the device is not answering;
   a job the device no longer knows (a reboot) points at `last_update`.
+- **The STM32 screen follows the install across the device's own restart**
+  (`features/system-update`, stage "Обновление STM32"). The upload is the ESP32
+  one with `target: "stm32u585"` - same chunk loop, its own `localStorage` entry
+  (`memoryAt`), so neither screen forgets the other's upload. The install job
+  lives in the device's RAM and parks in `rebooting`: the page follows it that
+  far, then polls `system/status` until `boot_id` changes (up to 180 s; MCUboot's
+  swap takes ~40 s). A 401 on the way means the restart ended the session: the
+  sign-in screen says so and the path stays `/firmware`, where `last_update`
+  tells the outcome. The logic is in `install.ts`, away from React, on a fake
+  clock.
+- **An unconfirmed new firmware is a warning, not a detail**: a reset or power
+  loss before confirmation returns the previous one, and the card says so with
+  a countdown the page ticks between polls. While unconfirmed, upload and
+  install are refused by the device and blocked on the page. An older image
+  needs a checkbox, and only then is `acknowledge_downgrade: true` sent; the
+  same version is a reinstall. The install asks once more in an inline panel.
 
 ## Commands
 
@@ -216,6 +234,18 @@ origin and console checks. It never touches the mock's control plane.
   e2e against the mock: upload → verify → write → running module, bare app
   refused, Wi-Fi refused, USB bridge, a reboot mid-write, a reload mid-upload
   and deletion.
+- **STM32 update**: version parsing and order; following the job (rebooting,
+  silence only after `requesting`, 404, 401) and waiting for a new `boot_id` on
+  a fake clock (silence, timeout, 401); the countdown; phases and the separate
+  storage entry. The screen on OpenAPI fixtures: confirmed, unconfirmed with
+  warning and countdown, rolled back, reasons, the size limit, the whole path
+  with `target` and the restart, the declined confirmation, downgrade, reinstall,
+  a rejected image, refusals of upload and install, a failed job, the session
+  ending with the restart, reload resume, an ESP32 upload not taken, a job gone,
+  the overview link. e2e against the mock with real MCUboot images built in the
+  test: install through the restart to self-confirmation, a reset that rolls
+  back, downgrade, garbage and a damaged TLV hash, refusal while unconfirmed,
+  a reload mid-upload.
 - **End-to-end** (Playwright, against the mock): setup from the page, the
   policy refusal, sign in / reload / sign out with the cookie's flags, the
   password change, two browsers at once; the network change applied and

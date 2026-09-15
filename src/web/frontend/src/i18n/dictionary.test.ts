@@ -54,6 +54,7 @@ describe('the dictionary covers what the device can say', () => {
     ['Upload', 'state', 'update.upload_state'],
     ['UpdateSummary', 'state', 'update.summary'],
     ['FirmwareImage', 'format', 'update.format'],
+    ['SystemUpdateSummary', 'state', 'sysupd.summary'],
   ])('%s.%s values all have text', (schema, property, prefix) => {
     for (const value of enumOf(schema, property)) {
       expect(ru, `${prefix}.${value}`).toHaveProperty(`${prefix}.${value}`);

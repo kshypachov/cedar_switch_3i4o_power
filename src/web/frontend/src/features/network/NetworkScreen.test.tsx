@@ -92,6 +92,7 @@ describe('network: state and form', () => {
       t('nav.network'),
       t('nav.logs'),
       t('nav.coprocessor'),
+      t('nav.firmware'),
       t('nav.access'),
     ]);
 

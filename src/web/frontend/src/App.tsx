@@ -9,6 +9,7 @@ import { OverviewScreen } from './features/device/OverviewScreen';
 import { LogsScreen } from './features/logs/LogsScreen';
 import { MatterScreen } from './features/matter/MatterScreen';
 import { NetworkScreen } from './features/network/NetworkScreen';
+import { SystemUpdateScreen } from './features/system-update/SystemUpdateScreen';
 import { t } from './i18n';
 import { AuthProvider, useAuth } from './state/auth';
 import { useRoute } from './state/router';
@@ -53,6 +54,8 @@ function Shell() {
             <LogsScreen />
           ) : route === 'coprocessor' ? (
             <CoprocessorUpdateScreen session={view.session} />
+          ) : route === 'firmware' ? (
+            <SystemUpdateScreen session={view.session} />
           ) : (
             <OverviewScreen />
           )}
