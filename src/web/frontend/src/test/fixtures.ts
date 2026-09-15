@@ -8,6 +8,7 @@ import type {
   CommissioningWindow,
   CoprocessorStatus,
   Fabrics,
+  FirmwareImage,
   Job,
   JobAccepted,
   LogPage,
@@ -22,6 +23,7 @@ import type {
   ScanResults,
   Session,
   SystemStatus,
+  Upload,
 } from '../api/types';
 
 export const authStateFresh: AuthState = {
@@ -136,7 +138,7 @@ export const capabilities: Capabilities = {
   limits: {
     json_body_bytes: 8192,
     upload_chunk_bytes: 16384,
-    upload_max_bytes: 2097152,
+    upload_max_bytes: 1900544,
     log_page_records: 100,
     scan_records: 64,
     commissioning_min_seconds: 180,
@@ -145,9 +147,170 @@ export const capabilities: Capabilities = {
     network_confirm_max_seconds: 300,
   },
   wifi_security_modes: ['open', 'wpa2_psk', 'wpa3_sae'],
-  firmware_formats: ['raw_app'],
+  firmware_formats: ['raw_full_flash'],
   update_requires_ethernet: true,
 };
+
+/** P6: the UART updater is served; OTA stays outside the first version. */
+export const capabilitiesUpdater: Capabilities = {
+  ...capabilities,
+  features: { ...capabilities.features, esp32_uart: { available: true, reason: null } },
+};
+
+/** Board B before its first flash: the UART talks (ROM), ESP-Hosted does not. */
+export const coprocessorEmpty: CoprocessorStatus = {
+  state: 'failed',
+  chip: 'esp32c6',
+  firmware_version: null,
+  host_protocol: null,
+  partition_layout_id: null,
+  transport_ready: false,
+  uart_mode: 'console',
+  generation: 1,
+  ota: { available: false, reason: 'not_implemented' },
+  uart_update: { available: true, reason: null },
+  last_update: null,
+};
+
+export const coprocessorUpdated: CoprocessorStatus = {
+  ...coprocessorEmpty,
+  state: 'ready',
+  firmware_version: 'v3.0.6',
+  host_protocol: 'esp-hosted-mcu-3',
+  partition_layout_id: 'cedar-c6-ota-4m-2x1792k',
+  transport_ready: true,
+  generation: 2,
+  last_update: {
+    job_id: 'job_00000105',
+    state: 'succeeded',
+    method: 'uart',
+    version: '1',
+    recovery_required: false,
+    error: null,
+  },
+};
+
+export const coprocessorInterrupted: CoprocessorStatus = {
+  ...coprocessorEmpty,
+  generation: 2,
+  last_update: {
+    job_id: 'job_00000105',
+    state: 'interrupted',
+    method: 'uart',
+    version: null,
+    recovery_required: true,
+    error: {
+      code: 'boot_changed',
+      message: 'The device restarted during the writing phase; nothing continues until the install is requested again',
+      request_id: 'req_00000105',
+      retryable: false,
+    },
+  },
+};
+
+export const coprocessorBridgeBusy: CoprocessorStatus = {
+  ...coprocessorEmpty,
+  uart_mode: 'usb_bridge',
+  uart_update: { available: false, reason: 'uart_usb_bridge' },
+};
+
+const SHA = '750cb58e2c3692cae0d8b6abd6d89346765b735316d75d5392e73cae7f82cb77';
+
+export const uploadReceiving: Upload = {
+  id: 'upload_0001',
+  filename: 'merged-binary.bin',
+  size_bytes: 40000,
+  received_bytes: 0,
+  sha256: SHA,
+  state: 'receiving',
+  active_job_id: null,
+  image: null,
+  error: null,
+};
+
+export const uploadImage: FirmwareImage = {
+  format: 'raw_full_flash',
+  format_version: null,
+  target: 'esp32c6',
+  version: '1',
+  kind: 'recovery_bundle',
+  partition_layout_id: 'cedar-c6-ota-4m-2x1792k',
+  host_protocol: 'esp-hosted-mcu-3',
+  signature_verified: null,
+  allowed_methods: ['uart'],
+};
+
+export const uploadReady: Upload = { ...uploadReceiving, received_bytes: 40000, state: 'ready', image: uploadImage };
+
+export const uploadFailed: Upload = {
+  ...uploadReceiving,
+  received_bytes: 40000,
+  state: 'failed',
+  error: {
+    code: 'invalid_image',
+    message: 'The file is a bare application .bin; this device takes the merged file (idf.py merge-bin) that is written from 0x0',
+    request_id: 'req_00000101',
+    retryable: false,
+  },
+};
+
+const firmwareJob = (over: Partial<Job>): Job => ({
+  id: 'job_00000101',
+  boot_id: 'boot_0123456789abcdef',
+  kind: 'upload_chunk',
+  state: 'succeeded',
+  phase: 'writing',
+  progress: null,
+  cancellable: false,
+  created_uptime_ms: '200000',
+  updated_uptime_ms: '200200',
+  resource_url: '/api/v1/firmware/uploads/upload_0001',
+  error: null,
+  ...over,
+});
+
+export const chunkSucceeded: Job = firmwareJob({ progress: { completed: 16384, total: 16384, unit: 'bytes' } });
+export const verifySucceeded: Job = firmwareJob({ id: 'job_00000102', kind: 'firmware_verify', phase: 'verifying', cancellable: false });
+export const verifyFailed: Job = {
+  ...verifySucceeded,
+  state: 'failed',
+  error: uploadFailed.error,
+};
+export const deleteSucceeded: Job = firmwareJob({ id: 'job_00000103', kind: 'firmware_delete', phase: 'deleting', resource_url: null });
+
+export const installPreflight: Job = firmwareJob({
+  id: 'job_00000105',
+  kind: 'coprocessor_update',
+  state: 'running',
+  phase: 'preflight',
+  cancellable: true,
+  resource_url: '/api/v1/coprocessor/status',
+});
+export const installWriting: Job = {
+  ...installPreflight,
+  phase: 'writing',
+  progress: { completed: 262144, total: 40000 * 30, unit: 'bytes' },
+  cancellable: false,
+};
+export const installSucceeded: Job = { ...installPreflight, state: 'succeeded', phase: 'complete', cancellable: false };
+export const installFailed: Job = {
+  ...installPreflight,
+  state: 'failed',
+  phase: 'health_check',
+  cancellable: false,
+  error: {
+    code: 'internal_error',
+    message: 'The coprocessor did not come back after the write; recovery is required',
+    request_id: 'req_00000106',
+    retryable: false,
+  },
+};
+
+export const accepted = (jobId: string, resource: string | null): JobAccepted => ({
+  job_id: jobId,
+  job_url: `/api/v1/jobs/${jobId}`,
+  resource_url: resource,
+});
 
 export const windowClosed: CommissioningWindow = {
   open: false,
@@ -574,4 +737,21 @@ export const all: Record<string, [string, unknown]> = {
   scanSucceeded: ['Job', scanSucceeded],
   scanResults: ['ScanResults', scanResults],
   scanResultsTruncated: ['ScanResults', scanResultsTruncated],
+  capabilitiesUpdater: ['Capabilities', capabilitiesUpdater],
+  coprocessorEmpty: ['CoprocessorStatus', coprocessorEmpty],
+  coprocessorUpdated: ['CoprocessorStatus', coprocessorUpdated],
+  coprocessorInterrupted: ['CoprocessorStatus', coprocessorInterrupted],
+  coprocessorBridgeBusy: ['CoprocessorStatus', coprocessorBridgeBusy],
+  uploadReceiving: ['Upload', uploadReceiving],
+  uploadReady: ['Upload', uploadReady],
+  uploadFailed: ['Upload', uploadFailed],
+  uploadImage: ['FirmwareImage', uploadImage],
+  chunkSucceeded: ['Job', chunkSucceeded],
+  verifySucceeded: ['Job', verifySucceeded],
+  verifyFailed: ['Job', verifyFailed],
+  deleteSucceeded: ['Job', deleteSucceeded],
+  installPreflight: ['Job', installPreflight],
+  installWriting: ['Job', installWriting],
+  installSucceeded: ['Job', installSucceeded],
+  installFailed: ['Job', installFailed],
 };

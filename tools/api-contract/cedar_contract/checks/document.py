@@ -230,7 +230,9 @@ def parse_routes(text: str, name: str = "routes.h") -> tuple[list[Route], list[F
                 method=m["method"].lower(),
                 path=m["path"],
                 flags=flags,
-                has_body=m["schema"] != "NULL",
+                # A route takes a body when it decodes JSON into a schema or
+                # keeps raw bytes (WEB_API_BODY_OCTETS, the upload chunk).
+                has_body=m["schema"] != "NULL" or "WEB_API_BODY_OCTETS" in flags,
                 has_query=m["query"] != "NULL",
                 line=number,
             )
@@ -336,6 +338,20 @@ def check_undocumented_routes(
                        else "declares no body schema, but the document has a request body"),
                 )
             )
+        if op.request_body is not None:
+            octets = "WEB_API_BODY_OCTETS" in route.flags
+            declared = op.request_content_types()
+            expected = ("application/octet-stream",) if octets else ("application/json",)
+            if tuple(declared) != expected:
+                findings.append(
+                    Finding(
+                        "undocumented_routes",
+                        where,
+                        f"{route.operation_id}: routed as a "
+                        + ("raw application/octet-stream" if octets else "JSON")
+                        + f" body, the document's request body is {', '.join(declared) or 'untyped'}",
+                    )
+                )
         if ("WEB_API_BODY_REQUIRED" in route.flags) != (
             op.request_body is not None and op.request_body_required
         ):

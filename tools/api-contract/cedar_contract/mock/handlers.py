@@ -120,6 +120,10 @@ def cancel_job(app, ctx: Context) -> Response:
         "cancelled",
         error("invalid_state", "Cancelled by the administrator"),
     )
+    if job.kind == "coprocessor_update":
+        app.state.coprocessor.cancelled(job)
+    elif job.kind == "firmware_verify":
+        app.state.firmware.verify_cancelled(job)
     return accepted(job.id, job.resource_url)
 
 

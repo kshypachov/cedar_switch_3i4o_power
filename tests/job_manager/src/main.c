@@ -217,6 +217,33 @@ ZTEST(job_manager, test_cancel_only_when_cancellable)
 	zassert_equal(job_cancel("job_nope"), -ENOENT);
 }
 
+ZTEST(job_manager, test_set_cancellable_closes_the_window_and_reports_a_cancel)
+{
+	struct job_snapshot a, b;
+
+	zassert_equal(create("a", 1, true, &a), JOB_CREATE_NEW);
+	zassert_equal(create("b", 2, true, &b), JOB_CREATE_NEW);
+	zassert_ok(job_set_state(a.id, JOB_STATE_RUNNING));
+
+	/* Leaving the cancellable part: a later cancel is refused. */
+	zassert_ok(job_set_cancellable(a.id, false));
+	zassert_ok(job_get(a.id, &a));
+	zassert_false(a.cancellable);
+	zassert_equal(job_cancel(a.id), -EPERM);
+	zassert_ok(job_get(a.id, &a));
+	zassert_equal(a.state, JOB_STATE_RUNNING);
+
+	/* And back. */
+	zassert_ok(job_set_cancellable(a.id, true));
+	zassert_ok(job_get(a.id, &a));
+	zassert_true(a.cancellable);
+
+	/* A cancel that landed first is what the change reports. */
+	zassert_ok(job_cancel(b.id));
+	zassert_equal(job_set_cancellable(b.id, false), -EINVAL);
+	zassert_equal(job_set_cancellable("job_nope", false), -ENOENT);
+}
+
 ZTEST(job_manager, test_unknown_id_is_not_found)
 {
 	struct job_snapshot s;

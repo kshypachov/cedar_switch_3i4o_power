@@ -112,3 +112,13 @@ table.logs td { padding: 0.15rem 0.4rem; }
 .log-gap td { background: var(--warning-bg); text-align: center; }
 .log-boot td { background: var(--bg); font-weight: 600; text-align: center; }
 a.button-link { display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 0.375rem; color: var(--text); text-decoration: none; }
+
+/* ESP32 update (P6) */
+.phases { list-style: none; margin: 0.5rem 0; padding: 0; }
+.phase { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; padding: 0.3rem 0.5rem; border-left: 3px solid var(--border); }
+.phase-done { border-left-color: var(--accent); }
+.phase-current { border-left-color: var(--warning-border); background: var(--warning-bg); font-weight: 600; }
+.phase-stopped { border-left-color: var(--error-border); background: var(--error-bg); }
+.phase-pending { color: var(--muted); }
+.phase progress { width: 100%; }
+.upload-progress { width: 100%; }

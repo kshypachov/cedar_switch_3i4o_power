@@ -31,6 +31,10 @@ HTTP_SERVER_REGISTER_HEADER_CAPTURE(web_api_hdr_idem, "Idempotency-Key");
 HTTP_SERVER_REGISTER_HEADER_CAPTURE(web_api_hdr_setup, "X-Setup-Token");
 HTTP_SERVER_REGISTER_HEADER_CAPTURE(web_api_hdr_ae, "Accept-Encoding");
 HTTP_SERVER_REGISTER_HEADER_CAPTURE(web_api_hdr_inm, "If-None-Match");
+/* Zephyr's HTTP/1 parser never fills client->content_type (only HTTP/2 does, in
+ * http_server_http2.c); a JSON body without a type was accepted as JSON, so this
+ * went unseen until the upload chunk, whose type is required (reports/p6). */
+HTTP_SERVER_REGISTER_HEADER_CAPTURE(web_api_hdr_ct, "Content-Type");
 
 /* Room for every captured value, NUL-terminated, plus the path and query. */
 #define HEADER_STORE_SIZE (CONFIG_HTTP_SERVER_CAPTURE_HEADER_BUFFER_SIZE + 16)
@@ -138,13 +142,17 @@ static enum web_api_method method_of(enum http_method m)
 	}
 }
 
-static void peer_of(struct http_client_ctx *client, struct web_auth_peer *peer)
+/* The client's address, or with @p local the device's own end of the connection. */
+static void address_of(int fd, bool local, struct web_auth_peer *peer)
 {
 	struct net_sockaddr_storage addr;
 	net_socklen_t len = sizeof(addr);
+	int rc;
 
 	memset(peer, 0, sizeof(*peer));
-	if (zsock_getpeername(client->fd, (struct net_sockaddr *)&addr, &len) != 0) {
+	rc = local ? zsock_getsockname(fd, (struct net_sockaddr *)&addr, &len)
+		   : zsock_getpeername(fd, (struct net_sockaddr *)&addr, &len);
+	if (rc != 0) {
 		return;
 	}
 	if (addr.ss_family == NET_AF_INET) {
@@ -205,17 +213,15 @@ static void begin_request(struct slot *s, const struct web_api_router *router,
 	req->path = s->url;
 	req->method = method_of(client->method);
 
-	strncpy(s->content_type, (const char *)client->content_type, sizeof(s->content_type) - 1U);
-	s->content_type[sizeof(s->content_type) - 1U] = '\0';
-	h->content_type = s->content_type[0] != '\0' ? s->content_type : NULL;
-
 	h->dropped = rq->headers_status == HTTP_HEADER_STATUS_DROPPED;
 	for (size_t i = 0; i < rq->header_count; i++) {
 		const char *name = rq->headers[i].name;
 		const char *value = rq->headers[i].value;
 		const char **dst = NULL;
 
-		if (strcasecmp(name, "Host") == 0) {
+		if (strcasecmp(name, "Content-Type") == 0) {
+			dst = &h->content_type;
+		} else if (strcasecmp(name, "Host") == 0) {
 			dst = &h->host;
 		} else if (strcasecmp(name, "Origin") == 0) {
 			dst = &h->origin;
@@ -243,7 +249,16 @@ static void begin_request(struct slot *s, const struct web_api_router *router,
 		}
 	}
 
-	peer_of(client, &req->peer);
+	/* HTTP/2 fills the client's field instead of the capture. */
+	if (h->content_type == NULL && client->content_type[0] != '\0') {
+		strncpy(s->content_type, (const char *)client->content_type,
+			sizeof(s->content_type) - 1U);
+		s->content_type[sizeof(s->content_type) - 1U] = '\0';
+		h->content_type = s->content_type;
+	}
+
+	address_of(client->fd, false, &req->peer);
+	address_of(client->fd, true, &req->local);
 	s->limit = (strncmp(req->path, "/api/", 5) == 0)
 			   ? web_api_body_limit(router, req->method, req->path)
 			   : 0U;

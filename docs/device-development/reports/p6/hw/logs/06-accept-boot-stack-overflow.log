@@ -1,0 +1,71 @@
+# 2026-09-14 12:18-12:26, board B. Acceptance image 0f6715366bcaeaac4ee71bb27c40fc28ecb5ec8b096103d7a65829fed3afa3f6 (F's coprocessor.c fix, coproc loader, coproc upload drop; MAIN_STACK_SIZE 2048), uploaded over CDC recovery in 372 s.
+# /lfs/firmware held a half-received upload from the interrupted step-1 run. Halted at boot: stack overflow in main.
+## flash.out
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/build-accept/cedar_p6/zephyr/zephyr.signed.bin sha256 0f6715366bcaeaac4ee71bb27c40fc28ecb5ec8b096103d7a65829fed3afa3f6
+J-Link reset rc=0
+recovery on /dev/cu.usbmodem11201 after 2.5 s
+upload rc=0 in 372 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 37e83192c3e06e67cb9867ae33f59572e33f967d1cf34d1b048932f9aab4bb43
+Split status: N/A (0)
+
+## boot console
+# image sha256 0f6715366bcaeaac4ee71bb27c40fc28ecb5ec8b096103d7a65829fed3afa3f6
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+uart:~$ I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 92 15 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 50 92 15 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: 88 62 12 2 20 d1 1 70 e8 4a 12 2 ac 10 0 70
+I: 4c 4a 12 2 d0 4a 12 2 0 0 0 0 f4 9e 14 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+uart:~$ [8D[J[00:00:01.657,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.657,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.658,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.658,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.667,000] <inf> eth_w5500: W5500 Initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.667,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.667,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.668,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.769,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.773,000] <err> net_if: Iface 0x200034e8 device not ready
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.774,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x200033b0)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.774,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.776,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.776,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+uart:~$ [8D[Juart:~$ [8D[J*** Booting Zephyr OS build v[1B[9D[8D[J[8D[J[JDBooting Zephyr OS build v4[00:00:02.010,000] <inf> shell_telnet: Telnet shell backend initialized
+uart:~$ [8D[J[8D[J[00:00:02.011,000] <inf> main_app: Start main app (build: Sep 14 2026 12:18:06) version 8
+uart:~$ [8D[J[8D[J[00:00:02.012,000] <inf> main_app: PSRAM @0x7026da28: write/read 1024 words OK
+uart:~$ [8D[J[8D[J[00:00:02.292,000] <inf> settings_registry: 10 keys registered, 0 rejected
+uart:~$ [8D[J[8D[J[00:00:02.292,000] <inf> io: Start io init
+uart:~$ [8D[J[8D[J[00:00:02.303,000] <err> fs: failed to create directory (-17)
+uart:~$ [8D[J[8D[J[00:00:02.366,000] <err> os: ***** USAGE FAULT *****
+uart:~$ [8D[J[8D[J[00:00:02.366,000] <err> os:   Stack overflow (context area not valid)
+uart:~$ [8D[J[8D[J[00:00:02.366,000] <err> os: r0/a1:  0xaaaaaaaa  r1/a2:  0xaaaaaaaa  r2/a3:  0xaaaaaaaa
+uart:~$ [8D[J[8D[J[00:00:02.366,000] <err> os: r3/a4:  0xaaaaaaaa r12/ip:  0x0206ace0 r14/lr:  0x89000000
+uart:~$ [8D[J[8D[J[00:00:02.366,000] <err> os:  xpsr:  0xaaaaaa00
+uart:~$ [8D[J[8D[J[00:00:02.367,000] <err> os: Faulting instruction address (r15/pc): 0xaaaaaaaa
+uart:~$ [8D[J[8D[J[00:00:02.367,000] <err> os: >>> ZEPHYR FATAL ERROR 2: Stack overflow on CPU 0
+uart:~$ [8D[J[8D[J[00:00:02.367,000] <err> os: Current thread: 0x20006638 (main)
+uart:~$ [8D[J[8D[J[00:00:02.405,000] <err> os: Halting system
+uart:~$ 

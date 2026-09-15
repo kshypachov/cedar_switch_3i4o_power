@@ -48,14 +48,18 @@ CANCELLABLE_KINDS: dict[str, bool] = {
     "upload_chunk": False,
     "firmware_verify": True,
     "firmware_delete": False,
-    "coprocessor_update": False,
+    "coprocessor_update": True,
     "password_change": False,
 }
 
 
 @dataclass(frozen=True)
 class Step:
-    """One phase of a job, with how long it takes and what it counts."""
+    """One phase of a job, with how long it takes and what it counts.
+
+    `cancellable` narrows a cancellable kind to the steps before its destructive
+    phase: a coprocessor update may be cancelled until it starts erasing, never
+    after (the contract's example carries `cancellable: false` in `writing`)."""
 
     phase: str
     duration_ms: int
@@ -63,6 +67,7 @@ class Step:
     total: int | None = None
     state: str = "running"
     on_done: Callable[[], None] | None = None
+    cancellable: bool = True
 
 
 @dataclass
@@ -100,7 +105,9 @@ class Job:
         contract's own example carries `cancellable: false` on a job whose
         destructive phase has started, and a terminal job is never cancellable
         however permissive its kind."""
-        return CANCELLABLE_KINDS[self.kind] and self.state not in TERMINAL_STATES
+        if not CANCELLABLE_KINDS[self.kind] or self.state in TERMINAL_STATES:
+            return False
+        return self._index >= len(self.steps) or self.steps[self._index].cancellable
 
     @property
     def is_terminal(self) -> bool:

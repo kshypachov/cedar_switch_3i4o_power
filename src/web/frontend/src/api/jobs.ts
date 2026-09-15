@@ -31,7 +31,13 @@ function wait(ms: number, signal?: AbortSignal): Promise<void> {
 /** Poll one job until it is terminal, one request at a time. */
 export async function pollJob(
   jobId: string,
-  options: { signal?: AbortSignal; onUpdate?: (job: Job) => void; intervalMs?: number } = {},
+  options: {
+    signal?: AbortSignal;
+    onUpdate?: (job: Job) => void;
+    /** A poll that got no answer (busy, network, timeout); polling goes on. */
+    onTransient?: (error: ApiFailure) => void;
+    intervalMs?: number;
+  } = {},
 ): Promise<JobOutcome> {
   const interval = options.intervalMs ?? JOB_POLL_MS;
   for (;;) {
@@ -43,6 +49,7 @@ export async function pollJob(
       if (error instanceof ApiFailure && error.status === 401) return { kind: 'session_ended' };
       if (!(error instanceof ApiFailure) || error.kind === 'api') throw error;
       // busy, network, timeout: the job keeps running; keep asking.
+      options.onTransient?.(error);
     }
     await wait(interval, options.signal);
   }

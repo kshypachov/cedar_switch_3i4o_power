@@ -243,6 +243,20 @@ void v1_coprocessor_fake_init(void)
 	web_api_v1_set_coprocessor(NULL);
 }
 
+static bool version_of(char *buf, size_t cap)
+{
+	return snprintf(buf, cap, "v3.0.6") < (int)cap;
+}
+
+static const struct web_api_v1_coprocessor version_hooks = {.firmware_version = version_of};
+
+static bool odd_version_of(char *buf, size_t cap)
+{
+	return snprintf(buf, cap, "unknown") < (int)cap;
+}
+
+static const struct web_api_v1_coprocessor odd_version_hooks = {.firmware_version = odd_version_of};
+
 static void logs_reset(void)
 {
 	v1_coprocessor_fake_init();
@@ -526,7 +540,8 @@ ZTEST(v1, test_logs_sources_follow_the_uart_owner_not_the_transport)
 		     "no transport, and the console still reads the UART: %s", body);
 	get_ok("/api/v1/capabilities");
 	zassert_true(body_has("\"esp32_logs\":{\"available\":true,\"reason\":null}"), "%s", body);
-	zassert_true(body_has("\"esp32_uart\":{\"available\":false,\"reason\":\"not_implemented\"}"));
+	/* The UART updater follows the same owner, and an empty C6 can be installed (P6). */
+	zassert_true(body_has("\"esp32_uart\":{\"available\":true,\"reason\":null}"), "%s", body);
 
 	zassert_ok(coprocessor_manager_set_mode(COPROCESSOR_UART_USB_BRIDGE));
 	get_ok("/api/v1/logs/sources");
@@ -565,19 +580,56 @@ ZTEST(v1, test_coprocessor_status)
 	zassert_true(body_has("\"uart_mode\":\"console\""));
 	zassert_true(body_has("\"generation\":1"));
 	zassert_true(body_has("\"ota\":{\"available\":false,\"reason\":\"not_implemented\"}"));
-	zassert_true(body_has("\"uart_update\":{\"available\":false,\"reason\":\"not_implemented\"}"));
+	/* An empty C6 can be installed: availability follows the UART, not the chip. */
+	zassert_true(body_has("\"uart_update\":{\"available\":true,\"reason\":null}"), "%s", body);
 	zassert_true(body_has("\"last_update\":null"));
 
+	/* A transport without a version the C6 reported names no protocol. */
 	cp.transport = true;
 	get_ok("/api/v1/coprocessor/status");
 	zassert_true(body_has("\"state\":\"ready\""), "%s", body);
-	zassert_true(body_has("\"host_protocol\":\"esp-hosted-mcu\""));
+	zassert_true(body_has("\"firmware_version\":null"), "%s", body);
+	zassert_true(body_has("\"host_protocol\":null"), "%s", body);
+
+	web_api_v1_set_coprocessor(&version_hooks);
+	get_ok("/api/v1/coprocessor/status");
+	zassert_true(body_has("\"firmware_version\":\"v3.0.6\""), "%s", body);
+	zassert_true(body_has("\"host_protocol\":\"esp-hosted-mcu-3\""), "%s", body);
+	cp.transport = false;
+	get_ok("/api/v1/coprocessor/status");
+	zassert_true(body_has("\"firmware_version\":null"), "only while the transport is up: %s", body);
+	zassert_true(body_has("\"host_protocol\":null"), "%s", body);
+	cp.transport = true;
+
+	/* A version with no major number names no protocol. */
+	web_api_v1_set_coprocessor(&odd_version_hooks);
+	get_ok("/api/v1/coprocessor/status");
+	zassert_true(body_has("\"firmware_version\":\"unknown\""), "%s", body);
+	zassert_true(body_has("\"host_protocol\":null"), "%s", body);
+	web_api_v1_set_coprocessor(&version_hooks);
 
 	zassert_ok(coprocessor_manager_set_mode(COPROCESSOR_UART_FLASHING));
 	get_ok("/api/v1/coprocessor/status");
 	zassert_true(body_has("\"state\":\"updating\""), "%s", body);
 	zassert_true(body_has("\"uart_mode\":\"flashing\""));
+	zassert_true(body_has("\"uart_update\":{\"available\":false,\"reason\":\"uart_flashing\"}"),
+		     "%s", body);
+	get_ok("/api/v1/capabilities");
+	zassert_true(body_has("\"esp32_uart\":{\"available\":false,\"reason\":\"uart_flashing\"}"),
+		     "%s", body);
 	zassert_ok(coprocessor_manager_set_mode(COPROCESSOR_UART_CONSOLE));
+
+	zassert_ok(coprocessor_manager_set_mode(COPROCESSOR_UART_USB_BRIDGE));
+	get_ok("/api/v1/coprocessor/status");
+	zassert_true(body_has("\"uart_update\":{\"available\":false,\"reason\":\"uart_usb_bridge\"}"),
+		     "%s", body);
+	get_ok("/api/v1/capabilities");
+	zassert_true(body_has("\"esp32_uart\":{\"available\":false,\"reason\":\"uart_usb_bridge\"}"),
+		     "%s", body);
+	zassert_ok(coprocessor_manager_set_mode(COPROCESSOR_UART_CONSOLE));
+	get_ok("/api/v1/capabilities");
+	zassert_true(body_has("\"esp32_uart\":{\"available\":true,\"reason\":null}"), "%s", body);
+	web_api_v1_set_coprocessor(NULL);
 }
 
 /* -- the export ---------------------------------------------------------------------- */

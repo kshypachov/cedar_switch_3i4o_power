@@ -57,3 +57,53 @@ patches:
       checkout on 2026-09-13 with the owner's permission, on its own: the
       multicast entry above was already applied, and `west patch apply` stops
       at the first patch that does not.
+
+  - path: zephyr/esp_hosted_mcu-restart-after-coprocessor-flash.patch
+    sha256sum: c978d1e7089831cb4ec21e62ffe37d517f01ab6b7fe0f19e1200ee2d3d596449
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-14
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      Adds esp_hosted_mcu_restart() and esp_hosted_mcu_wifi_restart(), called
+      by the coprocessor updater after it re-flashed the ESP32-C6 over UART and
+      released it from reset (owner decision P6 №2 (a)). The core forgets the
+      learned firmware version, a pending RPC, the frame stride and receive
+      data of the previous run and waits for the new version; the Wi-Fi driver
+      reports the old association lost and runs WifiInit/SetWifiMode/WifiStart
+      again. Neither pulses EN, and nothing changes unless they are called. A
+      Wi-Fi device whose init failed at boot stays not ready (-ENODEV): its
+      interface comes up only after a host reboot. Made against the driver as
+      it stands in this checkout, which already carries uncommitted edits to
+      the same files from other work; on a clean upstream tree it may not
+      apply. Applied to the shared zephyr checkout on 2026-09-14 10:07 +0300,
+      on its own, after git apply --check; builds, no behaviour change unless
+      called; not exercised on hardware at that time
+      (docs/device-development/reports/p6/notes-hosted-restart-patch.md).
+
+  - path: zephyr/esp_hosted_mcu-suspend-while-coprocessor-flashes.patch
+    sha256sum: 366d058898126ea730f738eb1a0b6770ac2ce64b01536a738fd89e32d81f6398
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-14
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      Two changes to the receive thread, found on board B during the first
+      coprocessor installs (docs/device-development/reports/p6/hw, logs 09):
+      with the ESP32-C6 in its UART ROM loader the data-ready line stays high
+      with no frames, and the thread polled SPI2 - shared with the W5500 -
+      without pause, starving the CPU, the Ethernet and the updater (two J-Link
+      halts inside spi_stm32 under esp_hosted_mcu_event_task). Adds
+      esp_hosted_mcu_suspend(): while suspended the thread only sleeps its poll
+      interval and esp_hosted_mcu_send_frame() returns -EAGAIN. And, with or
+      without suspension, a burst in which data-ready was high but no transfer
+      carried a frame ends in a sleep of the poll interval instead of an
+      immediate retry (k_yield() gives nothing to lower priorities). Depends on
+      the restart entry above (rx_flush); made against this checkout's driver.
+      Applied to the shared zephyr checkout on 2026-09-14 ~13:40 +0300 after a
+      reverse git apply --check against the tree and an application build; the
+      owner allowed driver patches to be applied after verification (P6 №2).

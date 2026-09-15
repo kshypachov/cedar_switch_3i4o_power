@@ -1,0 +1,15 @@
+tests:
+  cedar.coprocessor_updater:
+    # The install automaton on a fake loader and platform: the sim tier of
+    # section 12 (failure and timeout of every phase, recovery_required, no
+    # continuation after a restart, ethernet_required is the binding's, claims
+    # and the USB bridge). A real write and the ESP-Hosted restart are the
+    # hardware tier's (reports/p6).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - coprocessor_updater
+      - sim

@@ -12,6 +12,8 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/network-manager
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/log-store
     ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/coprocessor-manager
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/firmware-store
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../modules/coprocessor-updater
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -27,10 +29,12 @@ target_sources(app PRIVATE
     src/middleware.c
     src/v1.c
     src/v1_logs.c
+    src/v1_firmware.c
     src/json_reader.c
     src/json_writer.c
     ../fakes/fake_iface.c
     ../fakes/fake_storage.c
+    ../fakes/fake_update_platform.c
     ${V1_DIR}/router.c
     ${V1_DIR}/auth.c
     ${V1_DIR}/system.c
@@ -38,4 +42,13 @@ target_sources(app PRIVATE
     ${V1_DIR}/network.c
     ${V1_DIR}/logs.c
     ${V1_DIR}/coprocessor.c
+    ${V1_DIR}/firmware.c
 )
+
+# Two files of the synthetic corpus (tests/fixtures/esp32/firmware) as byte arrays,
+# for the upload bindings driven end to end (src/v1_firmware.c).
+set(FIXTURES ${CMAKE_CURRENT_SOURCE_DIR}/../fixtures/esp32/firmware)
+set(GEN_DIR ${ZEPHYR_BINARY_DIR}/include/generated)
+foreach(name valid bare_app)
+  generate_inc_file_for_target(app ${FIXTURES}/${name}.bin ${GEN_DIR}/fw_${name}.inc)
+endforeach()

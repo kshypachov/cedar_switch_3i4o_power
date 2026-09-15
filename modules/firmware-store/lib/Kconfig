@@ -1,0 +1,58 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig FIRMWARE_STORE
+	bool "Staged ESP32-C6 image on the file system"
+	depends on FILE_SYSTEM
+	select CRC
+	help
+	  One upload of a full-flash ESP32-C6 image as a file with durable
+	  metadata: chunks that count only once synced, recovery after a
+	  reboot, a space check before the first byte, expiry, and the check
+	  of the image itself (fw_image.h). SHA-256 comes from PSA
+	  (PSA_WANT_ALG_SHA_256). See include/firmware_store/firmware_store.h.
+
+if FIRMWARE_STORE
+
+config FIRMWARE_STORE_MAX_BYTES
+	int "Largest image accepted, in bytes"
+	default 1900544
+	range 65537 1900544
+	help
+	  limits.upload_max_bytes. The default is 0x1d0000: a full-flash file
+	  written from 0x0 may not reach ota_1, so nothing larger can be valid.
+
+config FIRMWARE_STORE_CHUNK_MAX
+	int "Largest chunk, in bytes (the staging buffer)"
+	default 16384
+	range 512 16384
+	help
+	  limits.upload_chunk_bytes. One buffer of this size holds the chunk
+	  between the HTTP thread and the worker that writes it.
+
+config FIRMWARE_STORE_RESERVE_KIB
+	int "Free space kept beyond the image, in KiB"
+	default 256
+	range 0 4096
+	help
+	  An upload is refused unless its missing bytes plus this much are
+	  free on the volume, checked at creation and before every chunk.
+	  LittleFS appends copy-on-write, and other writers share the volume.
+
+config FIRMWARE_STORE_EXPIRE_SECONDS
+	int "An upload untouched this long is removed, in seconds of uptime"
+	default 86400
+	range 1 2592000
+	help
+	  The contract's 24 hours of uptime without activity. Not while an
+	  install uses the upload, a chunk is pending or a check runs.
+
+config FIRMWARE_STORE_READ_BUF
+	int "Read buffer of the image check, in bytes"
+	default 4096
+	range 512 16384
+
+module = FIRMWARE_STORE
+module-str = firmware_store
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # FIRMWARE_STORE

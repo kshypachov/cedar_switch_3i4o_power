@@ -1,0 +1,2494 @@
+# 2026-09-14 ~16:45-16:57, board B, image f5fd7a6c3e14ae45788df8e12349de4faccc7efbd99305c77986e452cc5bbeb5 (USART3 fifo-enable), install_b.py NORMAL polling (3 requests every 2 s).
+# Before it: STM32 reset via J-Link, C6 already v3.0.6, 0 W5500 inconsistent events for 212 s; Wi-Fi scan through the API failed -5 (Wi-Fi disabled in settings).
+# job_00000002 succeeded without an STM32 restart: 1434 blocks, max 550 ms (101 > 250 ms, 31 > 500 ms), MD5 ok, health_check, ready v3.0.6.
+## after-flash/reset-status.out
+jlink reset rc 0
+http up 54.4 s
+login ms 1301
+55.8 coprocessor/status 200 {"state": "ready", "uart_mode": "console", "transport_ready": true, "firmware_version": "v3.0.6", "host_protocol": "esp-hosted-mcu-3", "generation": 2}
+last_update {"job_id": "job_00000001", "state": "succeeded", "method": "uart", "version": "v3.0.6", "recovery_required": false, "error": null}
+891 info esp_hosted_mcu_core coprocessor priv event 34
+896 info esp_hosted_mcu_core coprocessor firmware v3.0.6
+897 info eth_w5500 ETH_W5500: interrupt mode
+907 info eth_w5500 W5500 Initialized
+2592 info eth_w5500 ETH_W5500: Link speed 100 Mb, full duplex
+8234 info eth_w5500 ETH_W5500 MAC set to 80:34:28:10:6a:1d
+21359 info net_adapter Ethernet found, Wi-Fi coprocessor ready
+27850 info net_adapter wifi disabled
+## after-flash/wifi-scan.out
+scanWiFi 400 122 ms {"error":{"code":"invalid_json","message":"A JSON body is required","request_id":"req_e1a6730d","retryable":false}}
+w5500 inconsistent events since boot: 0 uptime_ms 212183
+scanWiFi 202 148 ms {"job_id":"job_00000001","job_url":"/api/v1/jobs/job_00000001","resource_url":"/api/v1/network/wifi/scans/job_00000001"}
+0.3 job 200 queued None
+2.4 job 200 running None
+4.5 job 200 failed {'code': 'service_not_ready', 'message': 'The operation failed', 'request_id': 'req_e1a67314', 'retryable': True}
+scan result 200 networks 0 []
+## chain output
+image f5fd7a6c3e14ae45788df8e12349de4faccc7efbd99305c77986e452cc5bbeb5 (fifo-enable), install with NORMAL polling (3 requests every 2 s), C6 already has v3.0.6
+install rc=0
+{"t": 268.18, "step": "job", "elapsed_s": 264.8, "ms": 115, "state": "running", "phase": "writing", "progress": {"completed": 1228800, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 270.59, "step": "job", "elapsed_s": 267.2, "ms": 104, "state": "running", "phase": "writing", "progress": {"completed": 1245184, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 272.99, "step": "job", "elapsed_s": 269.6, "ms": 103, "state": "running", "phase": "writing", "progress": {"completed": 1257472, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 275.39, "step": "job", "elapsed_s": 272.0, "ms": 104, "state": "running", "phase": "writing", "progress": {"completed": 1269760, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 277.8, "step": "job", "elapsed_s": 274.4, "ms": 115, "state": "running", "phase": "writing", "progress": {"completed": 1282048, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 280.21, "step": "job", "elapsed_s": 276.8, "ms": 103, "state": "running", "phase": "writing", "progress": {"completed": 1294336, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 282.61, "step": "job", "elapsed_s": 279.2, "ms": 102, "state": "running", "phase": "writing", "progress": {"completed": 1306624, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 285.01, "step": "job", "elapsed_s": 281.6, "ms": 103, "state": "running", "phase": "writing", "progress": {"completed": 1318912, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 287.43, "step": "job", "elapsed_s": 284.0, "ms": 103, "state": "running", "phase": "writing", "progress": {"completed": 1331200, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 289.83, "step": "job", "elapsed_s": 286.4, "ms": 104, "state": "running", "phase": "writing", "progress": {"completed": 1343488, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 292.24, "step": "job", "elapsed_s": 288.8, "ms": 111, "state": "running", "phase": "writing", "progress": {"completed": 1355776, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 294.64, "step": "job", "elapsed_s": 291.2, "ms": 109, "state": "running", "phase": "writing", "progress": {"completed": 1368064, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 297.05, "step": "job", "elapsed_s": 293.6, "ms": 111, "state": "running", "phase": "writing", "progress": {"completed": 1380352, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 299.45, "step": "job", "elapsed_s": 296.0, "ms": 111, "state": "running", "phase": "writing", "progress": {"completed": 1392640, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 301.85, "step": "job", "elapsed_s": 298.4, "ms": 104, "state": "running", "phase": "writing", "progress": {"completed": 1409024, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 304.26, "step": "job", "elapsed_s": 300.8, "ms": 104, "state": "running", "phase": "writing", "progress": {"completed": 1421312, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 306.67, "step": "job", "elapsed_s": 303.3, "ms": 114, "state": "running", "phase": "writing", "progress": {"completed": 1433600, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 309.08, "step": "job", "elapsed_s": 305.7, "ms": 114, "state": "running", "phase": "writing", "progress": {"completed": 1445888, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 311.48, "step": "job", "elapsed_s": 308.1, "ms": 103, "state": "running", "phase": "writing", "progress": {"completed": 1462272, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 313.87, "step": "job", "elapsed_s": 310.5, "ms": 101, "state": "running", "phase": "verifying", "progress": null, "cancellable": false, "error": null}
+{"t": 323.47, "step": "job", "elapsed_s": 320.1, "ms": 102, "state": "running", "phase": "reconnecting", "progress": null, "cancellable": false, "error": null}
+{"t": 325.9, "step": "job", "elapsed_s": 322.5, "ms": 102, "state": "running", "phase": "health_check", "progress": null, "cancellable": false, "error": null}
+{"t": 330.69, "step": "job", "elapsed_s": 327.3, "ms": 101, "state": "running", "phase": "complete", "progress": null, "cancellable": false, "error": null}
+{"t": 340.38, "step": "job", "elapsed_s": 337.0, "ms": 101, "state": "succeeded", "phase": "complete", "progress": null, "cancellable": false, "error": null}
+{"t": 340.68, "step": "finished", "elapsed_s": 337.3, "state": "succeeded"}
+{"t": 340.51, "step": "status", "elapsed_s": 337.1, "state": "ready", "uart_mode": "console", "transport_ready": true, "firmware_version": "v3.0.6", "host_protocol": "esp-hosted-mcu-3", "last_update": {"job_id": "job_00000002", "state": "succeeded", "method": "uart", "version": "v3.0.6", "recovery_required": false, "error": null}}
+updater: active no, phase complete, job job_00000002, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000002 succeeded, version v3.0.6, recovery_required no, error -: -
+library: connect 0 in 533 ms, flash_start 0 in 6072 ms, writes 1434 (last 0 in 80 ms, max 550 ms), finish 0 in 2664 ms
+library: target 8, writes over 250 ms 101, over 500 ms 31
+port: longest read past its timeout 0 ms, at uptime 0 ms
+port: rx tail 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 0b 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 13 24 00 20 40 16 00 30 38 30 30 64 65 62 64 39 34 36 61 38 38 64 66 32 66 31 34 31 34 35 61 35 37 38 39 66 66 32 63 00 00 00 00 c0 
+port: reads 20619 in 190321 ms (max 5958, last failure 2 after 83 of 83 ms, 140 bytes since write), writes 18913 in 1788 ms (max 419, last failure 0 after 0 of 0 ms)
+cpu: window 307468 ms, idle 140216 ms, 27 threads
+cpu: idle                     140216 ms
+cpu: web_v1_jobs              107370 ms
+cpu: http_server_tid          17932 ms
+cpu: tx_q[0]                  15652 ms
+cpu: eth_w5500                12737 ms
+cpu: rx_q[0]                  9758 ms
+cpu: ?                        1277 ms
+cpu: CHIP                     1078 ms
+cpu: coprocessor              857 ms
+cpu: tcp_work                 245 ms
+device logs lines      123
+:"224","uptime_ms":"316588","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: preflight","truncated":false,"kind":"message"}
+:"226","uptime_ms":"325303","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: entering_bootloader","truncated":false,"kind":"message"}
+:"227","uptime_ms":"326148","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"message"}
+:"228","uptime_ms":"327472","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: begin","truncated":false,"kind":"message"}
+:"229","uptime_ms":"335706","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: writing","truncated":false,"kind":"message"}
+:"230","uptime_ms":"631489","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: verifying","truncated":false,"kind":"message"}
+:"231","uptime_ms":"634235","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"wrote and verified 1468176 bytes","truncated":false,"kind":"message"}
+:"232","uptime_ms":"635878","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: reconnecting","truncated":false,"kind":"message"}
+:"347","uptime_ms":"636603","wall_time":null,"level":"info","module":"coprocessor_updater","message":"console: application 1 started","truncated":false,"kind":"message"}
+:"349","uptime_ms":"638841","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: health_check","truncated":false,"kind":"message"}
+:"400","uptime_ms":"650180","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: complete","truncated":false,"kind":"message"}
+:"401","uptime_ms":"651095","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002 succeeded: firmware v3.0.6","truncated":false,"kind":"message"}
+
+[exited with code 0]
+## accept10/install.json
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 1.71,
+   "step": "login",
+   "ms": 1289
+  },
+  {
+   "t": 1.85,
+   "step": "upload",
+   "status": 200,
+   "ms": 134,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 1.97,
+   "step": "board settled",
+   "uptime_ms": 312974
+  },
+  {
+   "t": 2.1,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "ready",
+    "chip": "esp32c6",
+    "firmware_version": "v3.0.6",
+    "host_protocol": "esp-hosted-mcu-3",
+    "partition_layout_id": null,
+    "transport_ready": true,
+    "uart_mode": "console",
+    "generation": 2,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "succeeded",
+     "method": "uart",
+     "version": "v3.0.6",
+     "recovery_required": false,
+     "error": null
+    }
+   }
+  },
+  {
+   "t": 3.42,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 1315,
+   "body": {
+    "job_id": "job_00000002",
+    "job_url": "/api/v1/jobs/job_00000002",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 3.54,
+   "step": "job",
+   "elapsed_s": 0.1,
+   "ms": 123,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 3.67,
+   "step": "status",
+   "elapsed_s": 0.3,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": true,
+   "firmware_version": "v3.0.6",
+   "host_protocol": "esp-hosted-mcu-3",
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 5.93,
+   "step": "job",
+   "elapsed_s": 2.5,
+   "ms": 101,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 8.33,
+   "step": "job",
+   "elapsed_s": 4.9,
+   "ms": 102,
+   "state": "running",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 15.52,
+   "step": "job",
+   "elapsed_s": 12.1,
+   "ms": 101,
+   "state": "running",
+   "phase": "begin",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 15.65,
+   "step": "status",
+   "elapsed_s": 12.2,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": true,
+   "firmware_version": "v3.0.6",
+   "host_protocol": "esp-hosted-mcu-3",
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 22.71,
+   "step": "job",
+   "elapsed_s": 19.3,
+   "ms": 100,
+   "state": "running",
+   "phase": "writing",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 25.11,
+   "step": "job",
+   "elapsed_s": 21.7,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 0,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 27.51,
+   "step": "job",
+   "elapsed_s": 24.1,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 12288,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 29.93,
+   "step": "job",
+   "elapsed_s": 26.5,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 20480,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 32.33,
+   "step": "job",
+   "elapsed_s": 28.9,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 32768,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 34.73,
+   "step": "job",
+   "elapsed_s": 31.3,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 45056,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 37.14,
+   "step": "job",
+   "elapsed_s": 33.7,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 57344,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 39.55,
+   "step": "job",
+   "elapsed_s": 36.1,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 69632,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 41.95,
+   "step": "job",
+   "elapsed_s": 38.5,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 81920,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 44.36,
+   "step": "job",
+   "elapsed_s": 40.9,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 94208,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 46.77,
+   "step": "job",
+   "elapsed_s": 43.4,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 106496,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 49.19,
+   "step": "job",
+   "elapsed_s": 45.8,
+   "ms": 117,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 118784,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 51.59,
+   "step": "job",
+   "elapsed_s": 48.2,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 131072,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 53.99,
+   "step": "job",
+   "elapsed_s": 50.6,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 143360,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 56.39,
+   "step": "job",
+   "elapsed_s": 53.0,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 155648,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 58.8,
+   "step": "job",
+   "elapsed_s": 55.4,
+   "ms": 102,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 167936,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 61.19,
+   "step": "job",
+   "elapsed_s": 57.8,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 176128,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 63.59,
+   "step": "job",
+   "elapsed_s": 60.2,
+   "ms": 102,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 188416,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 66.0,
+   "step": "job",
+   "elapsed_s": 62.6,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 200704,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 68.41,
+   "step": "job",
+   "elapsed_s": 65.0,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 212992,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 70.81,
+   "step": "job",
+   "elapsed_s": 67.4,
+   "ms": 109,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 225280,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 73.22,
+   "step": "job",
+   "elapsed_s": 69.8,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 237568,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 75.63,
+   "step": "job",
+   "elapsed_s": 72.2,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 249856,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 78.03,
+   "step": "job",
+   "elapsed_s": 74.6,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 262144,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 80.43,
+   "step": "job",
+   "elapsed_s": 77.0,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 274432,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 82.83,
+   "step": "job",
+   "elapsed_s": 79.4,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 286720,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 85.23,
+   "step": "job",
+   "elapsed_s": 81.8,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 299008,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 87.62,
+   "step": "job",
+   "elapsed_s": 84.2,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 311296,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 90.02,
+   "step": "job",
+   "elapsed_s": 86.6,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 323584,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 92.42,
+   "step": "job",
+   "elapsed_s": 89.0,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 331776,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 94.83,
+   "step": "job",
+   "elapsed_s": 91.4,
+   "ms": 115,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 344064,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 97.25,
+   "step": "job",
+   "elapsed_s": 93.8,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 356352,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 99.68,
+   "step": "job",
+   "elapsed_s": 96.3,
+   "ms": 131,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 368640,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 102.08,
+   "step": "job",
+   "elapsed_s": 98.7,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 380928,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 104.49,
+   "step": "job",
+   "elapsed_s": 101.1,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 393216,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 106.9,
+   "step": "job",
+   "elapsed_s": 103.5,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 405504,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 109.34,
+   "step": "job",
+   "elapsed_s": 105.9,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 417792,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 111.77,
+   "step": "job",
+   "elapsed_s": 108.4,
+   "ms": 129,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 430080,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 114.17,
+   "step": "job",
+   "elapsed_s": 110.8,
+   "ms": 108,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 442368,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 116.58,
+   "step": "job",
+   "elapsed_s": 113.2,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 454656,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 118.98,
+   "step": "job",
+   "elapsed_s": 115.6,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 466944,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 121.39,
+   "step": "job",
+   "elapsed_s": 118.0,
+   "ms": 115,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 479232,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 123.79,
+   "step": "job",
+   "elapsed_s": 120.4,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 491520,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 126.19,
+   "step": "job",
+   "elapsed_s": 122.8,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 503808,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 128.59,
+   "step": "job",
+   "elapsed_s": 125.2,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 516096,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 131.0,
+   "step": "job",
+   "elapsed_s": 127.6,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 528384,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 133.4,
+   "step": "job",
+   "elapsed_s": 130.0,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 540672,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 135.81,
+   "step": "job",
+   "elapsed_s": 132.4,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 552960,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 138.21,
+   "step": "job",
+   "elapsed_s": 134.8,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 565248,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 140.61,
+   "step": "job",
+   "elapsed_s": 137.2,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 577536,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 143.04,
+   "step": "job",
+   "elapsed_s": 139.6,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 589824,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 145.45,
+   "step": "job",
+   "elapsed_s": 142.0,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 602112,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 147.86,
+   "step": "job",
+   "elapsed_s": 144.4,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 614400,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 150.26,
+   "step": "job",
+   "elapsed_s": 146.8,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 626688,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 152.67,
+   "step": "job",
+   "elapsed_s": 149.2,
+   "ms": 109,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 638976,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 155.07,
+   "step": "job",
+   "elapsed_s": 151.7,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 651264,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 157.47,
+   "step": "job",
+   "elapsed_s": 154.1,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 663552,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 159.88,
+   "step": "job",
+   "elapsed_s": 156.5,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 675840,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 162.31,
+   "step": "job",
+   "elapsed_s": 158.9,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 688128,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 164.71,
+   "step": "job",
+   "elapsed_s": 161.3,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 700416,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 167.11,
+   "step": "job",
+   "elapsed_s": 163.7,
+   "ms": 108,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 712704,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 169.52,
+   "step": "job",
+   "elapsed_s": 166.1,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 724992,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 171.93,
+   "step": "job",
+   "elapsed_s": 168.5,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 737280,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 174.33,
+   "step": "job",
+   "elapsed_s": 170.9,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 749568,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 176.75,
+   "step": "job",
+   "elapsed_s": 173.3,
+   "ms": 108,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 761856,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 179.15,
+   "step": "job",
+   "elapsed_s": 175.7,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 774144,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 181.55,
+   "step": "job",
+   "elapsed_s": 178.1,
+   "ms": 106,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 786432,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 183.96,
+   "step": "job",
+   "elapsed_s": 180.5,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 798720,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 186.37,
+   "step": "job",
+   "elapsed_s": 183.0,
+   "ms": 120,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 811008,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 188.79,
+   "step": "job",
+   "elapsed_s": 185.4,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 823296,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 191.2,
+   "step": "job",
+   "elapsed_s": 187.8,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 835584,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 193.6,
+   "step": "job",
+   "elapsed_s": 190.2,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 847872,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 196.01,
+   "step": "job",
+   "elapsed_s": 192.6,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 860160,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 198.42,
+   "step": "job",
+   "elapsed_s": 195.0,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 872448,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 200.82,
+   "step": "job",
+   "elapsed_s": 197.4,
+   "ms": 106,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 884736,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 203.22,
+   "step": "job",
+   "elapsed_s": 199.8,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 897024,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 205.62,
+   "step": "job",
+   "elapsed_s": 202.2,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 909312,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 208.02,
+   "step": "job",
+   "elapsed_s": 204.6,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 921600,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 210.43,
+   "step": "job",
+   "elapsed_s": 207.0,
+   "ms": 109,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 933888,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 212.83,
+   "step": "job",
+   "elapsed_s": 209.4,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 946176,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 215.24,
+   "step": "job",
+   "elapsed_s": 211.8,
+   "ms": 112,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 958464,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 217.64,
+   "step": "job",
+   "elapsed_s": 214.2,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 970752,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 220.03,
+   "step": "job",
+   "elapsed_s": 216.6,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 983040,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 222.43,
+   "step": "job",
+   "elapsed_s": 219.0,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 995328,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 224.83,
+   "step": "job",
+   "elapsed_s": 221.4,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1007616,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 227.23,
+   "step": "job",
+   "elapsed_s": 223.8,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1019904,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 229.64,
+   "step": "job",
+   "elapsed_s": 226.2,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1032192,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 232.05,
+   "step": "job",
+   "elapsed_s": 228.6,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1044480,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 234.45,
+   "step": "job",
+   "elapsed_s": 231.0,
+   "ms": 110,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1056768,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 236.85,
+   "step": "job",
+   "elapsed_s": 233.4,
+   "ms": 108,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1069056,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 239.27,
+   "step": "job",
+   "elapsed_s": 235.9,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1081344,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 241.71,
+   "step": "job",
+   "elapsed_s": 238.3,
+   "ms": 106,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1093632,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 244.11,
+   "step": "job",
+   "elapsed_s": 240.7,
+   "ms": 105,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1105920,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 246.51,
+   "step": "job",
+   "elapsed_s": 243.1,
+   "ms": 106,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1118208,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 248.92,
+   "step": "job",
+   "elapsed_s": 245.5,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1130496,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 251.34,
+   "step": "job",
+   "elapsed_s": 247.9,
+   "ms": 125,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1142784,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 253.75,
+   "step": "job",
+   "elapsed_s": 250.3,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1155072,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 256.16,
+   "step": "job",
+   "elapsed_s": 252.7,
+   "ms": 113,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1167360,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 258.56,
+   "step": "job",
+   "elapsed_s": 255.1,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1179648,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 260.96,
+   "step": "job",
+   "elapsed_s": 257.5,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1191936,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 263.37,
+   "step": "job",
+   "elapsed_s": 260.0,
+   "ms": 107,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1204224,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 265.77,
+   "step": "job",
+   "elapsed_s": 262.4,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1216512,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 268.18,
+   "step": "job",
+   "elapsed_s": 264.8,
+   "ms": 115,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1228800,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 270.59,
+   "step": "job",
+   "elapsed_s": 267.2,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1245184,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 272.99,
+   "step": "job",
+   "elapsed_s": 269.6,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1257472,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 275.39,
+   "step": "job",
+   "elapsed_s": 272.0,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1269760,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 277.8,
+   "step": "job",
+   "elapsed_s": 274.4,
+   "ms": 115,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1282048,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 280.21,
+   "step": "job",
+   "elapsed_s": 276.8,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1294336,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 282.61,
+   "step": "job",
+   "elapsed_s": 279.2,
+   "ms": 102,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1306624,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 285.01,
+   "step": "job",
+   "elapsed_s": 281.6,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1318912,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 287.43,
+   "step": "job",
+   "elapsed_s": 284.0,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1331200,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 289.83,
+   "step": "job",
+   "elapsed_s": 286.4,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1343488,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 292.24,
+   "step": "job",
+   "elapsed_s": 288.8,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1355776,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 294.64,
+   "step": "job",
+   "elapsed_s": 291.2,
+   "ms": 109,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1368064,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 297.05,
+   "step": "job",
+   "elapsed_s": 293.6,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1380352,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 299.45,
+   "step": "job",
+   "elapsed_s": 296.0,
+   "ms": 111,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1392640,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 301.85,
+   "step": "job",
+   "elapsed_s": 298.4,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1409024,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 304.26,
+   "step": "job",
+   "elapsed_s": 300.8,
+   "ms": 104,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1421312,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 306.67,
+   "step": "job",
+   "elapsed_s": 303.3,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1433600,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 309.08,
+   "step": "job",
+   "elapsed_s": 305.7,
+   "ms": 114,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1445888,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 311.48,
+   "step": "job",
+   "elapsed_s": 308.1,
+   "ms": 103,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 1462272,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 313.87,
+   "step": "job",
+   "elapsed_s": 310.5,
+   "ms": 101,
+   "state": "running",
+   "phase": "verifying",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 323.47,
+   "step": "job",
+   "elapsed_s": 320.1,
+   "ms": 102,
+   "state": "running",
+   "phase": "reconnecting",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 325.9,
+   "step": "job",
+   "elapsed_s": 322.5,
+   "ms": 102,
+   "state": "running",
+   "phase": "health_check",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 326.03,
+   "step": "status",
+   "elapsed_s": 322.6,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": true,
+   "firmware_version": "v3.0.6",
+   "host_protocol": "esp-hosted-mcu-3",
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 328.42,
+   "step": "status",
+   "elapsed_s": 325.0,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": true,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 330.69,
+   "step": "job",
+   "elapsed_s": 327.3,
+   "ms": 101,
+   "state": "running",
+   "phase": "complete",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 330.82,
+   "step": "status",
+   "elapsed_s": 327.4,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": true,
+   "firmware_version": "v3.0.6",
+   "host_protocol": "esp-hosted-mcu-3",
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 340.38,
+   "step": "job",
+   "elapsed_s": 337.0,
+   "ms": 101,
+   "state": "succeeded",
+   "phase": "complete",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 340.51,
+   "step": "status",
+   "elapsed_s": 337.1,
+   "state": "ready",
+   "uart_mode": "console",
+   "transport_ready": true,
+   "firmware_version": "v3.0.6",
+   "host_protocol": "esp-hosted-mcu-3",
+   "last_update": {
+    "job_id": "job_00000002",
+    "state": "succeeded",
+    "method": "uart",
+    "version": "v3.0.6",
+    "recovery_required": false,
+    "error": null
+   }
+  },
+  {
+   "t": 340.68,
+   "step": "finished",
+   "elapsed_s": 337.3,
+   "state": "succeeded"
+  }
+ ],
+ "image_sha256": "f5fd7a6c3e14ae45788df8e12349de4faccc7efbd99305c77986e452cc5bbeb5"
+}## accept10/updater-after.out
+updater: active no, phase complete, job job_00000002, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000002 succeeded, version v3.0.6, recovery_required no, error -: -
+library: connect 0 in 533 ms, flash_start 0 in 6072 ms, writes 1434 (last 0 in 80 ms, max 550 ms), finish 0 in 2664 ms
+library: target 8, writes over 250 ms 101, over 500 ms 31
+port: longest read past its timeout 0 ms, at uptime 0 ms
+port: rx tail 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 0b 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 13 24 00 20 40 16 00 30 38 30 30 64 65 62 64 39 34 36 61 38 38 64 66 32 66 31 34 31 34 35 61 35 37 38 39 66 66 32 63 00 00 00 00 c0 
+port: reads 20619 in 190321 ms (max 5958, last failure 2 after 83 of 83 ms, 140 bytes since write), writes 18913 in 1788 ms (max 419, last failure 0 after 0 of 0 ms)
+cpu: window 307468 ms, idle 140216 ms, 27 threads
+cpu: idle                     140216 ms
+cpu: web_v1_jobs              107370 ms
+cpu: http_server_tid          17932 ms
+cpu: tx_q[0]                  15652 ms
+cpu: eth_w5500                12737 ms
+cpu: rx_q[0]                  9758 ms
+cpu: ?                        1277 ms
+cpu: CHIP                     1078 ms
+cpu: coprocessor              857 ms
+cpu: tcp_work                 245 ms
+## accept10/device-logs.txt (device log store, source stm32)
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+X-Request-ID: req_e1a674c8
+Cache-Control: no-store
+Content-Type: application/x-ndjson
+Content-Disposition: attachment; filename="cedar-logs.ndjson"
+
+3f99
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"1","uptime_ms":"891","wall_time":null,"level":"info","module":"esp_hosted_mcu_core","message":"coprocessor priv event 34","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"2","uptime_ms":"896","wall_time":null,"level":"info","module":"esp_hosted_mcu_core","message":"coprocessor firmware v3.0.6","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"3","uptime_ms":"896","wall_time":null,"level":"error","module":"mb85rsxx","message":"invalid device ID: 00 00 00 00","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"4","uptime_ms":"896","wall_time":null,"level":"error","module":"mb85rsxx","message":"Failed to initialize device, RDID check failed (err -5)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"5","uptime_ms":"897","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500: interrupt mode","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"6","uptime_ms":"907","wall_time":null,"level":"info","module":"eth_w5500","message":"W5500 Initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"7","uptime_ms":"908","wall_time":null,"level":"info","module":"spi_nor","message":"SPI_FLASH: SFDP v 1.5 AP ff with 1 PH","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"8","uptime_ms":"908","wall_time":null,"level":"info","module":"spi_nor","message":"PH0: ff00 rev 1.5: 16 DW @ 80","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"9","uptime_ms":"910","wall_time":null,"level":"info","module":"spi_nor","message":"SPI_FLASH: 16 MiBy flash","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"10","uptime_ms":"2093","wall_time":null,"level":"error","module":"net_ethernet","message":"Invalid MAC address for iface 1 (0x20004fb0)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"11","uptime_ms":"2093","wall_time":null,"level":"info","module":"littlefs","message":"LittleFS version 2.11, disk version 2.1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"12","uptime_ms":"2095","wall_time":null,"level":"info","module":"littlefs","message":"FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"13","uptime_ms":"2095","wall_time":null,"level":"info","module":"littlefs","message":"partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"14","uptime_ms":"2417","wall_time":null,"level":null,"module":null,"message":"*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"15","uptime_ms":"2592","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500: Link speed 100 Mb, full duplex","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"16","uptime_ms":"2863","wall_time":null,"level":"info","module":"shell_telnet","message":"Telnet shell backend initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"25","uptime_ms":"2864","wall_time":null,"level":"info","module":"main_app","message":"Start main app (build: Sep 14 2026 15:24:01) version 8","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"26","uptime_ms":"2865","wall_time":null,"level":"info","module":"main_app","message":"PSRAM @0x7026dbc8: write/read 1024 words OK","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"29","uptime_ms":"7034","wall_time":null,"level":"info","module":"settings_registry","message":"10 keys registered, 0 rejected","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"30","uptime_ms":"7034","wall_time":null,"level":"info","module":"io","message":"Start io init","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"31","uptime_ms":"7150","wall_time":null,"level":"error","module":"fs","message":"failed to create directory (-17)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"32","uptime_ms":"8268","wall_time":null,"level":"info","module":"io","message":"Start io outputs task","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"33","uptime_ms":"8233","wall_time":null,"level":"info","module":"net_init","message":"EEPROM MAC: 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"34","uptime_ms":"8234","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500 MAC set to 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"35","uptime_ms":"8234","wall_time":null,"level":"info","module":"net_init","message":"Network interface up with MAC 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"36","uptime_ms":"8259","wall_time":null,"level":"info","module":"matter","message":"IPv6 address added, starting Matter","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"37","uptime_ms":"9759","wall_time":null,"level":"info","module":"matter","message":"IPv6 address added, starting Matter","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"38","uptime_ms":"9759","wall_time":null,"level":"info","module":"matter","message":"Matter start work already submitted","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"39","uptime_ms":"21359","wall_time":null,"level":"info","module":"device_config_store","message":"configuration loaded, revision 8","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"40","uptime_ms":"21359","wall_time":null,"level":"info","module":"network_service","message":"network configuration revision 8: clean (13090 ms)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"41","uptime_ms":"21359","wall_time":null,"level":"info","module":"net_adapter","message":"Ethernet found, Wi-Fi coprocessor ready","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"42","uptime_ms":"23660","wall_time":null,"level":"info","module":"network_service","message":"boot 1 of 5 in a row shorter than 30 s","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"43","uptime_ms":"23660","wall_time":null,"level":"info","module":"network_service","message":"worker stack: 4888 of 8192 bytes never used","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"44","uptime_ms":"27844","wall_time":null,"level":"info","module":"web_server","message":"web interface cedar-2037394c3543501200210047, firmware 4e5b8a42deba-dirty, frontend 0.1.0+4e5b8a42deba-dirty, boot_409bc30c72acbe5e","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"45","uptime_ms":"27849","wall_time":null,"level":"info","module":"net_adapter","message":"ethernet: DHCP","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"46","uptime_ms":"27850","wall_time":null,"level":"info","module":"net_adapter","message":"wifi disabled","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"47","uptime_ms":"28207","wall_time":null,"level":"info","module":"matter","message":"Init CHIP stack","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"52","uptime_ms":"35918","wall_time":null,"level":"info","module":"net_dhcpv4","message":"Received: 192.168.88.13","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"53","uptime_ms":"35922","wall_time":null,"level":"info","module":"network_manager","message":"default route via ethernet","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"64","uptime_ms":"53246","wall_time":null,"level":"info","module":"chip","message":"[SVR]Initializing session resumption storage...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"65","uptime_ms":"53247","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server initializing...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"66","uptime_ms":"53248","wall_time":null,"level":"debug","module":"chip","message":"LogV: [FP]Initializing FabricTable from persistent storage","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"67","uptime_ms":"61985","wall_time":null,"level":"info","module":"chip","message":"[TS]Last Known Good Time: 2023-10-14T01:16:48","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"74","uptime_ms":"78913","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControl: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"75","uptime_ms":"78914","wall_time":null,"level":"info","module":"chip","message":"[DMG]Examples::AccessControlDelegate::Init","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"76","uptime_ms":"78914","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControl: setting","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"77","uptime_ms":"78915","wall_time":null,"level":"info","module":"chip","message":"[DMG]DefaultAclStorage: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"78","uptime_ms":"78915","wall_time":null,"level":"info","module":"chip","message":"[DMG]DefaultAclStorage: 0 entries loaded","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"79","uptime_ms":"78916","wall_time":null,"level":"info","module":"chip","message":"[SVR]WARNING: mTestEventTriggerDelegate is null","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"80","uptime_ms":"78917","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]UDP::Init bind&listen port=5540","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"81","uptime_ms":"78920","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]UDP::Init bound to port=5540","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"82","uptime_ms":"78921","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]TransportMgr initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"95","uptime_ms":"104958","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Using ZAP configuration...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"98","uptime_ms":"112111","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"101","uptime_ms":"119229","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"106","uptime_ms":"126383","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"109","uptime_ms":"133491","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"114","uptime_ms":"140598","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"117","uptime_ms":"147714","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"122","uptime_ms":"154835","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"125","uptime_ms":"162000","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"126","uptime_ms":"162006","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"127","uptime_ms":"162009","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"128","uptime_ms":"162010","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 1 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"129","uptime_ms":"162012","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"130","uptime_ms":"162013","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 2 On/off already set to new value","truncated":false,"kind":"message"}
+
+2a5e
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"131","uptime_ms":"162015","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"132","uptime_ms":"162016","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 3 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"133","uptime_ms":"162018","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"134","uptime_ms":"162019","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 4 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"135","uptime_ms":"162219","wall_time":null,"level":"debug","module":"chip","message":"LogV: [EVL]LogEvent event number: 0x0000000000200000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x000000000001A9A9","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"142","uptime_ms":"176525","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControlCluster: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"143","uptime_ms":"176527","wall_time":null,"level":"info","module":"chip","message":"[DIS]Updating services using commissioning mode 0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"144","uptime_ms":"176535","wall_time":null,"level":"info","module":"chip","message":"[DIS]CHIP minimal mDNS started advertising.","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"145","uptime_ms":"176539","wall_time":null,"level":"info","module":"chip","message":"[IN]CASE Server enabling CASE session setups","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"146","uptime_ms":"176540","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]SecureSession[0x700018f0]: Allocated Type:2 LSID:13553","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"147","uptime_ms":"176541","wall_time":null,"level":"debug","module":"chip","message":"LogV: [SC]Allocated SecureSession (0x700018f0) - waiting for Sigma1 msg","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"148","uptime_ms":"176542","wall_time":null,"level":"info","module":"chip","message":"[SVR]Joining Multicast groups","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"149","uptime_ms":"176543","wall_time":null,"level":"debug","module":"chip","message":"LogV: [ZCL]Emitting StartUp event","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"150","uptime_ms":"176546","wall_time":null,"level":"debug","module":"chip","message":"LogV: [EVL]LogEvent event number: 0x0000000000200001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x000000000001E19F","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"151","uptime_ms":"176547","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server initialization complete","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"152","uptime_ms":"176763","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server Listening...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"153","uptime_ms":"176763","wall_time":null,"level":"info","module":"matter","message":"Matter stack initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"154","uptime_ms":"176765","wall_time":null,"level":"info","module":"matter","message":"Matter event loop started","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"155","uptime_ms":"176765","wall_time":null,"level":"info","module":"matter_event_loop","message":"Init io_to_matter_stream","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"156","uptime_ms":"176766","wall_time":null,"level":"info","module":"matter_event_loop","message":"Start io_to_matter_stream","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"157","uptime_ms":"176767","wall_time":null,"level":"info","module":"chip","message":"[DL]CHIP task running","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"158","uptime_ms":"176769","wall_time":null,"level":"info","module":"chip","message":"[DIS]Updating services using commissioning mode 0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"159","uptime_ms":"176775","wall_time":null,"level":"info","module":"chip","message":"[DIS]CHIP minimal mDNS started advertising.","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"166","uptime_ms":"191311","wall_time":null,"level":"warning","module":"matter_service_chip","message":"generating the onboarding codes took 14532 ms on the Matter thread","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"167","uptime_ms":"191312","wall_time":null,"level":"error","module":"chip","message":"[DL]Long dispatch time: 14534 ms, for event type 2","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"189","uptime_ms":"234746","wall_time":null,"level":"warning","module":"network_manager","message":"scan failed (-5)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"224","uptime_ms":"316588","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: preflight","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"226","uptime_ms":"325303","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: entering_bootloader","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"227","uptime_ms":"326148","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"228","uptime_ms":"327472","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: begin","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"229","uptime_ms":"335706","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: writing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"230","uptime_ms":"631489","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: verifying","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"231","uptime_ms":"634235","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"wrote and verified 1468176 bytes","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"232","uptime_ms":"635878","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: reconnecting","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"347","uptime_ms":"636603","wall_time":null,"level":"info","module":"coprocessor_updater","message":"console: application 1 started","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"348","uptime_ms":"636874","wall_time":null,"level":"info","module":"esp_hosted_mcu_core","message":"coprocessor priv event 34","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"349","uptime_ms":"638841","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: health_check","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"385","uptime_ms":"640079","wall_time":null,"level":"info","module":"esp_hosted_mcu_core","message":"coprocessor restarted, firmware v3.0.6","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"400","uptime_ms":"650180","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002: complete","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"401","uptime_ms":"651095","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000002 succeeded: firmware v3.0.6","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"412","uptime_ms":"673187","wall_time":null,"level":"error","module":"shell_telnet","message":"Failed to send 128, shutting down","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"413","uptime_ms":"673192","wall_time":null,"level":"error","module":"shell_telnet","message":"Telnet socket 15 error (0)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_409bc30c72acbe5e","source_generation":0,"seq":"414","uptime_ms":"673199","wall_time":null,"level":"info","module":"shell_telnet","message":"Telnet shell backend initialized","truncated":false,"kind":"message"}
+
+0
+
+
+## accept10/install.console.log (ANSI stripped)
+[+    0.42] ==== host: http up
+[+    1.71] ==== host: login
+[+    1.85] ==== host: upload
+[+    1.97] ==== host: board settled
+[+    2.10] ==== host: status before
+[+    3.42] ==== host: startCoprocessorUpdate
+[+    3.54] ==== host: job
+[+    3.67] ==== host: status
+[+    5.93] ==== host: job
+[+    8.33] ==== host: job
+[+   11.20] [00:05:16.588,000] <inf> coprocessor_updater: install job_00000002: preflight
+[+   15.52] ==== host: job
+[+   15.65] ==== host: status
+[+   16.46] uart:~$ uart:~$ [00:05:25.303,000] <inf> coprocessor_updater: install job_00000002: entering_bootloader
+[+   16.56] uart:~$ uart:~$ [00:05:26.148,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM loader
+[+   16.56] uart:~$ uart:~$ [00:05:27.472,000] <inf> coprocessor_updater: install job_00000002: begin
+[+   22.71] ==== host: job
+[+   25.11] ==== host: job
+[+   25.73] uart:~$ uart:~$ [00:05:35.706,000] <inf> coprocessor_updater: install job_00000002: writing
+[+   27.51] ==== host: job
+[+   29.93] ==== host: job
+[+   32.33] ==== host: job
+[+   34.73] ==== host: job
+[+   37.14] ==== host: job
+[+   39.55] ==== host: job
+[+   41.95] ==== host: job
+[+   44.36] ==== host: job
+[+   46.78] ==== host: job
+[+   49.19] ==== host: job
+[+   51.60] ==== host: job
+[+   53.99] ==== host: job
+[+   56.39] ==== host: job
+[+   58.80] ==== host: job
+[+   61.19] ==== host: job
+[+   63.59] ==== host: job
+[+   66.00] ==== host: job
+[+   68.41] ==== host: job
+[+   70.81] ==== host: job
+[+   73.22] ==== host: job
+[+   75.63] ==== host: job
+[+   78.03] ==== host: job
+[+   80.43] ==== host: job
+[+   82.83] ==== host: job
+[+   85.23] ==== host: job
+[+   87.62] ==== host: job
+[+   90.02] ==== host: job
+[+   92.42] ==== host: job
+[+   94.83] ==== host: job
+[+   97.25] ==== host: job
+[+   99.68] ==== host: job
+[+  102.08] ==== host: job
+[+  104.49] ==== host: job
+[+  106.90] ==== host: job
+[+  109.34] ==== host: job
+[+  111.77] ==== host: job
+[+  114.17] ==== host: job
+[+  116.58] ==== host: job
+[+  118.98] ==== host: job
+[+  121.39] ==== host: job
+[+  123.79] ==== host: job
+[+  126.19] ==== host: job
+[+  128.59] ==== host: job
+[+  131.00] ==== host: job
+[+  133.40] ==== host: job
+[+  135.81] ==== host: job
+[+  138.21] ==== host: job
+[+  140.61] ==== host: job
+[+  143.04] ==== host: job
+[+  145.45] ==== host: job
+[+  147.86] ==== host: job
+[+  150.26] ==== host: job
+[+  152.67] ==== host: job
+[+  155.07] ==== host: job
+[+  157.47] ==== host: job
+[+  159.88] ==== host: job
+[+  162.31] ==== host: job
+[+  164.71] ==== host: job
+[+  167.11] ==== host: job
+[+  169.52] ==== host: job
+[+  171.93] ==== host: job
+[+  174.33] ==== host: job
+[+  176.75] ==== host: job
+[+  179.15] ==== host: job
+[+  181.55] ==== host: job
+[+  183.96] ==== host: job
+[+  186.37] ==== host: job
+[+  188.79] ==== host: job
+[+  191.20] ==== host: job
+[+  193.60] ==== host: job
+[+  196.01] ==== host: job
+[+  198.42] ==== host: job
+[+  200.82] ==== host: job
+[+  203.22] ==== host: job
+[+  205.62] ==== host: job
+[+  208.02] ==== host: job
+[+  210.43] ==== host: job
+[+  212.83] ==== host: job
+[+  215.24] ==== host: job
+[+  217.64] ==== host: job
+[+  220.03] ==== host: job
+[+  222.43] ==== host: job
+[+  224.83] ==== host: job
+[+  227.23] ==== host: job
+[+  229.64] ==== host: job
+[+  232.05] ==== host: job
+[+  234.45] ==== host: job
+[+  236.85] ==== host: job
+[+  239.27] ==== host: job
+[+  241.71] ==== host: job
+[+  244.11] ==== host: job
+[+  246.51] ==== host: job
+[+  248.92] ==== host: job
+[+  251.34] ==== host: job
+[+  253.75] ==== host: job
+[+  256.16] ==== host: job
+[+  258.56] ==== host: job
+[+  260.96] ==== host: job
+[+  263.37] ==== host: job
+[+  265.77] ==== host: job
+[+  268.18] ==== host: job
+[+  270.59] ==== host: job
+[+  272.99] ==== host: job
+[+  275.39] ==== host: job
+[+  277.80] ==== host: job
+[+  280.21] ==== host: job
+[+  282.61] ==== host: job
+[+  285.01] ==== host: job
+[+  287.43] ==== host: job
+[+  289.83] ==== host: job
+[+  292.24] ==== host: job
+[+  294.64] ==== host: job
+[+  297.05] ==== host: job
+[+  299.45] ==== host: job
+[+  301.85] ==== host: job
+[+  304.26] ==== host: job
+[+  306.67] ==== host: job
+[+  309.08] ==== host: job
+[+  311.48] ==== host: job
+[+  313.88] ==== host: job
+[+  321.44] uart:~$ uart:~$ [00:10:31.489,000] <inf> coprocessor_updater: install job_00000002: verifying
+[+  323.47] ==== host: job
+[+  324.85] uart:~$ uart:~$ [00:10:34.235,000] <inf> esp_loader_adapter: wrote and verified 1468176 bytes
+[+  324.85] uart:~$ uart:~$ [00:10:35.878,000] <inf> coprocessor_updater: install job_00000002: reconnecting
+[+  325.90] ==== host: job
+[+  326.03] ==== host: status
+[+  327.82] uart:~$ uart:~$ [00:10:36.603,000] <inf> coprocessor_updater: console: application 1 started
+[+  327.82] uart:~$ uart:~$ [00:10:36.874,000] <inf> esp_hosted_mcu_core: coprocessor priv event 34
+[+  327.82] uart:~$ uart:~$ [00:10:38.841,000] <inf> coprocessor_updater: install job_00000002: health_check
+[+  328.42] ==== host: status
+[+  330.21] uart:~$ uart:~$ [00:10:40.079,000] <inf> esp_hosted_mcu_core: coprocessor restarted, firmware v3.0.6
+[+  330.69] ==== host: job
+[+  330.82] ==== host: status
+[+  340.11] uart:~$ uart:~$ [00:10:50.180,000] <inf> coprocessor_updater: install job_00000002: complete
+[+  340.21] uart:~$ uart:~$ [00:10:51.095,000] <inf> coprocessor_updater: install job_00000002 succeeded: firmware v3.0.6
+[+  340.38] ==== host: job
+[+  340.51] ==== host: status
+[+  340.68] ==== host: finished

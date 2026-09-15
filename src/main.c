@@ -67,7 +67,8 @@ LOG_MODULE_REGISTER(main_app);
 // #define STORAGE_PARTITION_ID	FIXED_PARTITION_ID(STORAGE_PARTITION)
 
 /* Получаем numeric ID разделов из DTS по алиасам узлов fixed-partitions */
-#define LFS_PART_ID  FIXED_PARTITION_ID(storage_lfs_partition)
+/* storage_zms: хранилище настроек ZMS (бывший storage_lfs); стирание уничтожает все настройки */
+#define ZMS_PART_ID  FIXED_PARTITION_ID(storage_zms_partition)
 //#define NVS_PART_ID  FIXED_PARTITION_ID(storage_partition)
 
 //static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
@@ -150,7 +151,7 @@ static void ipv4_addr_add_handler(struct net_mgmt_event_callback *cb,
 // }
 
 // static void erase_flash(void) {
-// 	(void)erase_partition_by_id(LFS_PART_ID);
+// 	(void)erase_partition_by_id(ZMS_PART_ID);
 // 	(void)erase_partition_by_id(NVS_PART_ID);
 // 	sys_reboot(SYS_REBOOT_COLD);
 // }
@@ -202,6 +203,12 @@ static void psram_selftest(void)
 	free_external_memory(buf);
 }
 
+/* The coprocessor update must be requested over Ethernet (plan section 8). */
+static bool request_over_ethernet(const struct web_auth_peer *local)
+{
+	return local != NULL && coprocessor_service_request_over_ethernet(local->family, local->addr);
+}
+
 int main(void)
 {
 	LOG_INF("Start main app (build: %s %s) version 8", __DATE__, __TIME__);
@@ -229,8 +236,16 @@ int main(void)
 	static const struct web_api_v1_coprocessor coprocessor_hooks = {
 		.firmware_version = coprocessor_service_firmware_version,
 		.rx_seen = coprocessor_service_rx_seen,
+		.request_over_ethernet = request_over_ethernet,
 	};
 	web_api_v1_set_coprocessor(&coprocessor_hooks);
+	/* The upload bindings open only over a store that opened (/lfs/firmware). */
+	static const struct web_api_v1_firmware firmware_hooks = {
+		.now_ms = NULL,
+	};
+	if (coprocessor_service_firmware_ready()) {
+		web_api_v1_set_firmware(&firmware_hooks);
+	}
 	/* The W5500 with its EEPROM MAC; addressing is the network service's. */
 	ethernet_interfaces_init();
 	network_service_start();

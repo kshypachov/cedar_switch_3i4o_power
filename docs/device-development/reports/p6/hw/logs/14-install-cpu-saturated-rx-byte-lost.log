@@ -1,0 +1,1189 @@
+# 2026-09-14 ~15:30-15:45, board B, image d9f32970ba389208f8cfd0623b2fb39866fe07b30bff4d171cef05352a37fa18 (session-wide per-thread CPU, rx tail, get_target, read overrun).
+# accept8: build+recovery OK, loader check aborted (telnet TIMEOUT then broken pipe). accept8b (no rebuild): loader OK, install: connect 1857 ms, flash_start 6764 ms,
+# block 2 failed: ROM answer to FLASH_DATA arrived 12 bytes (command byte 03 lost), timeout, retries INVALID_COMMAND. CPU window 56.7 s, idle 1.8 s: tx_q 25.9 s, http_server 10.8 s, web_v1_jobs 8.9 s, eth_w5500 4.7 s.
+## accept8/build.log
+[243/251] Linking C static library modules/cedar_mcuboot_hooks/lib..__cedar_p6__sysbuild__mcuboot_hooks.a
+[244/251] Building C object zephyr/drivers/flash/CMakeFiles/drivers__flash.dir/flash_stm32_ospi.c.obj
+[245/251] Linking C static library zephyr/drivers/flash/libdrivers__flash.a
+[246/251] Linking C executable zephyr/zephyr_pre0.elf; Logical command for additional byproducts on target: zephyr_pre0
+[247/251] Generating linker.cmd
+[248/251] Generating isr_tables.c, isr_tables_vt.ld, isr_tables_swi.ld
+[249/251] Building C object zephyr/CMakeFiles/zephyr_final.dir/misc/empty_file.c.obj
+[250/251] Building C object zephyr/CMakeFiles/zephyr_final.dir/isr_tables.c.obj
+[251/251] Linking C executable zephyr/zephyr.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       85872 B       128 KB     65.52%
+             RAM:       44736 B       768 KB      5.69%
+           SRAM0:           0 B       768 KB      0.00%
+       EXT_FLASH:           0 B         4 MB      0.00%
+           PSRAM:           0 B         8 MB      0.00%
+        IDT_LIST:           0 B        32 KB      0.00%
+Generating files from /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/build-accept/mcuboot/zephyr/zephyr.elf for board: cedar_switch_3in4out_power_rev3/stm32u585xx/ext_flash_app
+[13/16] Completed 'cedar_p6'
+[15/16] No install step for 'mcuboot'
+[16/16] Completed 'mcuboot'
+## accept8/flash.out
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p6/docs/device-development/reports/p6/hw/run_image_b.py", line 40, in reader
+    d = s.read(4096)
+  File "/Volumes/Programming/Zephyr/zephyr_latest/.venv/lib/python3.14/site-packages/serial/serialposix.py", line 595, in read
+    raise SerialException(
+        'device reports readiness to read but returned no data '
+        '(device disconnected or multiple access on port?)')
+serial.serialutil.SerialException: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+recovery on /dev/cu.usbmodem11201 after 1.8 s
+upload rc=0 in 373 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: e5d5a398c91a29975fd9e9dd1d8ae8401cc4e91b94bda8c2e4015f419bb43218
+Split status: N/A (0)
+
+
+## accept8/loader.out
+{"t": 1.08, "step": "http up", "seconds": 0.7}
+{"t": 6.65, "step": "login", "ms": 5563}
+{"t": 17.25, "step": "coproc status", "lines": ["TIMEOUT"]}
+Traceback (most recent call last):
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p6/docs/device-development/reports/p6/hw/loader_b.py", line 134, in <module>
+    main()
+    ~~~~^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p6/docs/device-development/reports/p6/hw/loader_b.py", line 115, in main
+    loader_once(sh, "loader")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p6/docs/device-development/reports/p6/hw/loader_b.py", line 97, in loader_once
+    lines = sh.run("coproc loader", r"coproc loader: uart_mode", timeout=40)
+  File "/Volumes/Programming/Zephyr/zephyr_latest/cedar_p6/docs/device-development/reports/p6/hw/loader_b.py", line 60, in run
+    self.sock.sendall((command + "\r\n").encode())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+## accept8b chain
+loader rc=0
+coproc loader: ESP32-C6 in its ROM loader after 834 ms
+coproc loader: close 0 after 961 ms
+coproc loader: uart_mode console, generation 360, session closed
+install rc=0
+{"t": 10.61, "step": "startCoprocessorUpdate", "status": 202, "ms": 7069, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/coprocessor/status"}}
+{"t": 10.86, "step": "job", "elapsed_s": 0.3, "ms": 251, "state": "queued", "phase": "", "progress": null, "cancellable": true, "error": null}
+{"t": 14.78, "step": "job", "elapsed_s": 4.2, "ms": 112, "state": "running", "phase": "preflight", "progress": null, "cancellable": true, "error": null}
+{"t": 21.55, "step": "job", "elapsed_s": 10.9, "ms": 101, "state": "running", "phase": "entering_bootloader", "progress": null, "cancellable": true, "error": null}
+{"t": 42.06, "step": "job", "elapsed_s": 31.4, "ms": 102, "state": "running", "phase": "begin", "progress": null, "cancellable": false, "error": null}
+{"t": 86.79, "step": "job", "elapsed_s": 76.2, "ms": 244, "state": "running", "phase": "writing", "progress": null, "cancellable": false, "error": null}
+{"t": 93.77, "step": "job", "elapsed_s": 83.2, "ms": 291, "state": "running", "phase": "writing", "progress": {"completed": 0, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 97.11, "step": "job", "elapsed_s": 86.5, "ms": 136, "state": "failed", "phase": "writing", "progress": {"completed": 0, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": {"code": "internal_error", "message": "The operation failed", "request_id": "req_82c2057e", "retryable": true}}
+{"t": 98.32, "step": "finished", "elapsed_s": 87.7, "state": "failed"}
+{"t": 97.24, "step": "status", "elapsed_s": 86.6, "state": "failed", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": true, "error": {"code": "internal_error", "message": "A block of the image was not written", "request_id": "req_82c2057f", "retryable": true}}}
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 1857 ms, flash_start 0 in 6764 ms, writes 2 (last 9 in 3102 ms, max 3102 ms), finish 0 in 0 ms
+library: target 8, writes over 250 ms 1, over 500 ms 1
+port: longest read past its timeout 1861 ms, at uptime 377204 ms
+port: rx tail 20 40 16 00 00 00 00 00 c0 | c0 01 09 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 09 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 0b 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 02 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 01 05 00 00 c0 | c0 01 03 04 00 20 40 16 00 01 05 00 00 c0 
+port: reads 531 in 10063 ms (max 6690, last failure 2 after 0 of 2576978515 ms, 13 bytes since write), writes 67 in 10 ms (max 0, last failure 0 after 0 of 0 ms)
+cpu: window 56727 ms, idle 1763 ms, 27 threads
+cpu: tx_q[0]                  25891 ms
+cpu: http_server_tid          10780 ms
+cpu: web_v1_jobs              8923 ms
+cpu: eth_w5500                4675 ms
+cpu: rx_q[0]                  4256 ms
+cpu: idle                     1763 ms
+cpu: CHIP                     181 ms
+cpu: tcp_work                 74 ms
+cpu: ?                        66 ms
+cpu: shell_uart               63 ms
+device logs rc=0 lines      220
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5771","uptime_ms":"275028","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"messa
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6227","uptime_ms":"300147","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: preflight","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6231","uptime_ms":"317506","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: entering_bootloader","truncated":false,"kind":
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6232","uptime_ms":"322418","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"messa
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6233","uptime_ms":"360013","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: begin","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6234","uptime_ms":"373990","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: writing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6235","uptime_ms":"377206","wall_time":null,"level":null,"module":null,"message":"[W] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6238","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"[E] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6241","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"[W] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6244","uptime_ms":"377443","wall_time":null,"level":null,"module":null,"message":"[E] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6247","uptime_ms":"377445","wall_time":null,"level":"warning","module":"esp_loader_adapter","message":"A block of the image was not written (internal_error, cause 9)","t
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6360","uptime_ms":"383885","wall_time":null,"level":"error","module":"coprocessor_updater","message":"install job_00000001 failed in writing: A block of the image was no
+
+[exited with code 0]
+## accept8b/loader.out
+{"t": 0.43, "step": "http up", "seconds": 0.1}
+{"t": 1.74, "step": "login", "ms": 1310}
+{"t": 4.3, "step": "coproc status", "lines": ["uart_mode console, generation 358, transport down, dtr follow on", "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 357)", "rx bytes 138022, rx activity 138022, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 5207, truncated 0, replacements 1, escapes 0, idle flushes 0, overflows 0", "~$ [00:04:31.667,000] <err> eth_w5500: W5500 re
+{"t": 10.74, "step": "loader", "before": {"state": "failed", "uart_mode": "console", "generation": 358, "transport_ready": false}, "lines": ["coproc loader: ESP32-C6 in its ROM loader after 834 ms", "coproc loader: close 0 after 961 ms", "coproc loader: uart_mode console, generation 360, session closed", "~$ [00:04:35.028,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM loader", "~$ ~$ [00:04:35.336,000] <wrn> net_if: "], "after": {"state": "failed", "uart_mode": "console", "generati
+{"t": 12.36, "step": "coproc status after", "lines": ["uart_mode console, generation 366, transport down, dtr follow on", "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 364)", "rx bytes 141693, rx activity 141693, console ring overflows 0 (0 bytes lost, 0 pending)", "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0", "lines 5337, truncated 0, replacements 2, escapes 0, idle flushes 0, overflows 0"]}
+## accept8b/install.json
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 1.82,
+   "step": "login",
+   "ms": 1402
+  },
+  {
+   "t": 2.09,
+   "step": "upload",
+   "status": 200,
+   "ms": 262,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 2.51,
+   "step": "board settled",
+   "uptime_ms": 284421
+  },
+  {
+   "t": 3.54,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 370,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "failed",
+     "method": "uart",
+     "version": null,
+     "recovery_required": false,
+     "error": {
+      "code": "unsupported_target",
+      "message": "The coprocessor is not an ESP32-C6",
+      "request_id": "req_82c204ce",
+      "retryable": false
+     }
+    }
+   }
+  },
+  {
+   "t": 10.61,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 7069,
+   "body": {
+    "job_id": "job_00000001",
+    "job_url": "/api/v1/jobs/job_00000001",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 10.86,
+   "step": "job",
+   "elapsed_s": 0.3,
+   "ms": 251,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 11.12,
+   "step": "status",
+   "elapsed_s": 0.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204d3",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 12.66,
+   "step": "w5500 events",
+   "new": 55,
+   "total": 55
+  },
+  {
+   "t": 14.78,
+   "step": "job",
+   "elapsed_s": 4.2,
+   "ms": 112,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 14.91,
+   "step": "status",
+   "elapsed_s": 4.3,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204d8",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 18.36,
+   "step": "status",
+   "elapsed_s": 7.8,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204df",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 21.55,
+   "step": "job",
+   "elapsed_s": 10.9,
+   "ms": 101,
+   "state": "running",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 21.68,
+   "step": "status",
+   "elapsed_s": 11.1,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204e6",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 25.01,
+   "step": "status",
+   "elapsed_s": 14.4,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204ed",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 28.91,
+   "step": "status",
+   "elapsed_s": 18.3,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204f4",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 32.26,
+   "step": "status",
+   "elapsed_s": 21.6,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c204fb",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 35.57,
+   "step": "status",
+   "elapsed_s": 25.0,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20502",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 38.89,
+   "step": "status",
+   "elapsed_s": 28.3,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20509",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 42.06,
+   "step": "job",
+   "elapsed_s": 31.4,
+   "ms": 102,
+   "state": "running",
+   "phase": "begin",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 42.19,
+   "step": "status",
+   "elapsed_s": 31.6,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20510",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 45.49,
+   "step": "status",
+   "elapsed_s": 34.9,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20517",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 48.85,
+   "step": "status",
+   "elapsed_s": 38.2,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2051e",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 52.27,
+   "step": "status",
+   "elapsed_s": 41.7,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20525",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 55.72,
+   "step": "status",
+   "elapsed_s": 45.1,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2052c",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 59.24,
+   "step": "status",
+   "elapsed_s": 48.6,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20533",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 62.73,
+   "step": "status",
+   "elapsed_s": 52.1,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2053a",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 66.24,
+   "step": "status",
+   "elapsed_s": 55.6,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20541",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 69.68,
+   "step": "status",
+   "elapsed_s": 59.1,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20548",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 73.14,
+   "step": "status",
+   "elapsed_s": 62.5,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2054f",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 76.58,
+   "step": "status",
+   "elapsed_s": 66.0,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20556",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 80.03,
+   "step": "status",
+   "elapsed_s": 69.4,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2055d",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 83.48,
+   "step": "status",
+   "elapsed_s": 72.9,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20564",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 86.79,
+   "step": "job",
+   "elapsed_s": 76.2,
+   "ms": 244,
+   "state": "running",
+   "phase": "writing",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 86.93,
+   "step": "status",
+   "elapsed_s": 76.3,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c2056b",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 90.42,
+   "step": "status",
+   "elapsed_s": 79.8,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20572",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 93.77,
+   "step": "job",
+   "elapsed_s": 83.2,
+   "ms": 291,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 0,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 93.91,
+   "step": "status",
+   "elapsed_s": 83.3,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "unsupported_target",
+     "message": "The coprocessor is not an ESP32-C6",
+     "request_id": "req_82c20579",
+     "retryable": false
+    }
+   }
+  },
+  {
+   "t": 97.11,
+   "step": "job",
+   "elapsed_s": 86.5,
+   "ms": 136,
+   "state": "failed",
+   "phase": "writing",
+   "progress": {
+    "completed": 0,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": {
+    "code": "internal_error",
+    "message": "The operation failed",
+    "request_id": "req_82c2057e",
+    "retryable": true
+   }
+  },
+  {
+   "t": 97.24,
+   "step": "status",
+   "elapsed_s": 86.6,
+   "state": "failed",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_82c2057f",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 98.32,
+   "step": "finished",
+   "elapsed_s": 87.7,
+   "state": "failed"
+  }
+ ],
+ "image_sha256": "d9f32970ba389208f8cfd0623b2fb39866fe07b30bff4d171cef05352a37fa18"
+}## accept8b/updater-after.out
+updater: active no, phase writing, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required yes, error internal_error: A block of the image was not written
+library: connect 0 in 1857 ms, flash_start 0 in 6764 ms, writes 2 (last 9 in 3102 ms, max 3102 ms), finish 0 in 0 ms
+library: target 8, writes over 250 ms 1, over 500 ms 1
+port: longest read past its timeout 1861 ms, at uptime 377204 ms
+port: rx tail 20 40 16 00 00 00 00 00 c0 | c0 01 09 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 09 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 0b 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 02 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 04 00 20 40 16 00 00 00 00 00 c0 | c0 01 03 04 00 20 40 16 00 01 05 00 00 c0 | c0 01 03 04 00 20 40 16 00 01 05 00 00 c0 
+port: reads 531 in 10063 ms (max 6690, last failure 2 after 0 of 2576978515 ms, 13 bytes since write), writes 67 in 10 ms (max 0, last failure 0 after 0 of 0 ms)
+cpu: window 56727 ms, idle 1763 ms, 27 threads
+cpu: tx_q[0]                  25891 ms
+cpu: http_server_tid          10780 ms
+cpu: web_v1_jobs              8923 ms
+cpu: eth_w5500                4675 ms
+cpu: rx_q[0]                  4256 ms
+cpu: idle                     1763 ms
+cpu: CHIP                     181 ms
+cpu: tcp_work                 74 ms
+cpu: ?                        66 ms
+cpu: shell_uart               63 ms
+## accept8b/device-logs.txt (device log store, source stm32)
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+X-Request-ID: req_82c20597
+Cache-Control: no-store
+Content-Type: application/x-ndjson
+Content-Disposition: attachment; filename="cedar-logs.ndjson"
+
+3fcb
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1","uptime_ms":"1664","wall_time":null,"level":"warning","module":"esp_hosted_mcu_core","message":"coprocessor firmware version unknown, expected v3.0.0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2","uptime_ms":"1664","wall_time":null,"level":"error","module":"mb85rsxx","message":"invalid device ID: 00 00 00 00","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3","uptime_ms":"1664","wall_time":null,"level":"error","module":"mb85rsxx","message":"Failed to initialize device, RDID check failed (err -5)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4","uptime_ms":"1665","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500: interrupt mode","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5","uptime_ms":"1675","wall_time":null,"level":"info","module":"eth_w5500","message":"W5500 Initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6","uptime_ms":"1676","wall_time":null,"level":"info","module":"spi_nor","message":"SPI_FLASH: SFDP v 1.5 AP ff with 1 PH","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"7","uptime_ms":"1676","wall_time":null,"level":"info","module":"spi_nor","message":"PH0: ff00 rev 1.5: 16 DW @ 80","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"8","uptime_ms":"1678","wall_time":null,"level":"info","module":"spi_nor","message":"SPI_FLASH: 16 MiBy flash","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"9","uptime_ms":"1781","wall_time":null,"level":"error","module":"esp_hosted_mcu","message":"coprocessor WifiInit failed","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"10","uptime_ms":"1785","wall_time":null,"level":"error","module":"net_if","message":"Iface 0x200050e8 device not ready","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"11","uptime_ms":"1786","wall_time":null,"level":"error","module":"net_ethernet","message":"Invalid MAC address for iface 1 (0x20004fb0)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"12","uptime_ms":"1787","wall_time":null,"level":"info","module":"littlefs","message":"LittleFS version 2.11, disk version 2.1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"13","uptime_ms":"1788","wall_time":null,"level":"info","module":"littlefs","message":"FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"14","uptime_ms":"1788","wall_time":null,"level":"info","module":"littlefs","message":"partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"15","uptime_ms":"2016","wall_time":null,"level":null,"module":null,"message":"*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"191","uptime_ms":"2316","wall_time":null,"level":"info","module":"shell_telnet","message":"Telnet shell backend initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"192","uptime_ms":"2317","wall_time":null,"level":"info","module":"main_app","message":"Start main app (build: Sep 14 2026 14:58:41) version 8","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"237","uptime_ms":"2318","wall_time":null,"level":"info","module":"main_app","message":"PSRAM @0x7026dbc8: write/read 1024 words OK","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"238","uptime_ms":"3286","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500: Link speed 100 Mb, full duplex","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"239","uptime_ms":"3941","wall_time":null,"level":"info","module":"settings_registry","message":"10 keys registered, 0 rejected","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"240","uptime_ms":"3941","wall_time":null,"level":"info","module":"io","message":"Start io init","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"241","uptime_ms":"4001","wall_time":null,"level":"error","module":"fs","message":"failed to create directory (-17)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"242","uptime_ms":"5252","wall_time":null,"level":"info","module":"io","message":"Start io outputs task","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"243","uptime_ms":"5217","wall_time":null,"level":"info","module":"net_init","message":"EEPROM MAC: 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"244","uptime_ms":"5218","wall_time":null,"level":"info","module":"eth_w5500","message":"ETH_W5500 MAC set to 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"245","uptime_ms":"5218","wall_time":null,"level":"info","module":"net_init","message":"Network interface up with MAC 80:34:28:10:6a:1d","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"246","uptime_ms":"5243","wall_time":null,"level":"info","module":"matter","message":"IPv6 address added, starting Matter","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"247","uptime_ms":"6368","wall_time":null,"level":"warning","module":"net_if","message":"iface 1 pkt 0x7017be74 send failure status -5","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"248","uptime_ms":"7324","wall_time":null,"level":"info","module":"matter","message":"IPv6 address added, starting Matter","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"249","uptime_ms":"7325","wall_time":null,"level":"info","module":"matter","message":"Matter start work already submitted","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"250","uptime_ms":"9371","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"251","uptime_ms":"10728","wall_time":null,"level":"info","module":"device_config_store","message":"configuration loaded, revision 8","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"252","uptime_ms":"10729","wall_time":null,"level":"info","module":"network_service","message":"network configuration revision 8: clean (5475 ms)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"253","uptime_ms":"10729","wall_time":null,"level":"info","module":"net_adapter","message":"Ethernet found, Wi-Fi coprocessor missing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"254","uptime_ms":"11772","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"255","uptime_ms":"11973","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"256","uptime_ms":"12174","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"257","uptime_ms":"13710","wall_time":null,"level":"info","module":"network_service","message":"boot 1 of 5 in a row shorter than 30 s","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"258","uptime_ms":"13710","wall_time":null,"level":"info","module":"network_service","message":"worker stack: 4936 of 8192 bytes never used","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"259","uptime_ms":"15353","wall_time":null,"level":"info","module":"web_server","message":"web interface cedar-2037394c3543501200210047, firmware 4e5b8a42deba-dirty, frontend 0.1.0+4e5b8a42deba-dirty, boot_d1fd7eea872bbfc6","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"260","uptime_ms":"15358","wall_time":null,"level":"info","module":"net_adapter","message":"ethernet: DHCP","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"287","uptime_ms":"15877","wall_time":null,"level":"info","module":"matter","message":"Init CHIP stack","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"324","uptime_ms":"17598","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"325","uptime_ms":"17800","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"326","uptime_ms":"18001","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"404","uptime_ms":"20986","wall_time":null,"level":"info","module":"net_dhcpv4","message":"Received: 192.168.88.13","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"405","uptime_ms":"20991","wall_time":null,"level":"info","module":"network_manager","message":"default route via ethernet","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"456","uptime_ms":"23526","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"457","uptime_ms":"23727","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"458","uptime_ms":"23928","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"548","uptime_ms":"27527","wall_time":null,"level":"info","module":"chip","message":"[SVR]Initializing session resumption storage...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"549","uptime_ms":"27529","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server initializing...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"550","uptime_ms":"27529","wall_time":null,"level":"debug","module":"chip","message":"LogV: [FP]Initializing FabricTable from persistent storage","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"588","uptime_ms":"29403","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"589","uptime_ms":"29604","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"590","uptime_ms":"29805","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"640","uptime_ms":"31153","wall_time":null,"level":"info","module":"chip","message":"[TS]Last Known Good Time: 2023-10-14T01:16:48","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"665","uptime_ms":"32436","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"668","uptime_ms":"32637","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"768","uptime_ms":"37504","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControl: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"769","uptime_ms":"37505","wall_time":null,"level":"info","module":"chip","message":"[DMG]Examples::AccessControlDelegate::Init","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"770","uptime_ms":"37506","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControl: setting","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"771","uptime_ms":"37506","wall_time":null,"level":"info","module":"chip","message":"[DMG]DefaultAclStorage: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"784","uptime_ms":"37507","wall_time":null,"level":"info","module":"chip","message":"[DMG]DefaultAclStorage: 0 entries loaded","truncated":false,"kind":"message"}
+
+3f87
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"785","uptime_ms":"37508","wall_time":null,"level":"info","module":"chip","message":"[SVR]WARNING: mTestEventTriggerDelegate is null","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"786","uptime_ms":"37508","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]UDP::Init bind&listen port=5540","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"787","uptime_ms":"37512","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]UDP::Init bound to port=5540","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"788","uptime_ms":"37512","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]TransportMgr initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"789","uptime_ms":"38545","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1005","uptime_ms":"46767","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1006","uptime_ms":"46968","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1007","uptime_ms":"47169","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1008","uptime_ms":"49418","wall_time":null,"level":"error","module":"shell_telnet","message":"Telnet client already connected.","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1009","uptime_ms":"49434","wall_time":null,"level":"error","module":"shell_telnet","message":"Failed to send 128, shutting down","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1010","uptime_ms":"49435","wall_time":null,"level":"error","module":"shell_telnet","message":"Network disconnected, shutting down","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1034","uptime_ms":"49671","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1035","uptime_ms":"49872","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1036","uptime_ms":"50073","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1282","uptime_ms":"61056","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Using ZAP configuration...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1283","uptime_ms":"61476","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1284","uptime_ms":"61678","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1285","uptime_ms":"61879","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1345","uptime_ms":"64253","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1346","uptime_ms":"64454","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1347","uptime_ms":"64656","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1407","uptime_ms":"67174","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1516","uptime_ms":"72033","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1604","uptime_ms":"76133","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1605","uptime_ms":"76203","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1606","uptime_ms":"76404","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1668","uptime_ms":"78841","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1669","uptime_ms":"79042","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1670","uptime_ms":"79243","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1733","uptime_ms":"82147","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1847","uptime_ms":"87329","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"1959","uptime_ms":"92417","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2051","uptime_ms":"96494","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2058","uptime_ms":"96695","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2059","uptime_ms":"96896","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2084","uptime_ms":"98389","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2145","uptime_ms":"102569","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2146","uptime_ms":"102575","wall_time":null,"level":"debug","module":"chip","message":"LogV: [DL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2147","uptime_ms":"102578","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2148","uptime_ms":"102579","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 1 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2149","uptime_ms":"102581","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2150","uptime_ms":"102581","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 2 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2151","uptime_ms":"102584","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2152","uptime_ms":"102584","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 3 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2153","uptime_ms":"102586","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Boot reason: 1","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2154","uptime_ms":"102587","wall_time":null,"level":"info","module":"chip","message":"[ZCL]Endpoint 4 On/off already set to new value","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2189","uptime_ms":"102795","wall_time":null,"level":"debug","module":"chip","message":"LogV: [EVL]LogEvent event number: 0x00000000001E0000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x00000000000125FB","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2347","uptime_ms":"111037","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2348","uptime_ms":"111239","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2349","uptime_ms":"111440","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2399","uptime_ms":"113993","wall_time":null,"level":"info","module":"chip","message":"[DMG]AccessControlCluster: initializing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2400","uptime_ms":"113996","wall_time":null,"level":"info","module":"chip","message":"[DIS]Updating services using commissioning mode 0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2401","uptime_ms":"114006","wall_time":null,"level":"info","module":"chip","message":"[DIS]CHIP minimal mDNS started advertising.","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2402","uptime_ms":"114010","wall_time":null,"level":"info","module":"chip","message":"[IN]CASE Server enabling CASE session setups","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2403","uptime_ms":"114012","wall_time":null,"level":"debug","module":"chip","message":"LogV: [IN]SecureSession[0x700018f0]: Allocated Type:2 LSID:64075","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2404","uptime_ms":"114012","wall_time":null,"level":"debug","module":"chip","message":"LogV: [SC]Allocated SecureSession (0x700018f0) - waiting for Sigma1 msg","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2405","uptime_ms":"114013","wall_time":null,"level":"info","module":"chip","message":"[SVR]Joining Multicast groups","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2406","uptime_ms":"114014","wall_time":null,"level":"debug","module":"chip","message":"LogV: [ZCL]Emitting StartUp event","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2407","uptime_ms":"114017","wall_time":null,"level":"debug","module":"chip","message":"LogV: [EVL]LogEvent event number: 0x00000000001E0001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000151D5","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2408","uptime_ms":"114017","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server initialization complete","truncated":false,"kind":"message"}
+
+3f44
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2435","uptime_ms":"114234","wall_time":null,"level":"info","module":"chip","message":"[SVR]Server Listening...","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2436","uptime_ms":"114234","wall_time":null,"level":"info","module":"matter","message":"Matter stack initialized","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2437","uptime_ms":"114236","wall_time":null,"level":"info","module":"matter","message":"Matter event loop started","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2438","uptime_ms":"114236","wall_time":null,"level":"info","module":"matter_event_loop","message":"Init io_to_matter_stream","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2451","uptime_ms":"114237","wall_time":null,"level":"info","module":"matter_event_loop","message":"Start io_to_matter_stream","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2452","uptime_ms":"114238","wall_time":null,"level":"info","module":"chip","message":"[DL]CHIP task running","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2453","uptime_ms":"114240","wall_time":null,"level":"info","module":"chip","message":"[DIS]Updating services using commissioning mode 0","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2466","uptime_ms":"114246","wall_time":null,"level":"info","module":"chip","message":"[DIS]CHIP minimal mDNS started advertising.","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2501","uptime_ms":"117039","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2503","uptime_ms":"117241","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2657","uptime_ms":"124340","wall_time":null,"level":"warning","module":"matter_service_chip","message":"generating the onboarding codes took 10091 ms on the Matter thread","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"2658","uptime_ms":"124342","wall_time":null,"level":"error","module":"chip","message":"[DL]Long dispatch time: 10092 ms, for event type 2","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3047","uptime_ms":"143054","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3048","uptime_ms":"143256","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3049","uptime_ms":"143457","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3123","uptime_ms":"146117","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3124","uptime_ms":"146318","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3125","uptime_ms":"146519","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3344","uptime_ms":"157657","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3345","uptime_ms":"157859","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3346","uptime_ms":"158060","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3673","uptime_ms":"172405","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3674","uptime_ms":"172607","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"3675","uptime_ms":"172808","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4033","uptime_ms":"189786","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4034","uptime_ms":"189987","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4035","uptime_ms":"190189","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4133","uptime_ms":"195736","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4134","uptime_ms":"195938","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4135","uptime_ms":"196139","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4459","uptime_ms":"210271","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4460","uptime_ms":"210472","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4461","uptime_ms":"210673","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4559","uptime_ms":"216284","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4560","uptime_ms":"216485","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4885","uptime_ms":"230703","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4886","uptime_ms":"230904","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"4887","uptime_ms":"231105","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5308","uptime_ms":"251193","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5309","uptime_ms":"251394","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5310","uptime_ms":"251596","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5444","uptime_ms":"257468","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5469","uptime_ms":"260117","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5470","uptime_ms":"260318","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5733","uptime_ms":"271667","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5734","uptime_ms":"271868","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5735","uptime_ms":"272069","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5771","uptime_ms":"275028","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5772","uptime_ms":"275336","wall_time":null,"level":"warning","module":"net_if","message":"iface 1 pkt 0x7017be74 send failure status -5","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5773","uptime_ms":"275541","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"5774","uptime_ms":"275742","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6227","uptime_ms":"300147","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: preflight","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6228","uptime_ms":"310300","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6229","uptime_ms":"310501","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6230","uptime_ms":"310702","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6231","uptime_ms":"317506","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: entering_bootloader","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6232","uptime_ms":"322418","wall_time":null,"level":"info","module":"esp_loader_adapter","message":"connected to the ESP32-C6 ROM loader","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6233","uptime_ms":"360013","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: begin","truncated":false,"kind":"message"}
+
+12cd
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6234","uptime_ms":"373990","wall_time":null,"level":"info","module":"coprocessor_updater","message":"install job_00000001: writing","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6235","uptime_ms":"377206","wall_time":null,"level":null,"module":null,"message":"[W] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6236","uptime_ms":"377206","wall_time":null,"level":null,"module":null,"message":"Flash write failed (attempt 1/3), retrying","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6237","uptime_ms":"377206","wall_time":null,"level":null,"module":null,"message":"","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6238","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"[E] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6239","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"Protocol error: INVALID_COMMAND","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6240","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6241","uptime_ms":"377328","wall_time":null,"level":null,"module":null,"message":"[W] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6242","uptime_ms":"377329","wall_time":null,"level":null,"module":null,"message":"Flash write failed (attempt 2/3), retrying","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6243","uptime_ms":"377329","wall_time":null,"level":null,"module":null,"message":"","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6244","uptime_ms":"377443","wall_time":null,"level":null,"module":null,"message":"[E] esf: ","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6245","uptime_ms":"377444","wall_time":null,"level":null,"module":null,"message":"Protocol error: INVALID_COMMAND","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6246","uptime_ms":"377444","wall_time":null,"level":null,"module":null,"message":"","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6247","uptime_ms":"377445","wall_time":null,"level":"warning","module":"esp_loader_adapter","message":"A block of the image was not written (internal_error, cause 9)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6360","uptime_ms":"383885","wall_time":null,"level":"error","module":"coprocessor_updater","message":"install job_00000001 failed in writing: A block of the image was not written (recovery required)","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6624","uptime_ms":"401121","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6629","uptime_ms":"401322","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6636","uptime_ms":"401523","wall_time":null,"level":"error","module":"eth_w5500","message":"W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6637","uptime_ms":"403544","wall_time":null,"level":"error","module":"shell_telnet","message":"Failed to send 128, shutting down","truncated":false,"kind":"message"}
+{"source":"stm32","boot_id":"boot_d1fd7eea872bbfc6","source_generation":0,"seq":"6638","uptime_ms":"403546","wall_time":null,"level":"error","module":"shell_telnet","message":"Network disconnected, shutting down","truncated":false,"kind":"message"}
+
+0
+
+
+## accept8b/install.console.log (ANSI stripped)
+[+    0.42] ==== host: http up
+[+    1.82] ==== host: login
+[+    2.09] ==== host: upload
+[+    2.51] ==== host: board settled
+[+    3.54] ==== host: status before
+[+   10.61] ==== host: startCoprocessorUpdate
+[+   10.86] ==== host: job
+[+   11.12] ==== host: status
+[+   12.66] ==== host: w5500 events
+[+   14.78] ==== host: job
+[+   14.91] ==== host: status
+[+   18.36] ==== host: status
+[+   21.55] ==== host: job
+[+   21.68] ==== host: status
+[+   25.02] ==== host: status
+[+   28.91] ==== host: status
+[+   32.26] ==== host: status
+[+   35.57] ==== host: status
+[+   38.89] ==== host: status
+[+   42.06] ==== host: job
+[+   42.19] ==== host: status
+[+   45.49] ==== host: status
+[+   48.85] ==== host: status
+[+   52.27] ==== host: status
+[+   55.72] ==== host: status
+[+   59.24] ==== host: status
+[+   62.73] ==== host: status
+[+   66.24] ==== host: status
+[+   69.68] ==== host: status
+[+   73.14] ==== host: status
+[+   76.58] ==== host: status
+[+   80.03] ==== host: status
+[+   81.20] [00:06:00.013,000] <inf> coprocessor_updater: install job_00000001: begin
+[+   83.48] ==== host: status
+[+   86.79] ==== host: job
+[+   86.93] ==== host: status
+[+   90.42] ==== host: status
+[+   93.77] ==== host: job
+[+   93.91] ==== host: status
+[+   95.05] uart:~$ uart:~$ [00:06:13.990,000] <inf> coprocessor_updater: install job_00000001: writing
+[+   95.16] uart:~$ uart:~$ [W] esf: uart:~$ uart:~$ Flash write failed (attempt 1/3), retryinguart:~$ uart:~$ 
+[+   97.11] ==== host: job
+[+   97.24] ==== host: status
+[+   98.32] ==== host: finished

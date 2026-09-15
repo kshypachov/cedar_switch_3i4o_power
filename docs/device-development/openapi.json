@@ -2975,11 +2975,12 @@
               "type": "string",
               "enum": [
                 "raw_app",
+                "raw_full_flash",
                 "cedar_package"
               ]
             },
             "minItems": 1,
-            "maxItems": 2
+            "maxItems": 3
           },
           "update_requires_ethernet": {
             "const": true,
@@ -4568,8 +4569,10 @@
             "type": "string",
             "enum": [
               "raw_app",
+              "raw_full_flash",
               "cedar_package"
-            ]
+            ],
+            "description": "raw_full_flash is the file `idf.py merge-bin` produces: bootloader, partition table, blank otadata and application, written to the coprocessor from offset 0x0. It is the only format the first version accepts, with kind recovery_bundle; raw_app and cedar_package stay reserved."
           },
           "format_version": {
             "anyOf": [
@@ -4735,7 +4738,8 @@
             "description": "Installation method. Only \"uart\" is accepted in the first version; \"ota\" is reserved and rejected with 503 capability_unavailable until ESP-Hosted OTA is implemented. Check capabilities.features before offering a method."
           },
           "acknowledge_recovery": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Must be true for an image of kind recovery_bundle, which includes every raw_full_flash file: it replaces the coprocessor's bootloader and partition table and erases its NVS. Otherwise 422 validation_failed."
           }
         },
         "required": [

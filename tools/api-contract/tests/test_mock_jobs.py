@@ -163,10 +163,22 @@ def test_a_network_apply_job_refuses_the_jobs_cancel_route(harness: Harness) -> 
     assert "transaction" in response.json["error"]["message"]
 
 
-def test_a_destructive_job_is_not_cancellable_at_all(harness: Harness) -> None:
+def test_a_destructive_phase_is_never_cancellable(harness: Harness) -> None:
     """The contract's own example carries `cancellable: false` on a coprocessor
-    update, and says cancelling a destructive phase is impossible."""
-    assert CANCELLABLE_KINDS["coprocessor_update"] is False
+    update in `writing`, and says cancelling a destructive phase is impossible.
+    P6: the kind is cancellable, but only in the steps before `begin`
+    (test_mock_firmware covers both sides); every step from `begin` on is not."""
+    from cedar_contract.mock.firmware import Coprocessor
+    from cedar_contract.mock.jobs import Job, Step
+
+    assert CANCELLABLE_KINDS["coprocessor_update"] is True
+    job = Job("job_1", "coprocessor_update", None, "boot_1", 0,
+              steps=[Step("preflight", 10), Step("begin", 10, cancellable=False)])
+    job.settle(5)
+    assert job.cancellable is True
+    job.settle(15)
+    assert job.phase == Coprocessor.DESTRUCTIVE_PHASE
+    assert job.cancellable is False
     assert CANCELLABLE_KINDS["upload_chunk"] is False
     assert CANCELLABLE_KINDS["network_apply"] is False, (
         "cancelled through the transaction's DELETE, so the jobs route must not "
@@ -250,7 +262,7 @@ def test_an_install_job_walks_the_first_versions_uart_phases(document: Document)
     harness.advance(5)
     accepted = harness.client.post(
         "/coprocessor/updates",
-        {"upload_id": upload["id"], "method": "uart", "acknowledge_recovery": False},
+        {"upload_id": upload["id"], "method": "uart", "acknowledge_recovery": True},
     )
     seen = _poll(
         harness,

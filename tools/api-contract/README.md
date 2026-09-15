@@ -173,7 +173,7 @@ built against a mock with no gap and no boot change would show neither:
 |---|---|
 | `esp32_logs` is available exactly when `uart_mode` is `console`; otherwise its reason is `uart_usb_bridge`, `uart_flashing` or `uart_unavailable` (`scenario.uart_mode`) | the log follows who owns the UART, not ESP-Hosted: board B's C6 has no firmware and its ROM output is still logged |
 | `uart_mode` does not follow `coprocessor_state` (an install still reports `flashing`) | coprocessor-manager owns the UART whether or not the C6 answers |
-| The device answers `esp32_uart` and `uart_update` `available=false`, `reason="not_implemented"` until P6 | no updater yet; the mock keeps its P6 install model for the update screen |
+| ~~The device answers `esp32_uart` and `uart_update` `available=false`, `reason="not_implemented"` until P6~~ superseded by P6 below | no updater yet in P5 |
 | Source generations: STM32 0, ESP32 the coprocessor's generation | only the C6 restarts under a running STM32 |
 | `dropped_count` counts records lost before a ring; overwrites are reported by `gap` | the device counts them separately (log core, UART overflow, ring) |
 | Two rings, one per source (`log_ring_records`), one `seq`; records arrive over clock time (`log_rate_per_s`) | a ring that never moves cannot produce a gap |
@@ -181,6 +181,26 @@ built against a mock with no gap and no boot change would show neither:
 | A page stops at `limit`, at 16384 bytes of JSON, or after `log_scan_budget` records looked at; a cut page has `has_more=true` and its cursor is the next record to look at, even with no items | the device builds a page in its response buffer and bounds each request's scan |
 | `contains` folds A–Z only | the device's comparison is ASCII |
 | An export marks a part the ring overwrote while it was sent with a `kind="gap"` record (`log_export_lost` stands in for that race); the text format has a header line and `# gap:` lines, and escapes CR/LF | the device streams the export from the ring |
+
+P6 did the same for the firmware file and the coprocessor update
+(`mock/firmware.py`; the device in `modules/firmware-store`,
+`modules/coprocessor-updater` and `src/web/api/v1`). The owner's decision made
+the file a whole flash image written from `0x0`, which also made the install
+the way an empty coprocessor gets its first firmware:
+
+| Rule | Why |
+|---|---|
+| A verified image is `format="raw_full_flash"`, `kind="recovery_bundle"`, `format_version=null`, `version` from `app_desc`, `partition_layout_id="cedar-c6-ota-4m-2x1792k"`, `host_protocol="esp-hosted-mcu-3"`, `signature_verified=null`, `allowed_methods=["uart"]`; `firmware_formats` is `["raw_full_flash"]` | the only format v1 accepts; the slots are `0x1c0000` (1792 KiB), and `host_protocol` is the device's profile value, not read from the image (the compatibility profile is deferred) |
+| Two versions: `FirmwareImage.version` and `UpdateSummary.version` are the image's `app_desc.version` (`"1"`); `CoprocessorStatus.firmware_version` is what the C6 reports over ESP-Hosted (`scenario.hosted_version`, default `"v3.0.6"`), only while the transport is up, with `host_protocol="esp-hosted-mcu-<major>"` of it; an offline, failed or flashing C6 reports `null` for both. An install never copies the image version into the status | api-contract.md "Решения P6": the device reads the status version from `esp_hosted_mcu_fw_version()`, and `app_desc.version` is a different number |
+| `limits.upload_max_bytes` is 1900544 (`0x1d0000`); a larger `createUpload` is `413` | the image ends before `ota_1` |
+| Verification failures: `invalid_image` (wrong header, digest, checksum, junk in a gap; also a bare application `.bin`, `verify_result=bare_app`, whose message names the merged file), `unsupported_target` (chip id), `incompatible_firmware` (partition table not the supported layout) | the device's check classes |
+| `acknowledge_recovery=false` on a `recovery_bundle` is `422 validation_failed` and starts nothing | the file replaces the bootloader and partition table and erases NVS |
+| The coprocessor's state does not gate an install; `uart_update` and `esp32_uart` are available exactly when the UART is at the console, else `reason` is `uart_usb_bridge`, `uart_flashing` or `uart_unavailable` | an offline or failed C6 is what an install repairs; board B's C6 has no firmware |
+| Refusals before a job, in order: `ota` `503`; not over Ethernet `409 ethernet_required`; unknown upload `404`; an install running `409 busy`; upload not `ready` `409 invalid_state`; no acknowledgement `422`; UART bridged `409 busy`; UART unavailable `503 capability_unavailable` | the updater checks before it touches the UART |
+| An install is cancellable in `queued`, `preflight` and `entering_bootloader`; from `begin` on `cancellable=false` and cancel is `409 invalid_state`. A cancelled install frees the file and leaves `last_update` alone | nothing reaches the chip before `begin` |
+| A cancelled verification returns the upload to `receiving` | nothing was found wrong; it can be verified again |
+| A finished install sets the coprocessor `ready` with the image's version (`failed` when it did not come back) | a C6 that had no firmware now has some |
+| A reboot keeps the file (up to the last flushed chunk; a verification in progress starts over) and the update journal: an install cut short becomes `last_update.state="interrupted"` with `error.code="boot_changed"`, `recovery_required` true once `begin` was reached (and the coprocessor `failed`), no job continues, the file stays `ready` | the contract's reconciliation after a restart: no automatic destructive continuation |
 
 ## The control plane
 
@@ -193,7 +213,7 @@ can be mistaken for the contract:
 | `POST /__mock/reset` | a fresh device, optionally `{"scenario": {...}}` |
 | `POST /__mock/advance` | `{"seconds": N}` skips time |
 | `POST /__mock/scenario` | change one knob without a reset |
-| `POST /__mock/reboot` | a new boot of the same device: new `boot_id`, uptime from zero, sessions, jobs, log rings and transactions gone; the password and the committed network configuration kept |
+| `POST /__mock/reboot` | a new boot of the same device: new `boot_id`, uptime from zero, sessions, jobs, log rings and transactions gone; the password, the committed network configuration, the staged firmware file and the update outcome kept (an install in progress becomes `interrupted`) |
 
 It exists for two things a frontend has to handle that are otherwise unreachable
 in a test: a 120-second confirmation timeout, and the paths only a

@@ -21,6 +21,16 @@ config WEB_API_JSON_BODY_MAX
 	  this are counted and discarded, never buffered, and the request is
 	  answered 413.
 
+config WEB_API_OCTET_BODY_MAX
+	int "Largest raw request body (an upload chunk), in bytes"
+	default 16384
+	range 512 16384
+	help
+	  For routes flagged WEB_API_BODY_OCTETS: the firmware upload chunk,
+	  whose contract limit is 16384 (capabilities.limits.upload_chunk_bytes
+	  must not publish more). Every request context's body buffer is the
+	  larger of this and WEB_API_JSON_BODY_MAX, per HTTP client.
+
 config WEB_API_RESPONSE_BODY_MAX
 	int "Largest response body built in RAM, in bytes"
 	default 4096

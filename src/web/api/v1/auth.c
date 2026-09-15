@@ -168,10 +168,11 @@ void v1_logout(struct web_api_call *call)
 /* -- password change ----------------------------------------------------- */
 
 /*
- * One worker thread for jobs that must not run on the HTTP server's thread. A
- * password change derives a key and writes flash; nothing else here needs a
- * worker yet. web-auth allows one pending change at a time, so one work item
- * and one job id suffice.
+ * One worker thread for jobs that must not run on the HTTP server's thread: a
+ * password change derives a key and writes flash, the firmware operations
+ * (firmware.c) write, check and delete the staged file - firmware-store wants
+ * all of those from one thread, and this is it. web-auth allows one pending
+ * change at a time, so one work item and one job id suffice for it.
  */
 #define WORKER_STACK_SIZE 4096
 #define WORKER_PRIORITY   K_PRIO_PREEMPT(10)
@@ -212,6 +213,14 @@ int v1_auth_worker_start(void)
 	worker_started = true;
 
 	return 0;
+}
+
+int v1_worker_submit(struct k_work *work)
+{
+	if (!worker_started) {
+		return -EAGAIN;
+	}
+	return k_work_submit_to_queue(&v1_worker, work);
 }
 
 void v1_change_password(struct web_api_call *call)

@@ -51,6 +51,9 @@ describe('the dictionary covers what the device can say', () => {
     ['LogSource', 'id', 'logs.source'],
     ['LogRecord', 'kind', 'logs.kind'],
     ['CoprocessorStatus', 'uart_mode', 'logs.uart_mode'],
+    ['Upload', 'state', 'update.upload_state'],
+    ['UpdateSummary', 'state', 'update.summary'],
+    ['FirmwareImage', 'format', 'update.format'],
   ])('%s.%s values all have text', (schema, property, prefix) => {
     for (const value of enumOf(schema, property)) {
       expect(ru, `${prefix}.${value}`).toHaveProperty(`${prefix}.${value}`);

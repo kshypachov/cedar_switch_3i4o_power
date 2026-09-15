@@ -56,13 +56,12 @@ void v1_get_system_status(struct web_api_call *call)
 
 /* -- capabilities -------------------------------------------------------- */
 
-/*
- * Limits whose owning service arrives in a later stage are the contract's
- * design values, published so a client has a number to respect; each is
- * replaced by the service's own Kconfig when that service exists.
- */
-#define UPLOAD_CHUNK_BYTES       16384 /* firmware-store, P6 */
-#define UPLOAD_MAX_BYTES         (2 * 1024 * 1024) /* firmware-store, P6 */
+/* A chunk must fit both the request body web-api keeps and firmware-store's
+ * staging buffer. */
+#define UPLOAD_CHUNK_BYTES       MIN(CONFIG_WEB_API_OCTET_BODY_MAX, CONFIG_FIRMWARE_STORE_CHUNK_MAX)
+/* The merged coprocessor file is written from 0x0 and must end before ota_1 at
+ * 0x1d0000 (api-contract.md, "Формат файла", P6). */
+#define UPLOAD_MAX_BYTES         CONFIG_FIRMWARE_STORE_MAX_BYTES
 /* The most a page returns (logs.c). A page may return fewer when the response
  * buffer or the scan budget runs out first, and says so with has_more. */
 #define LOG_PAGE_RECORDS         100
@@ -106,17 +105,20 @@ void v1_get_capabilities(struct web_api_call *call)
 	 * hardware might do. Matter is available once its stack runs. ESP32 logs
 	 * follow the UART's owner, not ESP-Hosted: a C6 with no firmware still
 	 * prints its ROM, and a working transport says nothing about who reads
-	 * the UART. The UART updater is P6, OTA outside the first version. */
+	 * the UART. The UART updater follows the UART's owner too, never the C6's
+	 * state (an install is how an empty C6 gets firmware); OTA is outside the
+	 * first version. */
 	web_json_key(w, "features");
 	web_json_object_begin(w);
 	matter_service_get_status(&matter);
 	feature(w, "matter", matter.state == MATTER_STATE_READY,
 		matter.state == MATTER_STATE_READY ? NULL : matter_state_str(matter.state));
 	const char *esp32_logs_reason = v1_esp32_logs_unavailable_reason(NULL);
+	const char *esp32_uart_reason = v1_uart_update_unavailable_reason();
 
 	feature(w, "esp32_logs", esp32_logs_reason == NULL, esp32_logs_reason);
 	feature(w, "esp32_ota", false, "not_implemented");
-	feature(w, "esp32_uart", false, "not_implemented");
+	feature(w, "esp32_uart", esp32_uart_reason == NULL, esp32_uart_reason);
 	web_json_object_end(w);
 
 	web_json_key(w, "limits");
@@ -153,9 +155,11 @@ void v1_get_capabilities(struct web_api_call *call)
 	}
 	web_json_array_end(w);
 
+	/* The only format of the first version (owner's decision, P6): the merged
+	 * file that replaces the C6's bootloader, table and application at once. */
 	web_json_key(w, "firmware_formats");
 	web_json_array_begin(w);
-	web_json_string(w, "raw_app");
+	web_json_string(w, "raw_full_flash");
 	web_json_array_end(w);
 
 	web_json_key(w, "update_requires_ethernet");
@@ -180,7 +184,13 @@ const char *v1_job_resource_url(const struct job_snapshot *job, char *buf, size_
 	case JOB_KIND_WIFI_SCAN:
 		(void)snprintf(buf, cap, WEB_API_BASE_PATH "/network/wifi/scans/%s", job->id);
 		return buf;
+	case JOB_KIND_UPLOAD_CHUNK:
+	case JOB_KIND_FIRMWARE_VERIFY:
+		return v1_upload_job_resource_url(job, buf, cap);
+	case JOB_KIND_COPROCESSOR_UPDATE:
+		return WEB_API_BASE_PATH "/coprocessor/status";
 	default:
+		/* A delete's upload is gone once it succeeds, as the mock answers. */
 		return NULL;
 	}
 }

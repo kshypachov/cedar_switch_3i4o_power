@@ -46,6 +46,14 @@ test('the board serves the application, signs in, shows itself, Matter and the n
   await expect(page.getByRole('heading', { level: 1, name: t('logs.title'), exact: true })).toBeVisible();
   await expect(page.getByTestId('log-row').first().or(page.getByText(t('overview.unavailable')).first())).toBeVisible({ timeout: 30_000 });
 
+  // The ESP32 screen is served since P6. Reading only: the module's status and the
+  // write's availability. Never a file, never an install - writing the board's
+  // ESP32-C6 is a hardware scenario of reports/p6, not part of this run.
+  await page.getByRole('link', { name: t('nav.coprocessor') }).click();
+  await expect(page.getByRole('heading', { level: 1, name: t('update.title'), exact: true })).toBeVisible();
+  await expect(page.getByTestId('method-uart').or(page.getByText(t('overview.unavailable')).first())).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole('button', { name: t('update.install_submit') })).toBeDisabled();
+
   await page.goto('/access');
   await expect(page.getByRole('heading', { name: t('access.title') })).toBeVisible();
   await page.getByRole('banner').getByRole('button', { name: t('nav.logout') }).click();

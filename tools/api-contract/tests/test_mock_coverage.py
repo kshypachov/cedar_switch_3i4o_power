@@ -99,7 +99,7 @@ def _walk(harness: Harness) -> set[str]:
     harness.advance((QUEUE_MS + FIRMWARE_VERIFY_MS) * seconds + 0.1)
     client.post(
         "/coprocessor/updates",
-        {"upload_id": upload_id, "method": "uart", "acknowledge_recovery": False},
+        {"upload_id": upload_id, "method": "uart", "acknowledge_recovery": True},
     )
     harness.advance(30)
     client.delete(f"/firmware/uploads/{upload_id}")

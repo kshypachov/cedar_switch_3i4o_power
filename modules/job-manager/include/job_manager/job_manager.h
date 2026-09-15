@@ -306,6 +306,21 @@ int job_get(const char *id, struct job_snapshot *out);
  */
 int job_cancel(const char *id);
 
+/**
+ * @brief Change whether a running job may still be cancelled.
+ *
+ * A job that is cancellable while it only prepares and stops being so once it
+ * starts something destructive (a coprocessor update at `begin`) needs the
+ * change and the check for a cancellation that already happened to be one
+ * step: under the manager's lock, a cancel either lands before this call -
+ * which then reports it - or is refused with -EPERM afterwards.
+ *
+ * @retval 0        applied
+ * @retval -ENOENT  unknown id, or only a compact record survives
+ * @retval -EINVAL  the job is terminal (for example it was just cancelled)
+ */
+int job_set_cancellable(const char *id, bool cancellable);
+
 /** @brief Number of jobs currently in a non-terminal state. */
 size_t job_active_count(void);
 

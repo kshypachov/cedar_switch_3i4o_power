@@ -11,6 +11,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /**
  * @brief Take USART3 for the console, install the CDC handler and start the
@@ -26,5 +27,17 @@ bool coprocessor_service_firmware_version(char *buf, size_t cap);
 
 /** @brief The C6 has sent a byte on its UART since boot. */
 bool coprocessor_service_rx_seen(void);
+
+/**
+ * @brief firmware-store opened /lfs/firmware at start (and, with it, the
+ *        updater read its journal). False: the upload bindings stay closed (503).
+ */
+bool coprocessor_service_firmware_ready(void);
+
+/**
+ * @brief The request's local address (@p family 4 or 6, @p addr in network order)
+ *        belongs to the Ethernet interface: the install's "over Ethernet" rule.
+ */
+bool coprocessor_service_request_over_ethernet(uint8_t family, const uint8_t *addr);
 
 #endif /* COPROCESSOR_SERVICE_H_ */

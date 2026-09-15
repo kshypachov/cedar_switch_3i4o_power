@@ -31,6 +31,12 @@ export type LogSource = S['LogSource'];
 export type LogSources = S['LogSources'];
 export type LogRecord = S['LogRecord'];
 export type LogPage = S['LogPage'];
+export type Upload = S['Upload'];
+export type UploadRequest = S['UploadRequest'];
+export type FirmwareImage = S['FirmwareImage'];
+export type UpdateSummary = S['UpdateSummary'];
+export type FeatureAvailability = S['FeatureAvailability'];
+export type Progress = S['Progress'];
 
 export const TERMINAL_JOB_STATES: ReadonlySet<Job['state']> = new Set([
   'succeeded',

@@ -115,15 +115,19 @@ class MockApp:
         """A new boot of the same device: a new `boot_id`, uptime from zero, and
         everything the device keeps in RAM gone - sessions, jobs, the log rings,
         a staged or applied transaction. What it keeps durably stays: the
-        administrator password and the committed network configuration."""
+        administrator password, the committed network configuration, the staged
+        firmware file and the update journal - an install the reboot cut short
+        is `interrupted` and does not continue."""
         old = self.state
+        old.settle()
         self.state = DeviceState(self.clock, old.scenario)
         self.state.auth.password = old.auth.password
         self.state.auth.setup_required = old.auth.setup_required
         self.state.auth.setup_allowed = old.auth.setup_allowed
         self.state.network.revision = old.network.revision
         self.state.network.config = old.network.config
-        self.state.coprocessor.version = old.coprocessor.version
+        self.state.firmware.survive_reboot(old.firmware)
+        self.state.coprocessor.survive_reboot(old.coprocessor)
 
     # -- entry point -----------------------------------------------------
 

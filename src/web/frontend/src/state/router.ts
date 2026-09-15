@@ -6,15 +6,23 @@ import { useEffect, useState } from 'react';
  * reload or a bookmark lands on the same screen. The query string is the
  * screen's own (`/network?txn=`); the route is the path alone.
  */
-export type Route = 'overview' | 'matter' | 'network' | 'logs' | 'access';
+export type Route = 'overview' | 'matter' | 'network' | 'logs' | 'coprocessor' | 'access';
 
-const PATHS: Record<Route, string> = { overview: '/', matter: '/matter', network: '/network', logs: '/logs', access: '/access' };
+const PATHS: Record<Route, string> = {
+  overview: '/',
+  matter: '/matter',
+  network: '/network',
+  logs: '/logs',
+  coprocessor: '/coprocessor',
+  access: '/access',
+};
 
 export function routeOf(pathname: string): Route {
   if (pathname === PATHS.access) return 'access';
   if (pathname === PATHS.matter) return 'matter';
   if (pathname === PATHS.network) return 'network';
   if (pathname === PATHS.logs) return 'logs';
+  if (pathname === PATHS.coprocessor) return 'coprocessor';
   return 'overview';
 }
 

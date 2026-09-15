@@ -1,0 +1,752 @@
+# 2026-09-14 13:52-14:08, board B, image b55a60918942008c20e759f0bb3f7683d321cd2a95bfda3ce0cbacf8f0dc9f4e (phase timer after journal save, preflight/connect timeouts 30 s), CDC recovery 382 s.
+# Install from the bench at uptime 121 s: preflight ~15 s, entering_bootloader ~5 s, begin ~8 s (ROM erased 1.47 MB), writing failed on the first block:
+# 'A block of the image was not written', recovery_required=true. Console silent 00:02:27.661-00:02:47.803 (updater, adapter and library lines lost).
+## chain output
+build rc=0
+1006:CONFIG_COPROCESSOR_UPDATER_PREFLIGHT_TIMEOUT_MS=30000
+1007:CONFIG_COPROCESSOR_UPDATER_CONNECT_TIMEOUT_MS=30000
+1011:CONFIG_COPROCESSOR_UPDATER_RECONNECT_TIMEOUT_MS=20000
+sha b55a60918942008c20e759f0bb3f7683d321cd2a95bfda3ce0cbacf8f0dc9f4e
+flash rc=0
+19:upload rc=0 in 382 s
+http up 0.1
+updater: active no, phase preflight, job job_00000001, upload upload_e2a1b4bc0b1a072f
+updater: last job_00000001 failed, version -, recovery_required no, error internal_error: preflight took longer than 5000 ms
+~$ [00:00:32.415,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+~$ ~$ [00:00:32.616,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reope
+upload id: upload_e2a1b4bc0b1a072f
+loader rc=0
+coproc loader: ESP32-C6 in its ROM loader after 833 ms
+coproc loader: close 0 after 953 ms
+coproc loader: uart_mode console, generation 52, session closed
+install rc=0
+{"t": 1.72, "step": "http up", "seconds": 1.4}
+{"t": 5.37, "step": "login", "ms": 3654}
+{"t": 5.6, "step": "upload", "status": 200, "ms": 233, "state": "ready", "image": {"format": "raw_full_flash", "format_version": null, "target": "esp32c6", "version": "1", "kind": "recovery_bundle", "partition_layout_id": "cedar-c6-ota-4m-2x1792k", "host_protocol": "esp-hosted-mcu-3", "signature_verified": null, "allowed_methods": ["uart"]}}
+{"t": 71.77, "step": "board settled", "uptime_ms": 121588}
+{"t": 71.89, "step": "status before", "status": 200, "body": {"state": "failed", "chip": "esp32c6", "firmware_version": null, "host_protocol": null, "partition_layout_id": null, "transport_ready": false, "uart_mode": "console", "generation": 164, "ota": {"available": false, "reason": "not_implemented"}, "uart_update": {"available": true, "reason": null}, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "
+{"t": 73.4, "step": "startCoprocessorUpdate", "status": 202, "ms": 1510, "body": {"job_id": "job_00000001", "job_url": "/api/v1/jobs/job_00000001", "resource_url": "/api/v1/coprocessor/status"}}
+{"t": 73.53, "step": "job", "elapsed_s": 0.1, "ms": 130, "state": "queued", "phase": "", "progress": null, "cancellable": true, "error": null}
+{"t": 73.76, "step": "status", "elapsed_s": 0.4, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e22d", "retryable": true}}}
+{"t": 76.75, "step": "job", "elapsed_s": 3.4, "ms": 103, "state": "running", "phase": "preflight", "progress": null, "cancellable": true, "error": null}
+{"t": 76.89, "step": "status", "elapsed_s": 3.5, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e234", "retryable": true}}}
+{"t": 79.9, "step": "status", "elapsed_s": 6.5, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e23b", "retryable": true}}}
+{"t": 82.92, "step": "status", "elapsed_s": 9.5, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e242", "retryable": true}}}
+{"t": 85.91, "step": "status", "elapsed_s": 12.5, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e249", "retryable": true}}}
+{"t": 88.92, "step": "status", "elapsed_s": 15.5, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e250", "retryable": true}}}
+{"t": 92.34, "step": "job", "elapsed_s": 18.9, "ms": 688, "state": "running", "phase": "entering_bootloader", "progress": null, "cancellable": true, "error": null}
+{"t": 92.51, "step": "status", "elapsed_s": 19.1, "state": "updating", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e257", "retryable": true}}}
+{"t": 95.4, "step": "status", "elapsed_s": 22.0, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e25e", "retryable": true}}}
+{"t": 97.92, "step": "job", "elapsed_s": 24.5, "ms": 64, "state": "running", "phase": "begin", "progress": null, "cancellable": false, "error": null}
+{"t": 98.0, "step": "status", "elapsed_s": 24.6, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e265", "retryable": true}}}
+{"t": 100.62, "step": "status", "elapsed_s": 27.2, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e26c", "retryable": true}}}
+{"t": 103.21, "step": "status", "elapsed_s": 29.8, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e273", "retryable": true}}}
+{"t": 105.76, "step": "job", "elapsed_s": 32.4, "ms": 90, "state": "running", "phase": "writing", "progress": null, "cancellable": false, "error": null}
+{"t": 105.85, "step": "status", "elapsed_s": 32.4, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e27a", "retryable": true}}}
+{"t": 108.52, "step": "status", "elapsed_s": 35.1, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e281", "retryable": true}}}
+{"t": 111.13, "step": "job", "elapsed_s": 37.7, "ms": 151, "state": "running", "phase": "writing", "progress": {"completed": 0, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": null}
+{"t": 111.22, "step": "status", "elapsed_s": 37.8, "state": "updating", "uart_mode": "flashing", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": false, "error": {"code": "internal_error", "message": "preflight took longer than 5000 ms", "request_id": "req_4b54e288", "retryable": true}}}
+{"t": 113.8, "step": "job", "elapsed_s": 40.4, "ms": 131, "state": "failed", "phase": "writing", "progress": {"completed": 0, "total": 1468176, "unit": "bytes"}, "cancellable": false, "error": {"code": "internal_error", "message": "The operation failed", "request_id": "req_4b54e28d", "retryable": true}}
+{"t": 113.88, "step": "status", "elapsed_s": 40.5, "state": "failed", "uart_mode": "console", "transport_ready": false, "firmware_version": null, "host_protocol": null, "last_update": {"job_id": "job_00000001", "state": "failed", "method": "uart", "version": null, "recovery_required": true, "error": {"code": "internal_error", "message": "A block of the image was not written", "request_id": "req_4b54e28e", "retryable": true}}}
+{"t": 114.34, "step": "finished", "elapsed_s": 40.9, "state": "failed"}
+
+[exited with code 0]
+## boot console
+# image sha256 b55a60918942008c20e759f0bb3f7683d321cd2a95bfda3ce0cbacf8f0dc9f4e
+## loader_b.py check
+{
+ "steps": [
+  {
+   "t": 0.42,
+   "step": "http up",
+   "seconds": 0.1
+  },
+  {
+   "t": 3.98,
+   "step": "login",
+   "ms": 3563
+  },
+  {
+   "t": 4.93,
+   "step": "coproc status",
+   "lines": [
+    "uart_mode console, generation 49, transport down, dtr follow on",
+    "switches 0, rx stop failures 0, last switch error 0, resets 0 (unexpected 48)",
+    "rx bytes 397571, rx activity 397571, console ring overflows 2 (52828 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 12411, truncated 1, replacements 49, escapes 0, idle flushes 0, overflows 2"
+   ]
+  },
+  {
+   "t": 16.13,
+   "step": "loader",
+   "before": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 50,
+    "transport_ready": false
+   },
+   "lines": [
+    "coproc loader: ESP32-C6 in its ROM loader after 833 ms",
+    "coproc loader: close 0 after 953 ms",
+    "coproc loader: uart_mode console, generation 52, session closed",
+    "~$ [00:00:37.898,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "~$ [00:00:38.099,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "~$ [00:00:38.300,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened",
+    "~$ ~$ [00:00:43.632,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM loader"
+   ],
+   "after": {
+    "state": "failed",
+    "uart_mode": "console",
+    "generation": 54,
+    "transport_ready": false
+   },
+   "esp32_records_3s_after": 69,
+   "faults": []
+  },
+  {
+   "t": 16.61,
+   "step": "coproc status after",
+   "lines": [
+    "uart_mode console, generation 59, transport down, dtr follow on",
+    "switches 2, rx stop failures 0, last switch error 0, resets 0 (unexpected 57)",
+    "rx bytes 519118, rx activity 519118, console ring overflows 6 (96441 bytes lost, 0 pending)",
+    "bridge dropped to host 0, to chip 0; host bytes discarded 0; host TX wakeups 0",
+    "lines 15224, truncated 4, replacements 64, escapes 0, idle flushes 0, overflows 6"
+   ]
+  }
+ ],
+ "image_sha256": "b55a60918942008c20e759f0bb3f7683d321cd2a95bfda3ce0cbacf8f0dc9f4e"
+}
+## install_b.py json
+{
+ "steps": [
+  {
+   "t": 1.72,
+   "step": "http up",
+   "seconds": 1.4
+  },
+  {
+   "t": 5.37,
+   "step": "login",
+   "ms": 3654
+  },
+  {
+   "t": 5.6,
+   "step": "upload",
+   "status": 200,
+   "ms": 233,
+   "state": "ready",
+   "image": {
+    "format": "raw_full_flash",
+    "format_version": null,
+    "target": "esp32c6",
+    "version": "1",
+    "kind": "recovery_bundle",
+    "partition_layout_id": "cedar-c6-ota-4m-2x1792k",
+    "host_protocol": "esp-hosted-mcu-3",
+    "signature_verified": null,
+    "allowed_methods": [
+     "uart"
+    ]
+   }
+  },
+  {
+   "t": 71.77,
+   "step": "board settled",
+   "uptime_ms": 121588
+  },
+  {
+   "t": 71.89,
+   "step": "status before",
+   "status": 200,
+   "body": {
+    "state": "failed",
+    "chip": "esp32c6",
+    "firmware_version": null,
+    "host_protocol": null,
+    "partition_layout_id": null,
+    "transport_ready": false,
+    "uart_mode": "console",
+    "generation": 164,
+    "ota": {
+     "available": false,
+     "reason": "not_implemented"
+    },
+    "uart_update": {
+     "available": true,
+     "reason": null
+    },
+    "last_update": {
+     "job_id": "job_00000001",
+     "state": "failed",
+     "method": "uart",
+     "version": null,
+     "recovery_required": false,
+     "error": {
+      "code": "internal_error",
+      "message": "preflight took longer than 5000 ms",
+      "request_id": "req_4b54e22a",
+      "retryable": true
+     }
+    }
+   }
+  },
+  {
+   "t": 73.4,
+   "step": "startCoprocessorUpdate",
+   "status": 202,
+   "ms": 1510,
+   "body": {
+    "job_id": "job_00000001",
+    "job_url": "/api/v1/jobs/job_00000001",
+    "resource_url": "/api/v1/coprocessor/status"
+   }
+  },
+  {
+   "t": 73.53,
+   "step": "job",
+   "elapsed_s": 0.1,
+   "ms": 130,
+   "state": "queued",
+   "phase": "",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 73.76,
+   "step": "status",
+   "elapsed_s": 0.4,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e22d",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 74.64,
+   "step": "w5500 events",
+   "new": 44,
+   "total": 44
+  },
+  {
+   "t": 76.75,
+   "step": "job",
+   "elapsed_s": 3.4,
+   "ms": 103,
+   "state": "running",
+   "phase": "preflight",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 76.89,
+   "step": "status",
+   "elapsed_s": 3.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e234",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 79.9,
+   "step": "status",
+   "elapsed_s": 6.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e23b",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 82.92,
+   "step": "status",
+   "elapsed_s": 9.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e242",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 85.91,
+   "step": "status",
+   "elapsed_s": 12.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e249",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 88.92,
+   "step": "status",
+   "elapsed_s": 15.5,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e250",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 92.34,
+   "step": "job",
+   "elapsed_s": 18.9,
+   "ms": 688,
+   "state": "running",
+   "phase": "entering_bootloader",
+   "progress": null,
+   "cancellable": true,
+   "error": null
+  },
+  {
+   "t": 92.51,
+   "step": "status",
+   "elapsed_s": 19.1,
+   "state": "updating",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e257",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 95.4,
+   "step": "status",
+   "elapsed_s": 22.0,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e25e",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 95.85,
+   "step": "w5500 events",
+   "new": 5,
+   "total": 49
+  },
+  {
+   "t": 97.92,
+   "step": "job",
+   "elapsed_s": 24.5,
+   "ms": 64,
+   "state": "running",
+   "phase": "begin",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 98.0,
+   "step": "status",
+   "elapsed_s": 24.6,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e265",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 100.62,
+   "step": "status",
+   "elapsed_s": 27.2,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e26c",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 103.21,
+   "step": "status",
+   "elapsed_s": 29.8,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e273",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 105.76,
+   "step": "job",
+   "elapsed_s": 32.4,
+   "ms": 90,
+   "state": "running",
+   "phase": "writing",
+   "progress": null,
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 105.85,
+   "step": "status",
+   "elapsed_s": 32.4,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e27a",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 108.52,
+   "step": "status",
+   "elapsed_s": 35.1,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e281",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 111.13,
+   "step": "job",
+   "elapsed_s": 37.7,
+   "ms": 151,
+   "state": "running",
+   "phase": "writing",
+   "progress": {
+    "completed": 0,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": null
+  },
+  {
+   "t": 111.22,
+   "step": "status",
+   "elapsed_s": 37.8,
+   "state": "updating",
+   "uart_mode": "flashing",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": false,
+    "error": {
+     "code": "internal_error",
+     "message": "preflight took longer than 5000 ms",
+     "request_id": "req_4b54e288",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 113.8,
+   "step": "job",
+   "elapsed_s": 40.4,
+   "ms": 131,
+   "state": "failed",
+   "phase": "writing",
+   "progress": {
+    "completed": 0,
+    "total": 1468176,
+    "unit": "bytes"
+   },
+   "cancellable": false,
+   "error": {
+    "code": "internal_error",
+    "message": "The operation failed",
+    "request_id": "req_4b54e28d",
+    "retryable": true
+   }
+  },
+  {
+   "t": 113.88,
+   "step": "status",
+   "elapsed_s": 40.5,
+   "state": "failed",
+   "uart_mode": "console",
+   "transport_ready": false,
+   "firmware_version": null,
+   "host_protocol": null,
+   "last_update": {
+    "job_id": "job_00000001",
+    "state": "failed",
+    "method": "uart",
+    "version": null,
+    "recovery_required": true,
+    "error": {
+     "code": "internal_error",
+     "message": "A block of the image was not written",
+     "request_id": "req_4b54e28e",
+     "retryable": true
+    }
+   }
+  },
+  {
+   "t": 114.34,
+   "step": "finished",
+   "elapsed_s": 40.9,
+   "state": "failed"
+  }
+ ],
+ "image_sha256": "b55a60918942008c20e759f0bb3f7683d321cd2a95bfda3ce0cbacf8f0dc9f4e"
+}
+## install console
+[+    1.72] ==== host: http up
+[+    5.37] ==== host: login
+[+    5.60] ==== host: upload
+[+   15.43] [8D[J[00:01:04.186,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   15.43] uart:~$ [8D[Juart:~$ [8D[J[00:01:04.387,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   15.43] uart:~$ [8D[Juart:~$ [8D[J[00:01:04.588,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.56] uart:~$ [8D[Juart:~$ [8D[J[00:01:10.342,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.56] uart:~$ [8D[Juart:~$ [8D[J[00:01:10.544,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   21.56] uart:~$ [8D[Juart:~$ [8D[J[00:01:10.686,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+[+   30.72] uart:~$ [8D[Juart:~$ [8D[J[00:01:18.828,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.72] uart:~$ [8D[Juart:~$ [8D[J[00:01:19.029,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.72] uart:~$ [8D[Juart:~$ [8D[J[00:01:19.230,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   30.83] uart:~$ [8D[Juart:~$ [8D[J[00:01:19.543,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
+[+   33.58] uart:~$ [8D[Juart:~$ [8D[J[00:01:21.957,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   33.58] uart:~$ [8D[Juart:~$ [8D[J[00:01:22.158,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   36.25] uart:~$ [8D[Juart:~$ [8D[J[00:01:24.348,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+[+   47.22] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.970,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+[+   47.22] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.976,000] <dbg> chip.LogV: [DL]Boot reason: 1
+[+   47.22] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.980,000] <inf> chip: [ZCL]Boot reason: 1
+[+   47.22] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.981,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
+[+   47.32] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.987,000] <inf> chip: [ZCL]Boot reason: 1
+[+   47.32] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.988,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
+[+   47.32] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.991,000] <inf> chip: [ZCL]Boot reason: 1
+[+   47.32] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.992,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
+[+   47.32] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.995,000] <inf> chip: [ZCL]Boot reason: 1
+[+   47.42] uart:~$ [8D[Juart:~$ [8D[J[00:01:36.996,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
+[+   57.24] uart:~$ [8D[Juart:~$ [8D[J[00:01:45.109,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   57.24] uart:~$ [8D[Juart:~$ [8D[J[00:01:45.310,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   57.24] uart:~$ [8D[Juart:~$ [8D[J[00:01:45.511,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   57.45] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.210,000] <inf> chip: [DMG]AccessControlCluster: initializing
+[+   57.45] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.214,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+[+   57.45] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.235,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+[+   57.55] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.240,000] <inf> chip: [IN]CASE Server enabling CASE session setups
+[+   57.55] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.242,000] <dbg> chip.LogV: [IN]SecureSession[0x700018f0]: Allocated Type:2 LSID:64703
+[+   57.55] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.243,000] <dbg> chip.LogV: [SC]Allocated SecureSession (0x700018f0) - waiting for Sigma1 msg
+[+   57.55] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.244,000] <inf> chip: [SVR]Joining Multicast groups
+[+   57.66] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.245,000] <dbg> chip.LogV: [ZCL]Emitting StartUp event
+[+   57.66] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.253,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x00000000001B0001 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0028 event id: 0x0 Sys timestamp: 0x00000000000158FB
+[+   57.66] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.254,000] <inf> chip: [SVR]Server initialization complete
+[+   58.71] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.510,000] <inf> chip: [SVR]Server Listening...
+[+   58.71] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.511,000] <inf> matter: Matter stack initialized
+[+   58.71] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.512,000] <inf> matter: Matter event loop started
+[+   58.71] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.513,000] <inf> matter_event_loop: Init io_to_matter_stream
+[+   58.82] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.514,000] <inf> matter_event_loop: Start io_to_matter_stream
+[+   58.82] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.515,000] <inf> chip: [DL]CHIP task running
+[+   58.82] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.520,000] <inf> chip: [DIS]Updating services using commissioning mode 0
+[+   58.82] uart:~$ [8D[Juart:~$ [8D[J[00:01:47.529,000] <inf> chip: [DIS]CHIP minimal mDNS started advertising.
+[+   65.88] uart:~$ [8D[Juart:~$ [8D[J[00:01:53.675,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   65.88] uart:~$ [8D[Juart:~$ [8D[J[00:01:53.876,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   65.88] uart:~$ [8D[Juart:~$ [8D[J[00:01:54.078,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   71.77] ==== host: board settled
+[+   71.89] ==== host: status before
+[+   73.40] ==== host: startCoprocessorUpdate
+[+   73.53] ==== host: job
+[+   73.76] ==== host: status
+[+   74.64] ==== host: w5500 events
+[+   76.75] ==== host: job
+[+   76.89] ==== host: status
+[+   79.90] ==== host: status
+[+   82.92] ==== host: status
+[+   85.91] ==== host: status
+[+   88.92] ==== host: status
+[+   92.34] ==== host: job
+[+   92.51] ==== host: status
+[+   95.07] uart:~$ [8D[Juart:~$ uart:~$ [8D[Juart:~$ [8D[J[00:02:00.050,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   95.07] uart:~$ [8D[Juart:~$ [8D[J[00:02:19.979,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   95.18] uart:~$ [8D[Juart:~$ [8D[J[00:02:20.180,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   95.18] uart:~$ [8D[Juart:~$ [8D[J[00:02:20.381,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+   95.18] uart:~$ [8D[Juart:~$ [8D[J[00:02:20.788,000] <inf> coprocessor_updater: install job_00000001: preflight
+[+   95.18] uart:~$ [8D[Juart:~$ [8D[J[00:02:24.151,000] <inf> coprocessor_updater: install job_00000001: entering_bootloader
+[+   95.40] ==== host: status
+[+   95.85] ==== host: w5500 events
+[+   97.83] uart:~$ [8D[Juart:~$ [8D[J[00:02:26.169,000] <inf> esp_loader_adapter: connected to the ESP32-C6 ROM loader
+[+   97.83] uart:~$ [8D[Juart:~$ [8D[J[00:02:27.661,000] <inf> coprocessor_updater: install job_00000001: begin
+[+   97.92] ==== host: job
+[+   98.00] ==== host: status
+[+  100.62] ==== host: status
+[+  103.21] ==== host: status
+[+  105.76] ==== host: job
+[+  105.85] ==== host: status
+[+  108.52] ==== host: status
+[+  111.13] ==== host: job
+[+  111.22] ==== host: status
+[+  113.80] ==== host: job
+[+  113.88] ==== host: status
+[+  114.34] ==== host: finished
+[+  119.22] uart:~$ [8D[Juart:~$ [8D[J[00:02:47.803,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  119.22] uart:~$ [8D[Juart:~$ [8D[J[00:02:48.003,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  119.22] uart:~$ [8D[Juart:~$ [8D[J[00:02:48.204,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+[+  131.14] uart:~$ [8D[Juart:~$ [8D[J[00:02:59.916,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened

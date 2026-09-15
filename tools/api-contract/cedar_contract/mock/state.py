@@ -93,8 +93,8 @@ class DeviceState:
         }
 
     def capabilities_json(self) -> dict[str, object]:
-        ready = self.scenario.coprocessor_state == "ready"
         logs_available, logs_reason = self.logs.esp32_availability()
+        uart_available, uart_reason = self.coprocessor.uart_update_availability()
         return {
             "api_version": "1",
             "features": {
@@ -110,7 +110,9 @@ class DeviceState:
                 # The owner's decision, and the reason the UI must display
                 # instead of a disabled placeholder control.
                 "esp32_ota": {"available": False, "reason": Coprocessor.OTA_REASON},
-                "esp32_uart": {"available": ready, "reason": None if ready else "no transport"},
+                # Follows the UART's owner too: an install is how a coprocessor
+                # with no firmware gets some, so its state does not gate it.
+                "esp32_uart": {"available": uart_available, "reason": uart_reason},
             },
             "limits": {
                 "json_body_bytes": JSON_BODY_BYTES,
@@ -124,7 +126,7 @@ class DeviceState:
                 "network_confirm_max_seconds": 300,
             },
             "wifi_security_modes": ["open", "wpa2_psk", "wpa3_sae"],
-            "firmware_formats": ["raw_app"],
+            "firmware_formats": ["raw_full_flash"],
             "update_requires_ethernet": True,
         }
 

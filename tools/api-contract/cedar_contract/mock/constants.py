@@ -42,7 +42,9 @@ SESSION_ABSOLUTE_MS = 8 * 60 * 60 * 1_000
 #: The device's published limits, echoed in capabilities and enforced here.
 JSON_BODY_BYTES = 8_192
 UPLOAD_CHUNK_BYTES = 16_384
-UPLOAD_MAX_BYTES = 2_097_152
+#: A whole flash image ends before the second application slot (0x1d0000):
+#: bootloader, partition table, otadata and ota_0 fit, anything longer does not.
+UPLOAD_MAX_BYTES = 0x1D0000
 LOG_PAGE_RECORDS = 100
 #: The device builds a log page in its response buffer
 #: (CONFIG_WEB_API_RESPONSE_BODY_MAX); a page stops before the record that

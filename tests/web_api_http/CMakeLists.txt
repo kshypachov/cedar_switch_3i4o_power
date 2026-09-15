@@ -12,6 +12,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${APP_ROOT}/modules/network-manager
     ${APP_ROOT}/modules/log-store
     ${APP_ROOT}/modules/coprocessor-manager
+    ${APP_ROOT}/modules/firmware-store
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -43,6 +44,7 @@ target_sources(app PRIVATE
     ${V1_DIR}/network.c
     ${V1_DIR}/logs.c
     ${V1_DIR}/coprocessor.c
+    ${V1_DIR}/firmware.c
 )
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)

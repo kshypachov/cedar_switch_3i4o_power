@@ -57,6 +57,11 @@
  *     8. Body: absent where required 400 invalid_json; a body where none is
  *        declared 415; a Content-Type other than application/json 415; over
  *        the limit 413; malformed 400 invalid_json; not fitting the schema 422.
+ *        On a route that keeps raw bytes (WEB_API_BODY_OCTETS, the upload
+ *        chunk): absent where required 422 validation_failed, as the mock
+ *        answers an empty chunk; a Content-Type other than
+ *        application/octet-stream, or none, 415; over
+ *        CONFIG_WEB_API_OCTET_BODY_MAX 413.
  *     9. Query: an undeclared or repeated parameter is 400 invalid_query.
  *    10. The handler. Replays of idempotent requests are resolved there,
  *        through job-manager, with the key scoped as the contract says.
@@ -155,6 +160,12 @@ struct web_api_request {
 	size_t body_received;
 	/** Who sent it, for the password guessing limit. */
 	struct web_auth_peer peer;
+	/**
+	 * The device's own address the request arrived on (family 0 when the
+	 * adapter could not tell): which interface it came through, for the
+	 * coprocessor update's "requested over Ethernet" rule.
+	 */
+	struct web_auth_peer local;
 };
 
 /** One response header. Same layout as Zephyr's struct http_header. */
@@ -213,6 +224,12 @@ typedef void (*web_api_handler_t)(struct web_api_call *call);
 #define WEB_API_SETUP_TOKEN BIT(4)
 /** The request body is required. */
 #define WEB_API_BODY_REQUIRED BIT(5)
+/**
+ * The body is raw bytes, `application/octet-stream`, up to
+ * CONFIG_WEB_API_OCTET_BODY_MAX - the firmware upload chunk. Such a route has
+ * no body schema; its handler reads web_api_call.octets.
+ */
+#define WEB_API_BODY_OCTETS BIT(6)
 
 struct web_api_route {
 	/** The operationId, as the document spells it. */
@@ -273,7 +290,8 @@ struct web_api_context {
 	struct web_api_request req;
 	struct web_api_response rsp;
 	struct api_error error;
-	uint8_t body[CONFIG_WEB_API_JSON_BODY_MAX];
+	/** A JSON body or an upload chunk, whichever the route takes. */
+	uint8_t body[MAX(CONFIG_WEB_API_JSON_BODY_MAX, CONFIG_WEB_API_OCTET_BODY_MAX)];
 	char response_body[CONFIG_WEB_API_RESPONSE_BODY_MAX];
 	/** Aligned for any struct a body decodes into. */
 	uint64_t decoded[DIV_ROUND_UP(WEB_API_DECODED_MAX, sizeof(uint64_t))];
@@ -293,6 +311,13 @@ struct web_api_call {
 	bool has_session;
 	/** The decoded body, of the route's body struct type; NULL without one. */
 	const void *body;
+	/**
+	 * For WEB_API_BODY_OCTETS routes: the body as it arrived, NULL when none
+	 * was sent. It lives in the request's context and is gone once the
+	 * handler returns - copy what must outlive the call.
+	 */
+	const uint8_t *octets;
+	size_t octets_len;
 	/**
 	 * For WEB_API_IDEMPOTENT routes: the key scoped as the contract requires,
 	 * and a 32-bit hash of the decoded body. Hand both to job_create().
@@ -328,8 +353,9 @@ void web_api_not_found(struct web_api_context *ctx);
  * @brief The body limit for a request, decided before its body is read.
  *
  * The adapter calls this on the first callback of a request so that it knows
- * how many bytes to keep. JSON requests get CONFIG_WEB_API_JSON_BODY_MAX; a
- * route with no body gets 0, and anything that arrives is counted, not kept.
+ * how many bytes to keep. JSON requests get CONFIG_WEB_API_JSON_BODY_MAX, routes
+ * that keep raw bytes CONFIG_WEB_API_OCTET_BODY_MAX; a route with no body gets
+ * 0, and anything that arrives past the limit is counted, not kept.
  */
 size_t web_api_body_limit(const struct web_api_router *router, enum web_api_method method,
 			  const char *path);

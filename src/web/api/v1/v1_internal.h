@@ -7,6 +7,8 @@
 #ifndef WEB_API_V1_INTERNAL_H_
 #define WEB_API_V1_INTERNAL_H_
 
+#include <zephyr/kernel.h>
+
 #include <job_manager/job_manager.h>
 #include <web_api/web_api.h>
 #include <web_auth/web_auth.h>
@@ -111,6 +113,21 @@ struct v1_empty_body {
 	uint8_t unused;
 };
 
+/* UpdateRequest; upload_id wider than 64 so a longer id is too_long, not cut. */
+struct v1_update_body {
+	char upload_id[128 + 1];
+	char method[16];
+	bool acknowledge_recovery;
+};
+
+/* UploadRequest; 128 code points of up to four bytes. sha256 is wider than its
+ * 64 digits so a longer value is refused by its format, as the mock refuses it. */
+struct v1_upload_body {
+	char filename[128 * 4 + 1];
+	int64_t size_bytes;
+	char sha256[128 + 1];
+};
+
 extern const struct web_json_object v1_setup_schema;
 extern const struct web_json_object v1_login_schema;
 extern const struct web_json_object v1_password_schema;
@@ -118,6 +135,8 @@ extern const struct web_json_object v1_commissioning_schema;
 extern const struct web_json_object v1_network_transaction_schema;
 extern const struct web_json_object v1_apply_schema;
 extern const struct web_json_object v1_empty_schema;
+extern const struct web_json_object v1_upload_schema;
+extern const struct web_json_object v1_update_schema;
 
 void v1_get_auth_state(struct web_api_call *call);
 void v1_setup_admin(struct web_api_call *call);
@@ -147,10 +166,35 @@ void v1_get_log_sources(struct web_api_call *call);
 void v1_get_log_records(struct web_api_call *call);
 void v1_export_logs(struct web_api_call *call);
 void v1_get_coprocessor_status(struct web_api_call *call);
+void v1_create_upload(struct web_api_call *call);
+void v1_get_upload(struct web_api_call *call);
+void v1_write_upload_chunk(struct web_api_call *call);
+void v1_verify_upload(struct web_api_call *call);
+void v1_delete_upload(struct web_api_call *call);
+void v1_cancel_job(struct web_api_call *call);
+void v1_start_coprocessor_update(struct web_api_call *call);
+
+/** The board says @p req arrived on the Ethernet interface; false without its hook (coprocessor.c). */
+bool v1_request_over_ethernet(const struct web_api_request *req);
 
 /* Query parameters of the log operations, for routes.h (logs.c). */
 extern const char *const v1_log_records_query[];
 extern const char *const v1_log_export_query[];
+/* writeUploadChunk's `offset` (firmware.c). */
+extern const char *const v1_upload_chunk_query[];
+
+/**
+ * Why a UART install could not start now - the UART's owner is not the console
+ * - or NULL (coprocessor.c). The C6's state never enters into it: an install is
+ * how a C6 with no firmware gets some.
+ */
+const char *v1_uart_update_unavailable_reason(void);
+
+/** The upload an upload_chunk or firmware_verify job worked on, as a URL in @p buf, or NULL (firmware.c). */
+const char *v1_upload_job_resource_url(const struct job_snapshot *job, char *buf, size_t cap);
+
+/** Run @p work on the v1 job worker, the one thread of firmware-store's file I/O (auth.c). */
+int v1_worker_submit(struct k_work *work);
 
 /**
  * Why ESP32 logs are unavailable - the UART's owner is not the console, or

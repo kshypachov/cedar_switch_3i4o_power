@@ -13,11 +13,17 @@ compatibility and rejected with `503 capability_unavailable`, and both this
 module and capabilities report `available=false` with `reason="not_implemented"`
 — the owner's decision, and the reason the UI must show instead of a disabled
 placeholder switch.
+
+P6 made the file a whole flash image (`raw_full_flash`, the owner's decision):
+bootloader, partition table, blank otadata and application, written from 0x0.
+That makes every image a `recovery_bundle` that needs `acknowledge_recovery`,
+and it makes an install the way an empty or broken coprocessor gets firmware,
+so the coprocessor's state no longer gates it — only who owns the UART does.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 from ..errors import ApiError, error
@@ -31,9 +37,25 @@ from .constants import (
     UPLOAD_CHUNK_MS,
     UPLOAD_MAX_BYTES,
 )
-from .jobs import JobStore, Step
+from .jobs import Job, JobStore, Step
 from .scenario import Scenario
 from .util import deep_copy, detail
+
+#: The one partition layout the device accepts: nvs, otadata, phy_init and two
+#: application slots of 0x1c0000 (1792 KiB) on 4 MB flash.
+LAYOUT_ID = "cedar-c6-ota-4m-2x1792k"
+#: The device's profile value. It is not read from the image: a Wi-Fi and an OT
+#: coprocessor build carry identical headers, and the compatibility profile that
+#: would tell them apart is deferred by the owner.
+HOST_PROTOCOL = "esp-hosted-mcu-3"
+#: `app_desc.version` of the image the mock pretends was uploaded.
+IMAGE_VERSION = "1"
+
+
+def host_protocol_of(hosted_version: str) -> str:
+    """`esp-hosted-mcu-<major>` of a version the C6 reports, e.g. "v3.0.6" → 3."""
+    major = hosted_version.lstrip("vV").split(".")[0]
+    return f"esp-hosted-mcu-{major}"
 
 
 @dataclass
@@ -154,18 +176,21 @@ class Firmware:
             )
         if upload.active_job_id is not None:
             raise error("busy", "A chunk is still being written")
-        outcome = self._scenario.verify_result
+        code, message = _VERIFY_OUTCOMES.get(self._scenario.verify_result, (None, None))
+        ok = self._scenario.verify_result == "ok"
+        if not ok and code is None:
+            raise ValueError(f"unknown verify_result {self._scenario.verify_result!r}")
 
         def verified() -> None:
             upload.active_job_id = None
-            if outcome == "ok":
+            if ok:
                 upload.state = "ready"
                 upload.image = _image_json()
                 upload.error = None
             else:
                 upload.state = "failed"
                 upload.image = None
-                upload.error = error(outcome, _VERIFY_MESSAGES[outcome])
+                upload.error = error(code, message)
 
         job = self._jobs.create(
             "firmware_verify",
@@ -180,13 +205,22 @@ class Firmware:
                 ),
             ],
             resource_url=f"/api/v1/firmware/uploads/{upload.id}",
-            final_state="succeeded" if outcome == "ok" else "failed",
+            final_state="succeeded" if ok else "failed",
         )
-        if outcome != "ok":
-            job.error = error(outcome, _VERIFY_MESSAGES[outcome])
+        if not ok:
+            job.error = error(code, message)
         upload.state = "verifying"
         upload.active_job_id = job.id
         return job.id
+
+    def verify_cancelled(self, job: Job) -> None:
+        """A cancelled verification leaves the file as it was before: every byte
+        received and nothing known about it, so it can be verified again.
+        DECISION: `receiving`, not `failed` — nothing was found wrong."""
+        upload = self.upload
+        if upload is not None and upload.active_job_id == job.id:
+            upload.active_job_id = None
+            upload.state = "receiving"
 
     def delete(self, upload: Upload) -> str:
         if upload.installing:
@@ -203,33 +237,62 @@ class Firmware:
         upload.active_job_id = job.id
         return job.id
 
+    def survive_reboot(self, old: Firmware) -> None:
+        """The file and its metadata are on LittleFS and outlive a reboot; the
+        jobs working on them do not. A chunk not yet flushed is not counted, a
+        verification in progress starts over, and nothing is installing."""
+        self._counter = old._counter
+        upload = old.upload
+        if upload is None:
+            return
+        old._settle(upload)
+        if upload.state == "verifying":
+            upload.state = "receiving"
+        upload.active_job_id = None
+        upload.installing = False
+        self.upload = upload
+
     def _settle(self, upload: Upload) -> None:
         if upload.active_job_id is not None:
             self._jobs.get(upload.active_job_id)
 
 
-_VERIFY_MESSAGES = {
-    "invalid_image": "The file is not a recognised ESP32-C6 application image",
-    "unsupported_target": "The image targets a different chip",
-    "incompatible_firmware": "The image does not match this device's partition layout",
+#: `verify_result` knob → the code and message the device's check produces.
+_VERIFY_OUTCOMES: dict[str, tuple[str, str]] = {
+    "invalid_image": (
+        "invalid_image",
+        "The file is not a whole ESP32-C6 flash image: a checksum, digest or header is wrong",
+    ),
+    "bare_app": (
+        "invalid_image",
+        "The file is a bare application .bin; this device takes the merged file "
+        "(idf.py merge-bin) that is written from 0x0",
+    ),
+    "unsupported_target": ("unsupported_target", "The image targets a different chip"),
+    "incompatible_firmware": (
+        "incompatible_firmware",
+        "The image's partition table does not match the layout this device supports",
+    ),
 }
 
 
 def _image_json() -> dict[str, object]:
-    """A raw `.bin`, which is the only format the first version accepts.
+    """A whole flash image, the only format the first version accepts.
 
-    `signature_verified` is null rather than false: a raw application image
-    carries no signature, and false would claim a check was made and failed.
-    `allowed_methods` lists `uart` alone, because OTA is not implemented.
+    `kind` is `recovery_bundle` because writing it replaces the coprocessor's
+    bootloader and partition table and erases its NVS. `signature_verified` is
+    null rather than false: the file carries no signature, and false would claim
+    a check was made and failed. `allowed_methods` lists `uart` alone, because
+    OTA is not implemented.
     """
     return {
-        "format": "raw_app",
+        "format": "raw_full_flash",
         "format_version": None,
         "target": "esp32c6",
-        "version": "1.4.2",
-        "kind": "app",
-        "partition_layout_id": "cedar-c6-ota-2x1536k",
-        "host_protocol": "esp-hosted-mcu-2.0",
+        "version": IMAGE_VERSION,
+        "kind": "recovery_bundle",
+        "partition_layout_id": LAYOUT_ID,
+        "host_protocol": HOST_PROTOCOL,
         "signature_verified": None,
         "allowed_methods": ["uart"],
     }
@@ -259,6 +322,9 @@ class Coprocessor:
         "health_check",
         "complete",
     )
+    #: From this phase on the chip's flash is being erased or written: the job
+    #: can no longer be cancelled, and an interruption leaves recovery to do.
+    DESTRUCTIVE_PHASE = "begin"
 
     def __init__(
         self, clock: Clock, jobs: JobStore, scenario: Scenario, firmware: Firmware
@@ -267,7 +333,6 @@ class Coprocessor:
         self._jobs = jobs
         self._scenario = scenario
         self._firmware = firmware
-        self.version = "1.4.1"
         self.generation = 3
         self.last_update: dict[str, Any] | None = None
         self._installing_job: str | None = None
@@ -282,25 +347,33 @@ class Coprocessor:
         has no firmware, and its UART still belongs to the log console."""
         return "flashing" if self.updating() else self._scenario.uart_mode
 
+    def uart_update_availability(self) -> tuple[bool, str | None]:
+        """Whether an install could start now, and why not. It follows the
+        UART's owner, never the coprocessor's state: an install is how a C6 with
+        no firmware gets some."""
+        mode = self.uart_mode()
+        if mode == "console":
+            return True, None
+        return False, f"uart_{mode}"
+
     def status_json(self) -> dict[str, object]:
         updating = self.updating()
         ready = self._scenario.coprocessor_state == "ready"
+        transport = ready and not updating
+        available, reason = self.uart_update_availability()
+        # What the C6 reports over ESP-Hosted, and only while it can report it.
+        hosted = self._scenario.hosted_version if transport else None
         return {
             "state": "updating" if updating else self._scenario.coprocessor_state,
             "chip": "esp32c6",
-            "firmware_version": self.version if ready else None,
-            "host_protocol": "esp-hosted-mcu-2.0" if ready else None,
-            "partition_layout_id": "cedar-c6-ota-2x1536k" if ready else None,
-            "transport_ready": ready and not updating,
+            "firmware_version": hosted,
+            "host_protocol": None if hosted is None else host_protocol_of(hosted),
+            "partition_layout_id": LAYOUT_ID if ready else None,
+            "transport_ready": transport,
             "uart_mode": self.uart_mode(),
             "generation": self.generation,
             "ota": {"available": False, "reason": self.OTA_REASON},
-            "uart_update": {
-                "available": ready,
-                "reason": None
-                if ready
-                else f"the coprocessor is {self._scenario.coprocessor_state}",
-            },
+            "uart_update": {"available": available, "reason": reason},
             "last_update": deep_copy(self.last_update),
         }
 
@@ -320,37 +393,48 @@ class Coprocessor:
                 "ethernet_required",
                 "A coprocessor update must be requested over Ethernet",
             )
-        if self._scenario.coprocessor_state != "ready":
-            raise error(
-                "service_not_ready",
-                f"The coprocessor is {self._scenario.coprocessor_state}",
-            )
         upload = self._firmware.find(body["upload_id"])
+        if self.updating():
+            raise error("busy", "A coprocessor update is already running")
         if upload.state != "ready":
             raise error("invalid_state", f"The upload is {upload.state!r}, not 'ready'")
-        job = self._jobs.get(self._installing_job or "")
-        if job is not None and not job.is_terminal:
-            raise error("busy", "A coprocessor update is already running")
-        if upload.image and "recovery_bundle" == upload.image.get("kind"):
-            if not body["acknowledge_recovery"]:
-                raise error("validation_failed", "A recovery bundle needs acknowledge_recovery")
+        if (upload.image or {}).get("kind") == "recovery_bundle" and not body[
+            "acknowledge_recovery"
+        ]:
+            raise error(
+                "validation_failed",
+                "This image replaces the coprocessor's bootloader and partition table "
+                "and erases its NVS; set acknowledge_recovery to true",
+            )
+        mode = self._scenario.uart_mode
+        if mode == "usb_bridge":
+            raise error("busy", "The coprocessor's UART is bridged to USB")
+        if mode != "console":
+            # DECISION: the UART cannot be handed to a flasher at all, which is a
+            # capability missing now rather than a conflict that clears by itself.
+            raise error("capability_unavailable", f"The coprocessor's UART is {mode}")
 
         failed = self._scenario.install_result != "ok"
         steps = [Step("queued", QUEUE_MS, state="queued")]
+        destructive = False
         for phase in self.INSTALL_PHASES:
+            destructive = destructive or phase == self.DESTRUCTIVE_PHASE
             if phase == "writing":
-                steps.append(Step(phase, INSTALL_PHASE_MS * 3, "bytes", upload.size_bytes))
+                step = Step(phase, INSTALL_PHASE_MS * 3, "bytes", upload.size_bytes)
             elif phase == "verifying":
-                steps.append(Step(phase, INSTALL_PHASE_MS, "bytes", upload.size_bytes))
+                step = Step(phase, INSTALL_PHASE_MS, "bytes", upload.size_bytes)
             elif phase == "health_check" and failed:
                 break
             else:
-                steps.append(Step(phase, INSTALL_PHASE_MS))
+                step = Step(phase, INSTALL_PHASE_MS)
+            steps.append(replace(step, cancellable=not destructive))
 
         def done() -> None:
             upload.installing = False
             self.generation += 1
             if failed:
+                # The chip did not come back: it answers nothing over ESP-Hosted.
+                self._scenario.coprocessor_state = "failed"
                 self.last_update = {
                     "job_id": new_job.id,
                     "state": "failed",
@@ -360,12 +444,15 @@ class Coprocessor:
                     "error": detail(cause),
                 }
             else:
-                self.version = (upload.image or {}).get("version", self.version)
+                # Written and confirmed: a C6 that had no firmware now has some.
+                # The summary names the image's app_desc version; the status goes
+                # on showing what the C6 itself reports over ESP-Hosted.
+                self._scenario.coprocessor_state = "ready"
                 self.last_update = {
                     "job_id": new_job.id,
                     "state": "succeeded",
                     "method": "uart",
-                    "version": self.version,
+                    "version": (upload.image or {}).get("version"),
                     "recovery_required": False,
                     "error": None,
                 }
@@ -374,13 +461,7 @@ class Coprocessor:
             "internal_error",
             "The coprocessor did not come back after the write; recovery is required",
         )
-        steps[-1] = Step(
-            steps[-1].phase,
-            steps[-1].duration_ms,
-            steps[-1].unit,
-            steps[-1].total,
-            on_done=done,
-        )
+        steps[-1] = replace(steps[-1], on_done=done)
         new_job = self._jobs.create(
             "coprocessor_update",
             steps,
@@ -392,3 +473,41 @@ class Coprocessor:
         upload.installing = True
         self._installing_job = new_job.id
         return new_job.id
+
+    def cancelled(self, job: Job) -> None:
+        """An install cancelled before its destructive phase touched nothing on
+        the chip: the file is free again and `last_update` stays as it was."""
+        if job.id == self._installing_job and self._firmware.upload is not None:
+            self._firmware.upload.installing = False
+
+    def survive_reboot(self, old: Coprocessor) -> None:
+        """The update journal is on LittleFS. An install the reboot cut short
+        becomes `interrupted` and nothing continues it; whether recovery is
+        needed depends on whether the destructive phase had begun."""
+        # Settle the install first: one that finished before the reboot writes
+        # its outcome as it settles, and that outcome is what the journal holds.
+        job = old._jobs.get(old._installing_job or "")
+        self.last_update = deep_copy(old.last_update)
+        if job is None or job.is_terminal:
+            return
+        phases = self.INSTALL_PHASES
+        reached = job.phase in phases and phases.index(job.phase) >= phases.index(
+            self.DESTRUCTIVE_PHASE
+        )
+        if reached:
+            # Part of the chip's flash is erased or written: it boots nothing.
+            self._scenario.coprocessor_state = "failed"
+        self.last_update = {
+            "job_id": job.id,
+            "state": "interrupted",
+            "method": "uart",
+            "version": None,
+            "recovery_required": reached,
+            "error": detail(
+                error(
+                    "boot_changed",
+                    f"The device restarted during the {job.phase} phase; "
+                    "nothing continues until the install is requested again",
+                )
+            ),
+        }

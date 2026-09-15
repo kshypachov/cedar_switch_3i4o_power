@@ -1,0 +1,51 @@
+   0.000 I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+   0.000 I: PSRAM initialised in QPI mode, 8192 KB
+   0.000 *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+   0.000 I: Starting bootloader
+   0.000 [m
+   0.000 [1;32muart:~$ [mI: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+   0.000 I: 0x90000000..0x9000001F:
+   0.000 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.000 I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0.000 I: Alias[0x02000000..0x0200001F]:
+   0.000 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.000 I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0.000 I: PSRAM 0x70000000..0x7000001F:
+   0.000 I: 50 62 12 2 a0 10 2 70 b0 4a 12 2 ac 10 0 70
+   0.000 I: 14 4a 12 2 98 4a 12 2 0 0 0 0 c0 9d 14 2
+   0.000 I: PSRAM write/read: PASS
+   0.000 I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+   0.000 I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+   0.000 I: Boot source: primary slot
+   0.000 I: Image index: 0, Swap type: none
+   0.594 I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+   0.594 I: PSRAM initialised in QPI mode, 8192 KB
+   0.645 *** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+   0.645 I: Starting bootloader
+   0.645 [m
+   0.645 [1;32muart:~$ [mI: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+   0.645 I: 0x90000000..0x9000001F:
+   0.645 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.645 I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0.645 I: Alias[0x02000000..0x0200001F]:
+   0.645 I: 3d b8 f3 96 0 0 0 0 0 4 0 0 d8 a7 15 0
+   0.645 I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0.645 I: PSRAM 0x70000000..0x7000001F:
+   0.645 I: 50 62 12 2 a0 10 2 70 b0 4a 12 2 ac 10 0 70
+   0.645 I: 14 4a 12 2 98 4a 12 2 0 0 0 0 c0 9d 14 2
+   0.645 I: PSRAM write/read: PASS
+   0.699 I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+   0.699 I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+   0.699 I: Boot source: primary slot
+   0.699 I: Image index: 0, Swap type: none
+   1.400 I: Image index: 0, Swap type: none
+   2.161 ## recovery on /dev/cu.usbmodem11201
+   2.161 ## image list:
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: 0013e3f05d2f3ecffd022c4db89f900aacaea3eaf783da5613940b5028cba091
+Split status: N/A (0)
+

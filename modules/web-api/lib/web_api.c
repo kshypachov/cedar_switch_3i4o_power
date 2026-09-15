@@ -666,11 +666,14 @@ size_t web_api_body_limit(const struct web_api_router *router, enum web_api_meth
 	bool valid;
 	const struct web_api_route *route = find_route(router, method, path, NULL, &known, &valid);
 
-	if (route == NULL || route->body_schema == NULL) {
+	if (route == NULL) {
 		return 0U;
 	}
+	if (route->flags & WEB_API_BODY_OCTETS) {
+		return CONFIG_WEB_API_OCTET_BODY_MAX;
+	}
 
-	return CONFIG_WEB_API_JSON_BODY_MAX;
+	return route->body_schema != NULL ? CONFIG_WEB_API_JSON_BODY_MAX : 0U;
 }
 
 /* -- middleware steps ---------------------------------------------------- */
@@ -697,9 +700,9 @@ static bool origin_ok(const struct web_api_headers *h)
 	return h->host != NULL && strlen(h->host) == n && memcmp(netloc, h->host, n) == 0;
 }
 
-static bool is_json_type(const char *content_type)
+/* The media type of a Content-Type value, ignoring parameters and case. */
+static bool is_media_type(const char *content_type, const char *type)
 {
-	static const char json[] = "application/json";
 	const char *p = content_type;
 	size_t n;
 
@@ -708,7 +711,12 @@ static bool is_json_type(const char *content_type)
 	}
 	n = strcspn(p, "; ");
 
-	return equal_nocase(p, n, json, sizeof(json) - 1U);
+	return equal_nocase(p, n, type, strlen(type));
+}
+
+static bool is_json_type(const char *content_type)
+{
+	return is_media_type(content_type, "application/json");
 }
 
 static int hex_digit(char c)
@@ -801,6 +809,14 @@ static void scope_idempotency(struct web_api_call *call)
 	if (call->body != NULL) {
 		call->request_hash =
 			(uint32_t)web_api_fnv1a64(FNV64_OFFSET, call->body, call->route->body_size);
+	} else if (call->octets != NULL) {
+		/* Raw bytes have no canonical form to hash: the bytes are the
+		 * request, with their length, so a retry that carries another
+		 * chunk under the same key is a conflict, not a replay. */
+		const uint64_t len = call->octets_len;
+
+		h = web_api_fnv1a64(FNV64_OFFSET, &len, sizeof(len));
+		call->request_hash = (uint32_t)web_api_fnv1a64(h, call->octets, call->octets_len);
 	} else {
 		call->request_hash = 0U;
 	}
@@ -921,7 +937,32 @@ void web_api_dispatch(const struct web_api_router *router, struct web_api_contex
 	}
 
 	/* 8. Body */
-	if (route->body_schema == NULL) {
+	if (route->flags & WEB_API_BODY_OCTETS) {
+		__ASSERT(route->body_schema == NULL, "a route keeps raw bytes or decodes JSON, not both");
+		if (req->body_received == 0U) {
+			if (route->flags & WEB_API_BODY_REQUIRED) {
+				reject_ctx(ctx, API_ERR_VALIDATION_FAILED, "A request body is required");
+				return;
+			}
+		} else {
+			/* Unlike JSON, an absent Content-Type is not assumed: bytes a
+			 * form or a script sent without saying what they are must not
+			 * land in a firmware file. */
+			if (h->content_type == NULL ||
+			    !is_media_type(h->content_type, "application/octet-stream")) {
+				reject_ctx(ctx, API_ERR_UNSUPPORTED_MEDIA_TYPE,
+					   "The body must be application/octet-stream");
+				return;
+			}
+			if (req->body == NULL || req->body_received > CONFIG_WEB_API_OCTET_BODY_MAX) {
+				reject_ctx(ctx, API_ERR_PAYLOAD_TOO_LARGE,
+					   "The body is larger than one upload chunk");
+				return;
+			}
+			call.octets = req->body;
+			call.octets_len = req->body_len;
+		}
+	} else if (route->body_schema == NULL) {
 		if (req->body_received > 0U) {
 			reject_ctx(ctx, API_ERR_UNSUPPORTED_MEDIA_TYPE,
 				   "This operation takes no request body");

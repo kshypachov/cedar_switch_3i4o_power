@@ -1,0 +1,118 @@
+From: Кирило Шипачов <kshypachov@gmail.com>
+Date: Mon, 14 Sep 2026 13:45:00 +0300
+Subject: [PATCH] drivers: esp_hosted_mcu: do not busy-poll a coprocessor that is not
+ running its firmware
+
+Adds esp_hosted_mcu_suspend() and sleeps the receive thread's poll interval
+when data-ready was high but no transfer carried a frame.
+---
+--- a/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c
++++ b/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.c
+@@ -61,6 +61,8 @@
+ 	bool rx_stride_aligned;
+ 	/* Set by esp_hosted_mcu_restart(): the receive thread drops its carry. */
+ 	atomic_t rx_flush;
++	/* Set by esp_hosted_mcu_suspend(): another owner has the coprocessor. */
++	atomic_t suspended;
+ 	/* Transmit path statistics: frames queued and transport writes issued. */
+ 	uint32_t tx_frames;
+ 	uint32_t tx_writes;
+@@ -568,6 +570,18 @@
+ 			carry = 0;
+ 		}
+ 
++		/*
++		 * While the coprocessor sits in its ROM loader it may hold the
++		 * data-ready line high with no frames behind it; reading that level
++		 * as "frames queued" turns this loop into a busy SPI poll of a chip
++		 * that does not answer.
++		 */
++		if (atomic_get(&data->suspended) != 0) {
++			carry = 0;
++			k_msleep(CONFIG_ESP_HOSTED_MCU_EVENT_TASK_POLL_MS);
++			continue;
++		}
++
+ 		if (!cfg->transport->data_ready(dev)) {
+ 			/*
+ 			 * Block on the transport's data-ready interrupt so a
+@@ -588,6 +602,8 @@
+ 		 * and yield between frames so a sustained flood cannot monopolise
+ 		 * the CPU and starve the network and transmit threads.
+ 		 */
++		bool received = false;
++
+ 		for (int i = 0; i < ESP_HOSTED_MCU_RX_BURST; i++) {
+ 			int len = cfg->transport->transfer(dev, NULL, 0, rxdma);
+ 			uint16_t total;
+@@ -597,6 +613,7 @@
+ 			if (len <= 0) {
+ 				break;
+ 			}
++			received = true;
+ 			data->rx_reads++;
+ 			data->rx_bytes += len;
+ 
+@@ -627,6 +644,17 @@
+ 				break;
+ 			}
+ 		}
++
++		/*
++		 * Data-ready was high but no transfer carried a frame: a line held
++		 * or floating high (a coprocessor in reset or in its ROM loader), not
++		 * a queue to drain. Sleep the poll interval instead of retrying at
++		 * once - k_yield() gives nothing to lower priorities, and a tight
++		 * loop here starves the CPU and every other device on the bus.
++		 */
++		if (!received) {
++			k_msleep(CONFIG_ESP_HOSTED_MCU_EVENT_TASK_POLL_MS);
++		}
+ 	}
+ }
+ 
+@@ -672,6 +700,10 @@
+ 	}
+ 	data = dev->data;
+ 
++	if (atomic_get(&data->suspended) != 0) {
++		return -EAGAIN;
++	}
++
+ 	if (len > ESP_HOSTED_MCU_MAX_PAYLOAD) {
+ 		return -EMSGSIZE;
+ 	}
+@@ -803,6 +835,11 @@
+ 	return esp_hosted_mcu_data_0.fw_version;
+ }
+ 
++void esp_hosted_mcu_suspend(bool suspend)
++{
++	atomic_set(&esp_hosted_mcu_data_0.suspended, suspend ? 1 : 0);
++}
++
+ int esp_hosted_mcu_restart(k_timeout_t timeout)
+ {
+ 	const struct device *dev = esp_hosted_mcu_data_0.dev;
+--- a/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.h
++++ b/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.h
+@@ -295,6 +295,19 @@
+ int esp_hosted_mcu_restart(k_timeout_t timeout);
+ 
+ /*
++ * Stop and resume the driver's use of the transport while another owner holds
++ * the coprocessor - for example its UART ROM loader during a re-flash. In the
++ * ROM loader the coprocessor may keep the data-ready line high with no frames
++ * behind it, and the receive thread would poll the SPI bus without pause,
++ * starving every other user of that bus and of the CPU.
++ *
++ * While suspended the receive thread only sleeps its poll interval and
++ * esp_hosted_mcu_send_frame() returns -EAGAIN; frames already queued are still
++ * sent. Resume before esp_hosted_mcu_restart(). Nothing changes unless called.
++ */
++void esp_hosted_mcu_suspend(bool suspend);
++
++/*
+  * Implemented by the Wi-Fi driver. After esp_hosted_mcu_restart(), run the
+  * coprocessor's esp_wifi bring-up again: MAC query, WifiInit, station mode,
+  * WifiStart. A station association or soft AP from the previous run is

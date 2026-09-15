@@ -53,6 +53,9 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/zephyr-log-source # Zephyr log backend into log-store (CONFIG_ZEPHYR_LOG_SOURCE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/esp32-log-source # C6 UART bytes into log lines (CONFIG_ESP32_LOG_SOURCE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/coprocessor-manager # Owner of USART3 and EN/BOOT, UART modes and exclusion (CONFIG_COPROCESSOR_MANAGER)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/firmware-store   # Staged coprocessor image in LittleFS: chunks, recovery, merged-file check (CONFIG_FIRMWARE_STORE)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/esp-loader-adapter # esp-serial-flasher session with guaranteed UART/strap cleanup (CONFIG_ESP_LOADER_ADAPTER)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/coprocessor-updater # UART install of the C6 image as one job, journal, health (CONFIG_COPROCESSOR_UPDATER)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -97,6 +100,7 @@ target_sources(app PRIVATE
         src/web/api/v1/network.c
         src/web/api/v1/logs.c
         src/web/api/v1/coprocessor.c
+        src/web/api/v1/firmware.c
         src/mqtt/ha_mqtt.c
         src/mqtt/ha_mqtt_callback.c
         src/mqtt/ha_mqtt_helpers.c

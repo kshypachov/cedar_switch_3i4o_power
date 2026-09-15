@@ -1,0 +1,129 @@
+# 2026-09-14 ~11:38-11:46, board B. Step 1 image: firmware-store, esp-loader-adapter, coprocessor-updater, API v1 upload/update bindings, Content-Type capture; esp_hosted_mcu restart patch in the tree.
+# zephyr.signed.bin sha256 5e92f1e3ed22e2d85e4d010c81666c8f43757b7c8bd7a3f3c70c33a34c3b3740; FLASH 1 413 316 B (33.72 %), RAM 86 728 B, PSRAM 2 546 112 B; uploaded over CDC recovery in 382 s.
+## flash.out
+image /private/tmp/claude-501/-Volumes-Programming-Zephyr-zephyr-latest-cedar-switch-3in4out-power/e74ea288-8214-49be-9d08-9f3a97e4aadb/scratchpad/build-step1/cedar_p6/zephyr/zephyr.signed.bin sha256 5e92f1e3ed22e2d85e4d010c81666c8f43757b7c8bd7a3f3c70c33a34c3b3740
+J-Link reset rc=0
+recovery on /dev/cu.usbmodem11201 after 2.5 s
+upload rc=0 in 382 s
+Images:
+ image=0 slot=0
+    version: 0.0.0
+    bootable: true
+    flags: active confirmed
+    hash: e27d91c1f5df6888183c1c4f76cb47bce1e0c9d15c1d6dc987f06c41070083b4
+Split status: N/A (0)
+
+## boot console
+# image sha256 5e92f1e3ed22e2d85e4d010c81666c8f43757b7c8bd7a3f3c70c33a34c3b3740
+I: Detected ESP-PSRAM64H (ID D 5D 46 A1 21)
+I: PSRAM initialised in QPI mode, 8192 KB
+*** Using Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+I: Starting bootloader
+
+uart:~$ I: ICACHE alias: 0x02000000 -> 0x90000000 (4MB)
+I: 0x90000000..0x9000001F:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 c4 8c 15 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: Alias[0x02000000..0x0200001F]:
+I: 3d b8 f3 96 0 0 0 0 0 4 0 0 c4 8c 15 0
+I: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I: PSRAM 0x70000000..0x7000001F:
+I: b0 c8 11 2 78 c9 1 70 10 b1 11 2 ec e 0 70
+I: 74 b0 11 2 f8 b0 11 2 0 0 0 0 d4 e2 13 2
+I: PSRAM write/read: PASS
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: Bootloader chainload address offset: 0x0
+I: Image version: v0.0.0
+I: Jumping to the first image slot
+
+uart:~$ [8D[J[00:00:01.654,000] <wrn> esp_hosted_mcu_core: coprocessor firmware version unknown, expected v3.0.0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.654,000] <err> mb85rsxx: invalid device ID: 00 00 00 00
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.654,000] <err> mb85rsxx: Failed to initialize device, RDID check failed (err -5)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.654,000] <inf> eth_w5500: ETH_W5500: interrupt mode
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.663,000] <inf> eth_w5500: W5500 Initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.664,000] <inf> spi_nor: SPI_FLASH: SFDP v 1.5 AP ff with 1 PH
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.664,000] <inf> spi_nor: PH0: ff00 rev 1.5: 16 DW @ 80
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.664,000] <inf> spi_nor: SPI_FLASH: 16 MiBy flash
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.765,000] <err> esp_hosted_mcu: coprocessor WifiInit failed
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.769,000] <err> net_if: Iface 0x200034e8 device not ready
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.771,000] <err> net_ethernet: Invalid MAC address for iface 1 (0x200033b0)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.771,000] <inf> littlefs: LittleFS version 2.11, disk version 2.1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.772,000] <inf> littlefs: FS at SPI_FLASH:0xa00000 is 1280 0x1000-byte blocks with 1024 cycle
+uart:~$ [8D[Juart:~$ [8D[J[00:00:01.772,000] <inf> littlefs: partition sizes: rd 256 ; pr 256 ; ca 2048 ; la 256
+uart:~$ [8D[Juart:~$ [8D[J*** Booting Zephyr OS build v4.4.0-12983-gb6a5e6e8aa90 ***
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.033,000] <inf> shell_telnet: Telnet shell backend initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.034,000] <inf> main_app: Start main app (build: Sep 14 2026 11:38:15) version 8
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.035,000] <inf> main_app: PSRAM @0x7026da28: write/read 1024 words OK
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.250,000] <inf> settings_registry: 10 keys registered, 0 rejected
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.250,000] <inf> io: Start io init
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.302,000] <inf> io: Start io outputs task
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.413,000] <err> fs: file open error (-2)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.438,000] <err> fs: failed to unlink path (-2)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.463,000] <err> fs: file open error (-2)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.465,000] <inf> net_init: EEPROM MAC: 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.465,000] <inf> eth_w5500: ETH_W5500 MAC set to 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:02.466,000] <inf> net_init: Network interface up with MAC 80:34:28:10:6a:1d
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.271,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+uart:~$ [8D[Juart:~$ [8D[J[00:00:03.498,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.339,000] <inf> device_config_store: configuration loaded, revision 8
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.340,000] <inf> network_service: network configuration revision 8: clean (1871 ms)
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.340,000] <inf> net_adapter: Ethernet found, Wi-Fi coprocessor missing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.626,000] <inf> eth_w5500: ETH_W5500: Link speed 100 Mb, full duplex
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.655,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.656,000] <inf> matter: Matter start work already submitted
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.927,000] <inf> network_service: boot 1 of 5 in a row shorter than 30 s
+uart:~$ [8D[Juart:~$ [8D[J[00:00:04.928,000] <inf> network_service: worker stack: 4936 of 8192 bytes never used
+uart:~$ [8D[Juart:~$ [8D[J[00:00:05.427,000] <inf> web_server: web interface cedar-2037394c3543501200210047, firmware 4e5b8a42deba-dirty, frontend 0.1.0+4e5b8a42deba-dirty, boot_e33618da456b1e2e
+uart:~$ [8D[Juart:~$ [8D[J[00:00:05.438,000] <inf> net_adapter: ethernet: DHCP
+uart:~$ [8D[Juart:~$ [8D[J[00:00:05.992,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:06.194,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:06.395,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:06.561,000] <inf> matter: IPv6 address added, starting Matter
+uart:~$ [8D[Juart:~$ [8D[J[00:00:06.561,000] <inf> matter: Matter start work already submitted
+uart:~$ [8D[Juart:~$ [8D[J[00:00:06.820,000] <inf> matter: Init CHIP stack
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.179,000] <inf> chip: [SVR]Initializing session resumption storage...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.182,000] <inf> chip: [SVR]Server initializing...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.186,000] <dbg> chip.LogV: [FP]Initializing FabricTable from persistent storage
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.486,000] <inf> net_dhcpv4: Received: 192.168.88.13
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.492,000] <inf> network_manager: default route via ethernet
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.696,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:11.897,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:12.098,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:12.300,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:13.405,000] <inf> chip: [TS]Last Known Good Time: 2023-10-14T01:16:48
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.887,000] <inf> chip: [DMG]AccessControl: initializing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.888,000] <inf> chip: [DMG]Examples::AccessControlDelegate::Init
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.889,000] <inf> chip: [DMG]AccessControl: setting
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.890,000] <inf> chip: [DMG]DefaultAclStorage: initializing
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.891,000] <inf> chip: [DMG]DefaultAclStorage: 0 entries loaded
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.892,000] <inf> chip: [SVR]WARNING: mTestEventTriggerDelegate is null
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.896,000] <dbg> chip.LogV: [IN]UDP::Init bind&listen port=5540
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.901,000] <dbg> chip.LogV: [IN]UDP::Init bound to port=5540
+uart:~$ [8D[Juart:~$ [8D[J[00:00:15.902,000] <dbg> chip.LogV: [IN]TransportMgr initialized
+uart:~$ [8D[Juart:~$ [8D[J[00:00:17.984,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:20.993,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:23.512,000] <inf> chip: [ZCL]Using ZAP configuration...
+uart:~$ [8D[Juart:~$ [8D[J[00:00:24.736,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:25.973,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (1, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:27.248,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:28.475,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (2, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:29.725,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:30.962,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (3, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.208,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_0000: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.434,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:32.636,000] <err> eth_w5500: W5500 receive state inconsistent (header 65535, 65535 buffered): socket reopened
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.723,000] <dbg> chip.LogV: [DMG]Failed to read stored attribute (4, 0x0000_0006, 0x0000_4003: a0
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.730,000] <dbg> chip.LogV: [DL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.737,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.738,000] <inf> chip: [ZCL]Endpoint 1 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.742,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.743,000] <inf> chip: [ZCL]Endpoint 2 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.747,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.748,000] <inf> chip: [ZCL]Endpoint 3 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.752,000] <inf> chip: [ZCL]Boot reason: 1
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.753,000] <inf> chip: [ZCL]Endpoint 4 On/off already set to new value
+uart:~$ [8D[Juart:~$ [8D[J[00:00:33.965,000] <dbg> chip.LogV: [EVL]LogEvent event number: 0x0000000000150000 priority: 2, endpoint id:  0x0 cluster id: 0x0000_0033 event id: 0x3 Sys timestamp: 0x00000000000058FA
+uart:~$ [8D[Juart:~$ 

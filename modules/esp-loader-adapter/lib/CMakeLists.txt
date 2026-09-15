@@ -1,0 +1,6 @@
+# A named library, so the firmware's psram_sections.ld can place its state.
+zephyr_library_named(esp_loader_adapter)
+
+zephyr_library_sources(esp_loader_adapter.c)
+zephyr_library_sources_ifdef(CONFIG_ESP_LOADER_ADAPTER_ZEPHYR esp_loader_adapter_zephyr.c)
+zephyr_library_sources_ifdef(CONFIG_ESP_LOADER_ADAPTER_UPDATER_OPS esp_loader_adapter_updater.c)

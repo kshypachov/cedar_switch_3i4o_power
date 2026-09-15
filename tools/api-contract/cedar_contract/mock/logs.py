@@ -412,7 +412,7 @@ _TEMPLATE: list[tuple[str, str | None, str | None, str, str]] = [
     ("esp32", "warning", "wifi", "AP not found, retrying in 5s", "message"),
     ("stm32", "warning", "eth_w5500", "receive queue high water mark 12", "message"),
     ("stm32", "error", "settings", "settings_registry: 0 keys registered", "message"),
-    ("esp32", "info", "esp_hosted", "transport ready, protocol esp-hosted-mcu-2.0", "message"),
+    ("esp32", "info", "esp_hosted", "transport ready, protocol esp-hosted-mcu-3", "message"),
     ("stm32", "debug", "matter", "FabricTable: 0 fabrics loaded", "message"),
     ("esp32", "unknown", None, "\x1b[0;32mI (412) boot: compile time 11:22:33", "message"),
     ("stm32", "info", "web", "HTTP server listening on 0.0.0.0:80", "message"),
