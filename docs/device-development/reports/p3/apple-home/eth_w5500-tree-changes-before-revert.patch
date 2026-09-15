@@ -1,0 +1,78 @@
+diff --git a/drivers/ethernet/eth_w5500.c b/drivers/ethernet/eth_w5500.c
+index a7c588bbeb6..101bdaad539 100644
+--- a/drivers/ethernet/eth_w5500.c
++++ b/drivers/ethernet/eth_w5500.c
+@@ -204,6 +204,20 @@ static int w5500_tx(const struct device *dev, struct net_pkt *pkt)
+ 	return 0;
+ }
+ 
++/*
++ * Socket 0 closed and opened again. OPEN resets the chip's receive pointers,
++ * which is the only way back once the length header and Sn_RX_RD disagree:
++ * advancing the pointer by a length read in that state only moves it further
++ * from the data. Sn_MR survives CLOSE, so the MACRAW mode and filters stay.
++ */
++static void w5500_rx_resync(const struct device *dev, uint16_t header, uint16_t buffered)
++{
++	LOG_ERR("W5500 receive state inconsistent (header %u, %u buffered): socket reopened",
++		header, buffered);
++	w5500_command(dev, S0_CR_CLOSE);
++	w5500_command(dev, S0_CR_OPEN);
++}
++
+ static void w5500_rx(const struct device *dev)
+ {
+ 	uint8_t header[2];
+@@ -230,8 +244,19 @@ static void w5500_rx(const struct device *dev)
+ 	if (w5500_readbuf(dev, off, header, 2) < 0) {
+ 		return;
+ 	}
+-	if (sys_get_be16(header) <= 2U) {
+-		LOG_ERR("Invalid W5500 header size %u", sys_get_be16(header));
++	/*
++	 * The length is read from the chip's buffer and nothing else checks it.
++	 * One that cannot be a frame, or is larger than the bytes actually
++	 * buffered, means the read pointer and the data disagree. Returning
++	 * without fixing that leaves the pointer where it is, and every later
++	 * frame is read from the same wrong place; walking a too-large length
++	 * runs past the last fragment net_pkt_rx_alloc_with_buffer() gave us and
++	 * faults on a NULL fragment.
++	 */
++	if (sys_get_be16(header) <= 2U || sys_get_be16(header) > rx_buf_len ||
++	    sys_get_be16(header) - 2U > NET_ETH_MAX_FRAME_SIZE) {
++		eth_stats_update_errors_rx(ctx->iface);
++		w5500_rx_resync(dev, sys_get_be16(header), rx_buf_len);
+ 		return;
+ 	}
+ 	rx_len = sys_get_be16(header) - 2;
+@@ -419,8 +444,15 @@ static void w5500_iface_init(struct net_if *iface)
+ 	const struct device *dev = net_if_get_device(iface);
+ 	struct w5500_runtime *ctx = dev->data;
+ 
+-	/* configure Socket 0 with MACRAW mode and MAC filtering enabled */
+-	uint8_t mode = S0_MR_MACRAW | BIT(W5500_S0_MR_MF);
++	/*
++	 * Socket 0 in MACRAW with MAC filtering. MMB additionally drops IPv4
++	 * multicast in hardware: an unrelated 239.255.x stream on the segment
++	 * was delivering ~271 frames/s to this driver, and since the RX thread
++	 * is cooperative it never yielded, starving logging, the shell and the
++	 * rest of the system. IPv6 multicast is left enabled (MIP6B, bit 4,
++	 * stays clear) because Matter depends on it.
++	 */
++	uint8_t mode = S0_MR_MACRAW | BIT(W5500_S0_MR_MF) | BIT(W5500_S0_MR_MMB);
+ 
+ 	w5500_spi_write(dev, W5500_S0_MR, &mode, 1);
+ 
+diff --git a/drivers/ethernet/eth_w5500_priv.h b/drivers/ethernet/eth_w5500_priv.h
+index d1070e62d49..a86cd6a5bfe 100644
+--- a/drivers/ethernet/eth_w5500_priv.h
++++ b/drivers/ethernet/eth_w5500_priv.h
+@@ -68,6 +68,8 @@
+ #define W5500_S0_IMR		(W5500_S0_REGS + W5500_Sn_IMR)
+ 
+ #define W5500_S0_MR_MF		7 /* MAC Filter for W5500 */
++#define W5500_S0_MR_MMB		5 /* IPv4 multicast blocking in MACRAW mode */
++#define W5500_S0_MR_MIP6B	4 /* IPv6 packet blocking in MACRAW mode */
+ #define W5500_Sn_REGS_LEN	0x0040
+ #define W5500_SIMR		0x0018 /* Socket Interrupt Mask Register */
+ #define IR_S0			0x01
