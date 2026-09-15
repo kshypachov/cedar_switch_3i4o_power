@@ -1,0 +1,48 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+menuconfig SYSTEM_UPDATER
+	bool "STM32 update through MCUboot slot 2 as one job"
+	depends on JOB_MANAGER
+	help
+	  Request a test swap of a verified image in slot 2 and restart; after
+	  the swap, reconcile a journal with the image that runs (awaiting
+	  confirmation, succeeded, rolled back, failed, interrupted) and
+	  confirm the new image once it has run long enough. See
+	  include/system_updater/system_updater.h.
+
+if SYSTEM_UPDATER
+
+config SYSTEM_UPDATER_CONFIRM_SECONDS
+	int "Seconds a new image runs before it confirms itself"
+	default 1200
+	range 10 86400
+	help
+	  Owner's decision (2026-09-14): 20 minutes without a crash. A reset
+	  before then makes MCUboot restore the previous image. Shorter values
+	  are for the bench.
+
+config SYSTEM_UPDATER_REBOOT_DELAY_MS
+	int "Delay between requesting the swap and the restart, ms"
+	default 2000
+	range 0 60000
+	help
+	  Lets the HTTP answer and a poll of the job reach the browser before
+	  the device goes away.
+
+config SYSTEM_UPDATER_CONFIRM_RETRY_MS
+	int "First retry after a failed confirmation, ms"
+	default 10000
+	range 100 3600000
+	help
+	  Doubles after each failure up to SYSTEM_UPDATER_CONFIRM_RETRY_MAX_MS.
+
+config SYSTEM_UPDATER_CONFIRM_RETRY_MAX_MS
+	int "Longest wait between confirmation retries, ms"
+	default 300000
+	range 100 3600000
+
+module = SYSTEM_UPDATER
+module-str = system-updater
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # SYSTEM_UPDATER

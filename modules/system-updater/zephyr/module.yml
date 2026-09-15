@@ -1,0 +1,7 @@
+# Zephyr module declaration for system-updater.
+#
+# Registered by the application via ZEPHYR_EXTRA_MODULES (see the app
+# CMakeLists.txt), the same way as the other in-tree modules.
+build:
+  cmake: .
+  kconfig: lib/Kconfig

@@ -1,0 +1,16 @@
+tests:
+  cedar.system_updater:
+    # The STM32 install on a fake platform: every reconciliation row of the
+    # journal against the running image, a restart at each phase, cancel before
+    # and at the point of no return, request and journal failures, the downgrade
+    # rule, self-confirmation with retries and the console's confirmation. The
+    # real swap and the XIP confirmation are the hardware tier's
+    # (reports/stm32-update).
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - system_updater
+      - sim
