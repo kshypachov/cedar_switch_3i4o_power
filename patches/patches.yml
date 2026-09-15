@@ -33,6 +33,27 @@ patches:
       were characterised on the board, not taken from the datasheet. Upstream
       request drafted in docs/upstream/w5500-multicast-filtering-request.md.
 
+  - path: tf-psa-crypto/ecp-p256-stm32-pka.patch
+    sha256sum: a604ff1f59b30a090cfbd58765f553bd91892f769303529ec34292a77974962a
+    module: tf-psa-crypto
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-15
+    upstreamable: false
+    merge-status: false
+    comments: >-
+      Offloads P-256 mbedtls_ecp_mul() and mbedtls_ecp_muladd() in the builtin
+      ECP module to the STM32U585 PKA (ECCMul, ECCDoubleBaseLadder) through
+      modules/psa-driver-stm32. Matter's SPAKE2+ (PASE) calls these directly,
+      past the PSA driver interface, so the PSA driver alone does not reach it.
+      Everything added is under #if defined(CONFIG_STM32_PKA_ECP_P256), a
+      Kconfig symbol only this application defines, so other projects building
+      from the shared tf-psa-crypto checkout compile the file unchanged. Not
+      offloaded (other curves, restartable contexts, non-affine points, scalars
+      outside [1, N-1], any PKA error) falls through to the software path.
+      Applied to the tree on 2026-09-15 with git apply (tf-psa-crypto 000d24cb5).
+      Measurements and the change log: docs/device-development/reports/crypto/pka.
+
   - path: zephyr/eth_w5500-reopen-socket-on-inconsistent-rx.patch
     sha256sum: 1de08f1de330cbdaba6e5792dacf166aed8c39760e5c298962f1e8e57b227d08
     module: zephyr

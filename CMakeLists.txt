@@ -56,6 +56,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/firmware-store   # Staged coprocessor image in LittleFS: chunks, recovery, merged-file check (CONFIG_FIRMWARE_STORE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/esp-loader-adapter # esp-serial-flasher session with guaranteed UART/strap cleanup (CONFIG_ESP_LOADER_ADAPTER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/coprocessor-updater # UART install of the C6 image as one job, journal, health (CONFIG_COPROCESSOR_UPDATER)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/psa-driver-stm32 # STM32 PKA: P-256 on the public key accelerator, PSA driver (CONFIG_STM32_PKA)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -240,13 +241,52 @@ if(CONFIG_CODE_DATA_RELOCATION)
     endforeach()
     zephyr_code_relocate(FILES
             ${ZEPHYR_BASE}/subsys/logging/log_core.c                # буфер deferred-логов
-            ${ZEPHYR_BASE}/lib/libc/common/source/stdlib/malloc.c   # арена malloc (Matter, mbedTLS)
+            # malloc.c (арена malloc Matter и mbedTLS) — в SRAM с 2026-09-15: остаток SRAM
+            # после _end (CONFIG_COMMON_LIBC_MALLOC_ARENA_SIZE=-1), reports/p3/tuning/sram
             ${ZEPHYR_BASE}/kernel/mempool.c                         # куча k_malloc
             ${ZEPHYR_BASE}/drivers/flash/flash_shell.c
             LOCATION PSRAM_DATA_BSS_NOINIT NOKEEP)
 endif()
+# ------------------ SRAM: горячий код криптографии сопряжения Matter ------------------
+# 2026-09-15, по решению владельца (reports/p3/tuning/sram): SPAKE2+, ECDSA, ECDH, SHA-256,
+# AES-CCM исполняются из SRAM, а не XIP из внешней флеши через ICACHE. Штатный
+# zephyr_code_relocate(RAM_TEXT); MPU-регион RX — CONFIG_CODE_DATA_RELOCATION_SRAM.
+# core/psa_crypto*.c gen_relocate_app.py не находит (каталог core, объект в tfpsacrypto.dir) —
+# слой диспетчеризации PSA остаётся во флеше; проверять размещение в zephyr.map.
+if(CONFIG_CODE_DATA_RELOCATION_SRAM AND CONFIG_TF_PSA_CRYPTO_BUILTIN)
+    set(tfpsa ${CONFIG_TF_PSA_CRYPTO_MODULE_DIR})
+    set(crypto_hot
+            ${tfpsa}/drivers/builtin/src/bignum.c
+            ${tfpsa}/drivers/builtin/src/bignum_core.c
+            ${tfpsa}/drivers/builtin/src/bignum_mod.c
+            ${tfpsa}/drivers/builtin/src/bignum_mod_raw.c
+            ${tfpsa}/drivers/builtin/src/ecp.c
+            ${tfpsa}/drivers/builtin/src/ecp_curves.c
+            ${tfpsa}/drivers/builtin/src/ecp_curves_new.c
+            ${tfpsa}/drivers/builtin/src/ecdsa.c
+            ${tfpsa}/drivers/builtin/src/sha256.c
+            ${tfpsa}/drivers/builtin/src/aes.c
+            ${tfpsa}/drivers/builtin/src/ccm.c
+            ${tfpsa}/drivers/builtin/src/block_cipher.c
+            ${tfpsa}/drivers/builtin/src/psa_crypto_ecp.c
+            ${tfpsa}/drivers/builtin/src/psa_crypto_hash.c
+            ${tfpsa}/drivers/builtin/src/psa_crypto_mac.c
+            ${tfpsa}/drivers/builtin/src/psa_crypto_aead.c
+            ${tfpsa}/drivers/builtin/src/psa_util_internal.c
+            ${tfpsa}/extras/md.c
+            ${tfpsa}/utilities/constant_time.c
+            ${tfpsa}/platform/platform_util.c)
+    if(CONFIG_MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+        list(APPEND crypto_hot
+                ${tfpsa}/drivers/p256-m/p256-m/p256-m.c
+                ${tfpsa}/drivers/p256-m/p256-m_driver_entrypoints.c)
+    endif()
+    zephyr_code_relocate(FILES ${crypto_hot} LOCATION RAM_TEXT NOKEEP)
+endif()
+
 # .bss/.noinit библиотек, объектники которых gen_relocate_app.py не находит или путает:
-# libCHIP.a (GN), libtfpsacrypto.a, settings_registry, esp_hosted_mcu (+_core, SPI без DMA).
+# settings_registry, esp_hosted_mcu (+_core, SPI без DMA), модули приложения из modules/.
+# libCHIP.a и libtfpsacrypto.a остаются в SRAM (горячие при сопряжении).
 zephyr_linker_sources(SECTIONS src/helpers/psram_sections.ld)
 
 zephyr_linker_section(NAME http_resource_desc_http_service

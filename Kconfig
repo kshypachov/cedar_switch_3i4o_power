@@ -31,4 +31,11 @@
 #
 # endmenu
 
+# STM32 PKA PSA driver (modules/psa-driver-stm32): TF-PSA-Crypto takes its driver
+# dispatch from this directory. The symbol has no prompt, so the default must be
+# defined before Kconfig.zephyr (the first defined default wins).
+config TF_PSA_CRYPTO_DISPATCH_DIR
+	string
+	default "$(APP_DIR)/modules/psa-driver-stm32/dispatch" if PSA_CRYPTO_DRIVER_STM32_PKA
+
 source "Kconfig.zephyr"

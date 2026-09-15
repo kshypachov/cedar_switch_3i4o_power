@@ -1981,6 +1981,49 @@ ZTEST(network_manager, test_a_dropped_wifi_is_rejoined_with_backoff)
 	zassert_equal(net.connect_calls, 11, "the backoff started over");
 }
 
+/*
+ * A Wi-Fi join refused while the boot push runs - the coprocessor not taking
+ * a join yet - is repeated by the rejoin, and that join has to start the
+ * radio's addressing too. Without it the radio associates with no IPv4, and
+ * with the Ethernet cable out at boot the default route never falls back to
+ * Wi-Fi (owner's report on board B, 2026-09-15).
+ */
+ZTEST(network_manager, test_a_wifi_join_refused_at_boot_gets_an_address_on_rejoin)
+{
+	struct network_config_input in = wifi_input();
+	struct network_transaction txn;
+	struct device_config_recovery_report report;
+	struct network_status status;
+
+	net.wifi.link_up = true;
+	apply_to_awaiting(&in, &txn);
+	confirm_and_commit(&txn);
+
+	/* Reboot with the cable out and the radio refusing the first join. */
+	fake_net_init(&net);
+	net.eth.link_up = false;
+	zassert_ok(device_config_init(&store_backend, &report));
+	bring_up();
+	net.fail_connect = -ENODEV;
+	network_manager_boot(&report);
+	(void)network_manager_process();
+	zassert_false(net.associated);
+	zassert_false(net.has_default, "nothing can carry traffic yet");
+
+	/* The first retry joins, and the radio gets its address. */
+	advance_seconds(6);
+	(void)network_manager_process();
+	zassert_true(net.associated);
+	zassert_true(net.wifi.configured, "the rejoin starts the radio's addressing");
+	zassert_ok(network_get_status(&status));
+	zassert_true(status.wifi.has_ipv4);
+
+	(void)network_manager_process();
+	zassert_true(net.has_default);
+	zassert_equal(net.default_iface, DEVICE_CONFIG_INTERFACE_WIFI,
+		      "traffic falls back to Wi-Fi with the cable out");
+}
+
 static const char *apply_during_scan_id;
 
 static void apply_during_scan(void *arg)

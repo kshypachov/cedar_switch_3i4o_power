@@ -1,0 +1,63 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+config STM32_PKA
+	bool "STM32 PKA: P-256 primitives on the public key accelerator"
+	default y
+	depends on DT_HAS_ST_STM32_PKA_ENABLED
+	depends on CLOCK_CONTROL
+	select USE_STM32_HAL_PKA
+	help
+	  Brings up the PKA block (with the RNG clock it needs on STM32U5) and
+	  offers P-256 scalar multiplication, point check, ECDSA sign and verify
+	  on big-endian 32-byte buffers. Calls are serialised by a mutex and
+	  block the caller (polling); do not call from an ISR.
+
+if STM32_PKA
+
+config STM32_PKA_TIMEOUT_MS
+	int "Timeout of one PKA operation, ms"
+	default 5000
+
+config STM32_PKA_SHELL
+	bool "Shell command 'pka': known-answer tests and benchmark"
+	default y
+	depends on SHELL
+
+config PSA_CRYPTO_DRIVER_STM32_PKA
+	bool "PSA Crypto driver: P-256 ECDSA, ECDH, key generation on the PKA"
+	depends on TF_PSA_CRYPTO_BUILTIN
+	help
+	  Transparent driver entry points (sign_hash, verify_hash, generate_key,
+	  export_public_key, key_agreement) hooked into a copy of the TF-PSA-Crypto
+	  dispatch (modules/psa-driver-stm32/dispatch). The application's root
+	  Kconfig points TF_PSA_CRYPTO_DISPATCH_DIR at that copy. Other curves and
+	  algorithms fall through to p256-m / builtin.
+
+config PSA_CRYPTO_DRIVER_STM32_PKA_DEFAULT_ON
+	bool "Use the PKA from boot (shell 'pka psa on|off' switches at runtime)"
+	default y
+	depends on PSA_CRYPTO_DRIVER_STM32_PKA
+	help
+	  With this off the driver is still linked (same image layout) but every
+	  entry point returns PSA_ERROR_NOT_SUPPORTED until 'pka psa on'.
+
+config STM32_PKA_ECP_P256
+	bool "Builtin ECP: P-256 mbedtls_ecp_mul/muladd on the PKA (Matter SPAKE2+)"
+	depends on TF_PSA_CRYPTO_BUILTIN
+	help
+	  Matter's SPAKE2+ (PASE) calls mbedtls_ecp_mul() and mbedtls_ecp_muladd()
+	  directly, past the PSA driver interface. With this on they run on the PKA
+	  (ECCMul, ECCDoubleBaseLadder) for P-256. Needs
+	  patches/tf-psa-crypto/ecp-p256-stm32-pka.patch applied to tf-psa-crypto;
+	  without the patch the option links but changes nothing.
+
+config STM32_PKA_ECP_P256_DEFAULT_ON
+	bool "Use the PKA for builtin ECP from boot (shell 'pka ecp on|off')"
+	default y
+	depends on STM32_PKA_ECP_P256
+
+module = STM32_PKA
+module-str = stm32_pka
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # STM32_PKA

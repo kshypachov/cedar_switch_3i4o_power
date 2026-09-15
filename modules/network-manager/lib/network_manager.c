@@ -1479,6 +1479,18 @@ static int rejoin(const struct device_config *cfg, enum device_config_generation
 	}
 	secure_wipe(password, sizeof(password));
 
+	/*
+	 * Addressing as push_config() does after its join. A join refused
+	 * during the boot push (the coprocessor not ready yet) skipped it there,
+	 * and the radio would associate with no IPv4 - never a fallback for a
+	 * missing Ethernet (board B, 2026-09-15). The adapter keeps what it has
+	 * already applied, so a rejoin of a configured radio changes nothing.
+	 */
+	if (err == 0) {
+		err = nm.ops->configure(nm.ops->ctx, DEVICE_CONFIG_INTERFACE_WIFI, &cfg->wifi.ipv4,
+					true);
+	}
+
 	return err;
 }
 
