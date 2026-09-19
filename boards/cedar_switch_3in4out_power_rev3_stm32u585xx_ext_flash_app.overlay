@@ -14,7 +14,11 @@
 			automount;
 			read-size = <256>;
 			prog-size = <256>;
-			cache-size = <2048>;
+			/* 4096 (a whole block) since 2026-09-19: the image store's metadata save
+			 * (tmp + sync + rename) 83 -> 32 ms, rename 75 -> 23 ms (reports/littlefs-speed).
+			 * Every open file takes this much from FS_LITTLEFS_FC_HEAP_SIZE (prj.conf). */
+			cache-size = <4096>;
+			/* 256 B = 2048 blocks, more than the partition's 1280; 512 measured the same */
 			lookahead-size = <256>;
 			block-cycles = <1024>;
 		};
