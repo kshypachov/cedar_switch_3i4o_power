@@ -39,6 +39,9 @@ SECTION_PROLOGUE(.psram_ext_bss,(NOLOAD),)
 	*libcoprocessor_updater.a:*(.bss .bss.* COMMON)
 	*libsystem_image_store.a:*(.bss .bss.* COMMON)
 	*libsystem_updater.a:*(.bss .bss.* COMMON)
+	/* .bss only (struct zms_fs, 16 KiB): its work-queue stack and UART DMA buffers
+	 * are .noinit and must stay in SRAM (modules/energy-meter) */
+	*libenergy_meter.a:*(.bss .bss.* COMMON)
 	. = ALIGN(4);
 	__psram_ext_bss_end = .;
 	*libsettings_registry.a:*(.noinit .noinit.*)

@@ -33,7 +33,7 @@
 #include "web/web_server.h"
 #include "mqtt/ha_mqtt.h"
 #include "io/io.h"
-#include "energy_monitoring/energy_monitoring.h"
+#include <energy_meter/energy_meter.h>
 #include "littlefs/littlefs_mount.h"
 #include "plugin_wifi/wifi.h"
 #include "matter/matter_init.h"
@@ -229,6 +229,11 @@ int main(void)
 	}
 
 	io_init();
+	/* HLW8032 and the energy counter on the FRAM (modules/energy-meter). */
+	err = energy_meter_start();
+	if (err != 0) {
+		LOG_ERR("energy meter start failed: %d", err);
+	}
 	/* Before the network: the first IPv6 address starts the Matter stack. */
 	matter_service_chip_init();
 	/* Before the network too: network-manager tracks its work as jobs. */

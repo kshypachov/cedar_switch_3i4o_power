@@ -1,0 +1,12 @@
+tests:
+  cedar.energy_meter:
+    # HLW8032 frame check and parse (modules/energy-meter/src/hlw8032.c).
+    # Runs in the Linux container - see tests/ci/run-sim-tests.sh.
+    platform_allow:
+      - native_sim
+      - native_sim/native/64
+    integration_platforms:
+      - native_sim/native/64
+    tags:
+      - energy_meter
+      - sim

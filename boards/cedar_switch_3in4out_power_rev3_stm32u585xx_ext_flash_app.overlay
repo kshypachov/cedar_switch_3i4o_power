@@ -2,6 +2,8 @@
 	chosen {
 		/* Settings in ZMS on the 6 MB partition at offset 0 (see prj.conf) */
 		zephyr,settings-partition = &storage_zms_partition;
+		/* HLW8032 energy meter, modules/energy-meter */
+		cedar,hlw8032-uart = &usart2;
 	};
 
 	fstab {
@@ -233,6 +235,39 @@
  */
 &fram0 {
 	spi-max-frequency = <20000000>;
+};
+
+/*
+ * The FRAM through the flash API for the energy counter's own ZMS (only the energy
+ * lives there; settings stay on the NOR). modules/energy-meter, reports/energy.
+ */
+/ {
+	fram_flash: fram-flash {
+		compatible = "cedar,eeprom-flash";
+		eeprom = <&fram0>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			energy_partition: partition@0 {
+				label = "energy";
+				reg = <0x0 0x2000>;
+			};
+		};
+	};
+};
+
+/*
+ * HLW8032: 4800 8E1 (datasheet), receive only - the board wires RX on PA3 and
+ * nothing to TX. RX by DMA on GPDMA1 channel 9 (request 26 = USART2_RX; SPI1 has
+ * 10 and 11), so the driver interrupts once per 24-byte frame.
+ */
+&usart2 {
+	parity = "even";
+	dmas = <&gpdma1 9 26 (STM32_DMA_PERIPH_RX | STM32_DMA_PRIORITY_HIGH)>;
+	dma-names = "rx";
 };
 
 /*

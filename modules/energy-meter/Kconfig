@@ -1,0 +1,45 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+config EEPROM_FLASH
+	bool "Flash API over an EEPROM device (cedar,eeprom-flash)"
+	default y
+	depends on DT_HAS_CEDAR_EEPROM_FLASH_ENABLED
+	depends on EEPROM && FLASH
+	select FLASH_HAS_DRIVER_ENABLED
+	select FLASH_HAS_NO_EXPLICIT_ERASE
+	select FLASH_HAS_PAGE_LAYOUT
+	help
+	  Reads and writes go straight to the EEPROM driver in the caller's
+	  thread. On this board the FRAM is on SPI1 with DMA, which takes
+	  buffers only from SRAM: call it from a thread whose stack is in SRAM.
+
+menuconfig ENERGY_METER
+	bool "HLW8032 energy meter, energy counter in ZMS on the FRAM"
+	depends on EEPROM_FLASH
+	depends on SETTINGS_REGISTRY
+	select SERIAL
+	select UART_ASYNC_API
+	select ZMS
+	select SETTINGS_REGISTRY_F32
+
+if ENERGY_METER
+
+config ENERGY_METER_VOLTAGE_DIVIDER
+	int "Voltage divider ratio"
+	default 1880
+	help
+	  Upper resistance over the lower one of the voltage channel:
+	  4 x 470 kOhm / 1 kOhm = 1880 in the HLW8032 datasheet's typical
+	  circuit. The voltage factor is this / 1000.
+
+config ENERGY_METER_SHUNT_UOHM
+	int "Current shunt, micro-ohm"
+	default 1000
+	help
+	  1 mOhm in the datasheet's typical circuit.
+
+module = ENERGY_METER
+module-str = energy_meter
+source "subsys/logging/Kconfig.template.log_config"
+
+endif

@@ -1,0 +1,18 @@
+# Copyright (c) 2026 Cedar
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  The flash API over an EEPROM device, for storage that only speaks flash (ZMS)
+  on an SPI FRAM. No erase is needed: the device reports no explicit erase and
+  "erase" fills with 0xFF. The size is the EEPROM node's size. Put the
+  fixed-partitions under this node.
+
+compatible: "cedar,eeprom-flash"
+
+include: base.yaml
+
+properties:
+  eeprom:
+    type: phandle
+    required: true
+    description: The EEPROM device every read and write goes to.

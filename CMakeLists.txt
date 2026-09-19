@@ -60,6 +60,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/system-updater   # STM32 install through the MCUboot swap, journal, self-confirmation (CONFIG_SYSTEM_UPDATER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/psa-driver-stm32 # STM32 PKA: P-256 on the public key accelerator, PSA driver (CONFIG_STM32_PKA)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/flash-sram-proxy # SPI NOR access from an SRAM thread through an SRAM buffer, for SPI1 DMA (CONFIG_FLASH_SRAM_PROXY)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/energy-meter     # HLW8032 on USART2, the energy counter in ZMS on the FRAM (CONFIG_ENERGY_METER)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -114,8 +115,6 @@ target_sources(app PRIVATE
         src/littlefs/littlefs_mount.c
         src/io/io.c
         src/io/status_led.c
-        src/energy_monitoring/energy_monitoring.c
-        src/energy_monitoring/HLW8032.c
         src/mqtt/mqtt_settings_keys.c
         src/diagnostic/diag_report.c
         src/diagnostic/storage_bench.c
