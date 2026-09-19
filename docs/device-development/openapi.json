@@ -609,6 +609,153 @@
         }
       }
     },
+    "/system/coredump": {
+      "get": {
+        "operationId": "getCoredump",
+        "tags": [
+          "system"
+        ],
+        "summary": "Read CoredumpStatus: whether a coredump from a crash is stored, its size and reason",
+        "description": "Read CoredumpStatus: whether a coredump from a crash is stored, its size and reason. A reset by the watchdog stores none: a hang runs no fatal handler.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoredumpStatus"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "clearCoredump",
+        "tags": [
+          "system"
+        ],
+        "summary": "Forget the stored coredump",
+        "description": "Forget the stored coredump. Clearing when there is none also succeeds.",
+        "responses": {
+          "204": {
+            "description": "Success",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 32
+            }
+          }
+        ]
+      }
+    },
+    "/system/coredump/data": {
+      "get": {
+        "operationId": "downloadCoredump",
+        "tags": [
+          "system"
+        ],
+        "summary": "Download the stored coredump: Zephyr's binary coredump format",
+        "description": "Download the stored coredump: Zephyr's binary coredump format, streamed. 404 not_found when none is stored.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "attachment; filename=\"cedar-coredump.bin\""
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/capabilities": {
       "get": {
         "operationId": "getCapabilities",
@@ -5099,6 +5246,73 @@
             "acknowledge_downgrade": false
           }
         ]
+      },
+      "Coredump": {
+        "type": "object",
+        "description": "The Zephyr coredump the fatal error handler stored before the reset that followed a crash (DEBUG_COREDUMP, THREADS level: every thread and its stack). Read it with scripts/coredump/coredump_gdbserver.py and GDB against the ELF of the image that crashed.",
+        "properties": {
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cpu_exception",
+                  "spurious_irq",
+                  "stack_check_fail",
+                  "kernel_oops",
+                  "kernel_panic",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "From the dump's header; null when the header is not a coredump header."
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The kernel's K_ERR_* code; architecture codes start at 16."
+          }
+        },
+        "required": [
+          "size_bytes",
+          "reason",
+          "reason_code"
+        ],
+        "additionalProperties": false
+      },
+      "CoredumpStatus": {
+        "type": "object",
+        "properties": {
+          "coredump": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Coredump"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The stored dump, until cleared or replaced by the next crash; null when there is none."
+          }
+        },
+        "required": [
+          "coredump"
+        ],
+        "additionalProperties": false
       }
     }
   }

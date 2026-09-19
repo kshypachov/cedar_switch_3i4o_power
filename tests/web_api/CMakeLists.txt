@@ -29,6 +29,7 @@ target_sources(app PRIVATE
     src/middleware.c
     src/v1.c
     src/v1_logs.c
+    src/v1_coredump.c
     src/v1_firmware.c
     src/json_reader.c
     src/json_writer.c

@@ -56,4 +56,7 @@ WEB_API_V1_ROUTE(writeUploadChunk, PUT, "/firmware/uploads/{upload_id}/data", WE
 WEB_API_V1_ROUTE(verifyUpload, POST, "/firmware/uploads/{upload_id}/verify", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_empty_body), &v1_empty_schema, NULL, v1_verify_upload)
 WEB_API_V1_ROUTE(getSystemFirmware, GET, "/system/firmware", 0, V1_NO_BODY, NULL, NULL, v1_get_system_firmware)
 WEB_API_V1_ROUTE(startSystemUpdate, POST, "/system/updates", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_system_update_body), &v1_system_update_schema, NULL, v1_start_system_update)
+WEB_API_V1_ROUTE(getCoredump, GET, "/system/coredump", 0, V1_NO_BODY, NULL, NULL, v1_get_coredump)
+WEB_API_V1_ROUTE(downloadCoredump, GET, "/system/coredump/data", 0, V1_NO_BODY, NULL, NULL, v1_download_coredump)
+WEB_API_V1_ROUTE(clearCoredump, DELETE, "/system/coredump", WEB_API_CSRF, V1_NO_BODY, NULL, NULL, v1_clear_coredump)
 /* clang-format on */

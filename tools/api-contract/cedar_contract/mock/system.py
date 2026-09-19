@@ -73,6 +73,9 @@ class System:
             None if self.confirmed else clock.now_ms() + scenario.system_confirm_seconds * 1000
         )
         self.swap_pending = False
+        #: The stored coredump, kept across restarts like the device's flash
+        #: partition until cleared; see record_crash().
+        self.coredump: bytes | None = _coredump(0) if scenario.coredump_stored else None
         #: The install the journal records: job, upload, and both images.
         self.pending: dict[str, Any] | None = None
         #: Clock time at which the device restarts for the swap, once due.
@@ -128,6 +131,25 @@ class System:
             "update": {"available": available, "reason": reason},
             "last_update": deep_copy(self.last_update),
         }
+
+    # -- coredump --------------------------------------------------------
+
+    def coredump_json(self) -> dict[str, object]:
+        dump = self.coredump
+        if dump is None:
+            return {"coredump": None}
+        reason = int.from_bytes(dump[8:12], "little")
+        return {
+            "coredump": {
+                "size_bytes": len(dump),
+                "reason": _REASONS.get(reason, "cpu_exception" if reason >= 16 else "other"),
+                "reason_code": reason,
+            }
+        }
+
+    def record_crash(self, reason: int) -> None:
+        """What the fatal handler stores before the reset: a coredump."""
+        self.coredump = _coredump(reason)
 
     # -- time ------------------------------------------------------------
 
@@ -235,6 +257,7 @@ class System:
         self.confirmed = old.confirmed
         self.confirm_deadline_ms = old.confirm_deadline_ms
         self.last_update = deep_copy(old.last_update)
+        self.coredump = old.coredump
         pending = old.pending
         job = old._jobs.get(old._job_id or "")
 
@@ -298,6 +321,23 @@ class System:
                 "requested; nothing changed",
             )
         return 0, None
+
+
+#: The kernel's K_ERR_* codes by name, as getCoredump reports them.
+_REASONS = {
+    0: "cpu_exception",
+    1: "spurious_irq",
+    2: "stack_check_fail",
+    3: "kernel_oops",
+    4: "kernel_panic",
+}
+
+
+def _coredump(reason: int) -> bytes:
+    """A stand-in for Zephyr's binary coredump: the real header (`ZE`, version 2,
+    ARM Cortex-M target 3, 32-bit pointers, `reason`) and filler for the blocks."""
+    header = b"ZE" + (2).to_bytes(2, "little") + (3).to_bytes(2, "little") + bytes([5, 0])
+    return header + reason.to_bytes(4, "little") + bytes(range(256)) * 32
 
 
 def _hash_of(version: str) -> str:

@@ -93,6 +93,9 @@ class Scenario:
     #: resets it and MCUboot swaps back - twice the swap time (`failed`).
     #: `rolled_back` is a restart before confirmation: `POST /__mock/reboot`.
     system_swap_result: str = "ok"
+    #: Whether a coredump is stored at startup, as if the previous boot had
+    #: crashed. `POST /__mock/crash` stores one and restarts at any time.
+    coredump_stored: bool = False
     #: Host names accepted besides IP literals and localhost, comma-separated;
     #: CONFIG_WEB_API_EXTRA_HOSTS on the device.
     extra_hosts: str = ""

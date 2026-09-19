@@ -480,6 +480,16 @@ class MockApp:
         if request.method == "POST" and path == "reboot":
             self.reboot()
             return json_response(200, self.state.to_json())
+        if request.method == "POST" and path == "crash":
+            # A fatal error: the handler stores a coredump, then the device restarts.
+            payload = json.loads(request.body) if request.body else {}
+            reason = payload.get("reason_code", 0) if isinstance(payload, dict) else None
+            if not isinstance(reason, int) or not 0 <= reason <= 255:
+                raise error("validation_failed", "reason_code must be an integer 0-255")
+            self.state.settle()
+            self.state.system.record_crash(reason)
+            self.reboot()
+            return json_response(200, self.state.to_json())
         if request.method == "POST" and path == "scenario":
             payload = json.loads(request.body) if request.body else {}
             self.state.scenario.update(payload)

@@ -131,6 +131,25 @@ struct web_api_v1_system {
  */
 void web_api_v1_set_system(const struct web_api_v1_system *system);
 
+/** The stored Zephyr coredump, as the board keeps it (src/diagnostic/coredump_support.c). */
+struct web_api_v1_coredump {
+	/** Bytes of the stored dump; 0 when there is none; a negative errno when unreadable. */
+	int (*size)(void);
+	/** Copy up to @p len bytes from @p offset: the count copied, or a negative errno. */
+	int (*read)(size_t offset, uint8_t *buf, size_t len);
+	/** Forget the stored dump: 0, or a negative errno. */
+	int (*clear)(void);
+};
+
+/**
+ * @brief Tell the coredump bindings where the stored dump is.
+ *
+ * Until then getCoredump, downloadCoredump and clearCoredump answer 503
+ * capability_unavailable. @p coredump must outlive the program; NULL closes
+ * them again.
+ */
+void web_api_v1_set_coredump(const struct web_api_v1_coredump *coredump);
+
 #ifdef __cplusplus
 }
 #endif

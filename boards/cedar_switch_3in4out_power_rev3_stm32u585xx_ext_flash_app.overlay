@@ -147,3 +147,21 @@
 	div-q = <10>;
 	div-r = <2>;
 };
+
+/*
+ * Zephyr's coredump (prj.conf, owner's decisions 2026-09-18): THREADS level into the
+ * STM32U585's internal flash, right after MCUboot's 128 KiB. The application runs
+ * from the OSPI flash and never from here, so writing it from a fault touches
+ * neither the code nor a shared bus, and Zephyr's flash-partition backend takes it
+ * as it is (flash0 has write-block-size 16, erase-block-size 8 KiB). 256 KiB:
+ * every thread's stack together is ~110 KiB. The backend finds it by the node
+ * label coredump_partition.
+ */
+&flash0 {
+	partitions {
+		coredump_partition: partition@20000 {
+			label = "coredump";
+			reg = <0x00020000 DT_SIZE_K(256)>;
+		};
+	};
+};

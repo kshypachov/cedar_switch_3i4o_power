@@ -11,6 +11,7 @@ later - or undone by a power cut before then.
 from __future__ import annotations
 
 import hashlib
+import json
 import struct
 import threading
 import urllib.error
@@ -862,3 +863,68 @@ def test_the_image_builder_and_the_check_agree_with_imgtool_layout() -> None:
     assert len(data) == tlv_off + 40
     assert mcuboot.version_key("1.2.3+4") == (1, 2, 3, 4)
     assert mcuboot.version_key("1.2") == (1, 2, 0, 0)
+
+
+# -- the coredump ------------------------------------------------------
+
+
+def crash(harness: Harness, reason_code: int | None = None) -> None:
+    """A fatal error: the coredump is stored, then the device restarts."""
+    body = json.dumps({"reason_code": reason_code}).encode() if reason_code is not None else b""
+    got = harness.app.handle(Request("POST", "/__mock/crash", {}, body))
+    assert got.status == 200
+    assert harness.client.get("/system/status").status == 401, "the restart ends the session"
+    assert harness.client.login().status == 200
+
+
+def test_a_device_that_never_crashed_stores_no_coredump(device: Harness) -> None:
+    got = device.client.get("/system/coredump")
+    assert got.status == 200
+    assert got.json == {"coredump": None}
+    missing = device.client.get("/system/coredump/data")
+    assert missing.status == 404
+    assert missing.json["error"]["code"] == "not_found"
+
+
+def test_a_crash_stores_a_coredump_that_survives_the_restart_it_causes(
+    device: Harness,
+) -> None:
+    boot = device.client.get("/system/status").json["boot_id"]
+    crash(device, reason_code=4)
+    assert device.client.get("/system/status").json["boot_id"] != boot
+    info = device.client.get("/system/coredump").json["coredump"]
+    assert info["reason"] == "kernel_panic"
+    assert info["reason_code"] == 4
+    data = device.client.get("/system/coredump/data")
+    assert data.status == 200
+    assert data.headers["Content-Type"] == "application/octet-stream"
+    assert data.headers["Content-Disposition"] == 'attachment; filename="cedar-coredump.bin"'
+    assert len(data.body) == info["size_bytes"]
+    assert data.body[:2] == b"ZE"
+    # Another restart keeps it: flash, not RAM.
+    raw(device, "POST", "/__mock/reboot")
+    assert device.client.login().status == 200
+    assert device.client.get("/system/coredump/data").body == data.body
+
+
+def test_an_architecture_fault_code_is_a_cpu_exception(device: Harness) -> None:
+    crash(device, reason_code=17)
+    info = device.client.get("/system/coredump").json["coredump"]
+    assert (info["reason"], info["reason_code"]) == ("cpu_exception", 17)
+
+
+def test_clearing_forgets_the_coredump_and_is_idempotent(document: Document) -> None:
+    harness = signed_in(document, coredump_stored=True)
+    assert harness.client.get("/system/coredump").json["coredump"] is not None
+    assert harness.client.delete("/system/coredump").status == 204
+    assert harness.client.get("/system/coredump").json == {"coredump": None}
+    assert harness.client.delete("/system/coredump").status == 204
+
+
+def test_clearing_needs_the_csrf_token(document: Document) -> None:
+    harness = signed_in(document, coredump_stored=True)
+    token, harness.client.csrf = harness.client.csrf, None
+    got = harness.client.delete("/system/coredump", headers={"x-csrf-token": "x" * 40})
+    harness.client.csrf = token
+    assert got.status == 403
+    assert harness.client.get("/system/coredump").json["coredump"] is not None

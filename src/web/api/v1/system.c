@@ -4,11 +4,14 @@
  * API v1: system status, capabilities and jobs.
  */
 
+#include <errno.h>
 #include <string.h>
 
 #include <stdio.h>
 
+#include <zephyr/fatal_types.h>
 #include <zephyr/kernel.h>
+#include <zephyr/sys/byteorder.h>
 
 #include <device_config_store/device_config_store.h>
 #include <matter_service/matter_service.h>
@@ -52,6 +55,166 @@ void v1_get_system_status(struct web_api_call *call)
 	web_json_array_end(w);
 	web_json_object_end(w);
 	web_api_reply_json(call, 200);
+}
+
+/* -- coredump ------------------------------------------------------------ */
+
+/*
+ * The board's Zephyr coredump (DEBUG_COREDUMP_BACKEND_FLASH_PARTITION on the
+ * SPI NOR), behind hooks so the bindings run on native_sim, which has no
+ * coredump support. The dump is Zephyr's binary format: scripts/coredump/
+ * coredump_gdbserver.py serves it to GDB together with the image's ELF.
+ */
+
+static const struct web_api_v1_coredump *dump_hooks;
+
+void web_api_v1_set_coredump(const struct web_api_v1_coredump *coredump)
+{
+	dump_hooks = coredump;
+}
+
+/* struct coredump_hdr_t of zephyr/include/zephyr/debug/coredump.h (packed):
+ * "ZE", header version, target, pointer size, flags, then the reason. */
+#define DUMP_HDR_LEN        12
+#define DUMP_HDR_REASON_OFF 8
+
+static const char *dump_reason_name(uint32_t reason)
+{
+	switch (reason) {
+	case K_ERR_CPU_EXCEPTION:
+		return "cpu_exception";
+	case K_ERR_SPURIOUS_IRQ:
+		return "spurious_irq";
+	case K_ERR_STACK_CHK_FAIL:
+		return "stack_check_fail";
+	case K_ERR_KERNEL_OOPS:
+		return "kernel_oops";
+	case K_ERR_KERNEL_PANIC:
+		return "kernel_panic";
+	default:
+		/* Architecture codes (K_ERR_ARCH_START and up) are CPU faults too;
+		 * reason_code keeps the detail. */
+		return reason >= K_ERR_ARCH_START ? "cpu_exception" : "other";
+	}
+}
+
+static bool dump_ready(struct web_api_call *call)
+{
+	if (dump_hooks == NULL) {
+		web_api_reject(call, API_ERR_CAPABILITY_UNAVAILABLE,
+			       "This build does not keep a coredump");
+		return false;
+	}
+	return true;
+}
+
+void v1_get_coredump(struct web_api_call *call)
+{
+	uint8_t hdr[DUMP_HDR_LEN];
+	struct web_json_writer *w;
+	int size;
+
+	if (!dump_ready(call)) {
+		return;
+	}
+	size = dump_hooks->size();
+	if (size < 0) {
+		web_api_reject(call, API_ERR_INTERNAL_ERROR, "The coredump storage is unreadable");
+		return;
+	}
+
+	w = web_api_json(call);
+	web_json_object_begin(w);
+	web_json_key(w, "coredump");
+	if (size == 0) {
+		web_json_null(w);
+	} else {
+		bool header = size >= DUMP_HDR_LEN &&
+			      dump_hooks->read(0, hdr, sizeof(hdr)) == DUMP_HDR_LEN &&
+			      hdr[0] == 'Z' && hdr[1] == 'E';
+		uint32_t reason = header ? sys_get_le32(&hdr[DUMP_HDR_REASON_OFF]) : 0U;
+
+		web_json_object_begin(w);
+		web_json_key(w, "size_bytes");
+		web_json_int(w, size);
+		web_json_key(w, "reason");
+		web_json_string_or_null(w, header ? dump_reason_name(reason) : NULL);
+		web_json_key(w, "reason_code");
+		if (header) {
+			web_json_int(w, reason);
+		} else {
+			web_json_null(w);
+		}
+		web_json_object_end(w);
+	}
+	web_json_object_end(w);
+	web_api_reply_json(call, 200);
+}
+
+struct dump_stream {
+	size_t offset;
+	size_t size;
+};
+
+BUILD_ASSERT(sizeof(struct dump_stream) <= CONFIG_WEB_API_STREAM_STATE_MAX,
+	     "the coredump stream's state must fit CONFIG_WEB_API_STREAM_STATE_MAX");
+
+static int dump_next(void *state, char *buf, size_t cap)
+{
+	struct dump_stream *st = state;
+	size_t want = MIN(cap, st->size - st->offset);
+	int n;
+
+	if (want == 0U) {
+		return 0;
+	}
+	n = dump_hooks->read(st->offset, (uint8_t *)buf, want);
+	if (n <= 0) {
+		/* Closing mid-body tells the client the file is incomplete. */
+		return n < 0 ? n : -EIO;
+	}
+	st->offset += (size_t)n;
+	return n;
+}
+
+void v1_download_coredump(struct web_api_call *call)
+{
+	struct dump_stream *st;
+	int size;
+
+	if (!dump_ready(call)) {
+		return;
+	}
+	size = dump_hooks->size();
+	if (size < 0) {
+		web_api_reject(call, API_ERR_INTERNAL_ERROR, "The coredump storage is unreadable");
+		return;
+	}
+	if (size == 0) {
+		web_api_reject(call, API_ERR_NOT_FOUND, "No coredump is stored");
+		return;
+	}
+	st = web_api_reply_stream(call, 200, "application/octet-stream", sizeof(*st), dump_next,
+				  NULL);
+	if (st == NULL) {
+		return;
+	}
+	web_api_add_header(call, "Content-Disposition",
+			   "attachment; filename=\"cedar-coredump.bin\"");
+	st->offset = 0U;
+	st->size = (size_t)size;
+}
+
+void v1_clear_coredump(struct web_api_call *call)
+{
+	if (!dump_ready(call)) {
+		return;
+	}
+	if (dump_hooks->clear() != 0) {
+		web_api_reject(call, API_ERR_INTERNAL_ERROR, "The coredump could not be cleared");
+		return;
+	}
+	web_api_reply_empty(call, 204);
 }
 
 /* -- capabilities -------------------------------------------------------- */

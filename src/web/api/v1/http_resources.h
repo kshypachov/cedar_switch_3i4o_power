@@ -50,4 +50,6 @@ WEB_API_V1_RESOURCE(web_api_26_firmware_upload, "/api/v1/firmware/uploads/*")
 WEB_API_V1_RESOURCE(web_api_27_coprocessor_updates, "/api/v1/coprocessor/updates")
 WEB_API_V1_RESOURCE(web_api_28_system_firmware, "/api/v1/system/firmware")
 WEB_API_V1_RESOURCE(web_api_29_system_updates, "/api/v1/system/updates")
+WEB_API_V1_RESOURCE(web_api_30_a_system_coredump_data, "/api/v1/system/coredump/data")
+WEB_API_V1_RESOURCE(web_api_30_system_coredump, "/api/v1/system/coredump")
 /* clang-format on */

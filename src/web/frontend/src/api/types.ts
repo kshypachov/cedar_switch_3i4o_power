@@ -47,3 +47,5 @@ export const TERMINAL_JOB_STATES: ReadonlySet<Job['state']> = new Set([
   'cancelled',
   'interrupted',
 ]);
+export type Coredump = S['Coredump'];
+export type CoredumpStatus = S['CoredumpStatus'];

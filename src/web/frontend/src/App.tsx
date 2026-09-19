@@ -51,7 +51,7 @@ function Shell() {
           ) : route === 'network' ? (
             <NetworkScreen session={view.session} />
           ) : route === 'logs' ? (
-            <LogsScreen />
+            <LogsScreen session={view.session} />
           ) : route === 'coprocessor' ? (
             <CoprocessorUpdateScreen session={view.session} />
           ) : route === 'firmware' ? (

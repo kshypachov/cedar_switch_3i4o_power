@@ -93,6 +93,32 @@ def get_system_firmware(app, ctx: Context) -> Response:
     return json_response(200, app.state.system.status_json())
 
 
+@handles("getCoredump")
+def get_coredump(app, ctx: Context) -> Response:
+    return json_response(200, app.state.system.coredump_json())
+
+
+@handles("downloadCoredump")
+def download_coredump(app, ctx: Context) -> Response:
+    dump = app.state.system.coredump
+    if dump is None:
+        raise error("not_found", "No coredump is stored")
+    return Response(
+        200,
+        dump,
+        {
+            "Content-Type": "application/octet-stream",
+            "Content-Disposition": 'attachment; filename="cedar-coredump.bin"',
+        },
+    )
+
+
+@handles("clearCoredump")
+def clear_coredump(app, ctx: Context) -> Response:
+    app.state.system.coredump = None
+    return Response(204, b"", {})
+
+
 @handles("startSystemUpdate")
 def start_system_update(app, ctx: Context) -> Response:
     job_id = app.state.system.start_update(ctx.body)

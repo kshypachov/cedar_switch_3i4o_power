@@ -184,6 +184,9 @@ void v1_cancel_job(struct web_api_call *call);
 void v1_start_coprocessor_update(struct web_api_call *call);
 void v1_get_system_firmware(struct web_api_call *call);
 void v1_start_system_update(struct web_api_call *call);
+void v1_get_coredump(struct web_api_call *call);
+void v1_download_coredump(struct web_api_call *call);
+void v1_clear_coredump(struct web_api_call *call);
 
 /** The board's STM32 update hooks, or NULL until it opened both modules (system_update.c). */
 const struct web_api_v1_system *v1_system(void);

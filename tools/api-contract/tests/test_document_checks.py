@@ -32,9 +32,11 @@ def test_the_document_has_the_surface_the_plan_describes(document: Document) -> 
     plan rather than a number nobody notices changing."""
     # 37 since the STM32 update stage: getSystemFirmware and startSystemUpdate,
     # with SystemFirmware, SystemUpdateSummary and SystemUpdateRequest.
-    assert len(document.operations) == 37
-    assert len(document.raw["paths"]) == 31
-    assert len(document.schemas) == 51
+    # 40 since the coredump (2026-09-18): getCoredump, downloadCoredump and
+    # clearCoredump, with Coredump and CoredumpStatus.
+    assert len(document.operations) == 40
+    assert len(document.raw["paths"]) == 33
+    assert len(document.schemas) == 53
 
 
 def test_all_five_checks_run() -> None:

@@ -33,6 +33,7 @@ function logsDevice(records: Handler, extra: Record<string, Handler> = {}) {
     'GET /api/v1/logs/sources': () => json(200, logSources),
     'GET /api/v1/coprocessor/status': () => json(200, coprocessorStatus),
     'GET /api/v1/logs/records': records,
+    'GET /api/v1/system/coredump': () => json(200, { coredump: null }),
     ...extra,
   });
 }
@@ -234,5 +235,76 @@ describe('logs', () => {
     logsDevice(() => refusal(401, 'session_expired'));
     render(<App />);
     expect(await screen.findByRole('heading', { name: t('login.title') }, { timeout: 3_000 })).toBeInTheDocument();
+  });
+});
+
+describe('coredump', () => {
+  const stored = { coredump: { size_bytes: 30_000, reason: 'kernel_panic', reason_code: 4 } };
+
+  it('says so when no dump is stored', async () => {
+    logsDevice(() => json(200, logPage));
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    expect(await within(card).findByText(t('coredump.none'))).toBeInTheDocument();
+    expect(within(card).queryByTestId('coredump-download')).toBeNull();
+  });
+
+  it('describes a stored dump and links its download', async () => {
+    logsDevice(() => json(200, logPage), { 'GET /api/v1/system/coredump': () => json(200, stored) });
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    expect(await within(card).findByText(t('coredump.size_value', { kib: '29', bytes: 30000 }))).toBeInTheDocument();
+    expect(within(card).getByText(`${t('coredump.reason.kernel_panic')} (4)`)).toBeInTheDocument();
+    const link = within(card).getByTestId('coredump-download');
+    expect(link).toHaveAttribute('href', '/api/v1/system/coredump/data');
+    expect(link).toHaveAttribute('download');
+  });
+
+  it('shows the code when the header names no reason it knows', async () => {
+    logsDevice(() => json(200, logPage), {
+      'GET /api/v1/system/coredump': () => json(200, { coredump: { size_bytes: 512, reason: null, reason_code: null } }),
+    });
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    expect(await within(card).findByText(t('value.unknown'))).toBeInTheDocument();
+    expect(within(card).getByText(t('coredump.size_value', { kib: '0.5', bytes: 512 }))).toBeInTheDocument();
+  });
+
+  it('clears the dump with the session CSRF token and reads the state again', async () => {
+    let current: unknown = stored;
+    const device = logsDevice(() => json(200, logPage), {
+      'GET /api/v1/system/coredump': () => json(200, current),
+      'DELETE /api/v1/system/coredump': () => {
+        current = { coredump: null };
+        return new Response(null, { status: 204 });
+      },
+    });
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    await userEvent.click(await within(card).findByRole('button', { name: t('coredump.clear') }));
+    expect(await within(card).findByText(t('coredump.none'))).toBeInTheDocument();
+    const deleted = device.requests.find((r) => r.method === 'DELETE');
+    expect(deleted?.headers.get('X-CSRF-Token')).toBe(session.csrf_token);
+  });
+
+  it('keeps the dump and says why when clearing fails', async () => {
+    logsDevice(() => json(200, logPage), {
+      'GET /api/v1/system/coredump': () => json(200, stored),
+      'DELETE /api/v1/system/coredump': () => refusal(500, 'internal_error'),
+    });
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    await userEvent.click(await within(card).findByRole('button', { name: t('coredump.clear') }));
+    expect(await within(card).findByRole('alert')).toBeInTheDocument();
+    expect(within(card).getByTestId('coredump-download')).toBeInTheDocument();
+  });
+
+  it('says the firmware keeps no dump when the capability is missing', async () => {
+    logsDevice(() => json(200, logPage), {
+      'GET /api/v1/system/coredump': () => refusal(503, 'capability_unavailable'),
+    });
+    render(<App />);
+    const card = await screen.findByRole('region', { name: t('coredump.title') });
+    expect(await within(card).findByText(t('coredump.unavailable'))).toBeInTheDocument();
   });
 });

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getCoprocessorStatus } from '../../api/device';
 import { exportUrl, getLogSources } from '../../api/logs';
-import type { LogSource } from '../../api/types';
+import type { LogSource, Session } from '../../api/types';
 import { ErrorNotice } from '../../components/ErrorNotice';
 import { Body } from '../../components/Polled';
 import { Card, Facts, Loading } from '../../components/ui';
@@ -20,6 +20,7 @@ import {
   formatUptime,
   isAtBottom,
 } from './controller';
+import { CoredumpCard } from './CoredumpCard';
 import { useLogFeed } from './useLogFeed';
 
 const SOURCES_MS = 5_000;
@@ -90,7 +91,7 @@ function SourcesTable({ items }: { items: LogSource[] }) {
   );
 }
 
-export function LogsScreen() {
+export function LogsScreen({ session }: { session: Session }) {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [moduleDraft, setModuleDraft] = useState('');
   const [containsDraft, setContainsDraft] = useState('');
@@ -248,6 +249,8 @@ export function LogsScreen() {
           </a>
         </div>
       </Card>
+
+      <CoredumpCard session={session} />
 
       <Card title="logs.sources">
         <Body polled={sources} render={(s) => <SourcesTable items={s.items} />} />

@@ -4,13 +4,13 @@
 This is the contract test section 12 asks for — "one set of examples is run
 against the mock server of stage P1 and against the firmware at the hardware
 tier; a response that diverges from the schema is a test failure, not a remark".
-The walkthrough below reaches all thirty-seven operations in dependency order,
+The walkthrough below reaches all forty operations in dependency order,
 because half of them need something to exist first: a job to poll, a transaction
 to apply, an upload to verify.
 
 The schema check itself is not here. It is in `Client._check`, which runs on
 every call in every test file, so this module only has to prove that all
-thirty-seven were reached.
+forty were reached.
 """
 
 from __future__ import annotations
@@ -25,13 +25,14 @@ from cedar_contract.mock.constants import (
     WIFI_SCAN_MS,
 )
 from cedar_contract.mock.mcuboot import build_image
+from cedar_contract.mock.wire import Request
 from cedar_contract.openapi import Document
 
 from .conftest import Harness, build
 
 
 def _walk(harness: Harness) -> set[str]:
-    """Call all thirty-seven operations, in an order that makes each one legal."""
+    """Call all forty operations, in an order that makes each one legal."""
     client = harness.client
     seconds = 1 / 1000
 
@@ -43,6 +44,11 @@ def _walk(harness: Harness) -> set[str]:
     # Device and capabilities.
     client.get("/system/status")
     client.get("/capabilities")
+    client.get("/system/coredump")
+    harness.app.handle(Request("POST", "/__mock/crash", {}, b""))
+    client.login()
+    client.get("/system/coredump/data")
+    client.delete("/system/coredump")
     client.get("/coprocessor/status")
 
     # Matter: open a window, poll the job, read the codes and the fabrics.
