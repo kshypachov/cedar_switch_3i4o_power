@@ -21,6 +21,7 @@ import { type MessageKey, t } from '../../i18n';
 import { useAuth } from '../../state/auth';
 import { usePolling } from '../../state/usePolling';
 import { notServed, useSessionGuard } from '../../state/useSessionGuard';
+import { findDeviceUploads, OtherUpload } from '../coprocessor-update/deviceUploads';
 import { phaseRowsOf } from '../coprocessor-update/phases';
 import { memoryAt } from '../coprocessor-update/remember';
 import { hashBlob } from '../coprocessor-update/sha256';
@@ -98,6 +99,8 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
   const [busy, setBusy] = useState<Busy>(null);
   const [uploadError, setUploadError] = useState<unknown>(null);
   const [uploadNotice, setUploadNotice] = useState<MessageKey | null>(null);
+  /** The ESP32's upload, which keeps this screen from uploading until it is gone. */
+  const [other, setOther] = useState<Upload | null>(null);
 
   const [acknowledgeDowngrade, setAcknowledgeDowngrade] = useState(false);
   const [stage, setStage] = useState<Stage>({ kind: 'idle' });
@@ -229,26 +232,59 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
     [signal, signedOut, awaitReboot],
   );
 
-  // Pick up what a reload interrupted.
+  /**
+   * The device is the authority on which upload exists: this screen's own (from
+   * another window, a script, a reload) and the ESP32's. The remembered id only
+   * says which one this browser was sending.
+   */
+  const discover = useCallback(async () => {
+    const found = await findDeviceUploads(TARGET, signal);
+    if (!signal.aborted) {
+      setOther(found.other);
+      memory.remember({ uploadId: found.own?.id ?? null });
+      setUpload(found.own);
+    }
+    return found;
+  }, [signal]);
+
+  // Pick up what a reload interrupted - or what someone else left on the device.
   useEffect(() => {
     const { uploadId, installJobId } = memory.recall();
-    if (uploadId) {
-      getUpload(uploadId, signal)
-        .then((u) => {
-          if (signal.aborted) return;
-          if (u.target !== TARGET) {
-            memory.remember({ uploadId: null });
-            setUploadNotice('sysupd.wrong_target');
-            return;
+    discover()
+      .then(async (found) => {
+        const own = found.own;
+        if (own?.state === 'verifying' && own.active_job_id && !signal.aborted) {
+          // A check started elsewhere: its result shows here when it ends.
+          setBusy('verifying');
+          try {
+            await waitJob(own.active_job_id);
+            if (!signal.aborted) setUpload(await getUpload(own.id, signal));
+          } catch {
+            /* the upload card keeps the last state it knew */
+          } finally {
+            if (!signal.aborted) setBusy(null);
           }
-          setUpload(u);
-        })
-        .catch((error: unknown) => {
-          if (isApiFailure(error, 'not_found')) memory.remember({ uploadId: null });
-        });
-    }
+        }
+      })
+      .catch(() => {
+        // A device without the list (older firmware): the remembered id only.
+        if (!uploadId || signal.aborted) return;
+        getUpload(uploadId, signal)
+          .then((u) => {
+            if (signal.aborted) return;
+            if (u.target !== TARGET) {
+              memory.remember({ uploadId: null });
+              setUploadNotice('sysupd.wrong_target');
+              return;
+            }
+            setUpload(u);
+          })
+          .catch((error: unknown) => {
+            if (isApiFailure(error, 'not_found')) memory.remember({ uploadId: null });
+          });
+      });
     if (installJobId) void followInstall(installJobId, null);
-  }, [signal, followInstall]);
+  }, [signal, followInstall, discover, waitJob]);
 
   const limits = capabilities.data?.limits;
   const maxBytes = limits?.system_upload_max_bytes;
@@ -312,19 +348,26 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
             target: TARGET,
           });
         } catch (error) {
-          if (isApiFailure(error, 'busy')) {
-            setUploadNotice('sysupd.upload_busy');
+          if (!isApiFailure(error, 'busy')) {
+            if (isApiFailure(error, 'invalid_state')) {
+              setUploadNotice('sysupd.upload_unconfirmed');
+              return;
+            }
+            if (isApiFailure(error, 'payload_too_large')) {
+              setFileProblem('sysupd.file_too_large');
+              return;
+            }
+            throw error;
+          }
+          // Busy: the device holds an upload this page did not know about. Show it;
+          // the same file continues it, anything else has to delete it first.
+          const found = await discover();
+          const own = found.own;
+          if (!own || own.size_bytes !== file.size || own.sha256 !== sha256 || own.state === 'failed') {
+            setUploadNotice(own ? 'update.upload_found' : found.other ? null : 'update.upload_busy_unknown');
             return;
           }
-          if (isApiFailure(error, 'invalid_state')) {
-            setUploadNotice('sysupd.upload_unconfirmed');
-            return;
-          }
-          if (isApiFailure(error, 'payload_too_large')) {
-            setFileProblem('sysupd.file_too_large');
-            return;
-          }
-          throw error;
+          current = own;
         }
         keys.current.delete(action);
         memory.remember({ uploadId: current.id });
@@ -399,6 +442,29 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
       }
     } finally {
       if (!signal.aborted) setBusy(null);
+    }
+  }
+
+  /** Delete the ESP32's upload that keeps this screen from uploading. */
+  async function removeOther() {
+    if (!other) return;
+    setUploadError(null);
+    setUploadNotice(null);
+    setBusy('deleting');
+    const action = `delete:${other.id}`;
+    try {
+      const accepted = await deleteUpload(session.csrf_token, keyFor(action), other.id);
+      await waitJob(accepted.job_id);
+      keys.current.delete(action);
+    } catch (error) {
+      if (!isApiFailure(error, 'not_found') && !(error instanceof Stop) && !signal.aborted) {
+        setUploadError(error);
+      }
+    } finally {
+      if (!signal.aborted) {
+        await discover().catch(() => setOther(null));
+        setBusy(null);
+      }
     }
   }
 
@@ -514,6 +580,7 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
       </Card>
 
       <Card title="update.upload">
+        {other ? <OtherUpload upload={other} disabled={busy !== null || following} onDelete={() => void removeOther()} /> : null}
         {upload ? (
           <>
             <Facts
@@ -529,6 +596,11 @@ export function SystemUpdateScreen({ session }: { session: Session }) {
                   {t('update.uploading', { received: upload.received_bytes, total: upload.size_bytes })}
                 </p>
                 <progress className="upload-progress" value={upload.received_bytes} max={upload.size_bytes} />
+                {!resumable && busy === null && upload.received_bytes < upload.size_bytes ? (
+                  <p className="muted" data-testid="system-upload-continue">
+                    {t('update.upload_continue_hint', { size: upload.size_bytes })}
+                  </p>
+                ) : null}
               </>
             ) : null}
             {upload.state === 'failed' && upload.error ? (

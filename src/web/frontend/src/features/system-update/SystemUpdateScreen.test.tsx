@@ -63,6 +63,10 @@ interface Options {
   capabilities?: Capabilities;
   /** The version verification finds in the image. */
   version?: string;
+  /** The ESP32's upload the device holds as well. */
+  other?: Upload | null;
+  /** An upload another browser creates just before this page's create: that one is refused busy. */
+  appearOnCreate?: Upload;
   /** What the device answers on /system/status once it restarted. */
   afterReboot?: Handler;
   extra?: Record<string, Handler>;
@@ -74,6 +78,7 @@ interface Options {
  */
 function systemDevice(options: Options = {}) {
   let stored: Upload | null = options.upload ?? null;
+  let other: Upload | null = options.other ?? null;
   let firmware = options.firmware ?? systemFirmwareConfirmed;
   let jobPolls = 0;
   const creates: unknown[] = [];
@@ -91,12 +96,22 @@ function systemDevice(options: Options = {}) {
       return json(200, { ...systemStatus, boot_id: BOOT_AFTER, uptime_ms: '41000' });
     },
     'POST /api/v1/firmware/uploads': async (request) => {
+      if (options.appearOnCreate && stored === null) {
+        stored = options.appearOnCreate;
+        return refusal(409, 'busy');
+      }
       const body = (await request.json()) as { filename: string; size_bytes: number; sha256: string };
       creates.push(body);
       stored = { ...systemUploadReceiving, filename: body.filename, size_bytes: body.size_bytes, sha256: body.sha256 };
       return json(201, stored);
     },
+    'GET /api/v1/firmware/uploads': () => json(200, { uploads: [stored, other].filter((u): u is Upload => u !== null) }),
     [`GET ${UPLOAD}`]: () => (stored ? json(200, stored) : refusal(404, 'not_found')),
+    'DELETE /api/v1/firmware/uploads/upload_0001': () => {
+      other = null;
+      return json(202, accepted('job_00000104', null));
+    },
+    'GET /api/v1/jobs/job_00000104': () => json(200, deleteSucceeded),
     [`PUT ${UPLOAD}/data`]: async (request, url) => {
       const offset = Number(url.searchParams.get('offset'));
       const length = (await request.arrayBuffer()).byteLength;
@@ -206,7 +221,8 @@ describe('the file', () => {
     await userEvent.upload(screen.getByLabelText(t('sysupd.file_label')), new File([new Uint8Array(max + 1)], 'huge.bin'));
     expect(await screen.findByTestId('system-file-problem')).toHaveTextContent(t('sysupd.file_too_large', { max }));
     expect(screen.getByRole('button', { name: t('update.upload_submit') })).toBeDisabled();
-    expect(device.requests.some((r) => r.url.includes('/firmware/'))).toBe(false);
+    // Only the look at what the device holds, nothing that creates or writes.
+    expect(device.requests.some((r) => r.url.includes('/firmware/') && r.method !== 'GET')).toBe(false);
   });
 
   it('a file just within slot 2 is taken', async () => {
@@ -421,12 +437,38 @@ describe('upload, verify and install', () => {
     expect(dev.chunks).toEqual([]);
   });
 
-  it('another file on the device (an ESP32 upload) holds the slot', async () => {
-    systemDevice({ extra: { 'POST /api/v1/firmware/uploads': () => refusal(409, 'busy') } });
+  it('an ESP32 upload holds the slot: the page names it and deletes it', async () => {
+    const dev = systemDevice({ other: uploadReady });
+    render(<App />);
+    const notice = await screen.findByTestId('other-upload');
+    expect(notice).toHaveTextContent(t('update.target.esp32c6'));
+    expect(notice).toHaveTextContent(uploadReady.filename);
+    await userEvent.click(screen.getByRole('button', { name: t('update.other_upload_delete') }));
+    await waitFor(() => expect(screen.queryByTestId('other-upload')).toBeNull());
+    await uploadAndVerify();
+    expect(dev.creates).toHaveLength(1);
+  });
+
+  it('busy on create shows the STM32 upload the device holds, started elsewhere', async () => {
+    systemDevice({
+      appearOnCreate: { ...systemUploadReceiving, received_bytes: 8192, sha256: 'c'.repeat(64), filename: 'other.bin' },
+    });
     render(<App />);
     await chooseFile(image());
     await userEvent.click(screen.getByRole('button', { name: t('update.upload_submit') }));
-    expect(await screen.findByTestId('system-upload-notice')).toHaveTextContent(t('sysupd.upload_busy'));
+    expect(await screen.findByTestId('system-upload-notice')).toHaveTextContent(t('update.upload_found'));
+    expect(screen.getByTestId('system-upload-state')).toHaveTextContent(t('update.upload_state.receiving'));
+    expect(screen.getByRole('button', { name: t('update.delete_submit') })).toBeEnabled();
+  });
+
+  it('busy on create with the same file continues the upload the device holds', async () => {
+    const bytes = image();
+    const dev = systemDevice({ appearOnCreate: { ...systemUploadReceiving, received_bytes: 16384, sha256: sha(bytes) } });
+    render(<App />);
+    await chooseFile(bytes);
+    await userEvent.click(screen.getByRole('button', { name: t('update.upload_submit') }));
+    await screen.findByTestId('system-image-version', {}, { timeout: 10_000 });
+    expect(dev.chunks.map((c) => c.offset)).toEqual([16384, 32768]);
   });
 
   it('the device refusing a too large file after all is shown at the file', async () => {
@@ -522,14 +564,45 @@ describe('after a reload', () => {
   });
 
   it('does not take an ESP32 upload for its own', async () => {
+    systemDevice({ other: uploadReady });
+    window.localStorage.setItem(SYSTEM_STORAGE_KEY, JSON.stringify({ uploadId: 'upload_0001' }));
+    render(<App />);
+    expect(await screen.findByTestId('other-upload')).toHaveTextContent(t('update.target.esp32c6'));
+    expect(screen.queryByTestId('system-upload-state')).toBeNull();
+    await waitFor(() => expect(window.localStorage.getItem(SYSTEM_STORAGE_KEY)).toBeNull());
+  });
+
+  it('without the device list (older firmware) it still refuses an ESP32 upload it remembered', async () => {
     systemDevice({
-      extra: { 'GET /api/v1/firmware/uploads/upload_0001': () => json(200, uploadReady) },
+      extra: {
+        'GET /api/v1/firmware/uploads': () => refusal(404, 'not_found'),
+        'GET /api/v1/firmware/uploads/upload_0001': () => json(200, uploadReady),
+      },
     });
     window.localStorage.setItem(SYSTEM_STORAGE_KEY, JSON.stringify({ uploadId: 'upload_0001' }));
     render(<App />);
     expect(await screen.findByTestId('system-upload-notice')).toHaveTextContent(t('sysupd.wrong_target'));
     expect(screen.queryByTestId('system-upload-state')).toBeNull();
-    expect(window.localStorage.getItem(SYSTEM_STORAGE_KEY)).toBeNull();
+  });
+
+  it('shows an upload another browser left, without a remembered id', async () => {
+    systemDevice({ upload: systemUploadReady });
+    render(<App />);
+    expect(await screen.findByTestId('system-image-version')).toHaveTextContent('1.1.0+0');
+    expect(JSON.parse(window.localStorage.getItem(SYSTEM_STORAGE_KEY)!)).toMatchObject({ uploadId: 'upload_0002' });
+  });
+
+  it('an unfinished upload another browser left asks for the same file, then continues it', async () => {
+    const bytes = image();
+    const dev = systemDevice({ upload: { ...systemUploadReceiving, received_bytes: 16384, sha256: sha(bytes) } });
+    render(<App />);
+    expect(await screen.findByTestId('system-upload-continue')).toHaveTextContent(String(SIZE));
+    await chooseFile(bytes);
+    expect(screen.queryByTestId('system-upload-continue')).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: t('update.upload_resume') }));
+    await screen.findByTestId('system-image-version', {}, { timeout: 10_000 });
+    expect(dev.creates).toEqual([]);
+    expect(dev.chunks.map((c) => c.offset)).toEqual([16384, 32768]);
   });
 
   it('an install job the device no longer knows means it restarted', async () => {

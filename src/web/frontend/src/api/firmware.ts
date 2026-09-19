@@ -13,6 +13,10 @@ export function createUpload(csrfToken: string, idempotencyKey: string, body: Up
   return unwrap(api.POST('/firmware/uploads', { params: { header: headers(csrfToken, idempotencyKey) }, body }));
 }
 
+/** Every upload the device holds, one per target at most, whatever its state. */
+export const listUploads = (signal?: AbortSignal): Promise<Upload[]> =>
+  unwrap(api.GET('/firmware/uploads', { signal })).then((list) => list.uploads);
+
 export const getUpload = (uploadId: string, signal?: AbortSignal): Promise<Upload> =>
   unwrap(api.GET('/firmware/uploads/{upload_id}', { params: { path: { upload_id: uploadId } }, signal }));
 

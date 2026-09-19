@@ -22,8 +22,10 @@ import {
   installSucceeded,
   installWriting,
   session,
+  systemUploadReceiving,
   uploadFailed,
   uploadImage,
+  uploadReady,
   uploadReceiving,
   verifyFailed,
   verifySucceeded,
@@ -54,8 +56,11 @@ function image(size = SIZE): Uint8Array<ArrayBuffer> {
 const sha = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
 
 /** A device with an upload store: chunks land at their offsets, verify makes the file ready. */
-function updateDevice(options: { upload?: Upload | null; status?: Handler; extra?: Record<string, Handler> } = {}) {
+function updateDevice(
+  options: { upload?: Upload | null; other?: Upload | null; status?: Handler; extra?: Record<string, Handler> } = {},
+) {
   let stored: Upload | null = options.upload ?? null;
+  let other: Upload | null = options.other ?? null;
   const chunks: { offset: number; bytes: Uint8Array; key: string | null; type: string | null }[] = [];
   const creates: unknown[] = [];
   const device = fakeDevice({
@@ -69,7 +74,13 @@ function updateDevice(options: { upload?: Upload | null; status?: Handler; extra
       stored = { ...uploadReceiving, filename: body.filename, size_bytes: body.size_bytes, sha256: body.sha256 };
       return json(201, stored);
     },
+    'GET /api/v1/firmware/uploads': () => json(200, { uploads: [stored, other].filter((u): u is Upload => u !== null) }),
     [`GET ${UPLOAD}`]: () => (stored ? json(200, stored) : refusal(404, 'not_found')),
+    'DELETE /api/v1/firmware/uploads/upload_0002': () => {
+      other = null;
+      return json(202, accepted('job_00000104', null));
+    },
+    'GET /api/v1/jobs/job_00000104': () => json(200, deleteSucceeded),
     [`PUT ${UPLOAD}/data`]: async (request, url) => {
       const offset = Number(url.searchParams.get('offset'));
       const bytes = new Uint8Array(await request.arrayBuffer());
@@ -167,7 +178,7 @@ describe('the file', () => {
       t('update.file_too_large', { max: capabilitiesUpdater.limits.upload_max_bytes }),
     );
     expect(screen.getByRole('button', { name: t('update.upload_submit') })).toBeDisabled();
-    expect(device.requests.some((r) => r.url.includes('/firmware/'))).toBe(false);
+    expect(device.requests.some((r) => r.url.includes('/firmware/') && r.method !== 'GET')).toBe(false);
   });
 
   it('shows the SHA-256 it computed here', async () => {
@@ -185,7 +196,7 @@ describe('the file', () => {
     await userEvent.upload(screen.getByLabelText(t('update.file_label')), new File([], 'empty.bin'));
     expect(await screen.findByRole('alert')).toHaveTextContent(t('update.file_empty'));
     expect(screen.getByRole('button', { name: t('update.upload_submit') })).toBeDisabled();
-    expect(device.requests.some((r) => r.url.includes('/firmware/'))).toBe(false);
+    expect(device.requests.some((r) => r.url.includes('/firmware/') && r.method !== 'GET')).toBe(false);
   });
 });
 
@@ -252,6 +263,22 @@ describe('upload and verify', () => {
     await waitFor(() => expect(screen.queryByTestId('upload-state')).toBeNull());
     expect(dev.stored()).toBeNull();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+
+  it('shows an upload another browser left, without a remembered id', async () => {
+    updateDevice({ upload: uploadReady });
+    render(<App />);
+    expect(await screen.findByTestId('upload-state')).toHaveTextContent(t('update.upload_state.ready'));
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY)!)).toMatchObject({ uploadId: 'upload_0001' });
+  });
+
+  it('an STM32 upload holds the slot: the page names it and deletes it', async () => {
+    updateDevice({ other: systemUploadReceiving });
+    render(<App />);
+    const notice = await screen.findByTestId('other-upload');
+    expect(notice).toHaveTextContent(t('update.target.stm32u585'));
+    await userEvent.click(screen.getByRole('button', { name: t('update.other_upload_delete') }));
+    await waitFor(() => expect(screen.queryByTestId('other-upload')).toBeNull());
   });
 
   it('says when another browser holds the upload slot', async () => {

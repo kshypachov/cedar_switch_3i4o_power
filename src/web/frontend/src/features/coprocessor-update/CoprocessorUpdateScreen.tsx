@@ -21,6 +21,7 @@ import { type MessageKey, t } from '../../i18n';
 import { useAuth } from '../../state/auth';
 import { usePolling } from '../../state/usePolling';
 import { notServed, useSessionGuard } from '../../state/useSessionGuard';
+import { findDeviceUploads, OtherUpload } from './deviceUploads';
 import { phaseRows, type PhaseRow } from './phases';
 import { recall, remember } from './remember';
 import { hashBlob } from './sha256';
@@ -33,6 +34,8 @@ const CAPABILITIES_MS = 10_000;
 const FIRMWARE_POLL_MS = 500;
 const DEFAULT_CHUNK_BYTES = 16_384;
 const FILENAME_MAX = 128;
+/** The upload this screen owns in GET /firmware/uploads (createUpload's default target). */
+const TARGET = 'esp32c6';
 
 type Busy = 'hashing' | 'sending' | 'verifying' | 'deleting' | null;
 
@@ -88,6 +91,8 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
   const [busy, setBusy] = useState<Busy>(null);
   const [uploadError, setUploadError] = useState<unknown>(null);
   const [uploadNotice, setUploadNotice] = useState<MessageKey | null>(null);
+  /** The STM32's upload, which keeps this screen from uploading until it is gone. */
+  const [other, setOther] = useState<Upload | null>(null);
 
   const [acknowledged, setAcknowledged] = useState(false);
   const [installJob, setInstallJob] = useState<Job | null>(null);
@@ -169,20 +174,53 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
     [signal, waitJob],
   );
 
-  // Pick up what a reload interrupted: the upload being sent, the install being followed.
+  /**
+   * The device is the authority on which upload exists: this screen's own (from
+   * another window, a script, a reload) and the STM32's. The remembered id only
+   * says which one this browser was sending.
+   */
+  const discover = useCallback(async () => {
+    const found = await findDeviceUploads(TARGET, signal);
+    if (!signal.aborted) {
+      setOther(found.other);
+      remember({ uploadId: found.own?.id ?? null });
+      setUpload(found.own);
+    }
+    return found;
+  }, [signal]);
+
+  // Pick up what a reload interrupted - or what someone else left on the device.
   useEffect(() => {
     const { uploadId, installJobId } = recall();
-    if (uploadId) {
-      getUpload(uploadId, signal)
-        .then((u) => {
-          if (!signal.aborted) setUpload(u);
-        })
-        .catch((error: unknown) => {
-          if (isApiFailure(error, 'not_found')) remember({ uploadId: null });
-        });
-    }
+    discover()
+      .then(async (found) => {
+        const own = found.own;
+        if (own?.state === 'verifying' && own.active_job_id && !signal.aborted) {
+          // A check started elsewhere: its result shows here when it ends.
+          setBusy('verifying');
+          try {
+            await waitJob(own.active_job_id);
+            if (!signal.aborted) setUpload(await getUpload(own.id, signal));
+          } catch {
+            /* the upload card keeps the last state it knew */
+          } finally {
+            if (!signal.aborted) setBusy(null);
+          }
+        }
+      })
+      .catch(() => {
+        // A device without the list (older firmware): the remembered id only.
+        if (!uploadId || signal.aborted) return;
+        getUpload(uploadId, signal)
+          .then((u) => {
+            if (!signal.aborted) setUpload(u);
+          })
+          .catch((error: unknown) => {
+            if (isApiFailure(error, 'not_found')) remember({ uploadId: null });
+          });
+      });
     if (installJobId) void followInstall(installJobId);
-  }, [signal, followInstall]);
+  }, [signal, followInstall, discover, waitJob]);
 
   async function choose(chosen: File | null) {
     setFile(chosen);
@@ -242,11 +280,16 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
             sha256,
           });
         } catch (error) {
-          if (isApiFailure(error, 'busy')) {
-            setUploadNotice('update.upload_busy_unknown');
+          if (!isApiFailure(error, 'busy')) throw error;
+          // Busy: the device holds an upload this page did not know about. Show it;
+          // the same file continues it, anything else has to delete it first.
+          const found = await discover();
+          const own = found.own;
+          if (!own || own.size_bytes !== file.size || own.sha256 !== sha256 || own.state === 'failed') {
+            setUploadNotice(own ? 'update.upload_found' : found.other ? null : 'update.upload_busy_unknown');
             return;
           }
-          throw error;
+          current = own;
         }
         keys.current.delete(action);
         remember({ uploadId: current.id });
@@ -362,6 +405,29 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
     }
   }
 
+  /** Delete the STM32's upload that keeps this screen from uploading. */
+  async function removeOther() {
+    if (!other) return;
+    setUploadError(null);
+    setUploadNotice(null);
+    setBusy('deleting');
+    const action = `delete:${other.id}`;
+    try {
+      const accepted = await deleteUpload(session.csrf_token, keyFor(action), other.id);
+      await waitJob(accepted.job_id);
+      keys.current.delete(action);
+    } catch (error) {
+      if (!isApiFailure(error, 'not_found') && !(error instanceof Stop) && !signal.aborted) {
+        setUploadError(error);
+      }
+    } finally {
+      if (!signal.aborted) {
+        await discover().catch(() => setOther(null));
+        setBusy(null);
+      }
+    }
+  }
+
   const max = capabilities.data?.limits.upload_max_bytes;
   const uartUpdate = status.data?.uart_update;
   const canInstall =
@@ -407,6 +473,7 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
       </Card>
 
       <Card title="update.upload">
+        {other ? <OtherUpload upload={other} disabled={busy !== null || installing} onDelete={() => void removeOther()} /> : null}
         {upload ? (
           <>
             <Facts
@@ -422,6 +489,11 @@ export function CoprocessorUpdateScreen({ session }: { session: Session }) {
                   {t('update.uploading', { received: upload.received_bytes, total: upload.size_bytes })}
                 </p>
                 <progress className="upload-progress" value={upload.received_bytes} max={upload.size_bytes} />
+                {!resumable && busy === null && upload.received_bytes < upload.size_bytes ? (
+                  <p className="muted" data-testid="upload-continue">
+                    {t('update.upload_continue_hint', { size: upload.size_bytes })}
+                  </p>
+                ) : null}
               </>
             ) : null}
             {upload.state === 'failed' && upload.error ? (
