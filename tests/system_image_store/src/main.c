@@ -194,6 +194,12 @@ void slot_reset_knobs(void)
 	memset(&slot, 0, sizeof(slot));
 }
 
+void slot_stream(bool on)
+{
+	platform.flash_dev = on ? flash_area_get_device(slot_fa()) : NULL;
+	platform.flash_offset = on ? (uint32_t)slot_fa()->fa_off : 0U;
+}
+
 void slot_erase_all(void)
 {
 	zassert_ok(flash_area_erase(slot_fa(), 0, SLOT_SIZE));

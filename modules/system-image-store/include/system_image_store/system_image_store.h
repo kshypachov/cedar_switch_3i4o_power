@@ -76,6 +76,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+struct device;
+
 #include <system_image_store/mcuboot_image.h>
 
 #ifdef __cplusplus
@@ -122,6 +124,13 @@ struct sys_img_platform {
 	uint32_t trailer_bytes;
 	/** Header size, RAM ranges and execution window of this board's images. */
 	struct mcuboot_image_params image;
+	/**
+	 * Optional, for CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH: the flash device
+	 * the slot is on and the slot's offset in it. NULL: every chunk goes
+	 * through @ref write and @ref erase.
+	 */
+	const struct device *flash_dev;
+	uint32_t flash_offset;
 };
 
 /** The Upload resource, plus what the binding and the updater need. */

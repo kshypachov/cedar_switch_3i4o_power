@@ -152,6 +152,7 @@ static void tamper_meta(void (*edit)(uint8_t *m, size_t len))
 static void before(void *unused)
 {
 	ARG_UNUSED(unused);
+	slot_stream(false);
 	slot_reset_knobs();
 	slot_erase_all();
 	volume_fresh();
@@ -561,6 +562,72 @@ ZTEST(system_image_store, test_mid_sector_chunk_keeps_accepted_bytes)
 	zassert_equal(slot.erase_off[0], 12288U);
 	zassert_equal(slot.erase_len[0], 4096U);
 	assert_slot(fx->data, 0, 16384);
+}
+
+/* -- stream_flash (CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH) --------------------------- */
+
+ZTEST(system_image_store, test_stream_upload_matches_the_file)
+{
+	const struct fixture *fx = fixture("valid_large");
+
+	slot_stream(true);
+	create_for(fx, 0);
+	slot_reset_knobs();
+	send(fx, 0, fx->len, 4096, 0);
+	/* every chunk started on a sector: the store erased its sector through the
+	 * platform (not STREAM_FLASH_ERASE), stream_flash wrote them all */
+	zassert_equal(slot.erase_calls, DIV_ROUND_UP(fx->len, SECTOR));
+	zassert_equal(slot.erase_off[1], SECTOR);
+	zassert_equal(slot.erase_len[1], SECTOR);
+	zassert_equal(slot.write_calls, 0);
+	zassert_ok(sys_img_get(up.id, 0, &up));
+	zassert_equal(up.received_bytes, fx->len);
+	assert_slot(fx->data, 0, fx->len);
+	verify(0);
+	zassert_equal(up.state, SYS_IMG_READY, "%s", up.error_message);
+}
+
+ZTEST(system_image_store, test_stream_erases_an_old_image_as_it_goes)
+{
+	const struct fixture *fx = fixture("valid_large");
+
+	/* an older image's bytes everywhere: without the page erase the program
+	 * would only clear bits and the read-back would fail */
+	slot_raw_fill(0, 0x00, fx->len);
+	slot_stream(true);
+	create_for(fx, 0);
+	send(fx, 0, fx->len, CHUNK, 0);
+	assert_slot(fx->data, 0, fx->len);
+	verify(0);
+	zassert_equal(up.state, SYS_IMG_READY, "%s", up.error_message);
+}
+
+ZTEST(system_image_store, test_stream_unaligned_chunk_takes_the_platform_path)
+{
+	const struct fixture *fx = fixture("valid_large");
+
+	slot_stream(true);
+	create_for(fx, 0);
+	slot_reset_knobs();
+	send(fx, 0, 5000, 5000, 0);
+	/* stream path: its two sectors erased up front, no platform write */
+	zassert_equal(slot.erase_calls, 1);
+	zassert_equal(slot.erase_off[0], 0U);
+	zassert_equal(slot.erase_len[0], 2 * SECTOR);
+	zassert_equal(slot.write_calls, 0);
+	/* 5000 is inside a sector: the platform's erase of 8192 and write */
+	send(fx, 5000, 10000, 5000, 0);
+	zassert_equal(slot.erase_calls, 2);
+	zassert_equal(slot.erase_off[1], 8192U);
+	zassert_true(slot.write_calls > 0);
+	/* aligned again: stream_flash */
+	slot_reset_knobs();
+	send(fx, 10000, 12288, 2288, 0);
+	send(fx, 12288, fx->len, 4096, 0);
+	zassert_equal(slot.write_calls, 1, "only the chunk at 10000 is unaligned");
+	assert_slot(fx->data, 0, fx->len);
+	verify(0);
+	zassert_equal(up.state, SYS_IMG_READY, "%s", up.error_message);
 }
 
 ZTEST(system_image_store, test_resend_after_write_before_metadata)

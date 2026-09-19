@@ -585,6 +585,11 @@ static void update_start(void)
 		return;
 	}
 	store_platform.slot_size = slot2->fa_size;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH)
+	/* Sector-aligned chunks go through stream_flash on the SPI NOR (prj.conf). */
+	store_platform.flash_dev = flash_area_get_device(slot2);
+	store_platform.flash_offset = (uint32_t)slot2->fa_off;
+#endif
 	upload_max_bytes = slot2->fa_size - TRAILER_SECTOR_BYTES;
 
 	rc = sys_img_init(FIRMWARE_DIR, &store_platform, k_uptime_get());

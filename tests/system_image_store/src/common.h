@@ -71,6 +71,8 @@ extern struct sys_img_platform platform;
 void slot_reset_knobs(void);
 /* Erase the whole slot. */
 void slot_erase_all(void);
+/* Point the platform at the sim flash device for the stream_flash path, or not. */
+void slot_stream(bool on);
 /* Raw access that bypasses the knobs. */
 void slot_raw_write(uint32_t offset, const uint8_t *data, size_t len);
 void slot_raw_read(uint32_t offset, uint8_t *data, size_t len);

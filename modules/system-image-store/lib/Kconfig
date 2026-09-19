@@ -44,6 +44,29 @@ config SYSTEM_IMAGE_STORE_SECTOR_MAX
 	  cannot be programmed to it keeps the sector's accepted prefix in a
 	  buffer of this size while the sector is erased.
 
+config SYSTEM_IMAGE_STORE_STREAM_FLASH
+	bool "Write sector-aligned chunks through Zephyr's stream_flash"
+	select STREAM_FLASH
+	depends on FLASH_HAS_EXPLICIT_ERASE
+	help
+	  When the platform names the slot's flash device (flash_dev), a chunk
+	  that starts on a sector boundary is written by stream_flash: the
+	  chunk's sectors are erased through the platform first, then
+	  stream_flash programs whole pages from its buffer. Not
+	  STREAM_FLASH_ERASE: that option is global and loses data for any
+	  stream_flash user whose start is not page-aligned (the coredump
+	  backend). A chunk that starts inside a sector still takes the
+	  platform's erase/write path, which keeps the sector's accepted bytes.
+	  The read-back check is the same for both (owner's request
+	  2026-09-19, to compare with the explicit erase-then-write).
+
+config SYSTEM_IMAGE_STORE_TIMING
+	bool "Log how long each stage of a chunk takes"
+	help
+	  One info line per committed chunk: offset, length, and the
+	  microseconds spent erasing, programming, reading back and saving the
+	  metadata. For measuring where an upload's time goes; off in products.
+
 config SYSTEM_IMAGE_STORE_TLV_MAX
 	int "Largest protected + unprotected TLV area accepted, in bytes"
 	default 2048

@@ -548,6 +548,10 @@ struct fw_work {
 	bool abandon;
 	/* The upload is system-image-store's. */
 	bool stm32;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	/* When the chunk was queued, to log how long it waited for the worker. */
+	uint32_t queued_cyc;
+#endif
 };
 
 static K_MUTEX_DEFINE(work_lock);
@@ -560,6 +564,9 @@ static void take(struct fw_work *fw, struct fw_work *out)
 	out->bytes = fw->bytes;
 	out->abandon = fw->abandon;
 	out->stm32 = fw->stm32;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	out->queued_cyc = fw->queued_cyc;
+#endif
 	k_mutex_unlock(&work_lock);
 }
 
@@ -572,6 +579,9 @@ static int submit(struct fw_work *fw, const char *job_id, const char *upload_id,
 	fw->bytes = bytes;
 	fw->abandon = abandon;
 	fw->stm32 = is_system_id(upload_id);
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	fw->queued_cyc = k_cycle_get_32();
+#endif
 	k_mutex_unlock(&work_lock);
 
 	return v1_worker_submit(&fw->work);
@@ -605,12 +615,20 @@ static void run_chunk(struct k_work *work)
 	int rc;
 
 	take(CONTAINER_OF(work, struct fw_work, work), &op);
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	const uint32_t started = k_cycle_get_32();
+#endif
 	(void)job_set_state(op.job, JOB_STATE_RUNNING);
 	(void)job_set_phase(op.job, "writing");
 	(void)job_set_progress(op.job, 0U, op.bytes, true, JOB_PROGRESS_UNIT_BYTES);
 
 	rc = store_commit(&op);
 	store_clear_job(&op);
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	LOG_INF("chunk job %s: queued %u us, ran %u us", op.job,
+		k_cyc_to_us_floor32(started - op.queued_cyc),
+		k_cyc_to_us_floor32(k_cycle_get_32() - started));
+#endif
 	if (rc == 0) {
 		(void)job_set_progress(op.job, op.bytes, op.bytes, true, JOB_PROGRESS_UNIT_BYTES);
 		(void)job_set_state(op.job, JOB_STATE_SUCCEEDED);

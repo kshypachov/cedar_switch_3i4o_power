@@ -18,6 +18,10 @@
 #include <zephyr/sys/crc.h>
 #include <zephyr/sys/util.h>
 
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH)
+#include <zephyr/storage/stream_flash.h>
+#endif
+
 #include <psa/crypto.h>
 
 #include <system_image_store/system_image_store.h>
@@ -573,6 +577,90 @@ static int programmable(uint32_t offset, size_t len)
 	return 1;
 }
 
+/* Stage times of the chunk being committed (CONFIG_SYSTEM_IMAGE_STORE_TIMING). */
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+static struct {
+	uint32_t erase_us;
+	uint32_t write_us;
+	uint32_t check_us;
+	uint32_t meta_us;
+} tm;
+#define TM_START()  uint32_t tm_t0 = k_cycle_get_32()
+#define TM_MARK(f)                                                                                 \
+	do {                                                                                       \
+		uint32_t tm_now = k_cycle_get_32();                                                \
+		tm.f += k_cyc_to_us_floor32(tm_now - tm_t0);                                       \
+		tm_t0 = tm_now;                                                                    \
+	} while (0)
+#else
+#define TM_START()  do { } while (0)
+#define TM_MARK(f)  do { } while (0)
+#endif
+
+/* The chunk just written reads back as staging[0..len). */
+static int read_back(uint32_t offset, size_t len)
+{
+	for (size_t done = 0; done < len;) {
+		const size_t n = MIN(sizeof(read_buf), len - done);
+
+		if (slot_read(offset + done, read_buf, n) != 0 ||
+		    memcmp(read_buf, &staging[done], n) != 0) {
+			LOG_ERR("slot 2 read-back differs at 0x%x", offset + (uint32_t)done);
+			return -EIO;
+		}
+		done += n;
+	}
+	return 0;
+}
+
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH)
+
+/* One page of stream_flash's buffer: it programs whole pages. */
+static uint8_t stream_buf[CONFIG_SYSTEM_IMAGE_STORE_SECTOR_MAX];
+
+/*
+ * A chunk that starts on a sector boundary, through stream_flash: a fresh context
+ * at the chunk's offset, so its first page is erased before anything is written
+ * there, then one buffered write flushed at the end (a flushed context takes no
+ * more writes; the next chunk opens its own).
+ */
+static int write_chunk_stream(uint32_t offset, size_t len)
+{
+	const struct sys_img_platform *p = st.p;
+	struct stream_flash_ctx ctx;
+	int rc;
+
+	/*
+	 * The sectors are erased here, not by stream_flash: CONFIG_STREAM_FLASH_ERASE
+	 * is global, and with a start that is not page-aligned it erases each next
+	 * page after writing its first bytes - the coredump backend starts 16 bytes
+	 * into its partition and lost 16 bytes per page (2026-09-19).
+	 */
+	TM_START();
+	if (p->erase(p->ctx, offset, ROUND_UP(len, p->sector_size)) != 0) {
+		return -EIO;
+	}
+	TM_MARK(erase_us);
+	rc = stream_flash_init(&ctx, p->flash_dev, stream_buf, p->sector_size,
+			       p->flash_offset + offset, p->slot_size - p->trailer_bytes - offset,
+			       NULL);
+	if (rc != 0) {
+		LOG_ERR("stream_flash_init at 0x%x: %d", offset, rc);
+		return -EIO;
+	}
+	rc = stream_flash_buffered_write(&ctx, staging, len, true);
+	if (rc != 0) {
+		LOG_ERR("stream_flash write at 0x%x: %d", offset, rc);
+		return -EIO;
+	}
+	TM_MARK(write_us);
+	rc = read_back(offset, len);
+	TM_MARK(check_us);
+	return rc;
+}
+
+#endif /* CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH */
+
 /*
  * The staged chunk at @p offset into the slot; runs without the lock (the pending
  * flag holds the staging buffer and the upload still). @p intact is set to the
@@ -588,6 +676,11 @@ static int write_chunk(uint32_t offset, size_t len, uint32_t *intact)
 	int rc;
 
 	*intact = offset;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_STREAM_FLASH)
+	if (p->flash_dev != NULL && offset % sector == 0U) {
+		return write_chunk_stream(offset, len);
+	}
+#endif
 	/* The sector the chunk begins in the middle of: accepted bytes before offset. */
 	if (first_start > offset) {
 		const uint32_t head = MIN(first_start, end) - offset;
@@ -614,24 +707,19 @@ static int write_chunk(uint32_t offset, size_t len, uint32_t *intact)
 		}
 	}
 	/* Every sector that starts inside the chunk. */
+	TM_START();
 	if (ROUND_UP(end, sector) > first_start &&
 	    p->erase(p->ctx, first_start, ROUND_UP(end, sector) - first_start) != 0) {
 		return -EIO;
 	}
+	TM_MARK(erase_us);
 	if (p->write(p->ctx, offset, staging, len) != 0) {
 		return -EIO;
 	}
-	for (size_t done = 0; done < len;) {
-		const size_t n = MIN(sizeof(read_buf), len - done);
-
-		if (slot_read(offset + done, read_buf, n) != 0 ||
-		    memcmp(read_buf, &staging[done], n) != 0) {
-			LOG_ERR("slot 2 read-back differs at 0x%x", offset + (uint32_t)done);
-			return -EIO;
-		}
-		done += n;
-	}
-	return 0;
+	TM_MARK(write_us);
+	rc = read_back(offset, len);
+	TM_MARK(check_us);
+	return rc;
 }
 
 int sys_img_chunk_commit(const char *id, int64_t now_ms)
@@ -660,11 +748,24 @@ int sys_img_chunk_commit(const char *id, int64_t now_ms)
 	next = st.m;
 	k_mutex_unlock(&st.lock);
 
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+	memset(&tm, 0, sizeof(tm));
+	const uint32_t tm_begin = k_cycle_get_32();
+#endif
 	rc = write_chunk(offset, len, &intact);
 	if (rc == 0) {
 		next.received = offset + (uint32_t)len;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+		const uint32_t tm_meta = k_cycle_get_32();
+#endif
 		rc = write_meta(&next);
 		record = rc == 0;
+#if defined(CONFIG_SYSTEM_IMAGE_STORE_TIMING)
+		tm.meta_us = k_cyc_to_us_floor32(k_cycle_get_32() - tm_meta);
+		LOG_INF("chunk 0x%x+%u: erase %u us, write %u us, check %u us, meta %u us, total %u us",
+			offset, (unsigned int)len, tm.erase_us, tm.write_us, tm.check_us, tm.meta_us,
+			k_cyc_to_us_floor32(k_cycle_get_32() - tm_begin));
+#endif
 	} else if (intact < offset) {
 		/*
 		 * Accepted bytes were lost: the client must send them again. The state
