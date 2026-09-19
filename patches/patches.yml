@@ -181,3 +181,27 @@ patches:
       2026-09-18: reverted, applied alone with `west patch apply` through a
       one-entry list, diff identical to the tested one, then reverted again -
       the shared checkout does not carry it until the owner decides.
+
+  - path: zephyr/eeprom_mb85rsxx-support-mb85rs64v.patch
+    sha256sum: baeff8e240e6d2198d47963974ff26d3a902608df4a6fb160c5c0b2e78442d3e
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-19
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      The board's FRAM on SPI1 is an MB85RS64V (RDID 04 7F 03 02, 64 Kbit),
+      which the driver rejected at init ("invalid device ID", -EIO): it knew
+      only the 2 Mbit MB85RS2MT/2MTA. The part also takes a 16-bit address
+      (datasheet DS501-00015), where the driver always sent 24 bits, so the ID
+      alone would have shifted reads by a byte and written the low address
+      byte as data. Kept to the minimum on the owner's request: the 64V ID is
+      accepted and devices up to 64 KiB get a 2-byte address. The frequency
+      (20 MHz, the part's maximum) is set in the application overlay, not
+      here. Applied to the shared zephyr checkout on 2026-09-19 with the
+      owner's permission (made against b6a5e6e8aa9, file unmodified before);
+      checked on the board at 192.168.88.10 with firmware 1.1.3+17: RDID
+      accepted at boot, eeprom shell writes at 0, 0x100 and 0x1FF8 read back
+      in place with no byte shift (docs/device-development/reports/fram). No
+      upstream issue or PR found (main, 2026-09-19).

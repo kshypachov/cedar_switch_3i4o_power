@@ -209,9 +209,9 @@
  * FIFO; 12-15 are the 2D ones), not used by anything else here. The SPI driver
  * with DCACHE accepts DMA buffers only in SRAM, so the NOR is reached through
  * nor_proxy below. The FRAM on the same bus has no proxy: read it only from a
- * thread whose stack is in SRAM into an SRAM buffer (today: the MAC, read on
- * main at boot, src/lib-init/net_init.c) - from a PSRAM stack the SPI driver
- * returns -ENOTSUP.
+ * thread whose stack is in SRAM into an SRAM buffer - from a PSRAM stack the SPI
+ * driver returns -ENOTSUP. Nothing in the application uses the FRAM today (the MAC
+ * comes from the I2C EEPROM at 0x50, src/lib-init/net_init.c).
  *
  * Checked against ST AN5593 (GPDMA, rev 9, table 24 and 2.2-2.4) and the channel
  * registers on the board: linear channels with the 2-word FIFO, requests 7/6, the
@@ -225,6 +225,14 @@
 	dmas = <&gpdma1 10 7 (STM32_DMA_PERIPH_TX | STM32_DMA_PRIORITY_HIGH)>,
 	       <&gpdma1 11 6 (STM32_DMA_PERIPH_RX | STM32_DMA_PRIORITY_HIGH)>;
 	dma-names = "tx", "rx";
+};
+
+/*
+ * The FRAM is an MB85RS64V (RDID 04 7F 03 02), rated for 20 MHz. The board's 60 MHz
+ * gave 40 MHz on the bus (PCLK2 160 MHz / 4); 20 MHz is PCLK2 / 8 exactly.
+ */
+&fram0 {
+	spi-max-frequency = <20000000>;
 };
 
 /*
