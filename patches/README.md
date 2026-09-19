@@ -1,7 +1,7 @@
 # Release manifest: what this product changes outside its own repository
 
 A build of this firmware is not reproducible from this repository alone. The
-seven edits in the table below live in the `zephyr` checkout, which this product
+eight edits in the table below live in the `zephyr` checkout, which this product
 does not own and which is shared with several unrelated projects in the same
 workspace. Anything that resets or re-clones that repository removes all of
 them, and the build either fails or — worse, in the case of the W5500 patches —
@@ -18,6 +18,7 @@ dropped.
 | ESP-Hosted link restart after the ESP32-C6 is re-flashed (`esp_hosted_mcu_restart`, `esp_hosted_mcu_wifi_restart`) | `zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.{c,h}`, `esp_hosted_mcu_spi.c`, `zephyr/drivers/wifi/esp_hosted_mcu/esp_hosted_mcu.c` | `west patch apply` of that one entry, see below; made against the driver as this checkout already carries it | The upstream driver can re-initialise its link and Wi-Fi after a coprocessor restart |
 | ESP-Hosted receive thread: suspended while the ESP32-C6 is in its ROM loader (`esp_hosted_mcu_suspend`), and a sleep after a burst that carried no frame | `zephyr/drivers/misc/esp_hosted_mcu/esp_hosted_mcu.{c,h}` | `west patch apply` of that one entry, after the restart entry | The upstream receive thread stops treating a high data-ready line without frames as work, or offers a suspend |
 | OCTOSPI NOR program/erase while executing from it (`FLASH_STM32_OSPI_XIP`) and `sys_clock_systick_wraps_observed()` — the STM32 update writes `image_ok` into slot 1 through it | `zephyr/drivers/flash/flash_stm32_ospi.c`, `flash_stm32_ospi_xip.{c,h}`, `Kconfig.stm32_ospi`, `CMakeLists.txt`; `zephyr/drivers/timer/cortex_m_systick.c`, `include/zephyr/drivers/timer/system_timer.h` | `west patch apply` of that one entry, see below; recorded from the tree, where it has been since 2026-09-06 | The upstream STM32 OSPI driver can write while memory-mapped and executing in place |
+| HTTP server: the fallback resource released when its client closes mid-transaction (`client_release_resources`), with a test | `zephyr/subsys/net/lib/http/http_server_core.c`, `zephyr/tests/net/lib/http_server/core/src/main.c` | `west patch apply` of that one entry, see below; **not applied to the checkout yet** (2026-09-18, owner's decision) | Upstream releases `res_fallback` on client close (not fixed in main as of 2026-09-18) |
 | Manifest entries for Matter and the three Cedar repositories | `zephyr/west.yml` | `git apply` of `workspace/west.yml.patch` | The workspace moves to an application-owned manifest repository |
 | esp-serial-flasher submanifest | `zephyr/submanifests/esp-serial-flasher.yaml` | copy from `workspace/submanifests/` | Same as above |
 
@@ -30,6 +31,7 @@ patches/
     eth_w5500-block-ipv4-multicast-in-macraw-mode.patch
     eth_w5500-reopen-socket-on-inconsistent-rx.patch
     flash_stm32_ospi-xip-safe-program-erase.patch
+    http_server-release-fallback-resource-on-client-close.patch
   workspace/
     west.yml.patch                                     manifest edit
     submanifests/esp-serial-flasher.yaml               verbatim copy

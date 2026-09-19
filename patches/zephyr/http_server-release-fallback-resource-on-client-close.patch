@@ -1,0 +1,339 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=9A=D0=B8=D1=80=D0=B8=D0=BB=D0=BE=20=D0=A8=D0=B8=D0=BF=D0=B0=D1=87=D0=BE=D0=B2?= <kshypachov@gmail.com>
+Date: Fri, 18 Sep 2026 00:00:00 +0300
+Subject: [PATCH] net: http_server: release the fallback resource on client
+ close
+
+A dynamic resource is held by the client whose transaction is in
+progress, and other clients get 409 Conflict until it is released. When
+a client goes away mid-transaction, client_release_resources() releases
+what it held and reports HTTP_SERVER_TRANSACTION_ABORTED to the
+application. It only walks the service's resource list, though, and the
+fallback resource added by commit ea6ca4e8b74 ("net: http_server: allow
+specifying a fallback resource") is not in that list.
+
+A client that closes its connection, or is closed by the inactivity
+timeout or a send error, while a dynamic fallback resource is serving
+it therefore leaves the resource held by a freed client context. From
+then on every request that reaches the fallback is answered with 409
+Conflict. It recovers only if a new client happens to be placed in the
+same slot of the client array and completes a request there.
+
+Seen on a device that serves its whole web application through the
+fallback: after one aborted transaction the page and every asset were
+answered with 409 while no client was connected, until reboot.
+
+Release the fallback resource of each service as well. The test holds
+the fallback with a partial POST, closes the connection and expects the
+abort callback and a normal response for the next client. Without the
+change it fails at the abort callback.
+
+Signed-off-by: Кирило Шипачов <kshypachov@gmail.com>
+---
+diff --git a/subsys/net/lib/http/http_server_core.c b/subsys/net/lib/http/http_server_core.c
+index 3b3ef4a5f0d..5470584dd11 100644
+--- a/subsys/net/lib/http/http_server_core.c
++++ b/subsys/net/lib/http/http_server_core.c
+@@ -537,42 +537,50 @@ static void close_all_sockets(struct http_server_ctx *ctx)
+ 	}
+ }
+ 
+-static void client_release_resources(struct http_client_ctx *client)
++static void client_release_resource(struct http_client_ctx *client,
++				    struct http_resource_detail *detail)
+ {
+-	struct http_resource_detail *detail;
+ 	struct http_resource_detail_dynamic *dynamic_detail;
+ 	struct http_request_ctx request_ctx;
+ 	struct http_response_ctx response_ctx;
+ 
+-	HTTP_SERVICE_FOREACH(service) {
+-		HTTP_SERVICE_FOREACH_RESOURCE(service, resource) {
+-			detail = resource->detail;
++	if (detail == NULL || detail->type != HTTP_RESOURCE_TYPE_DYNAMIC) {
++		return;
++	}
+ 
+-			if (detail->type != HTTP_RESOURCE_TYPE_DYNAMIC) {
+-				continue;
+-			}
++	dynamic_detail = (struct http_resource_detail_dynamic *)detail;
+ 
+-			dynamic_detail = (struct http_resource_detail_dynamic *)detail;
++	if (dynamic_detail->holder != client) {
++		return;
++	}
+ 
+-			if (dynamic_detail->holder != client) {
+-				continue;
+-			}
++	/* If the client still holds the resource at this point,
++	 * it means the transaction was not complete. Release
++	 * the resource and notify application.
++	 */
++	dynamic_detail->holder = NULL;
+ 
+-			/* If the client still holds the resource at this point,
+-			 * it means the transaction was not complete. Release
+-			 * the resource and notify application.
+-			 */
+-			dynamic_detail->holder = NULL;
++	if (dynamic_detail->cb == NULL) {
++		return;
++	}
+ 
+-			if (dynamic_detail->cb == NULL) {
+-				continue;
+-			}
++	populate_request_ctx(&request_ctx, NULL, 0, NULL);
+ 
+-			populate_request_ctx(&request_ctx, NULL, 0, NULL);
++	dynamic_detail->cb(client, HTTP_SERVER_TRANSACTION_ABORTED, &request_ctx,
++			   &response_ctx, dynamic_detail->user_data);
++}
+ 
+-			dynamic_detail->cb(client, HTTP_SERVER_TRANSACTION_ABORTED, &request_ctx,
+-					   &response_ctx, dynamic_detail->user_data);
++static void client_release_resources(struct http_client_ctx *client)
++{
++	HTTP_SERVICE_FOREACH(service) {
++		HTTP_SERVICE_FOREACH_RESOURCE(service, resource) {
++			client_release_resource(client, resource->detail);
+ 		}
++
++		/* The fallback resource is served like any other dynamic
++		 * resource, but it is not in the service's resource list.
++		 */
++		client_release_resource(client, service->res_fallback);
+ 	}
+ }
+ 
+diff --git a/tests/net/lib/http_server/core/src/main.c b/tests/net/lib/http_server/core/src/main.c
+index 15f0fe70ab5..fe68769d690 100644
+--- a/tests/net/lib/http_server/core/src/main.c
++++ b/tests/net/lib/http_server/core/src/main.c
+@@ -17,6 +17,7 @@
+ #define BUFFER_SIZE                    1024
+ #define SERVER_IPV4_ADDR               "127.0.0.1"
+ #define SERVER_PORT                    8080
++#define SERVER_FALLBACK_PORT           8081
+ #define TIMEOUT_S                      1
+ 
+ #define UPGRADE_STREAM_ID              1
+@@ -327,6 +328,54 @@ struct http_resource_detail_dynamic dynamic_detail = {
+ HTTP_RESOURCE_DEFINE(dynamic_resource, test_http_service, "/dynamic",
+ 		     &dynamic_detail);
+ 
++/* A service served by its fallback resource only. It is kept apart from
++ * test_http_service, whose tests expect 404 for paths that are not registered.
++ */
++static K_SEM_DEFINE(fallback_data, 0, 1);
++static K_SEM_DEFINE(fallback_aborted, 0, 1);
++
++static int fallback_cb(struct http_client_ctx *client, enum http_transaction_status status,
++		       const struct http_request_ctx *request_ctx,
++		       struct http_response_ctx *response_ctx, void *user_data)
++{
++	if (status == HTTP_SERVER_TRANSACTION_ABORTED) {
++		k_sem_give(&fallback_aborted);
++		return 0;
++	}
++
++	if (status == HTTP_SERVER_TRANSACTION_COMPLETE) {
++		return 0;
++	}
++
++	if (client->method == HTTP_POST) {
++		if (request_ctx->data_len > 0) {
++			k_sem_give(&fallback_data);
++		}
++		return 0;
++	}
++
++	response_ctx->body = TEST_DYNAMIC_GET_PAYLOAD;
++	response_ctx->body_len = strlen(TEST_DYNAMIC_GET_PAYLOAD);
++	response_ctx->final_chunk = true;
++
++	return 0;
++}
++
++static struct http_resource_detail_dynamic fallback_detail = {
++	.common = {
++		.type = HTTP_RESOURCE_TYPE_DYNAMIC,
++		.bitmask_of_supported_http_methods = BIT(HTTP_GET) | BIT(HTTP_POST),
++		.content_type = "text/plain",
++	},
++	.cb = fallback_cb,
++	.user_data = NULL,
++};
++
++static uint16_t test_fallback_service_port = SERVER_FALLBACK_PORT;
++HTTP_SERVICE_DEFINE_EMPTY(test_fallback_service, SERVER_IPV4_ADDR,
++			  &test_fallback_service_port, 1, 10, NULL,
++			  &fallback_detail.common, NULL);
++
+ struct test_headers_clone {
+ 	uint8_t buffer[CONFIG_HTTP_SERVER_CAPTURE_HEADER_BUFFER_SIZE];
+ 	struct http_header headers[CONFIG_HTTP_SERVER_CAPTURE_HEADER_COUNT];
+@@ -567,6 +616,47 @@ static uint8_t buf[BUFFER_SIZE];
+ /* This function ensures that there's at least as much data as requested in
+  * the buffer.
+  */
++static int test_connect(uint16_t port)
++{
++	struct net_sockaddr_in sa;
++	struct timeval optval = {
++		.tv_sec = TIMEOUT_S,
++		.tv_usec = 0,
++	};
++	int fd;
++	int ret;
++
++	ret = zsock_socket(NET_AF_INET, NET_SOCK_STREAM, NET_IPPROTO_TCP);
++	if (ret < 0) {
++		printk("Failed to create client socket (%d)\n", errno);
++		return -1;
++	}
++	fd = ret;
++
++	ret = zsock_setsockopt(fd, ZSOCK_SOL_SOCKET, ZSOCK_SO_RCVTIMEO, &optval,
++			       sizeof(optval));
++	if (ret < 0) {
++		printk("Failed to set timeout (%d)\n", errno);
++		return fd;
++	}
++
++	sa.sin_family = NET_AF_INET;
++	sa.sin_port = net_htons(port);
++
++	ret = zsock_inet_pton(NET_AF_INET, SERVER_IPV4_ADDR, &sa.sin_addr.s_addr);
++	if (ret != 1) {
++		printk("inet_pton() failed to convert %s\n", SERVER_IPV4_ADDR);
++		return fd;
++	}
++
++	ret = zsock_connect(fd, (struct net_sockaddr *)&sa, sizeof(sa));
++	if (ret < 0) {
++		printk("Failed to connect (%d)\n", errno);
++	}
++
++	return fd;
++}
++
+ static void test_read_data(size_t *offset, size_t need)
+ {
+ 	int ret;
+@@ -1268,6 +1358,57 @@ ZTEST(server_function_tests, test_http1_connection_close)
+ 	zassert_equal(ret, 0, "Connection should've been closed");
+ }
+ 
++ZTEST(server_function_tests, test_http1_fallback_released_on_abort)
++{
++	static const char partial_post[] =
++		"POST /not_registered HTTP/1.1\r\n"
++		"Host: 127.0.0.1:8081\r\n"
++		"Content-Length: 10\r\n"
++		"\r\n"
++		"12345";
++	static const char http1_request[] =
++		"GET /not_registered HTTP/1.1\r\n"
++		"Host: 127.0.0.1:8081\r\n"
++		"\r\n";
++	static const char expected_response[] = "HTTP/1.1 200\r\n"
++						"Transfer-Encoding: chunked\r\n"
++						"Content-Type: text/plain\r\n"
++						"\r\n"
++						"10\r\n" TEST_DYNAMIC_GET_PAYLOAD "\r\n"
++						"0\r\n\r\n";
++	size_t offset = 0;
++	int fd;
++	int ret;
++
++	fd = test_connect(SERVER_FALLBACK_PORT);
++	zassert_true(fd >= 0, "Failed to connect");
++
++	/* Half of the body: the fallback resource is now held by this client. */
++	ret = zsock_send(fd, partial_post, strlen(partial_post), 0);
++	zassert_not_equal(ret, -1, "send() failed (%d)", errno);
++	zassert_ok(k_sem_take(&fallback_data, K_SECONDS(TIMEOUT_S)),
++		   "Fallback resource did not receive the request body");
++
++	/* Abort the transaction by closing the connection mid-body. */
++	(void)zsock_close(fd);
++	zassert_ok(k_sem_take(&fallback_aborted, K_SECONDS(TIMEOUT_S)),
++		   "Fallback resource not released when its client closed");
++
++	/* Another client is served, not refused with 409 Conflict. */
++	(void)zsock_close(client_fd);
++	client_fd = test_connect(SERVER_FALLBACK_PORT);
++	zassert_true(client_fd >= 0, "Failed to connect");
++
++	ret = zsock_send(client_fd, http1_request, strlen(http1_request), 0);
++	zassert_not_equal(ret, -1, "send() failed (%d)", errno);
++
++	memset(buf, 0, sizeof(buf));
++
++	test_read_data(&offset, sizeof(expected_response) - 1);
++	zassert_mem_equal(buf, expected_response, sizeof(expected_response) - 1,
++			  "Received data doesn't match expected response");
++}
++
+ ZTEST(server_function_tests, test_http2_post_data_with_padding)
+ {
+ 	static const uint8_t request_post_dynamic[] = {
+@@ -2904,11 +3045,6 @@ ZTEST(server_function_tests, test_http1_static_fs_overlap)
+ 
+ static void http_server_tests_before(void *fixture)
+ {
+-	struct net_sockaddr_in sa;
+-	struct timeval optval = {
+-		.tv_sec = TIMEOUT_S,
+-		.tv_usec = 0,
+-	};
+ 	int ret;
+ 
+ 	ARG_UNUSED(fixture);
+@@ -2920,6 +3056,8 @@ static void http_server_tests_before(void *fixture)
+ 	dynamic_payload_len = 0;
+ 	dynamic_error = false;
+ 	dynamic_complete = false;
++	k_sem_reset(&fallback_data);
++	k_sem_reset(&fallback_aborted);
+ 
+ 	ret = http_server_start();
+ 	if (ret < 0) {
+@@ -2927,33 +3065,7 @@ static void http_server_tests_before(void *fixture)
+ 		return;
+ 	}
+ 
+-	ret = zsock_socket(NET_AF_INET, NET_SOCK_STREAM, NET_IPPROTO_TCP);
+-	if (ret < 0) {
+-		printk("Failed to create client socket (%d)\n", errno);
+-		return;
+-	}
+-	client_fd = ret;
+-
+-	ret = zsock_setsockopt(client_fd, ZSOCK_SOL_SOCKET, ZSOCK_SO_RCVTIMEO, &optval,
+-			       sizeof(optval));
+-	if (ret < 0) {
+-		printk("Failed to set timeout (%d)\n", errno);
+-		return;
+-	}
+-
+-	sa.sin_family = NET_AF_INET;
+-	sa.sin_port = net_htons(SERVER_PORT);
+-
+-	ret = zsock_inet_pton(NET_AF_INET, SERVER_IPV4_ADDR, &sa.sin_addr.s_addr);
+-	if (ret != 1) {
+-		printk("inet_pton() failed to convert %s\n", SERVER_IPV4_ADDR);
+-		return;
+-	}
+-
+-	ret = zsock_connect(client_fd, (struct net_sockaddr *)&sa, sizeof(sa));
+-	if (ret < 0) {
+-		printk("Failed to connect (%d)\n", errno);
+-	}
++	client_fd = test_connect(SERVER_PORT);
+ }
+ 
+ static void http_server_tests_after(void *fixture)

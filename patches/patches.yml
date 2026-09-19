@@ -154,3 +154,30 @@ patches:
       CONFIG_FLASH_STM32_OSPI_XIP. The same checkout carries separate,
       unrelated edits to drivers/timer/esp32_sys_timer.c and Kconfig.esp32 that
       are not part of this entry.
+
+  - path: zephyr/http_server-release-fallback-resource-on-client-close.patch
+    sha256sum: daa91ff03b9d1bbeb7f951732745fb2911e8a8837dcfb01d10d0c41feed9e70c
+    module: zephyr
+    author: Кирило Шипачов
+    email: kshypachov@gmail.com
+    date: 2026-09-18
+    upstreamable: true
+    merge-status: false
+    comments: >-
+      client_release_resources() walks only the service's resource list, so a
+      dynamic fallback resource (res_fallback, Zephyr ea6ca4e8b74, v4.1.0) stays
+      held by a freed client when a transaction on it is aborted. The web
+      application is served through the fallback (src/web/web_server.c), so one
+      aborted transaction answered every page and asset with 409 Conflict until
+      reboot (board at 192.168.88.10 on 2026-09-18; holder read with devmem
+      pointed at server_ctx.clients[3] while all four slots were free,
+      docs/device-development/reports/web-fallback-409). The patch releases the
+      fallback of each service too and adds a test to
+      tests/net/lib/http_server/core: it fails without the change, and with it
+      the suite passes 73 of 73 on native_sim/native/64 in the tests/ci
+      container, as does cedar.web_api_http (22 of 22). Not fixed upstream as
+      of 2026-09-18 (main b5f5f9ad2e9); no issue or PR found. Made against
+      zephyr b6a5e6e8aa9, where both files were unmodified. Round-trip on
+      2026-09-18: reverted, applied alone with `west patch apply` through a
+      one-entry list, diff identical to the tested one, then reverted again -
+      the shared checkout does not carry it until the owner decides.

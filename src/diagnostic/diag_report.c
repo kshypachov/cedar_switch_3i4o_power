@@ -152,16 +152,18 @@ static struct {
 // 	LOG_INF("Processing err %u\n", GET_STAT(iface, processing_error));
 // }
 
-#if defined(CONFIG_NET_STATISTICS_PER_INTERFACE)
-static void iface_cb(struct net_if *iface, void *user_data)
-{
-	struct net_stats *data = user_data;
-
-	net_mgmt(NET_REQUEST_STATS_GET_ALL, iface, data, sizeof(*data));
-
-	print_stats(iface, data);
-}
-#endif
+// Unused, like print_stats() and stats() it served; left compiled it broke the
+// build as soon as CONFIG_NET_STATISTICS_PER_INTERFACE was switched on.
+// #if defined(CONFIG_NET_STATISTICS_PER_INTERFACE)
+// static void iface_cb(struct net_if *iface, void *user_data)
+// {
+// 	struct net_stats *data = user_data;
+//
+// 	net_mgmt(NET_REQUEST_STATS_GET_ALL, iface, data, sizeof(*data));
+//
+// 	print_stats(iface, data);
+// }
+// #endif
 
 #if defined(CONFIG_NET_STATISTICS_ETHERNET)
 static void print_eth_stats(struct net_if *iface, struct net_stats_eth *data)
