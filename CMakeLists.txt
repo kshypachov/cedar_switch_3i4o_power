@@ -118,6 +118,7 @@ target_sources(app PRIVATE
         src/diagnostic/diag_report.c
         src/diagnostic/storage_bench.c
         src/diagnostic/coredump_support.c
+        src/diagnostic/xip_bus_test.c
         src/plugin_wifi/wifi.c
         src/plugin_wifi/wifi_shell.c
         src/app-firmware-updater/firmware_updater.c
