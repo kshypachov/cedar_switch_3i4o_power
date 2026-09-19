@@ -196,3 +196,74 @@
 		};
 	};
 };
+
+/*
+ * SPI1 (SPI NOR + FRAM only) with DMA (owner, 2026-09-19, reports/littlefs-speed):
+ * raw NOR reads went from 240 KB/s (polling) to 3.6 MB/s in 4 KiB pieces. SPI1 has
+ * requests only on GPDMA1 (LPDMA1 serves SPI3 only): SPI1_RX = 6, SPI1_TX = 7
+ * (LL_GPDMA1_REQUEST_SPI1_*). Channels 10 and 11: linear channels (0-11, 8-byte
+ * FIFO; 12-15 are the 2D ones), not used by anything else here. The SPI driver
+ * with DCACHE accepts DMA buffers only in SRAM, so the NOR is reached through
+ * nor_proxy below. The FRAM on the same bus has no proxy: read it only from a
+ * thread whose stack is in SRAM into an SRAM buffer (today: the MAC, read on
+ * main at boot, src/lib-init/net_init.c) - from a PSRAM stack the SPI driver
+ * returns -ENOTSUP.
+ *
+ * Checked against ST AN5593 (GPDMA, rev 9, table 24 and 2.2-2.4) and the channel
+ * registers on the board: linear channels with the 2-word FIFO, requests 7/6, the
+ * peripheral on port 0 - as recommended. Priority 2 (weighted, "high") as the note
+ * recommends for peripherals (0 was the default). Two differences come from the Zephyr
+ * drivers, not from here: the U5 DMA driver leaves the memory side on port 0 too
+ * (AN5593: port 1), and spi_stm32 moves 8-bit frames as 8-bit beats (AN5593: 32-bit on
+ * the SPI side); both cost only bus cycles (reports/littlefs-speed).
+ */
+&spi1 {
+	dmas = <&gpdma1 10 7 (STM32_DMA_PERIPH_TX | STM32_DMA_PRIORITY_HIGH)>,
+	       <&gpdma1 11 6 (STM32_DMA_PERIPH_RX | STM32_DMA_PRIORITY_HIGH)>;
+	dma-names = "tx", "rx";
+};
+
+/*
+ * The NOR's partitions (same offsets, sizes and labels as the board's
+ * ext_flash_app.dts) move under nor_proxy (modules/flash-sram-proxy): every flash
+ * area on the NOR - ZMS settings, slot 2, LittleFS, MCUboot scratch - is then read
+ * and written from the proxy thread through its SRAM buffer, so the SPI DMA never
+ * sees a stack or buffer in PSRAM. MCUboot is built without this overlay and keeps
+ * using spi_flash directly.
+ */
+&spi_flash {
+	/delete-node/ partitions;
+};
+
+/ {
+	nor_proxy: nor-proxy {
+		compatible = "cedar,flash-sram-proxy";
+		backend = <&spi_flash>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			storage_zms_partition: partition@0 {
+				label = "storage_zms";
+				reg = <0x00000000 0x00600000>;
+			};
+
+			slot1_partition: partition@600000 {
+				label = "image-1";
+				reg = <0x00600000 0x00400000>;
+			};
+
+			storage_partition: partition@a00000 {
+				label = "storage_nvs";
+				reg = <0x00a00000 0x00500000>;
+			};
+
+			scratch_partition: partition@f00000 {
+				label = "image-scratch";
+				reg = <0x00f00000 0x00010000>;
+			};
+		};
+	};
+};

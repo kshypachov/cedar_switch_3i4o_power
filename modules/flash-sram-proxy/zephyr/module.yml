@@ -1,0 +1,9 @@
+# Zephyr module declaration for flash-sram-proxy.
+#
+# Registered by the application via ZEPHYR_EXTRA_MODULES (see the app
+# CMakeLists.txt). dts_root brings the cedar,flash-sram-proxy binding.
+build:
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    dts_root: .

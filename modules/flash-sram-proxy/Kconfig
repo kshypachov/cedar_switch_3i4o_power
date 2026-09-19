@@ -1,0 +1,49 @@
+# Entry point sourced into the global Kconfig tree (via zephyr/module.yml).
+
+config FLASH_SRAM_PROXY
+	bool "Flash proxy: backend access from an SRAM thread through an SRAM buffer"
+	default y
+	depends on DT_HAS_CEDAR_FLASH_SRAM_PROXY_ENABLED
+	depends on FLASH
+	help
+	  A flash device (cedar,flash-sram-proxy) that forwards read, write,
+	  erase and the JESD216 calls to its backend from its own thread, with
+	  data copied through a buffer in SRAM. The backend's SPI driver then
+	  only ever sees SRAM (its command buffers on the proxy thread's stack,
+	  the data in the proxy buffer), which is what SPI DMA with DCACHE on
+	  STM32U5 needs. The library is not relocated to PSRAM (app
+	  CMakeLists.txt, src/helpers/psram_sections.ld): keep it that way.
+
+if FLASH_SRAM_PROXY
+
+config FLASH_SRAM_PROXY_BUF_SIZE
+	int "Bounce buffer, bytes"
+	default 4096
+	help
+	  Largest piece of one backend read or write. Longer requests are split,
+	  so this also sets how many DMA transfers a long read takes.
+
+config FLASH_SRAM_PROXY_STACK_SIZE
+	int "Proxy thread stack, bytes"
+	default 1024
+
+config FLASH_SRAM_PROXY_THREAD_PRIORITY
+	int "Proxy thread priority"
+	default 2
+	help
+	  Callers block until the proxy thread has done their request, so it
+	  should not be below any thread that uses the flash.
+
+config FLASH_SRAM_PROXY_INIT_PRIORITY
+	int "Init priority (POST_KERNEL)"
+	default 90
+	help
+	  After the backend (SPI_NOR_INIT_PRIORITY, 80) and before anything
+	  that mounts a file system or settings on it (FILE_SYSTEM_INIT_PRIORITY,
+	  99).
+
+module = FLASH_SRAM_PROXY
+module-str = flash_sram_proxy
+source "subsys/logging/Kconfig.template.log_config"
+
+endif

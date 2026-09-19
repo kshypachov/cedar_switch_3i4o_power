@@ -59,6 +59,7 @@ list(APPEND ZEPHYR_EXTRA_MODULES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/system-image-store # STM32 image straight into MCUboot slot 2, MCUboot image check (CONFIG_SYSTEM_IMAGE_STORE)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/system-updater   # STM32 install through the MCUboot swap, journal, self-confirmation (CONFIG_SYSTEM_UPDATER)
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/psa-driver-stm32 # STM32 PKA: P-256 on the public key accelerator, PSA driver (CONFIG_STM32_PKA)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules/flash-sram-proxy # SPI NOR access from an SRAM thread through an SRAM buffer, for SPI1 DMA (CONFIG_FLASH_SRAM_PROXY)
 )
 
 # CHIP (src/platform/Zephyr/CHIPDevicePlatformConfig.h) делает #include "autoconf.h",
@@ -292,6 +293,18 @@ if(CONFIG_CODE_DATA_RELOCATION_SRAM AND CONFIG_TF_PSA_CRYPTO_BUILTIN)
                 ${tfpsa}/drivers/p256-m/p256-m_driver_entrypoints.c)
     endif()
     zephyr_code_relocate(FILES ${crypto_hot} LOCATION RAM_TEXT NOKEEP)
+endif()
+
+# ------------------ SRAM: путь SPI NOR (SPI1 + DMA) ------------------
+# 2026-09-19 (reports/littlefs-speed): мелкая операция с NOR через DMA стоила ~0,8 мс —
+# настройка DMA, прерывание, пробуждение на каждый участок (команда, данные), всё XIP.
+# Код SPI-драйвера, DMA-драйвера, spi_nor и прослойки — в SRAM. Проверять в zephyr.map.
+if(CONFIG_CODE_DATA_RELOCATION_SRAM AND CONFIG_SPI_STM32_DMA)
+    zephyr_code_relocate(FILES
+            ${ZEPHYR_BASE}/drivers/spi/spi_stm32.c
+            ${ZEPHYR_BASE}/drivers/dma/dma_stm32u5.c
+            ${ZEPHYR_BASE}/drivers/flash/spi_nor.c
+            LOCATION RAM_TEXT NOKEEP)
 endif()
 
 # .bss/.noinit библиотек, объектники которых gen_relocate_app.py не находит или путает:

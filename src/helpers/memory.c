@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "zephyr/kernel.h"
+#include "zephyr/cache.h"
 #include "zephyr/init.h"
 #include "zephyr/devicetree.h"
 #include "zephyr/sys/util.h"
@@ -33,6 +34,25 @@ static int psram_ext_bss_zero(void) {
 }
 
 SYS_INIT(psram_ext_bss_zero, PRE_KERNEL_1, 0);
+
+#if defined(CONFIG_DCACHE)
+/*
+ * DCACHE1 (владелец, 2026-09-19): кеширует данные только внешней памяти — PSRAM
+ * (0x70000000) и прямые чтения флеши 0x90000000, — SRAM и периферию обходит; код через
+ * ремап ICACHE (0x02…) идёт по C-AHB и его не касается. Zephyr на U5 включает только
+ * ICACHE (soc/st/stm32/stm32u5x/soc.c), DCACHE1 до этого был выключен (DCACHE1_CR = 0x300).
+ * Условия (reports/littlefs-speed): DMA в PSRAM нет — SPI1 работает через
+ * modules/flash-sram-proxy только с SRAM, у остальной периферии DMA нет; драйвер записи
+ * XIP-флеши инвалидирует DCACHE по записанному диапазону.
+ */
+static int dcache1_enable(void) {
+    (void)sys_cache_data_invd_all();
+    sys_cache_data_enable();
+    return 0;
+}
+
+SYS_INIT(dcache1_enable, PRE_KERNEL_1, 1);
+#endif
 
 /* Внешняя куча — всё, что осталось в PSRAM после слинкованных туда секций */
 void init_memory_helpers(void) {

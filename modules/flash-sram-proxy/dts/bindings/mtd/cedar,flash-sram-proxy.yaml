@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Cedar
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  A flash device in front of another one (the backend) that makes every access
+  to the backend from one thread whose stack, and through one buffer, both in
+  SRAM. For SPI flash behind a DMA-driven SPI controller when callers' stacks
+  and buffers live in memory the DMA must not touch (external PSRAM behind
+  DCACHE1 on STM32U5). Put the backend's fixed-partitions under this node.
+
+compatible: "cedar,flash-sram-proxy"
+
+include: base.yaml
+
+properties:
+  backend:
+    type: phandle
+    required: true
+    description: The flash device every operation is forwarded to.
