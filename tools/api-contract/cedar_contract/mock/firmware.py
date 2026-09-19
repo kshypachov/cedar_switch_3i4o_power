@@ -124,6 +124,14 @@ class Firmware:
         self._settle(self.upload)
         return self.upload
 
+    def uploads(self) -> list[Upload]:
+        """listUploads: the upload the device holds, whatever its state. The mock
+        keeps one across targets; the device may hold a failed one of each."""
+        if self.upload is None:
+            return []
+        self._settle(self.upload)
+        return [self.upload]
+
     def create(self, body: dict[str, Any]) -> Upload:
         if self.upload is not None:
             self._settle(self.upload)

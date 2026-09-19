@@ -432,9 +432,9 @@ static void write_image(struct web_json_writer *w, const struct upload_view *up)
 	web_json_object_end(w);
 }
 
-static void reply_upload(struct web_api_call *call, const struct upload_view *up, uint16_t status)
+static void write_upload(struct web_json_writer *w, struct web_api_call *call,
+			 const struct upload_view *up)
 {
-	struct web_json_writer *w = web_api_json(call);
 	char digest[65];
 
 	web_json_object_begin(w);
@@ -476,7 +476,11 @@ static void reply_upload(struct web_api_call *call, const struct upload_view *up
 		web_json_null(w);
 	}
 	web_json_object_end(w);
+}
 
+static void reply_upload(struct web_api_call *call, const struct upload_view *up, uint16_t status)
+{
+	write_upload(web_api_json(call), call, up);
 	if (status == 201) {
 		char location[sizeof(UPLOADS_URL "/") + FW_STORE_ID_LEN];
 
@@ -812,6 +816,20 @@ static void reply_replayed_upload(struct web_api_call *call, const char *id)
 
 static const char MSG_BUSY_UPLOAD[] = "An upload is already staged or installing; delete it first";
 
+/* 409 busy for the target's own store, naming its upload (listUploads shows it too). */
+static void reject_busy(struct web_api_call *call, const char *id)
+{
+	char message[128];
+
+	if (id == NULL || id[0] == '\0') {
+		web_api_reject(call, API_ERR_BUSY, MSG_BUSY_UPLOAD);
+		return;
+	}
+	(void)snprintf(message, sizeof(message), "Upload %s is staged or installing; delete it first",
+		       id);
+	web_api_reject(call, API_ERR_BUSY, message);
+}
+
 #if defined(CONFIG_SYSTEM_IMAGE_STORE)
 static void create_system_upload(struct web_api_call *call, const struct v1_upload_body *body)
 {
@@ -844,7 +862,7 @@ static void create_system_upload(struct web_api_call *call, const struct v1_uplo
 	case 0:
 		break;
 	case -EBUSY:
-		web_api_reject(call, API_ERR_BUSY, MSG_BUSY_UPLOAD);
+		reject_busy(call, sys_img_current(sys_now_ms(), &up) == 0 ? up.id : NULL);
 		return;
 	case -EACCES:
 		web_api_reject(call, API_ERR_INVALID_STATE,
@@ -919,7 +937,7 @@ void v1_create_upload(struct web_api_call *call)
 	case 0:
 		break;
 	case -EBUSY:
-		web_api_reject(call, API_ERR_BUSY, MSG_BUSY_UPLOAD);
+		reject_busy(call, fw_store_current(now_ms(), &up) == 0 ? up.id : NULL);
 		return;
 	case -EFBIG:
 		web_api_reject(call, API_ERR_PAYLOAD_TOO_LARGE,
@@ -963,6 +981,39 @@ void v1_get_upload(struct web_api_call *call)
 		return;
 	}
 	reply_upload(call, &view, 200);
+}
+
+/*
+ * listUploads: the upload each store holds, whatever its state - at most one per
+ * target. A page learns here about an upload it did not start (another browser,
+ * a script, a reload that lost its note of the id), to continue or delete it; the
+ * one-upload rule (createUpload) otherwise only refuses with 409 busy. A store
+ * that is not ready adds nothing.
+ */
+void v1_list_uploads(struct web_api_call *call)
+{
+	static struct fw_upload fw;
+	struct web_json_writer *w = web_api_json(call);
+	struct upload_view view;
+
+	web_json_object_begin(w);
+	web_json_key(w, "uploads");
+	web_json_array_begin(w);
+#if defined(CONFIG_SYSTEM_IMAGE_STORE)
+	static struct sys_img_upload sys;
+
+	if (v1_system() != NULL && sys_img_current(sys_now_ms(), &sys) == 0) {
+		view_of_sys(&sys, &view);
+		write_upload(w, call, &view);
+	}
+#endif
+	if (fw_hooks != NULL && fw_store_current(now_ms(), &fw) == 0) {
+		view_of_fw(&fw, &view);
+		write_upload(w, call, &view);
+	}
+	web_json_array_end(w);
+	web_json_object_end(w);
+	web_api_reply_json(call, 200);
 }
 
 /* A decimal integer that fits 32 bits: no sign, no spaces, at least one digit. */

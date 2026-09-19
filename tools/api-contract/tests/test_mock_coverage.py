@@ -103,6 +103,7 @@ def _walk(harness: Harness) -> set[str]:
     client.put(f"/firmware/uploads/{upload_id}/data?offset=0", raw=b"\x00" * size)
     harness.advance(UPLOAD_CHUNK_MS * seconds + 0.1)
     client.get(f"/firmware/uploads/{upload_id}")
+    client.get("/firmware/uploads")
     client.post(f"/firmware/uploads/{upload_id}/verify", {})
     harness.advance((QUEUE_MS + FIRMWARE_VERIFY_MS) * seconds + 0.1)
     client.post(

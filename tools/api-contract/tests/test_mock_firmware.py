@@ -232,6 +232,26 @@ def test_only_one_upload_exists_at_a_time(harness: Harness) -> None:
     assert first in second.json["error"]["message"]
 
 
+def test_the_list_shows_the_upload_another_page_started(harness: Harness) -> None:
+    """A page that did not create the upload (another browser, a script) finds it
+    here instead of only meeting 409 busy."""
+    listed = harness.client.get("/firmware/uploads")
+    assert listed.status == 200
+    assert listed.json == {"uploads": []}
+    upload_id = create(harness).json["id"]
+    listed = harness.client.get("/firmware/uploads").json["uploads"]
+    assert [u["id"] for u in listed] == [upload_id]
+    assert listed[0]["state"] == "receiving"
+
+
+def test_the_list_is_empty_again_after_the_delete(harness: Harness) -> None:
+    upload_id = ready(harness)
+    assert harness.client.get("/firmware/uploads").json["uploads"][0]["state"] == "ready"
+    harness.client.delete(f"/firmware/uploads/{upload_id}")
+    harness.advance(FIRMWARE_DELETE_MS * SECOND + 0.1)
+    assert harness.client.get("/firmware/uploads").json == {"uploads": []}
+
+
 def test_an_unknown_upload_is_not_found(harness: Harness) -> None:
     assert harness.client.get("/firmware/uploads/upload_ffff").status == 404
 

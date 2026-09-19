@@ -341,6 +341,10 @@ ZTEST(v1, test_firmware_bindings_answer_503_until_the_store_is_open)
 	expect(503, "service_not_ready");
 	delete_upload("upload_0000000000000001", "delete-key-0001x");
 	expect(503, "service_not_ready");
+	/* The list only has nothing to show. */
+	get("/api/v1/firmware/uploads");
+	expect(200, NULL);
+	zassert_true(body_has("{\"uploads\":[]}"), "%s", body);
 }
 
 /* -- createUpload / getUpload --------------------------------------------------------- */
@@ -372,6 +376,42 @@ ZTEST(v1, test_create_and_get_an_upload)
 
 	get("/api/v1/firmware/uploads/upload_00000000000000ff");
 	expect(404, "not_found");
+}
+
+/* listUploads: a page finds the upload it did not start; busy names it. */
+ZTEST(v1, test_list_uploads_shows_the_staged_upload)
+{
+	char id[FW_STORE_ID_LEN + 1];
+	char job_id[JOB_ID_MAX_LEN + 1];
+	char sha[65];
+
+	firmware_reset();
+	get("/api/v1/firmware/uploads");
+	expect(200, NULL);
+	zassert_true(body_has("{\"uploads\":[]}"), "%s", body);
+
+	sha256_hex_of(fx_valid, sizeof(fx_valid), sha);
+	create("create-key-0001x", sizeof(fx_valid), sha);
+	expect(201, NULL);
+	zassert_true(json_string("id", id, sizeof(id)));
+
+	get("/api/v1/firmware/uploads");
+	expect(200, NULL);
+	zassert_true(body_has("{\"uploads\":[{\"id\":\""), "%s", body);
+	zassert_true(strstr(body, id) != NULL, "%s", body);
+	zassert_true(body_has("\"target\":\"esp32c6\""), "%s", body);
+	zassert_true(body_has("\"state\":\"receiving\""), "%s", body);
+
+	create("create-key-0002x", sizeof(fx_valid), sha);
+	expect(409, "busy");
+	zassert_true(strstr(body, id) != NULL, "busy names the upload: %s", body);
+
+	delete_upload(id, "delete-key-0001x");
+	accepted_job(job_id);
+	zassert_equal(wait_job(job_id).state, JOB_STATE_SUCCEEDED);
+	get("/api/v1/firmware/uploads");
+	expect(200, NULL);
+	zassert_true(body_has("{\"uploads\":[]}"), "%s", body);
 }
 
 ZTEST(v1, test_create_upload_replays_by_key)

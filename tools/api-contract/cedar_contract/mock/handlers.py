@@ -309,6 +309,11 @@ def create_upload(app, ctx: Context) -> Response:
     )
 
 
+@handles("listUploads")
+def list_uploads(app, ctx: Context) -> Response:
+    return json_response(200, {"uploads": [u.to_json() for u in app.state.firmware.uploads()]})
+
+
 @handles("getUpload")
 def get_upload(app, ctx: Context) -> Response:
     upload = app.state.firmware.find(ctx.params["upload_id"])

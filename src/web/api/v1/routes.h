@@ -49,6 +49,7 @@ WEB_API_V1_ROUTE(getLogRecords, GET, "/logs/records", 0, V1_NO_BODY, NULL, v1_lo
 WEB_API_V1_ROUTE(exportLogs, GET, "/logs/export", 0, V1_NO_BODY, NULL, v1_log_export_query, v1_export_logs)
 WEB_API_V1_ROUTE(getCoprocessorStatus, GET, "/coprocessor/status", 0, V1_NO_BODY, NULL, NULL, v1_get_coprocessor_status)
 WEB_API_V1_ROUTE(startCoprocessorUpdate, POST, "/coprocessor/updates", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_update_body), &v1_update_schema, NULL, v1_start_coprocessor_update)
+WEB_API_V1_ROUTE(listUploads, GET, "/firmware/uploads", 0, V1_NO_BODY, NULL, NULL, v1_list_uploads)
 WEB_API_V1_ROUTE(createUpload, POST, "/firmware/uploads", WEB_API_CSRF | WEB_API_IDEMPOTENT | WEB_API_BODY_REQUIRED, V1_BODY(struct v1_upload_body), &v1_upload_schema, NULL, v1_create_upload)
 WEB_API_V1_ROUTE(getUpload, GET, "/firmware/uploads/{upload_id}", 0, V1_NO_BODY, NULL, NULL, v1_get_upload)
 WEB_API_V1_ROUTE(deleteUpload, DELETE, "/firmware/uploads/{upload_id}", WEB_API_CSRF | WEB_API_IDEMPOTENT, V1_NO_BODY, NULL, NULL, v1_delete_upload)

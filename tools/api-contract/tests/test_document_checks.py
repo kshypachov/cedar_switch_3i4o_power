@@ -34,9 +34,11 @@ def test_the_document_has_the_surface_the_plan_describes(document: Document) -> 
     # with SystemFirmware, SystemUpdateSummary and SystemUpdateRequest.
     # 40 since the coredump (2026-09-18): getCoredump, downloadCoredump and
     # clearCoredump, with Coredump and CoredumpStatus.
-    assert len(document.operations) == 40
+    # 41 since the upload list (2026-09-19): listUploads with UploadList, so a page
+    # finds an upload it did not start.
+    assert len(document.operations) == 41
     assert len(document.raw["paths"]) == 33
-    assert len(document.schemas) == 53
+    assert len(document.schemas) == 54
 
 
 def test_all_five_checks_run() -> None:

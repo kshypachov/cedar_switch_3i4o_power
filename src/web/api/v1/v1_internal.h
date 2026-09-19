@@ -176,6 +176,7 @@ void v1_get_log_records(struct web_api_call *call);
 void v1_export_logs(struct web_api_call *call);
 void v1_get_coprocessor_status(struct web_api_call *call);
 void v1_create_upload(struct web_api_call *call);
+void v1_list_uploads(struct web_api_call *call);
 void v1_get_upload(struct web_api_call *call);
 void v1_write_upload_chunk(struct web_api_call *call);
 void v1_verify_upload(struct web_api_call *call);

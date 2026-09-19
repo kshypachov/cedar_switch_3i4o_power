@@ -2325,6 +2325,50 @@
       }
     },
     "/firmware/uploads": {
+      "get": {
+        "operationId": "listUploads",
+        "tags": [
+          "firmware"
+        ],
+        "summary": "List the uploads the device holds",
+        "description": "Read UploadList: the upload each store holds, one per target at most, whatever its state (receiving, verifying, ready or failed). The one-upload rule of createUpload refuses a second upload with 409 busy; this is how a page finds the upload it did not start (another browser, a script, a lost note of the id) to continue, verify, install or delete it.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadList"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-store"
+              }
+            }
+          },
+          "default": {
+            "description": "Error; status mapping and lifecycle semantics are defined in api-contract.md.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "operationId": "createUpload",
         "tags": [
@@ -5059,6 +5103,23 @@
         ],
         "additionalProperties": false,
         "description": "Staged firmware file. An esp32c6 image is stored as a file in the device LittleFS volume; a stm32u585 image is written straight into MCUboot's secondary slot (slot 2). filename is a display value only and is never used as a filesystem path. received_bytes is the next acceptable offset and advances only after the chunk is on storage (flushed file, or written and read back from flash)."
+      },
+      "UploadList": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "uploads"
+        ],
+        "properties": {
+          "uploads": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/Upload"
+            },
+            "description": "At most one upload per target (esp32c6, stm32u585)."
+          }
+        }
       },
       "UpdateRequest": {
         "type": "object",
