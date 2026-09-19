@@ -165,3 +165,34 @@
 		};
 	};
 };
+
+/*
+ * VDDA through VREFINT and its factory calibration (src/diagnostic/vdd_monitor.c,
+ * owner's request 2026-09-19: are the resets supply dips?). On this board VDDA is
+ * tied straight to VDD, the LDO output. ADC1 is clocked from HCLK (160 MHz) / 4 =
+ * 40 MHz, under the 55 MHz limit; the vref driver samples with the longest time
+ * (814 cycles, ~20 us), well above VREFINT's minimum.
+ */
+&adc1 {
+	st,adc-prescaler = <4>;
+	status = "okay";
+};
+
+&vref1 {
+	status = "okay";
+};
+
+/*
+ * Status LED on PC2 (owner, 2026-09-19): blinks while the firmware runs
+ * (src/io/status_led.c). Its polarity does not matter for a blink.
+ */
+/ {
+	status-leds {
+		compatible = "gpio-leds";
+
+		status_led: status_led {
+			gpios = <&gpioc 2 GPIO_ACTIVE_HIGH>;
+			label = "Status LED";
+		};
+	};
+};

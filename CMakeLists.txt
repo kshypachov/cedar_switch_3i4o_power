@@ -112,6 +112,7 @@ target_sources(app PRIVATE
         src/mqtt/ha_task.c
         src/littlefs/littlefs_mount.c
         src/io/io.c
+        src/io/status_led.c
         src/energy_monitoring/energy_monitoring.c
         src/energy_monitoring/HLW8032.c
         src/mqtt/mqtt_settings_keys.c
@@ -119,6 +120,7 @@ target_sources(app PRIVATE
         src/diagnostic/storage_bench.c
         src/diagnostic/coredump_support.c
         src/diagnostic/xip_bus_test.c
+        src/diagnostic/vdd_monitor.c
         src/plugin_wifi/wifi.c
         src/plugin_wifi/wifi_shell.c
         src/app-firmware-updater/firmware_updater.c
